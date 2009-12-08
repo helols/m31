@@ -66,6 +66,7 @@
         <filter-name>httpMethodFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
     
     <filter>
         <filter-name>UrlRewriteFilter</filter-name>
@@ -82,6 +83,7 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+
 	<!-- Spring Security
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>

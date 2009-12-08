@@ -7,7 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-    <head><title>Simple jsp page</title></head>
+    <head><title>Simple jsp page</title>
+    <script type="text/javascript" src="../js/framework/jQuery/jquery-1.3.2.js"></script>
+ 	<script type="text/javascript" src="../extJS/adapter/jquery/ext-jquery-adapter-debug.js"></script>
+ 	<!-- ENDLIBS -->
+
+    <script type="text/javascript" src="../extJS/ext-all-debug.js"></script>
+    </head>
     <body>
         RESTful Test page <br/>
 

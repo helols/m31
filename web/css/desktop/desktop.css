@@ -642,19 +642,17 @@ td.ux-taskButtons-edge {
 .ext-ie #x-shortcuts dt img {
     background:transparent !important;
 }
-#x-shortcuts dt a:hover {
-    text-decoration:underline;
-}
+
 /* shortcuts */
 #grid-win-shortcut img {
     width:48px;
     height:48px;
-    background-image: url(../../images/desktop/grid48x48.png);
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/grid48x48.png', sizingMethod='scale');
+    background-image: url(../../images/desktop/icon/me2day.png);
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/icon/me2day.png', sizingMethod='scale');
 }
 #acc-win-shortcut img {
     width:48px;
     height:48px;
-    background-image: url(../../images/desktop/im48x48.png);
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/im48x48.png', sizingMethod='scale');
+    background-image: url(../../images/desktop/icon/twitter.png);
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/icon/me2day.png', sizingMethod='scale');
 }
