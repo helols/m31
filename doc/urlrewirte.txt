@@ -1,0 +1,99 @@
+ outbound-rule을 정해주면 나가는 URL도 곱게 변환해준다. 가는 말이 고와야 오는 말이 곱다고 말 할 때도 곱게 해줘야 다시 고운말을들을 수 있다. 사용자는 주소창이나 HTML에 걸린 링크를 복사해서 또 다른 링크를 건다. 좋은 본보기가 되도록 어플리케이션이링크를 걸거나 리다이렉트 할 때도 고운 URL을 써야 사용자도 고운 URL을 복사해서 쓴다. outbound-rule까지지정해줘야 어플리케이션 외부로 어눌한 URL이 나가지 않아 고운 URL 순환 고리가 완성된다. 외부로 어눌한 URL이 나가지않기 때문에 내부에서만 쓰이는 어눌한 URL 구조는 언제든 바꿀 수 있게 되는 부수적인 이익도 누릴 수 있다.
+
+ /ViewPost.do?blogId=cowboybebop&postId=My_Funny_Valentine을 /blog/cowboybeop/post/My_Funny_Valentine으로 변환해주는 규칙이다.
+
+ <outbound-rule>
+         <from>^/ViewPost\.do\?blogId=(.+)&amp;(?:amp;)?postId=(.+)$</from>
+         <to>/blog/$1/post/$2</to>
+ </outbound-rule>
+
+ ".", "?"을 표현하기 위해 정규식 표현 "\.", "\?"으로 써준 부분과, 리다이렉트에서는 "&"로 표현되고 HTML에서는 "&amp;"로 표현되는 "&"를 표현하기 위해 정규식 표현 "&(?:amp;)?"을 XML로 표현한 "&amp;(?:amp;)?"로 써준 부분을 유의해서 보라. 여러가지 표현법을 조합해야 하기 때문에 실수하기 쉽다.
+
+ 정해준 규칙은 언제 적용이 될까? 유출 규칙은 HttpServletResponse.encodeURL이 호출 될 때 적용된다.
+
+ <a href="<%=response.encodeURL("/ViewPost.do?blogId=" + blog.getId() + "&amp;postId=" + post.getId())%>">View</a>
+
+ JSP 스크립트릿으로 직접 encodeURL을 호출할 수도 있지만 내부적으로 encodeURL을 사용하는 JSTL url 태그를 사용해도 된다.
+
+ <a href="<c:url value="/ViewPost.do"><c:param name="blogId" value="${blog.id}" /><c:param name="postId" value="${post.id}" /></c:url>">View</a>
+
+ 스트러츠 2의 url 태그를 사용하면 내부에서는 모두 Action 이름을 사용하고 UrlRewriteFilter로 URL 인터페이스만 규칙을 정해서 변환할 수 있다.
+
+ <a href="<s:url action="ViewPost"><s:param name="blogId" value="${blog.id}" /><s:param name="postId" value="${post.id}" /></s:url>">View</a>
+
+ JSTL이나 스트러츠 2의 JSP 태그보다는 스트러츠 2 Freemarker 태그가 사용하기 더 쉽다. JSP 태그와 같이 쓸 바에야 그냥 "/blog/${blog.id}/post/${post.id}"로 바로 쓰겠다.
+
+ <a href="<@s.url action="ViewPost" blogId=blog.id postId=post.id />">View</a>
+
+ 리다이렉트할 경우에도 변환해줘야 하므로 HttpServletResponse.encodeRedirectURL이 호출 될 때 경우에도 적용된다.
+
+ response.sendRedirect(response.encodeRedirectURL("/ViewPage.do?blogId=" + blog.getId() + "&postId=" + post.getId()));
+
+ 위와 같이 직접 리다이렉트 하는 경우는 굳이 어눌한 URL을 쓰고 그걸 다시 변환할 필요는 없을 것 같다. 아래와 같이 고운 URL을 바로 사용하면 된다.
+
+ response.sendRedirect("/blog/" + blog.getId() + "/post/" + post.getId());
+
+ 스 트러츠 2에서는 redirect-action Result를 사용하면 Action으로 리다이렉트할 경우 편하다.redirect-action Result가 encodeRedirectURL을 호출해서 outbound-rule이 적용된다.
+
+ <result type="redirect-action">
+         <param name="actionName">ViewPost</param>
+         <param name="blogId">${blog.id}</param>
+         <param name="postId">${post.id}</param>
+ </result>
+
+
+     *  . (any character)
+     * * (zero of more of the preceding)
+     * + (one or more of the preceding)
+     * {} (minimum to maximum quantifier)
+     * ? (ungreedy modifier)
+     * ! (at start of string means "negative pattern")
+     * ^ (start of string, or "negative" if at the start of a range)
+     * $ (end of string)
+     * [] (match any of contents)
+     * - (range if used between square brackets)
+     * () (group, backreferenced group)
+     * | (alternative, or)
+     * \ (the escape character itself)
+
+    <rule>
+         <from>^/blog/(.+)/post/(.+)$</from>
+         <to>/ViewPost.do?blogId=$1&amp;postId=$2</to>
+    </rule>
+
+    <rule>
+        <from>^/([0-9a-zA-Z]+)($|\/$)</from>
+        <to>/member?username=$1</to>
+    </rule>
+
+    <from>^/([^.]*)$</from>
+
+
+        <filter>
+         <filter-name>UrlRewriteFilter</filter-name>
+         <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+         <init-param>
+             <param-name>logLevel</param-name>
+             <param-value>WARN</param-value>
+         </init-param>
+     </filter>
+     <filter-mapping>
+         <filter-name>UrlRewriteFilter</filter-name>
+         <url-pattern>/*</url-pattern>
+         <dispatcher>REQUEST</dispatcher>
+         <dispatcher>FORWARD</dispatcher>
+     </filter-mapping>
+
+      <rule>
+        <from>^/([0-9a-zA-Z]+)($|\/$)</from>
+        <to>/member?username=$1</to>
+    </rule>
+
+     <rule>
+         <condition name="user-agent">Mozilla/[1-4]</condition>
+         <from>/some/page.html</from>
+         <to>/some/page-for-old-browsers.html</to>
+     </rule>
+
+
+
