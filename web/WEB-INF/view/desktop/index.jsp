@@ -23,7 +23,6 @@
     <script type="text/javascript" src="/js/desktop/App.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
-
 </head>
 <body scroll="no">
 
