@@ -26,7 +26,7 @@ Ext.extend(Ext.app.App, Ext.util.Observable, {
     initApp : function(){
     	this.startConfig = this.startConfig || this.getStartConfig();
 
-        this.desktop = new Ext.Desktop(this);
+        this.desktop = new Desktop(this);
 
 		this.launcher = this.desktop.taskbar.startMenu;
 
