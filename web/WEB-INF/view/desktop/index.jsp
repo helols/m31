@@ -18,9 +18,11 @@
 
     <!-- DESKTOP -->
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
+    <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
 </head>
-<body id="desktopBody" scroll="no">
-
+<body>
+    <div id="x-desktop">
+    </div>
 </body>
 </html>

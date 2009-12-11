@@ -10,13 +10,24 @@ Ext.m31.Desktop = function(cfg) {
 };
 Ext.extend(Ext.m31.Desktop, Ext.util.Observable, {
     isReady: false,
-    initDesktop : function() {
-        this.init();
-    },
-    init : function() {
+    initDesktop : function(){
         Ext.QuickTips.init();
+        this.changeBackground();
     },
-    chageBackground : function(){
-      Ext.fly('desktopBody').setStyle('background', '#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top', true);
+    
+    changeBackground : function(opt){
+      opt = opt||{
+              url:'/images/desktop/wallpapers/desktop.jpg'
+            , color:'#3d71b8'
+            , repeat:'repeat center'
+            ,width:Ext.lib.Dom.getViewWidth()
+            ,height:Ext.lib.Dom.getViewHeight()
+        };
+      Ext.fly('x-desktop').setStyle({
+              'background': opt.color+' '+'url('+opt.url+') '+opt.repeat
+            , 'width' : opt.width
+            , 'height': opt.height
+        }, true);
+        Ext.fly
     }
 });
