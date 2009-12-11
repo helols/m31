@@ -354,7 +354,7 @@
     </dependencies>
 
     <build>
-        <finalName>springsprout2</finalName>
+        <finalName>m31</finalName>
         <sourceDirectory>
             ${project.basedir}/src
         </sourceDirectory>
