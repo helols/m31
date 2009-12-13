@@ -1,10 +1,11 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">  
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <title>ExtTop - Desktop Sample App</title>
 
     <link rel="stylesheet" type="text/css" href="../extJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="css/desktop.css" />
+    <link rel="stylesheet" type="text/css" href="../css/desktop/desktop.css" />
 
     <!-- GC -->
  	<!-- LIBS -->
@@ -12,15 +13,21 @@
  	<script type="text/javascript" src="../extJS/adapter/jquery/ext-jquery-adapter-debug.js"></script>
  	<!-- ENDLIBS -->
 
-    <script type="text/javascript" src="../extJS/ext-all.js"></script>
+    <script type="text/javascript" src="../extJS/ext-all-debug.js"></script>
 
     <!-- DESKTOP -->
-    <script type="text/javascript" src="js/StartMenu.js"></script>
-    <script type="text/javascript" src="js/TaskBar.js"></script>
-    <script type="text/javascript" src="js/Desktop.js"></script>
-    <script type="text/javascript" src="js/App.js"></script>
-    <script type="text/javascript" src="js/Module.js"></script>
-    <script type="text/javascript" src="sample.js"></script>
+	<script type="text/javascript">
+        Ext.ns("M31","M31.dk","M31.app");
+    </script>
+    <script type="text/javascript" src="../js/desktop/StartMenu.js"></script>
+    <script type="text/javascript" src="../js/desktop/TaskBar.js"></script>
+    <script type="text/javascript" src="../js/desktop/WinManager.js"></script>
+    <script type="text/javascript" src="../js/desktop/Module.js"></script>
+    <script type="text/javascript" src="../js/desktop/Desktop.js"></script>
+    <script type="text/javascript" src="../js/desktop/sample.js"></script>
+	
+	<!-- my script -->
+    <script type="text/javascript" src="js/script.js"></script>
 </head>
 <body scroll="no">
 
