@@ -30,14 +30,18 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
             menuAlign: 'bl-tl',
             renderTo: 'ux-taskbar-start',
             clickEvent: 'mousedown',
-            template: new Ext.Template(
-				'<table cellspacing="0" class="x-btn {3}"><tbody><tr>',
-				'<td class="ux-startbutton-left"><i>&#160;</i></td>',
-                '<td class="ux-startbutton-center"><em class="{5} unselectable="on">',
-                    '<button class="x-btn-text {2}" type="{1}" style="height:30px;">{0}</button>',
-                '</em></td>',
-                '<td class="ux-startbutton-right"><i>&#160;</i></td>',
-				"</tr></tbody></table>")
+//            template: new Ext.Template(
+//				'<table cellspacing="0" class="x-btn {3}"><tbody><tr>',
+//				'<td class="ux-startbutton-left"><i>&#160;</i></td>',
+//                '<td class="ux-startbutton-center"><em class="{5} unselectable="on">',
+//                    '<button class="x-btn-text {2}" type="{1}" style="height:30px;">{0}</button>',
+//                '</em></td>',
+//                '<td class="ux-startbutton-right"><i>&#160;</i></td>',
+//				"</tr></tbody></table>")
+            template : new Ext.Template(
+                '<div class="{2}" style="width:40px;">',
+                    '<button type="{1}" style="height:40px;width:40px;background:transparent; border: 0 none;">{0}</button>',
+                '</div>')
         });
 
         var width = this.startBtn.getEl().getWidth()+10;

@@ -24,7 +24,7 @@ html, body {
 }
 
 .start {
-	background-image: url( ../../images/desktop/taskbar/default/start_btn.png);
+    background:transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
 }
 
@@ -101,7 +101,7 @@ html, body {
 
 #ux-taskbar {
 	background:transparent none;
-	height:30px;
+	height:40px;
 	margin:0;
 	padding:0;
 	position:relative;
@@ -374,7 +374,7 @@ html, body {
 }
 
 #ux-taskbar-start {
-	background:#000000 url( ../../images/desktop/taskbar/black/taskbar-start-panel-bg.gif ) repeat-x left top;
+	background:#000000 url( ../../images/desktop/taskbar/black/taskbuttons-panel-bg.gif) repeat-x left top;
 	left:0px;
 	padding:0;
 	position:absolute;
