@@ -18,8 +18,9 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
     isReady: false,
     startMenu: null,
     modules: null,
-
     initDesktop : function(){
+        this.desktopEl = this.desktopEl || Ext.get('x-desktop');
+        this.taskbarEl = this.taskbarEl || Ext.get('ux-taskbar');
     	this.startConfig = this.startConfig || this.getStartConfig();
         this.taskbar = new M31.dk.TaskBar(this);
         this.windowsManager = new M31.WindowsManager(this);
@@ -36,6 +37,8 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
 		this.fireEvent('ready', this);
         this.isReady = true;
+        Ext.EventManager.onDocumentReady(this.layout,this);
+        Ext.EventManager.onWindowResize(this.layout,this);
     },
 
     getModules : Ext.emptyFn,
@@ -78,6 +81,19 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
     onUnload : function(e){
         if(this.fireEvent('beforeunload', this) === false){
             e.stopEvent();
+        }
+    },
+
+    layout : function(){
+        if(Ext.lib.Dom.getViewHeight()-this.taskbarEl.getHeight() <= this.minHeight){
+            this.desktopEl.setHeight(this.minHeight);
+        }else{
+            this.desktopEl.setHeight(Ext.lib.Dom.getViewHeight()-this.taskbarEl.getHeight());
+        }
+        if(Ext.lib.Dom.getViewWidth() <= this.minWidth){
+            this.desktopEl.setWidth(this.minWidth);
+        }else{
+            this.desktopEl.setWidth(Ext.lib.Dom.getViewWidth());
         }
     }
 });

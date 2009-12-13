@@ -7,8 +7,6 @@
 M31.WindowsManager = function(desktop){
     this.taskbar = desktop.getTaskBar();
     var taskbar = this.taskbar;
-	var desktopEl = Ext.get('x-desktop');
-    var taskbarEl = Ext.get('ux-taskbar');
 
     var windows = new Ext.WindowGroup();
     var activeWindow;
@@ -38,23 +36,6 @@ M31.WindowsManager = function(desktop){
     function removeWin(win){
     	taskbar.removeTaskButton(win.taskButton);
     }
-
-    function layout(){
-        if(Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight() <= 500){
-            desktopEl.setHeight(500);
-        }else{
-            desktopEl.setHeight(Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight());
-        }
-        if(Ext.lib.Dom.getViewWidth() <= 1000){
-            desktopEl.setWidth(1000);
-        }else{
-            desktopEl.setWidth(Ext.lib.Dom.getViewWidth());
-        }
-    }
-    Ext.EventManager.onDocumentReady(layout)
-    Ext.EventManager.onWindowResize(layout);
-
-    this.layout = layout;
 
     this.createWindow = function(config, cls){
     	var win = new (cls||Ext.Window)(
@@ -104,21 +85,22 @@ M31.WindowsManager = function(desktop){
         return windows.get(id);
     }
 
-    this.getWinWidth = function(){
-		var width = Ext.lib.Dom.getViewWidth();
-		return width < 200 ? 200 : width;
-	}
-
-	this.getWinHeight = function(){
-		var height = (Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight());
-		return height < 100 ? 100 : height;
-	}
-
-	this.getWinX = function(width){
-		return (Ext.lib.Dom.getViewWidth() - width) / 2
-	}
-
-	this.getWinY = function(height){
-		return (Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight() - height) / 2;
-	}
+    
+//    this.getWinWidth = function(){
+//		var width = Ext.lib.Dom.getViewWidth();
+//		return width < 200 ? 200 : width;
+//	}
+//
+//	this.getWinHeight = function(){
+//		var height = (Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight());
+//		return height < 100 ? 100 : height;
+//	}
+//
+//	this.getWinX = function(width){
+//		return (Ext.lib.Dom.getViewWidth() - width) / 2
+//	}
+//
+//	this.getWinY = function(height){
+//		return (Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight() - height) / 2;
+//	}
 };

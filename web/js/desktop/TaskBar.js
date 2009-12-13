@@ -24,7 +24,6 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
 		}, this.desktop.startConfig));
 		
 		this.startBtn = new Ext.Button({
-            text: 'Start',
             id: 'ux-startbutton',
             iconCls:'start',
             menu: this.startMenu,

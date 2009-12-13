@@ -7,7 +7,9 @@
 
 // Sample desktop configuration
 M31Desktop = new M31.Desktop({
-	init :function(){
+	minHeight : 300,
+    minWidth : 1000,
+    init :function(){
 		Ext.QuickTips.init();
 	},
 
@@ -24,7 +26,7 @@ M31Desktop = new M31.Desktop({
     // config for the start menu
     getStartConfig : function(){
         return {
-            title: 'Jack Slocum',
+            title: 'Jack Slocum1',
             iconCls: 'user',
             toolItems: [{
                 text:'Settings',

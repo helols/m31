@@ -24,7 +24,8 @@ html, body {
 }
 
 .start {
-	background-image: url( ../../images/desktop/taskbar/black/startbutton-icon.gif ) !important;
+	background-image: url( ../../images/desktop/taskbar/default/start_btn.png);
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
 }
 
 .bogus {
