@@ -7,6 +7,8 @@
 M31.WindowsManager = function(desktop){
     this.taskbar = desktop.getTaskBar();
     var taskbar = this.taskbar;
+    var desktopEl = desktop.desktopEl;
+
 
     var windows = new Ext.WindowGroup();
     var activeWindow;

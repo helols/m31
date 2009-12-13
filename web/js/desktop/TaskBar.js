@@ -47,7 +47,6 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
 	        id: 'TaskBarStart',
 	        minWidth: width,
 			region:'west',
-			split: true,
 			width: width
 		});
 		
