@@ -37,11 +37,9 @@
  *	});
  */
 
-Ext.namespace("Ext.ux");
-
-Ext.ux.StartMenu = Ext.extend(Ext.menu.Menu, {
+M31.dk.StartMenu = Ext.extend(Ext.menu.Menu, {
     initComponent: function(config) {
-    	Ext.ux.StartMenu.superclass.initComponent.call(this, config);
+    	M31.dk.StartMenu.superclass.initComponent.call(this, config);
 
         var tools = this.toolItems;
         this.toolItems = new Ext.util.MixedCollection();
@@ -52,7 +50,7 @@ Ext.ux.StartMenu = Ext.extend(Ext.menu.Menu, {
 
     // private
     onRender : function(ct, position){
-        Ext.ux.StartMenu.superclass.onRender.call(this, ct, position);
+        M31.dk.StartMenu.superclass.onRender.call(this, ct, position);
         var el = this.el.addClass('ux-start-menu');
 
         var header = el.createChild({

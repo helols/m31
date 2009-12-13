@@ -8,20 +8,20 @@
  * @class Ext.ux.TaskBar
  * @extends Ext.util.Observable
  */
-Ext.ux.TaskBar = function(app){
-    this.app = app;
+M31.dk.TaskBar = function(desktop){
+    this.desktop = desktop;
     this.init();
 }
 
-Ext.extend(Ext.ux.TaskBar, Ext.util.Observable, {
+Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
     init : function(){
-		this.startMenu = new Ext.ux.StartMenu(Ext.apply({
+		this.startMenu = new M31.dk.StartMenu(Ext.apply({
 			iconCls: 'user',
 			height: 300,
 			shadow: true,
 			title: 'Jack Slocum',
 			width: 300
-		}, this.app.startConfig));
+		}, this.desktop.startConfig));
 		
 		this.startBtn = new Ext.Button({
             text: 'Start',
@@ -52,13 +52,13 @@ Ext.extend(Ext.ux.TaskBar, Ext.util.Observable, {
 			width: width
 		});
 		
-		this.tbPanel = new Ext.ux.TaskButtonsPanel({
+		this.tbPanel = new M31.dk.TaskButtonsPanel({
 			el: 'ux-taskbuttons-panel',
 			id: 'TaskBarButtons',
 			region:'center'
 		});
 				
-        var container = new Ext.ux.TaskBarContainer({
+        var container = new M31.dk.TaskBarContainer({
 			el: 'ux-taskbar',
 			layout: 'border',
 			items: [sbBox,this.tbPanel]
@@ -82,13 +82,9 @@ Ext.extend(Ext.ux.TaskBar, Ext.util.Observable, {
 
 
 
-/**
- * @class Ext.ux.TaskBarContainer
- * @extends Ext.Container
- */
-Ext.ux.TaskBarContainer = Ext.extend(Ext.Container, {
+M31.dk.TaskBarContainer = Ext.extend(Ext.Container, {
     initComponent : function() {
-        Ext.ux.TaskBarContainer.superclass.initComponent.call(this);
+        M31.dk.TaskBarContainer.superclass.initComponent.call(this);
         
         this.el = Ext.get(this.el) || Ext.getBody();
         this.el.setHeight = Ext.emptyFn;
@@ -118,7 +114,7 @@ Ext.ux.TaskBarContainer = Ext.extend(Ext.Container, {
  * @class Ext.ux.TaskButtonsPanel
  * @extends Ext.BoxComponent
  */
-Ext.ux.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
+M31.dk.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 	activeButton: null,
 	enableScroll: true,
 	scrollIncrement: 0,
@@ -132,7 +128,7 @@ Ext.ux.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
     buttonWidthSet: false,
 	
 	initComponent : function() {
-        Ext.ux.TaskButtonsPanel.superclass.initComponent.call(this);
+        M31.dk.TaskButtonsPanel.superclass.initComponent.call(this);
         this.on('resize', this.delegateUpdates);
         this.items = [];
         
@@ -158,7 +154,7 @@ Ext.ux.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 	
 	addButton : function(win){
 		var li = this.strip.createChild({tag:'li'}, this.edge); // insert before the edge
-        var btn = new Ext.ux.TaskBar.TaskButton(win, li);
+        var btn = new M31.dk.TaskButton(win, li);
 		
 		this.items.push(btn);
 		
@@ -211,7 +207,6 @@ Ext.ux.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
         if(!this.resizeButtons || count < 1 || !aw){ // !aw for display:none
             return;
         }
-        
         var each = Math.max(Math.min(Math.floor((aw-4) / count) - this.buttonMargin, this.buttonWidth), this.minButtonWidth); // -4 for float errors in IE
         var btns = this.stripWrap.dom.getElementsByTagName('button');
         
@@ -382,12 +377,12 @@ Ext.ux.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 
 
 /**
- * @class Ext.ux.TaskBar.TaskButton
+ * @class M31.desktop.TaskBar.TaskButton
  * @extends Ext.Button
  */
-Ext.ux.TaskBar.TaskButton = function(win, el){
+M31.dk.TaskButton = function(win, el){
 	this.win = win;
-    Ext.ux.TaskBar.TaskButton.superclass.constructor.call(this, {
+    M31.dk.TaskButton.superclass.constructor.call(this, {
         iconCls: win.iconCls,
         text: Ext.util.Format.ellipsis(win.title, 12),
         renderTo: el,
@@ -412,9 +407,9 @@ Ext.ux.TaskBar.TaskButton = function(win, el){
     });
 };
 
-Ext.extend(Ext.ux.TaskBar.TaskButton, Ext.Button, {
+Ext.extend(M31.dk.TaskButton, Ext.Button, {
     onRender : function(){
-        Ext.ux.TaskBar.TaskButton.superclass.onRender.apply(this, arguments);
+        M31.dk.TaskButton.superclass.onRender.apply(this, arguments);
 
         this.cmenu = new Ext.menu.Menu({
             items: [{

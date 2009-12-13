@@ -6,18 +6,18 @@
  */
 
 // Sample desktop configuration
-MyDesktop = new Ext.app.App({
+M31Desktop = new M31.Desktop({
 	init :function(){
 		Ext.QuickTips.init();
 	},
 
 	getModules : function(){
 		return [
-			new MyDesktop.GridWindow(),
-            new MyDesktop.TabWindow(),
-            new MyDesktop.AccordionWindow(),
-            new MyDesktop.BogusMenuModule(),
-            new MyDesktop.BogusModule()
+			new M31Desktop.GridWindow(),
+            new M31Desktop.TabWindow(),
+            new M31Desktop.AccordionWindow(),
+            new M31Desktop.BogusMenuModule(),
+            new M31Desktop.BogusModule()
 		];
 	},
 
@@ -44,7 +44,7 @@ MyDesktop = new Ext.app.App({
 /*
  * Example windows
  */
-MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
+M31Desktop.GridWindow = Ext.extend(M31.app.Module, {
     id:'grid-win',
     init : function(){
         this.launcher = {
@@ -56,10 +56,10 @@ MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
     },
 
     createWindow : function(){
-        var desktop = this.app.getDesktop();
-        var win = desktop.getWindow('grid-win');
+        var winManager = this.desktop.getWinManager();
+        var win = winManager.getWindow('grid-win');
         if(!win){
-            win = desktop.createWindow({
+            win = winManager.createWindow({
                 id: 'grid-win',
                 title:'Grid Window',
                 width:740,
@@ -117,7 +117,7 @@ MyDesktop.GridWindow = Ext.extend(Ext.app.Module, {
 
 
 
-MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
+M31Desktop.TabWindow = Ext.extend(M31.app.Module, {
     id:'tab-win',
     init : function(){
         this.launcher = {
@@ -129,10 +129,10 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
     },
 
     createWindow : function(){
-        var desktop = this.app.getDesktop();
-        var win = desktop.getWindow('tab-win');
+        var winManager = this.desktop.getWinManager();
+        var win = winManager.getWindow('tab-win');
         if(!win){
-            win = desktop.createWindow({
+            win = winManager.createWindow({
                 id: 'tab-win',
                 title:'Tab Window',
                 width:740,
@@ -178,7 +178,7 @@ MyDesktop.TabWindow = Ext.extend(Ext.app.Module, {
 
 
 
-MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
+M31Desktop.AccordionWindow = Ext.extend(M31.app.Module, {
     id:'acc-win',
     init : function(){
         this.launcher = {
@@ -190,10 +190,10 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
     },
 
     createWindow : function(){
-        var desktop = this.app.getDesktop();
-        var win = desktop.getWindow('acc-win');
+        var winManager = this.desktop.getWinManager();
+        var win = winManager.getWindow('acc-win');
         if(!win){
-            win = desktop.createWindow({
+            win = winManager.createWindow({
                 id: 'acc-win',
                 title: 'Accordion Window',
                 width:250,
@@ -320,7 +320,7 @@ MyDesktop.AccordionWindow = Ext.extend(Ext.app.Module, {
 // for example purposes
 var windowIndex = 0;
 
-MyDesktop.BogusModule = Ext.extend(Ext.app.Module, {
+M31Desktop.BogusModule = Ext.extend(M31.app.Module, {
     init : function(){
         this.launcher = {
             text: 'Window '+(++windowIndex),
@@ -332,10 +332,10 @@ MyDesktop.BogusModule = Ext.extend(Ext.app.Module, {
     },
 
     createWindow : function(src){
-        var desktop = this.app.getDesktop();
-        var win = desktop.getWindow('bogus'+src.windowId);
+        var winManager = this.desktop.getWinManager();
+        var win = winManager.getWindow('bogus'+src.windowId);
         if(!win){
-            win = desktop.createWindow({
+            win = winManager.createWindow({
                 id: 'bogus'+src.windowId,
                 title:src.text,
                 width:640,
@@ -352,7 +352,7 @@ MyDesktop.BogusModule = Ext.extend(Ext.app.Module, {
 });
 
 
-MyDesktop.BogusMenuModule = Ext.extend(MyDesktop.BogusModule, {
+M31Desktop.BogusMenuModule = Ext.extend(M31Desktop.BogusModule, {
     init : function(){
         this.launcher = {
             text: 'Bogus Submenu',

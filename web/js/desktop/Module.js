@@ -4,12 +4,12 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-Ext.app.Module = function(config){
+M31.app.Module = function(config){
     Ext.apply(this, config);
-    Ext.app.Module.superclass.constructor.call(this);
+    M31.app.Module.superclass.constructor.call(this);
     this.init();
 }
 
-Ext.extend(Ext.app.Module, Ext.util.Observable, {
+Ext.extend(M31.app.Module, Ext.util.Observable, {
     init : Ext.emptyFn
 });

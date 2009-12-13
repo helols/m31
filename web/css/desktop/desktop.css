@@ -6,19 +6,19 @@
  * background:#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top;
  */
 html, body {
-     background:#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top;
+    background:#3d71b8 url(../../images/desktop/wallpapers/desk.jpg) no-repeat center;
     font: normal 12px tahoma, arial, verdana, sans-serif;
 	margin: 0;
 	padding: 0;
 	border: 0 none;
-	overflow: hidden;
-	height: 100%;
+    overflow: hidden;
+    height:100%;
+    width:100%;
 }
 #x-desktop {
-	width: 600px;
-	height: 400px;
-	border: 0 none;
-	position: relative;
+	width: 100%;
+    border: 0 none;
+    position: relative;
     overflow:hidden;
     zoom:1;
 }
@@ -387,6 +387,9 @@ html, body {
 
 #ux-taskbuttons-panel {
 	background:#000000 url( ../../images/desktop/taskbar/black/taskbuttons-panel-bg.gif ) repeat-x left top;
+    /*opacity:.5;*/
+    /*-moz-opacity:.5;*/
+    /*filter:alpha(opacity=50);*/
 	padding-top:0;
 	position:relative;
 }

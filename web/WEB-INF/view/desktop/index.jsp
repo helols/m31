@@ -17,15 +17,18 @@
     <script type="text/javascript" src="/extJS/ext-all-debug.js"></script>
 
     <!-- DESKTOP -->
+    <script type="text/javascript">
+        Ext.ns("M31","M31.dk","M31.app");
+    </script>
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
-    <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
-    <script type="text/javascript" src="/js/desktop/App.js"></script>
+    <script type="text/javascript" src="/js/desktop/Winmanager.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
+    <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
 
 </head>
-<body scroll="no">
+<body id="body" scroll="no">
 
 <div id="x-desktop">
     <dl id="x-shortcuts">
