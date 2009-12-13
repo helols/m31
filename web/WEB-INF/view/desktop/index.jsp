@@ -22,7 +22,7 @@
     </script>
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
-    <script type="text/javascript" src="/js/desktop/Winmanager.js"></script>
+    <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
