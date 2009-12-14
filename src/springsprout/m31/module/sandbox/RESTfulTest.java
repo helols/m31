@@ -53,4 +53,12 @@ public class RESTfulTest {
         model.addAttribute("r_method","join");
         return "/sandbox/join";
     }
+    
+    // 봄씨 테스트용
+    @RequestMapping(value="images",method = RequestMethod.GET)
+    public String images(Model model){
+    	log.debug("RESTful images");
+    	model.addAttribute("r_method","images");
+    	return "/sandbox/images";
+    }
 }
