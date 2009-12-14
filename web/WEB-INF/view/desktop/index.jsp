@@ -18,7 +18,7 @@
 
     <!-- DESKTOP -->
     <script type="text/javascript">
-        Ext.ns("M31","M31.dk","M31.app");
+        Ext.ns("M31","M31.dt","M31.app");
     </script>
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>

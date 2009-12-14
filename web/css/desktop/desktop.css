@@ -23,6 +23,40 @@ html, body {
     zoom:1;
 }
 
+/*
+ * Begin Start button
+ */
+
+#ux-taskbar .start_btn{
+    height:40px;
+    width:40px;
+    background:transparent;
+    border: 0 none;
+}
+
+#ux-startbutton.start {
+    width:40px;
+    height:40px;
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
+}
+
+#ux-startbutton-ie.start{
+    width:40px;
+    height:40px;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
+}
+
+#ux-startbutton.x-btn-over, #ux-startbutton-ie.x-btn-menu-active{
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn_over.png', sizingMethod='scale');
+}
+
+#ux-startbutton.x-btn-over, #ux-startbutton.x-btn-menu-active{
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn_over.png) no-repeat;
+}
+/*
+ * End Start button
+ */
+
 .bogus {
 	background-image: url( ../../images/desktop/bogus.png ) !important;
 }
@@ -526,39 +560,6 @@ td.ux-taskButtons-edge {
 .x-window-header-text {
 	cursor:default;
 }
-
-/*
- * Begin Start button
- */
-#ux-startbutton.start {
-    width:40px;
-    height:40px;
-    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
-}
-
-#ux-startbutton-ie.start{
-    width:40px;
-    height:40px;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
-}
-#ux-taskbar .start_btn{
-    height:40px;
-    width:40px;
-    background:transparent;
-    border: 0 none;
-}
-
-#ux-startbutton-ie.x-btn-over, #ux-startbutton-ie.x-btn-over{
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn_over.png', sizingMethod='scale');
-}
-
-#ux-startbutton.x-btn-over, #ux-startbutton.btn-menu-active{
-    background: transparent url( ../../images/desktop/taskbar/default/start_btn_over.png) no-repeat;
-}
-
-/*
- * End Start button
- */
 
 .x-resizable-proxy{
     background:#C7DFFC;

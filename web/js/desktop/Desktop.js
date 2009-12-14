@@ -22,7 +22,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         this.desktopEl = this.desktopEl || Ext.get('x-desktop');
         this.taskbarEl = this.taskbarEl || Ext.get('ux-taskbar');
     	this.startConfig = this.startConfig || this.getStartConfig();
-        this.taskbar = new M31.dk.TaskBar(this);
+        this.taskbar = new M31.dt.TaskBar(this);
         this.windowsManager = new M31.WindowsManager(this);
 
 		this.launcher = this.taskbar.startMenu;

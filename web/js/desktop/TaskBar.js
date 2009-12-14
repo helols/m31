@@ -8,14 +8,14 @@
  * @class Ext.ux.TaskBar
  * @extends Ext.util.Observable
  */
-M31.dk.TaskBar = function(desktop){
+M31.dt.TaskBar = function(desktop){
     this.desktop = desktop;
     this.init();
 }
 
-Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
+Ext.extend(M31.dt.TaskBar, Ext.util.Observable, {
     init : function(){
-		this.startMenu = new M31.dk.StartMenu(Ext.apply({
+		this.startMenu = new M31.dt.StartMenu(Ext.apply({
 			iconCls: 'user',
 			height: 300,
 			shadow: true,
@@ -46,13 +46,13 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
 			width: width
 		});
 		
-		this.tbPanel = new M31.dk.TaskButtonsPanel({
+		this.tbPanel = new M31.dt.TaskButtonsPanel({
 			el: 'ux-taskbuttons-panel',
 			id: 'TaskBarButtons',
 			region:'center'
 		});
 				
-        var container = new M31.dk.TaskBarContainer({
+        var container = new M31.dt.TaskBarContainer({
 			el: 'ux-taskbar',
 			layout: 'border',
 			items: [sbBox,this.tbPanel]
@@ -76,9 +76,9 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
 
 
 
-M31.dk.TaskBarContainer = Ext.extend(Ext.Container, {
+M31.dt.TaskBarContainer = Ext.extend(Ext.Container, {
     initComponent : function() {
-        M31.dk.TaskBarContainer.superclass.initComponent.call(this);
+        M31.dt.TaskBarContainer.superclass.initComponent.call(this);
         
         this.el = Ext.get(this.el) || Ext.getBody();
         this.el.setHeight = Ext.emptyFn;
@@ -108,7 +108,7 @@ M31.dk.TaskBarContainer = Ext.extend(Ext.Container, {
  * @class Ext.ux.TaskButtonsPanel
  * @extends Ext.BoxComponent
  */
-M31.dk.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
+M31.dt.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 	activeButton: null,
 	enableScroll: true,
 	scrollIncrement: 0,
@@ -122,7 +122,7 @@ M31.dk.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
     buttonWidthSet: false,
 	
 	initComponent : function() {
-        M31.dk.TaskButtonsPanel.superclass.initComponent.call(this);
+        M31.dt.TaskButtonsPanel.superclass.initComponent.call(this);
         this.on('resize', this.delegateUpdates);
         this.items = [];
         
@@ -148,7 +148,7 @@ M31.dk.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 	
 	addButton : function(win){
 		var li = this.strip.createChild({tag:'li'}, this.edge); // insert before the edge
-        var btn = new M31.dk.TaskButton(win, li);
+        var btn = new M31.dt.TaskButton(win, li);
 		
 		this.items.push(btn);
 		
@@ -371,12 +371,11 @@ M31.dk.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
 
 
 /**
- * @class M31.desktop.TaskBar.TaskButton
- * @extends Ext.Button
+ * Taskbar 버튼.
  */
-M31.dk.TaskButton = function(win, el){
+M31.dt.TaskButton = function(win, el){
 	this.win = win;
-    M31.dk.TaskButton.superclass.constructor.call(this, {
+    M31.dt.TaskButton.superclass.constructor.call(this, {
         iconCls: win.iconCls,
         text: Ext.util.Format.ellipsis(win.title, 12),
         renderTo: el,
@@ -401,9 +400,9 @@ M31.dk.TaskButton = function(win, el){
     });
 };
 
-Ext.extend(M31.dk.TaskButton, Ext.Button, {
+Ext.extend(M31.dt.TaskButton, Ext.Button, {
     onRender : function(){
-        M31.dk.TaskButton.superclass.onRender.apply(this, arguments);
+        M31.dt.TaskButton.superclass.onRender.apply(this, arguments);
 
         this.cmenu = new Ext.menu.Menu({
             items: [{
