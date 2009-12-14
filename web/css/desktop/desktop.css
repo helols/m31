@@ -24,8 +24,21 @@ html, body {
 }
 
 .start {
-    background:transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
+    width:40px;
+    height:40px;
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
+}
+
+.start_ie {
+    width:40px;
+    height:40px;
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
+}
+.start_btn{
+    height:40px;
+    width:40px;
+    background:transparent;
+    border: 0 none;
 }
 
 .bogus {
