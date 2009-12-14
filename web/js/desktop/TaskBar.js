@@ -24,8 +24,8 @@ Ext.extend(M31.dk.TaskBar, Ext.util.Observable, {
 		}, this.desktop.startConfig));
 		
 		this.startBtn = new Ext.Button({
-            id: 'ux-startbutton',
-            iconCls:Ext.isIE?'start_ie':'start',
+            id: 'ux-startbutton'+(Ext.isIE?"-ie":""),
+            iconCls:'start',
             menu: this.startMenu,
             menuAlign: 'bl-tl',
             renderTo: 'ux-taskbar-start',

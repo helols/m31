@@ -23,24 +23,6 @@ html, body {
     zoom:1;
 }
 
-.start {
-    width:40px;
-    height:40px;
-    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
-}
-
-.start_ie {
-    width:40px;
-    height:40px;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
-}
-.start_btn{
-    height:40px;
-    width:40px;
-    background:transparent;
-    border: 0 none;
-}
-
 .bogus {
 	background-image: url( ../../images/desktop/bogus.png ) !important;
 }
@@ -548,78 +530,32 @@ td.ux-taskButtons-edge {
 /*
  * Begin Start button
  */
-.ux-startbutton-left, .ux-startbutton-right{
-	font-size:1px;
-    line-height:1px;
-}
-.ux-startbutton-left{
-	width:10px;
-	height:28px;
-	background:url( ../../images/desktop/taskbar/black/startbutton.gif ) no-repeat 0 0;
-}
-.ux-startbutton-right{
-	width:10px;
-	height:30px;
-	background:url( ../../images/desktop/taskbar/black/startbutton.gif ) no-repeat 0 -28px;
-}
-.ux-startbutton-left i, .ux-startbutton-right i{
-	display:block;
-    width:10px;
-    overflow:hidden;
-    font-size:1px;
-    line-height:1px;
-}
-.ux-startbutton-center{
-	background:url( ../../images/desktop/taskbar/black/startbutton.gif ) repeat-x 0 -56px;
-	vertical-align: middle;
-	text-align:center;
-	padding:0;
-	cursor:pointer;
-	white-space:nowrap;
+#ux-startbutton.start {
+    width:40px;
+    height:40px;
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
 }
 
-#ux-taskbar .ux-startbutton-left{
-	background-position:0 0;
+#ux-startbutton-ie.start{
+    width:40px;
+    height:40px;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
 }
-#ux-taskbar .ux-startbutton-right{
-	background-position:0 -30px;
-}
-#ux-taskbar .ux-startbutton-center{
-	background-position:0 -60px;
-}
-
-#ux-taskbar .x-btn-over .ux-startbutton-left{
-	background-position:0 -270px;
-}
-#ux-taskbar .x-btn-over  .ux-startbutton-right{
-	background-position:0 -300px;
-}
-#ux-taskbar .x-btn-over .ux-startbutton-center{
-	background-position:0 -330px;
+#ux-taskbar .start_btn{
+    height:40px;
+    width:40px;
+    background:transparent;
+    border: 0 none;
 }
 
-#ux-taskbar .x-btn-click .ux-startbutton-left{
-	background-position:0 -180px;
-}
-#ux-taskbar .x-btn-click  .ux-startbutton-right{
-	background-position:0 -210px;
-}
-#ux-taskbar .x-btn-click .ux-startbutton-center{
-	background-position:0 -240px;
+#ux-startbutton-ie.x-btn-over, #ux-startbutton-ie.x-btn-over{
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn_over.png', sizingMethod='scale');
 }
 
-#ux-taskbar .active-win .ux-startbutton-left{
-	background-position:0 -90px;
+#ux-startbutton.x-btn-over, #ux-startbutton.btn-menu-active{
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn_over.png) no-repeat;
 }
-#ux-taskbar .active-win  .ux-startbutton-right{
-	background:url( ../../images/desktop/taskbar/black/startbutton.gif ) no-repeat 0 -120px;
-}
-#ux-taskbar .active-win .ux-startbutton-center{
-	background:url( ../../images/desktop/taskbar/black/startbutton.gif ) repeat-x 0 -150px;
-}
-#ux-taskbar .active-win .ux-startbutton-center button {
-    color:#fff;
-}
+
 /*
  * End Start button
  */
