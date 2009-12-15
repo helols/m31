@@ -30,32 +30,84 @@ html, body {
 #ux-taskbar .start_btn{
     height:40px;
     width:40px;
-    background:transparent;
+    padding:0 !important;
+    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
     border: 0 none;
 }
 
 #ux-startbutton.start {
     width:40px;
     height:40px;
-    background: transparent url( ../../images/desktop/taskbar/default/start_btn.png) no-repeat;
+    background:transparent;
 }
-
-#ux-startbutton-ie.start{
-    width:40px;
-    height:40px;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn.png', sizingMethod='scale');
-}
-
-#ux-startbutton.x-btn-over, #ux-startbutton-ie.x-btn-menu-active{
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/desktop/taskbar/default/start_btn_over.png', sizingMethod='scale');
-}
-
-#ux-startbutton.x-btn-over, #ux-startbutton.x-btn-menu-active{
+#ux-startbutton.x-btn-over .start_btn , #ux-startbutton.x-btn-menu-active .start_btn{
     background: transparent url( ../../images/desktop/taskbar/default/start_btn_over.png) no-repeat;
 }
 /*
  * End Start button
  */
+
+/* 실행창 정보 시작. */
+.ux-taskbuttons-strip-wrap {
+	/* overflow:hidden;
+	position:relative;
+	width:100%; */
+
+	width:100%;
+    overflow:hidden;
+    position:relative;
+    zoom:1;
+}
+
+ul.ux-taskbuttons-strip {
+	display:block;
+	width:5000px;
+    zoom:1;
+}
+
+ul.ux-taskbuttons-strip li {
+    float:left;
+    margin-left:2px;
+}
+
+
+ul.ux-taskbuttons-strip li.ux-taskbuttons-edge {
+    float:left;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 none !important;
+    font-size:1px !important;
+    line-height:1px !important;
+    overflow:hidden;
+    zoom:1;
+    background:transparent !important;
+    width:1px;
+}
+
+.x-clear {
+    clear:both;
+    height:0;
+    overflow:hidden;
+    line-height:0;
+    font-size:0;
+}
+#ux-taskbar .active_btn{
+    height:36px;
+    width:36px;
+    padding:0 !important;
+    background: transparent url( ../../images/desktop/icon/me2day-active.png) no-repeat;
+    border: 0 none;
+}
+
+.me2day-active{
+    width:40px !important;
+    height:40px !important;
+    padding:2px 0;
+    margin-left:4px !important;
+    background:transparent none;
+
+}
+/*  실행창 정보 끝(기본)*/
 
 .bogus {
 	background-image: url( ../../images/desktop/bogus.png ) !important;
@@ -100,7 +152,7 @@ html, body {
 	margin: 0;
 }
 
-#ux-taskbar button {
+#ux-taskbar button { /*일단 dock 가면 이놈 삭제대상*/
 	/* width: 150px;
 	overflow: hidden; */
 	text-align: left;
@@ -422,50 +474,6 @@ html, body {
     /*filter:alpha(opacity=50);*/
 	padding-top:0;
 	position:relative;
-}
-
-.ux-taskbuttons-strip-wrap {
-	/* overflow:hidden;
-	position:relative;
-	width:100%; */
-
-	width:100%;
-    overflow:hidden;
-    position:relative;
-    zoom:1;
-}
-
-ul.ux-taskbuttons-strip {
-	display:block;
-	width:5000px;
-    zoom:1;
-}
-
-ul.ux-taskbuttons-strip li {
-    float:left;
-    margin-left:2px;
-}
-
-
-ul.ux-taskbuttons-strip li.ux-taskbuttons-edge {
-    float:left;
-    margin:0 !important;
-    padding:0 !important;
-    border:0 none !important;
-    font-size:1px !important;
-    line-height:1px !important;
-    overflow:hidden;
-    zoom:1;
-    background:transparent !important;
-    width:1px;
-}
-
-.x-clear {
-    clear:both;
-    height:0;
-    overflow:hidden;
-    line-height:0;
-    font-size:0;
 }
 
 .x-taskbuttons-scrolling {

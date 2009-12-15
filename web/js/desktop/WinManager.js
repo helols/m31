@@ -56,7 +56,7 @@ M31.WindowsManager = function(desktop){
             ]
         });
 
-        win.animateTarget = win.taskButton.el;
+        win.animateTarget = win.taskButton;
 
         win.on({
         	'activate': {
@@ -105,4 +105,15 @@ M31.WindowsManager = function(desktop){
 //	this.getWinY = function(height){
 //		return (Ext.lib.Dom.getViewHeight()-taskbarEl.getHeight() - height) / 2;
 //	}
+   /* if(shortcuts){
+        shortcuts.on('click', function(e, t){
+            if(t = e.getTarget('dt', shortcuts)){
+                e.stopEvent();
+                var module = desktop.getModule(t.id.replace('-shortcut', ''));
+                if(module){
+                    module.createWindow();
+                }
+            }
+        });
+    }*/
 };

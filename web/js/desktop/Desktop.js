@@ -84,7 +84,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         }
     },
 
-    layout : function(){
+   layout : function(){
         if(Ext.lib.Dom.getViewHeight()-this.taskbarEl.getHeight() <= this.minHeight){
             this.desktopEl.setHeight(this.minHeight);
         }else{

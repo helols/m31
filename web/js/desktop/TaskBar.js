@@ -24,7 +24,7 @@ Ext.extend(M31.dt.TaskBar, Ext.util.Observable, {
 		}, this.desktop.startConfig));
 		
 		this.startBtn = new Ext.Button({
-            id: 'ux-startbutton'+(Ext.isIE?"-ie":""),
+            id: 'ux-startbutton',
             iconCls:'start',
             menu: this.startMenu,
             menuAlign: 'bl-tl',
@@ -186,10 +186,10 @@ M31.dt.TaskButtonsPanel = Ext.extend(Ext.BoxComponent, {
             return;
         }*/
         if(this.resizeButtons && this.rendered){
-            this.autoSize();
+//            this.autoSize();
         }
         if(this.enableScroll && this.rendered){
-            this.autoScroll();
+//            this.autoScroll();
         }
     },
     
@@ -389,14 +389,10 @@ M31.dt.TaskButton = function(win, el){
             }
         },
         clickEvent:'mousedown',
-        template: new Ext.Template(
-			'<table cellspacing="0" class="x-btn {3}"><tbody><tr>',
-			'<td class="ux-taskbutton-left"><i>&#160;</i></td>',
-            '<td class="ux-taskbutton-center"><em class="{5} unselectable="on">',
-                '<button class="x-btn-text {2}" type="{1}" style="height:28px;">{0}</button>',
-            '</em></td>',
-            '<td class="ux-taskbutton-right"><i>&#160;</i></td>',
-			"</tr></tbody></table>")            
+        template : new Ext.Template(
+                '<div class="me2day-active">',
+                    '<button class="active_btn" type="{1}"></button>',
+                '</div>')
     });
 };
 

@@ -7,6 +7,11 @@
 
     <link rel="stylesheet" type="text/css" href="/extJS/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="/css/desktop/desktop.css" />
+    <link rel="stylesheet" type="text/css" href="/css/app/miracle.css" />
+    <link rel="stylesheet" type="text/css" href="/css/app/outsider.css" />
+    <!--[if lt IE 7]>
+        <link rel="stylesheet" type="text/css" href="/css/iehack.css"/>
+    <![endif]-->
 
     <!-- GC -->
  	<!-- LIBS -->
@@ -20,12 +25,16 @@
     <script type="text/javascript">
         Ext.ns("M31","M31.dt","M31.app");
     </script>
+
+    <script type="text/javascript" src="/js/application/miracle.js"></script>
+    <script type="text/javascript" src="/js/application/outsider.js"></script>
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
     <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
+
 
 </head>
 <body id="body" scroll="no">
@@ -49,6 +58,5 @@
 	<div class="x-clear"></div>
     <div id="ux-taskbar-tray"></div>
 </div>
-
 </body>
 </html>
