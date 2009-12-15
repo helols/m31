@@ -25,15 +25,18 @@
         Ext.ns("M31","M31.dt","M31.app");
     </script>
 
-    <script type="text/javascript" src="/js/application/miracle.js"></script>
-    <script type="text/javascript" src="/js/application/outsider.js"></script>
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
     <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
-
+    
+	<!-- Miracle -->
+    <script type="text/javascript" src="/js/application/miracle.js"></script>
+    
+	<!-- Outsider -->
+    <script type="text/javascript" src="/js/application/outsider.js"></script>
 
 </head>
 <body id="body" scroll="no">
