@@ -12,7 +12,6 @@
     <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="/css/iehack.css"/>
     <![endif]-->
-
     <!-- GC -->
  	<!-- LIBS -->
     <script type="text/javascript" src="/js/framework/jQuery/jquery-1.3.2.js"></script>
