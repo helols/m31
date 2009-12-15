@@ -182,7 +182,7 @@ ul.ux-taskbuttons-strip li.ux-taskbuttons-edge {
 
 #ux-taskbar {
 	background:transparent none;
-	height:40px;
+	height:50px;
 	margin:0;
 	padding:0;
 	position:relative;
@@ -455,7 +455,7 @@ ul.ux-taskbuttons-strip li.ux-taskbuttons-edge {
 }
 
 #ux-taskbar-start {
-	background:#000000 url( ../../images/desktop/taskbar/black/taskbuttons-panel-bg.gif) repeat-x left top;
+	background:transparent url(../../images/desktop/taskbar/default/spring-bar-bg.png) repeat-x left top;
 	left:0px;
 	padding:0;
 	position:absolute;
@@ -468,7 +468,7 @@ ul.ux-taskbuttons-strip li.ux-taskbuttons-edge {
 }
 
 #ux-taskbuttons-panel {
-	background:#000000 url( ../../images/desktop/taskbar/black/taskbuttons-panel-bg.gif ) repeat-x left top;
+	background:transparent url( ../../images/desktop/taskbar/default/spring-bar-bg.png) repeat-x left top;
     /*opacity:.5;*/
     /*-moz-opacity:.5;*/
     /*filter:alpha(opacity=50);*/

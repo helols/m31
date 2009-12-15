@@ -38,6 +38,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
 		this.fireEvent('ready', this);
         this.isReady = true;
         Ext.EventManager.onDocumentReady(this.layout,this);
+        Ext.EventManager.onDocumentReady(addReflections,this);
         Ext.EventManager.onWindowResize(this.layout,this);
     },
 
