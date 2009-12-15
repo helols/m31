@@ -25,6 +25,8 @@
         Ext.ns("M31","M31.dt","M31.app");
     </script>
 
+    <script type="text/javascript" src="/js/plugin/reflection.js"></script>
+    
     <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
     <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
     <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
@@ -38,8 +40,16 @@
 	<!-- Outsider -->
     <script type="text/javascript" src="/js/application/outsider.js"></script>
 
+
 </head>
 <body id="body" scroll="no">
+
+<div id="ux-taskbar">
+	<div id="ux-taskbar-start"></div>
+	<div id="ux-taskbuttons-panel"></div>
+	<div class="x-clear"></div>
+    <div id="ux-taskbar-tray"></div>
+</div>
 
 <div id="x-desktop">
     <dl id="x-shortcuts">
@@ -54,11 +64,5 @@
     </dl>
 </div>
 
-<div id="ux-taskbar">
-	<div id="ux-taskbar-start"></div>
-	<div id="ux-taskbuttons-panel"></div>
-	<div class="x-clear"></div>
-    <div id="ux-taskbar-tray"></div>
-</div>
 </body>
 </html>

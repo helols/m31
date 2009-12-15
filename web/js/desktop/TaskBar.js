@@ -27,12 +27,13 @@ Ext.extend(M31.dt.TaskBar, Ext.util.Observable, {
             id: 'ux-startbutton',
             iconCls:'start',
             menu: this.startMenu,
-            menuAlign: 'bl-tl',
+            menuAlign: 'tl-bl',
             renderTo: 'ux-taskbar-start',
             clickEvent: 'mousedown',
             template : new Ext.Template(
                 '<div class="{2}">',
                     '<button  class="start_btn" type="{1}"></button>',
+                    '<img class="reflect" src="/images/desktop/icon/me2day.png" />',
                 '</div>')
         });
 
@@ -91,10 +92,9 @@ M31.dt.TaskBarContainer = Ext.extend(Ext.Container, {
         });
         this.el.dom.scroll = 'no';
         this.allowDomMove = false;
-        this.autoWidth = true;
-        this.autoHeight = true;
         Ext.EventManager.onWindowResize(this.fireResize, this);
         this.renderTo = this.el;
+        this.shadow = true;
     },
 
     fireResize : function(w, h){
