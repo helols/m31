@@ -5,7 +5,6 @@
     <artifactId>SSJS</artifactId>
     <packaging>war</packaging>
     <version>1.0-M1</version>
-
     <properties>
         <java.version>1.6</java.version>
         <spring.version>3.0.0.RC3</spring.version>
@@ -99,6 +98,12 @@
             <artifactId>com.springsource.org.objectweb.asm.commons</artifactId>
             <version>${asm.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.cglib</groupId>
+            <artifactId>com.springsource.net.sf.cglib</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+
         <!-- web -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -133,21 +138,25 @@
             <version>1.1.0</version>
         </dependency>
         <dependency>
-            <groupId>c3p0</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.2-507.jdbc3</version>
-        </dependency>
-        <!-- ibaits-->
-        <dependency>
             <groupId>org.apache.ibatis</groupId>
-            <artifactId>ibatis-sqlmap</artifactId>
-            <version>3.0-beta-5</version>
+            <artifactId>com.springsource.com.ibatis</artifactId>
+            <version>2.3.4.726</version>
         </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.4.0</version>
+            </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>1.5.3</version>
+        </dependency> 
         <!-- Security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -429,6 +438,10 @@
             <id>opensprout snapshots</id>
             <name>OpenSprout Nexus public snapshots</name>
             <url>http://dev.springsprout.org/nexus/content/groups/public-snapshots/</url>
+        </repository>
+        <repository>
+            <id>mesir-repo</id>
+            <url>http://mesir.googlecode.com/svn/trunk/mavenrepo</url>
         </repository>
     </repositories>
 
