@@ -31,7 +31,7 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
-	!-- ============================================================= -->
+	<!-- ============================================================= -->
     <!--  dataSource                                                  -->
     <!-- ============================================================= -->
 	<!--
@@ -55,8 +55,7 @@
     <!--  ibatis                                                  -->
     <!-- ============================================================= -->
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-        <property name="configLocation" value="sqlMapConfig.xml" />
-        <property name="mappingLocations" value="classpath:/springsprout/m31/sqlmaps/*.xml"/>
+        <property name="configLocation" value="classpath:sqlMapConfig.xml" />
         <property name="dataSource" ref="m31DataSource"/>
     </bean>
   	<!-- ============================================================= -->

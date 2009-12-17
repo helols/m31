@@ -14,7 +14,7 @@
     />
     <typeAlias alias="hashMap" type="java.util.HashMap" />
     <typeAlias alias="string" type="java.lang.String" />
-<sqlMap resource="springspring/m31/resource/member.xml"/>
+<sqlMap resource="springsprout\m31\sqlmaps\member.xml"/>
 </sqlMapConfig>
 
 

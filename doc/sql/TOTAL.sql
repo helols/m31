@@ -36,3 +36,7 @@ MINVALUE 1 NOCYCLE CACHE 20 NOORDER ;
 CREATE SEQUENCE M31.APPLICATION_SEQ 
 INCREMENT BY 1 START WITH 1 NOMAXVALUE
 MINVALUE 1 NOCYCLE CACHE 20 NOORDER ;
+
+insert into member values (member_seq.nextval , 'helolsjava@gmail.com','is¿±±∫','abc');
+
+
