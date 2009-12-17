@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
-     "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+     "http://dev.springsprout.org/dtd/sql-map-config-2.dtd">
 
 <sqlMapConfig>
     <settings
@@ -14,7 +14,7 @@
     />
     <typeAlias alias="hashMap" type="java.util.HashMap" />
     <typeAlias alias="string" type="java.lang.String" />
-<sqlMap resource="springsprout\m31\module\sandbox\sandbox.xml"/>    
+<!--<sqlMap resource="springsprout\m31\module\sandbox\sandbox.xml"/>    -->
 </sqlMapConfig>
 
 

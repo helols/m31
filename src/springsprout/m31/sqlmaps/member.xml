@@ -10,4 +10,14 @@
 	<select id="getMember" resultMap="member" parameterClass="string">
 		SELECT ID , EMAIL , NAME FROM MEMBER WHERE EMAIL = #EMAIL#
 	</select>
+
+    <!--
+    <selectkey>
+        SELECT ID FROM MEMBER WHERE EMAIL = 'helolsjava@gmail.com'
+    </selectkey>
+    INSERT INTO MEMBER_APPS
+    SELECT member_id, ID , APP_DEFULT_YN from application_info
+    ÇÒ¿¹Á¤.
+    -->
+
 </sqlMap>

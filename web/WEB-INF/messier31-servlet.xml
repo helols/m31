@@ -50,8 +50,14 @@
 	<!-- ============================================================= -->
 	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" p:cacheSeconds="0">      
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" p:cacheSeconds="0">
+        <property name="customModelAndViewResolver">
+            <bean class="springsprout.m31.common.web.support.ModelAndJsonViewResolver">
+                <property name="defaultJsonViewName" value="mappingJacksonJsonView"/>
+                <property name="ajaxHeaderName" value="AJAX"/>
+                <property name="clearKey" value="__CLEAR__"/>
+            </bean>
+        </property>
 	</bean>
 
 </beans>
