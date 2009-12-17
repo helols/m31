@@ -28,6 +28,25 @@ CREATE TABLE M31.MEMBER_APPS
 );
 COMMENT ON TABLE M31.MEMBER_APPS IS 'MEMBER APPLICATION MAPPING';
 
+drop table api_info;
+CREATE TABLE M31.API_INFO 
+(
+	ID         NUMBER PRIMARY KEY,	
+	API_URL    VARCHAR2 (256),
+	API_KEY    VARCHAR2 (50)
+);
+COMMENT ON TABLE M31.API_INFO IS 'API 관련정보 모음' ;
+drop table api_target_info;
+CREATE TABLE M31.API_TARGET_INFO 
+(
+	API_TYPE   VARCHAR2 (20),
+    API_OP     VARCHAR2 (30),
+	API_TARGET VARCHAR2 (20),
+	API_ID     NUMBER 
+);
+COMMENT ON TABLE M31.API_TARGET_INFO IS 'API 종류 모음' ;
+
+
 CREATE SEQUENCE M31.MEMBER_SEQ 
 INCREMENT BY 1 START WITH 1 NOMAXVALUE
 MINVALUE 1 NOCYCLE CACHE 20 NOORDER ;
@@ -37,6 +56,22 @@ CREATE SEQUENCE M31.APPLICATION_SEQ
 INCREMENT BY 1 START WITH 1 NOMAXVALUE
 MINVALUE 1 NOCYCLE CACHE 20 NOORDER ;
 
-insert into member values (member_seq.nextval , 'helolsjava@gmail.com','is윤군','abc');
+CREATE SEQUENCE M31.API_SEQ 
+INCREMENT BY 1 START WITH 1 NOMAXVALUE
+MINVALUE 1 NOCYCLE CACHE 20 NOORDER ;
 
+insert into member values (member_seq.nextval , 'helolsjava@gmail.com','is윤군','abc');
+select * from api_info;
+insert into API_INFO values (api_seq.nextval ,  'http://apis.daum.net/search/OP_TARGET?apikey=OP_API_KEY&q=','d15e82f0b108d06e45ec70a9f7eec3aac3c0c61c');
+insert into API_INFO values (api_seq.nextval ,  'http://openapi.naver.com/search?key=OP_API_KEY&target=OP_TARGET&q=','b020ac68a52b2089aae394e4ec7bff2d');
+insert into API_TARGET_INFO values ('VIDEO','DAUM','vclip',5);
+insert into API_TARGET_INFO values ('VIDEO','NAVER','video',6);
+
+select 
+      ati.api_OP
+    , replace(replace(ai.API_URL,'OP_TARGET',ati.API_TARGET),'OP_API_KEY', ai.api_key) as url    
+from API_TARGET_INFO ati 
+inner join api_info ai on ati.api_id = ai.id
+where 
+ati.api_type= 'VIDEO'
 
