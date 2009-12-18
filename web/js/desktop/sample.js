@@ -19,7 +19,8 @@ M31Desktop = new M31.Desktop({
             new M31Desktop.TabWindow(),
             new M31Desktop.AccordionWindow(),
             new M31Desktop.BogusMenuModule(),
-            new M31Desktop.BogusModule()
+            new M31Desktop.BogusModule(),
+			new M31Desktop.SpringSee()
 		];
 	},
 
