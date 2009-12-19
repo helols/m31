@@ -121,10 +121,10 @@ ul.m31-barbuttons-strip li.m31-barbuttons-edge {
     border: 0 none;
 }
 
-.me2day-active{
-    width:40px !important;
-    height:40px !important;
-    padding:2px 0;
+#m31-springbar .bar-btn-icon{
+    width:50px !important;
+    height:50px !important;
+    padding:1px;
     margin-left:4px !important;
     background:transparent none;
 

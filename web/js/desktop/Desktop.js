@@ -16,7 +16,6 @@ M31.Desktop = function(cfg){
 
 Ext.extend(M31.Desktop, Ext.util.Observable, {
     isReady: false,
-    modules: [{appName:'setting',appIconCls:'app-setting-bar-icon',appId:'app-setting'}],
     initDesktop : function(){
         this.desktopEl = this.desktopEl || Ext.get('m31-desktop');
         this.springbarEl = this.springbarEl || Ext.get('m31-springbar');
@@ -24,10 +23,6 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         this.initApplicationStore();
         this.windowsManager = new M31.WindowsManager(this);
 
-//        this.modules = this.getModules();
-//        if(this.modules){
-//            this.initModules(this.modules);
-//        }
         this.appReg = new ApplicationRegistry();
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
 		this.fireEvent('ready', this);
@@ -37,14 +32,12 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         Ext.EventManager.onWindowResize(this.layout,this);
     },
 
-//    getModules : Ext.emptyFn,
     init : Ext.emptyFn,
     initApplicationStore : function(){
         var _self = this;
         if(!_self.applicationStore){
             _self.applicationStore = new Ext.data.JsonStore({
                 autoDestroy: true,
-//                autoLoad:true,
                 url: '/application/appList',                
                 storeId: 'appsStore',
                 restful:true,
@@ -56,15 +49,14 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
                        fn: function(store, records, options){
                             var apps = [];
                             store.each(function(item){
-//                                var app = _self.getApp(item.id);
-                                apps.push(Ext.apply(_self.getApp(item.data.appId), {
+                                apps.push({
                                     id : item.data.appId,
                                     appName:item.data.appName,
                                     appDesc:item.data.appDesc,
                                     appInstallYnL:item.data.appInstallYn,
-                                    winManager:_self.windowsManager
-                                }));
-
+                                    winManager:_self.windowsManager,
+                                    app: _self.getApp(item.data.appId)
+                                });
                             });
                            _self.springbar.initBarButtons(apps);
                            }
@@ -78,23 +70,6 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         _self.applicationStore.load();
     },
 
-//
-//    initModules : function(ms){
-//		for(var i = 0, len = ms.length; i < len; i++){
-//            var m = ms[i];
-//            m.desktop = this;
-//        }
-//    },
-//
-//    getModule : function(name){
-//    	var ms = this.modules;
-//    	for(var i = 0, len = ms.length; i < len; i++){
-//    		if(ms[i].id == name || ms[i].appType == name){
-//    			return ms[i];
-//			}
-//        }
-//        return '';
-//    },
     getApp : function(appId){
         return this.appReg.getApp(appId);
     },

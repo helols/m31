@@ -136,33 +136,35 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
 /**
  * Taskbar 버튼.
  */
-M31.dt.BarButton = function(app, el){
-    this.app = app;
+M31.dt.BarButton = function(appOpt, el){
+    var _self = this;
+    this.opt = appOpt;
+    this.app = undefined;
     this.win = undefined;
-
     this.open = false;
     var iconClsSuffix = '-bar-icon';
     M31.dt.BarButton.superclass.constructor.call(this, {
-        iconCls: app.id+iconClsSuffix,
+        iconCls: appOpt.id+iconClsSuffix,
 //        text: Ext.util.Format.ellipsis(app.appName, 6),
         renderTo: el,
         handler : function(){
-            if(!this.open && !this.win){
-                this.win = this.app.createWindow();
-                this.win.show();
-                this.open = true;
+            if(!_self.open && !_self.win){
+                _self.app = Ext.apply(eval(_self.opt.app),_self.opt);
+                _self.win = _self.app.createWindow();
+                _self.win.show();
+                _self.open = true;
             }
-            else if(this.win.minimized || this.win.hidden){
-                this.win.show();
-            }else if(this.win == this.win.manager.getActive()){
-                this.win.minimize();
+            else if(_self.win.minimized || _self.win.hidden){
+                _self.win.show();
+            }else if(_self.win == _self.win.manager.getActive()){
+                _self.win.minimize();
             }else{
-                this.win.toFront();
+                _self.win.toFront();
             }
         },
         clickEvent:'mousedown',
         template : new Ext.Template(
-                '<div class="me2day-active">',
+                '<div class="bar-btn-icon">',
                     '<button class="{2}" type="{1}"></button>',
                 '</div>')
     });
