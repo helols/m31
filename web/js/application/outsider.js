@@ -87,8 +87,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	lookup : {},
 	init : function(){
 		console.log("init");
+		
         console.log("before initTemplates");
         this.initTemplates();
+        
         this.store = new Ext.data.JsonStore({
 		    url: '/sandbox/images', //this.config.url,
 		    root: 'images',
@@ -98,7 +100,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 		        {name:'lastmod', type:'date', dateFormat:'timestamp'}
 		    ],
 		    listeners: {
-		    	'load': {fn:function(){ this.view.select(0); }, scope:this, single:true}
+		    	'load': {fn:function(){ console.log("store loaded"); this.view.select(0); }, scope:this, single:true}
 		    }
 		});
         
@@ -142,15 +144,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     createWindow : function(src){
          var win = this.winManager.createWindow({
-            	title: 'Choose an Image',
-		    	id: 'img-chooser-dlg',
+            	title: 'Spring See',
 		    	layout: 'border',
+		    	width: 500,
+		    	height: 300,
 				minWidth: 500,
 				minHeight: 300,
 				closeAction: 'hide',
 				border: false,
 				items:[{
-					id: 'img-chooser-view',
 					region: 'center',
 					autoScroll: true,
 					items: this.view,
@@ -220,7 +222,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     	console.log("after store.load");
     	this.reset(win);
     	this.callback = function(data){
-        	Ext.DomHelper.append('images', {
+        	console.log("callback called");
+    		Ext.DomHelper.append('images', {
         		tag: 'img', src: data.url, style:'margin:10px;visibility:hidden;'
         	}, true).show(true).frame();
         	btn.focus();
