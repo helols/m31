@@ -25,6 +25,7 @@ public class AppController {
 
     @Autowired
     DeskTopService deskTopService;
+
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list(){        
         return new ModelAndView(JSON_VIEW).addObject("appList",deskTopService.getAppList("helolsjava@gmail.com"));

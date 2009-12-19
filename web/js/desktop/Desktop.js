@@ -10,59 +10,92 @@ M31.Desktop = function(cfg){
         'ready' : true,
         'beforeunload' : true
     });
-
+    Ext.QuickTips.init();
     Ext.onReady(this.initDesktop, this);
 };
 
 Ext.extend(M31.Desktop, Ext.util.Observable, {
     isReady: false,
-    startMenu: null,
-    modules: null,
+    modules: [{appName:'setting',appIconCls:'app-setting-bar-icon',appId:'app-setting'}],
     initDesktop : function(){
-        this.desktopEl = this.desktopEl || Ext.get('x-desktop');
-        this.taskbarEl = this.taskbarEl || Ext.get('ux-taskbar');
-    	this.startConfig = this.startConfig || this.getStartConfig();
-        this.taskbar = new M31.dt.TaskBar(this);
+        this.desktopEl = this.desktopEl || Ext.get('m31-desktop');
+        this.springbarEl = this.springbarEl || Ext.get('m31-springbar');
+        this.springbar = new M31.dt.SpringBar(this);
+        this.initApplicationStore();
         this.windowsManager = new M31.WindowsManager(this);
 
-		this.launcher = this.taskbar.startMenu;
-
-		this.modules = this.getModules();
-        if(this.modules){
-            this.initModules(this.modules);
-        }
-
-        this.init();
-
+//        this.modules = this.getModules();
+//        if(this.modules){
+//            this.initModules(this.modules);
+//        }
+        this.appReg = new ApplicationRegistry();
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
 		this.fireEvent('ready', this);
         this.isReady = true;
         Ext.EventManager.onDocumentReady(this.layout,this);
-        Ext.EventManager.onDocumentReady(addReflections,this);
+//        Ext.EventManager.onDocumentReady(addReflections,this);
         Ext.EventManager.onWindowResize(this.layout,this);
     },
 
-    getModules : Ext.emptyFn,
+//    getModules : Ext.emptyFn,
     init : Ext.emptyFn,
+    initApplicationStore : function(){
+        var _self = this;
+        if(!this.applicationStore){
+            this.applicationStore = new Ext.data.JsonStore({
+                autoDestroy: true,
+                autoLoad:true,
+                url: '/application/appList',                
+                storeId: 'appsStore',
+                restful:true,
+                root: 'appList',
+                idProperty: 'appId',
+                fields: [ 'id','appName','appId','appDesc','appInstallYn'],
+                listeners: {
+                   load: {
+                       fn: function(store, records, options){
+                            var apps = [];
+                            store.each(function(item){
+//                                var app = _self.getApp(item.id);
+                                apps.push(Ext.apply(_self.getApp(item.data.appId), {
+                                    id : item.data.appId,
+                                    appName:item.data.appName,
+                                    appDesc:item.data.appDesc,
+                                    appInstallYnL:item.data.appInstallYn,
+                                    winManager:_self.windowsManager
+                                }));
 
-    initModules : function(ms){
-		for(var i = 0, len = ms.length; i < len; i++){
-            var m = ms[i];
-            this.launcher.add(m.launcher);
-            m.desktop = this;
+                            });
+                           _self.springbar.initBarButtons(apps);
+                           }
+                       }
+                   }
+            });
+        }else{
+            this.applicationStore.reload();
         }
     },
 
-    getModule : function(name){
-    	var ms = this.modules;
-    	for(var i = 0, len = ms.length; i < len; i++){
-    		if(ms[i].id == name || ms[i].appType == name){
-    			return ms[i];
-			}
-        }
-        return '';
+//
+//    initModules : function(ms){
+//		for(var i = 0, len = ms.length; i < len; i++){
+//            var m = ms[i];
+//            m.desktop = this;
+//        }
+//    },
+//
+//    getModule : function(name){
+//    	var ms = this.modules;
+//    	for(var i = 0, len = ms.length; i < len; i++){
+//    		if(ms[i].id == name || ms[i].appType == name){
+//    			return ms[i];
+//			}
+//        }
+//        return '';
+//    },
+    getApp : function(appId){
+        return this.appReg.getApp(appId);
     },
-
     onReady : function(fn, scope){
         if(!this.isReady){
             this.on('ready', fn, scope);
@@ -75,8 +108,8 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         return this.windowsManager;
     },
 
-    getTaskBar : function(){
-        return this.taskbar;
+    getSpringBar : function(){
+        return this.springbar;
     },
 
     onUnload : function(e){
@@ -86,15 +119,19 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
     },
 
    layout : function(){
-        if(Ext.lib.Dom.getViewHeight()-this.taskbarEl.getHeight() <= this.minHeight){
+        if(Ext.lib.Dom.getViewHeight()-this.springbarEl.getHeight() <= this.minHeight){
             this.desktopEl.setHeight(this.minHeight);
         }else{
-            this.desktopEl.setHeight(Ext.lib.Dom.getViewHeight()-this.taskbarEl.getHeight());
+            this.desktopEl.setHeight(Ext.lib.Dom.getViewHeight()-this.springbarEl.getHeight());
         }
         if(Ext.lib.Dom.getViewWidth() <= this.minWidth){
             this.desktopEl.setWidth(this.minWidth);
+            console.log(this.minWidth)
+            this.springbarEl.setStyle({width:this.minWidth+'px'});
+            console.log(this.springbarEl.getWidth());
         }else{
             this.desktopEl.setWidth(Ext.lib.Dom.getViewWidth());
+            this.springbarEl.setStyle({width:Ext.lib.Dom.getViewWidth()+'px'});
         }
     }
 });

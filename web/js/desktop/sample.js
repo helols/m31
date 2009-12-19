@@ -8,61 +8,18 @@
 // Sample desktop configuration
 M31Desktop = new M31.Desktop({
 	minHeight : 300,
-    minWidth : 1000,
-    init :function(){
-		Ext.QuickTips.init();
-	},
-
-	getModules : function(){
-		return [
-			new M31Desktop.GridWindow(),
-            new M31Desktop.TabWindow(),
-            new M31Desktop.AccordionWindow(),
-            new M31Desktop.BogusMenuModule(),
-            new M31Desktop.BogusModule(),
-			new M31Desktop.SpringSee()
-		];
-	},
-
-    // config for the start menu
-    getStartConfig : function(){
-        return {
-            title: 'Jack Slocum1',
-            iconCls: 'user',
-            toolItems: [{
-                text:'Settings',
-                iconCls:'settings',
-                scope:this
-            },'-',{
-                text:'Logout',
-                iconCls:'logout',
-                scope:this
-            }]
-        };
-    }
+    minWidth : 1000
 });
-
-
 
 /*
  * Example windows
  */
 M31Desktop.GridWindow = Ext.extend(M31.app.Module, {
-    id:'grid-win',
     init : function(){
-        this.launcher = {
-            text: 'Grid Window',
-            iconCls:'icon-grid',
-            handler : this.createWindow,
-            scope: this
-        }
     },
 
     createWindow : function(){
-        var winManager = this.desktop.getWinManager();
-        var win = winManager.getWindow('grid-win');
-        if(!win){
-            win = winManager.createWindow({
+         var win = this.winManager.createWindow({
                 id: 'grid-win',
                 title:'Grid Window',
                 width:740,
@@ -113,8 +70,7 @@ M31Desktop.GridWindow = Ext.extend(M31.app.Module, {
                         }]
                     })
             });
-        }
-        win.show();
+        return win;
     }
 });
 

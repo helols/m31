@@ -42,7 +42,11 @@ var Reflection = {
 			options = doptions;
 		}
 
-		try {
+        var src = Ext.fly(image).getStyle('background-image').match(/^url\(?(.*)\)/)[1].replace(/"/g,"");
+        var image = document.createElement('img');
+        image.src = src;
+        console.log(image);
+        try {
 			var d = document.createElement('div');
 			var p = image;
 
@@ -96,11 +100,7 @@ var Reflection = {
 				var canvas = document.createElement('canvas');
 				if (canvas.getContext) {
 					/* Copy original image's classes & styles to div */
-					d.className = newClasses;
-					p.className = 'reflected';
-
-					d.style.cssText = p.style.cssText;
-					p.style.cssText = 'vertical-align: bottom';
+					canvas.className = 'reflected';
 
 					var context = canvas.getContext("2d");
 

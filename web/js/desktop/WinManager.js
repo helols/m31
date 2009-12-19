@@ -5,8 +5,8 @@
  * http://www.extjs.com/license
  */
 M31.WindowsManager = function(desktop){
-    this.taskbar = desktop.getTaskBar();
-    var taskbar = this.taskbar;
+    this.springbar = desktop.getSpringBar();
+    var springbar = this.springbar;
     var desktopEl = desktop.desktopEl;
 
 
@@ -19,24 +19,24 @@ M31.WindowsManager = function(desktop){
     }
 
     function markActive(win){
-        if(activeWindow && activeWindow != win){
-            markInactive(activeWindow);
-        }
-        taskbar.setActiveButton(win.taskButton);
+//        if(activeWindow && activeWindow != win){
+//            markInactive(activeWindow);
+//        }
+//        springbar.setActiveButton(win.barButton);
         activeWindow = win;
-        Ext.fly(win.taskButton.el).addClass('active-win');
-        win.minimized = false;
+//        Ext.fly(win.barButton.el).addClass('active-win');
+//        win.minimized = false;
     }
 
     function markInactive(win){
-        if(win == activeWindow){
-            activeWindow = null;
-            Ext.fly(win.taskButton.el).removeClass('active-win');
-        }
+//        if(win == activeWindow){
+//            activeWindow = null;
+//            Ext.fly(win.barButton.el).removeClass('active-win');
+//        }
     }
 
     function removeWin(win){
-    	taskbar.removeTaskButton(win.taskButton);
+//    	taskbar.removeTaskButton(win.barButton);
     }
 
     this.createWindow = function(config, cls){
@@ -48,7 +48,7 @@ M31.WindowsManager = function(desktop){
             })
         );
         win.render(desktopEl);
-        win.taskButton = taskbar.addTaskButton(win);
+//        win.barButton = null; springbar.addTaskButton(win);
 
         win.cmenu = new Ext.menu.Menu({
             items: [
@@ -56,7 +56,7 @@ M31.WindowsManager = function(desktop){
             ]
         });
 
-        win.animateTarget = win.taskButton;
+//        win.animateTarget = win.barButton;
 
         win.on({
         	'activate': {

@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/css/desktop/desktop.css" />
     <link rel="stylesheet" type="text/css" href="/css/app/miracle.css" />
     <link rel="stylesheet" type="text/css" href="/css/app/outsider.css" />
+    <link rel="stylesheet" type="text/css" href="/css/app/helols.css" />
     <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="/css/iehack.css"/>
     <![endif]-->
@@ -24,17 +25,19 @@
     <!-- DESKTOP -->
     <script type="text/javascript">
         Ext.ns("M31","M31.dt","M31.app");
+        Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
     </script>
 
     <script type="text/javascript" src="/js/plugin/reflection.js"></script>
     
-    <script type="text/javascript" src="/js/desktop/StartMenu.js"></script>
-    <script type="text/javascript" src="/js/desktop/TaskBar.js"></script>
+
+    <script type="text/javascript" src="/js/desktop/SpringBar.js"></script>
     <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
     <script type="text/javascript" src="/js/desktop/sample.js"></script>
-    
+    <script type="text/javascript" src="/js/desktop/ApplicationRegistry.js"></script>
+
 	<!-- Miracle -->
     <script type="text/javascript" src="/js/application/miracle.js"></script>
     
@@ -45,24 +48,12 @@
 </head>
 <body id="body" scroll="no">
 
-<div id="ux-taskbar">
-	<div id="ux-taskbar-start"></div>
-	<div id="ux-taskbuttons-panel"></div>
+<div id="m31-springbar">
+	<div id="m31-barbuttons-panel"></div>
 	<div class="x-clear"></div>
-    <div id="ux-taskbar-tray"></div>
+    <div id="m31-springbar-tray"></div>
 </div>
-
-<div id="x-desktop">
-    <dl id="x-shortcuts">
-        <dt id="grid-win-shortcut">
-            <a href="#"><img src="/images/desktop/s.gif" />
-            <div>Grid Window</div></a>
-        </dt>
-        <dt id="acc-win-shortcut">
-            <a href="#"><img src="/images/desktop/s.gif" />
-            <div>Accordion Window</div></a>
-        </dt>
-    </dl>
+<div id="m31-desktop">
 </div>
 
 </body>

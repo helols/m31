@@ -26,6 +26,8 @@ public class DeskTopRepository extends SqlMapClientDaoSupport {
 	public void setSqlMapClient(){
 		super.setSqlMapClient(this.sqlMapClient);
 	}
+
+    @SuppressWarnings("unchecked")
     public ArrayList<Application> getAppList(String memberId) {
         return  (ArrayList<Application>)getSqlMapClientTemplate().queryForList("desktop.getAppList", memberId);
     }
