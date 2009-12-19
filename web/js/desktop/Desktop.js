@@ -41,10 +41,10 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
     init : Ext.emptyFn,
     initApplicationStore : function(){
         var _self = this;
-        if(!this.applicationStore){
-            this.applicationStore = new Ext.data.JsonStore({
+        if(!_self.applicationStore){
+            _self.applicationStore = new Ext.data.JsonStore({
                 autoDestroy: true,
-                autoLoad:true,
+//                autoLoad:true,
                 url: '/application/appList',                
                 storeId: 'appsStore',
                 restful:true,
@@ -72,8 +72,10 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
                    }
             });
         }else{
-            this.applicationStore.reload();
+            _self.applicationStore.reload();
         }
+
+        _self.applicationStore.load();
     },
 
 //
