@@ -87,13 +87,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	lookup : {},
 	init : function(){
 		console.log("init");
-        this.launcher = {
-            text: 'Spring See',
-            iconCls:'springsee',
-            handler : this.createWindow,
-            scope: this,
-            windowId:windowIndex
-        };
         console.log("before initTemplates");
         this.initTemplates();
         this.store = new Ext.data.JsonStore({
@@ -148,13 +141,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     },
 
     createWindow : function(src){
-    	console.log("createWindow");
-    	
-        var winManager = this.desktop.getWinManager();
-        var win = winManager.getWindow('springsee');
-        
-        if(!win){
-            win = winManager.createWindow({
+         var win = this.winManager.createWindow({
             	title: 'Choose an Image',
 		    	id: 'img-chooser-dlg',
 		    	layout: 'border',
@@ -227,8 +214,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 					scope: this
 				}
             });
-        }
-        
+
         console.log("before store.load");
     	this.store.load();
     	console.log("after store.load");
@@ -242,7 +228,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         
 		//this.callback = callback;
 		//this.animateTarget = el;
-        win.show();
+        return win;
     },
     
     initTemplates : function(){

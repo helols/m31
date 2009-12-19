@@ -1,1 +1,8 @@
 @charset "utf-8";
+.springsee-bar-icon{
+    padding:0 !important;
+    background: transparent url( ../../images/desktop/icon/setting.png) no-repeat;
+    border: 0 none;
+    width:36px;
+    height:36px;
+}
