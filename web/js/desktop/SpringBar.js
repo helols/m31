@@ -4,54 +4,6 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-/**
- * @class Ext.ux.TaskBar
- * @extends Ext.util.Observable
- */
-M31.dt.SpringBar = function(desktop){
-    this.desktop = desktop;
-    this.init();
-}
-
-Ext.extend(M31.dt.SpringBar, Ext.util.Observable, {
-    init : function(){
-        var trayWidth = 200;
-        this.springbartray = new Ext.BoxComponent({
-			el: 'm31-springbar-tray',
-	        id: 'SpringBarTray',
-			region:'east',
-			width: trayWidth
-		});
-		
-		this.sbPanel = new M31.dt.BarButtonsPanel({
-			el: 'm31-barbuttons-panel',
-			id: 'BarButtons',
-			region:'center'
-		});
-				
-        var container = new M31.dt.SpringBarContainer({
-			el: 'm31-springbar',
-			layout: 'border',
-			items: [this.sbPanel,this.springbartray]
-		});
-
-//        this.addBarButtons(this.desktop.modules);
-		return this;
-    },
-    
-    initBarButtons : function(apps){
-        this.sbPanel.addButtons(apps);
-        
-	},
-	
-	removeTaskButton : function(btn){
-		this.sbPanel.removeButton(btn);
-	},
-	
-	setActiveButton : function(btn){
-		this.sbPanel.setActiveButton(btn);
-	}
-});
 
 M31.dt.SpringBarContainer = Ext.extend(Ext.Container, {
     initComponent : function() {
@@ -112,16 +64,15 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
         });
 	},
 	
-	addButtons : function(apps){
-        var _self = this;
-        this.items = apps;
-        console.log(apps)
-        for(var i = 0 ; i < apps.length;i++){
-            var li = _self.strip.createChild({tag:'li'}, _self.edge);
-            new M31.dt.BarButton(apps[i], li);
+	addButtons : function(appsInfo){
+        for (var x in appsInfo) {
+            var li = this.strip.createChild({tag:'li'}, this.edge);
+            new M31.dt.BarButton(appsInfo[x], li);
         }
-
-//		this.setActiveButton(btn);
+        setTimeout(function(){
+                Ext.get('loading').remove();
+                Ext.get('loading-mask').fadeOut({remove:true});
+            }, 250);
 	},
 	
 	removeButton : function(btn){
@@ -136,30 +87,31 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
 /**
  * Taskbar 버튼.
  */
-M31.dt.BarButton = function(appOpt, el){
-    var _self = this;
-    this.opt = appOpt;
-    this.app = undefined;
-    this.win = undefined;
+M31.dt.BarButton = function(appInfo, el){
     this.open = false;
     var iconClsSuffix = '-bar-icon';
     M31.dt.BarButton.superclass.constructor.call(this, {
-        iconCls: appOpt.id+iconClsSuffix,
+        id : 'btn-'+ appInfo.appId,
+        iconCls: appInfo.appId+iconClsSuffix,
 //        text: Ext.util.Format.ellipsis(app.appName, 6),
         renderTo: el,
         handler : function(){
-            if(!_self.open && !_self.win){
-                _self.app = Ext.apply(eval(_self.opt.app),_self.opt);
-                _self.win = _self.app.createWindow();
-                _self.win.show();
-                _self.open = true;
+            var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
+            if(!win){
+                var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
+                M31.WindowsManager.getInstance().createWindow(this,
+                            Ext.apply(app.createWindow,{
+                                id:appInfo.appId,
+                                title:appInfo.appName
+                            })
+                        ).show();
             }
-            else if(_self.win.minimized || _self.win.hidden){
-                _self.win.show();
-            }else if(_self.win == _self.win.manager.getActive()){
-                _self.win.minimize();
+            else if(win.minimized || win.hidden){
+                win.show();
+            }else if(win === win.manager.getActive()){
+                win.minimize();
             }else{
-                _self.win.toFront();
+                win.toFront();
             }
         },
         clickEvent:'mousedown',
@@ -168,6 +120,8 @@ M31.dt.BarButton = function(appOpt, el){
                     '<button class="{2}" type="{1}"></button>',
                 '</div>')
     });
+
+//    remove
 };
 
 Ext.extend(M31.dt.BarButton, Ext.Button, {
@@ -227,3 +181,54 @@ Ext.extend(M31.dt.BarButton, Ext.Button, {
 		win.close();
 	}
 });
+
+M31.dt.SpringBar = function(){
+    var _instance = null;
+    var springbartray, sbPanel ,container;
+    var _desktop = null;
+    function init(desktop){
+         _desktop = desktop;
+        var trayWidth = 200;
+        springbartray = new Ext.BoxComponent({
+            el: 'm31-springbar-tray',
+            id: 'SpringBarTray',
+            region:'east',
+            width: trayWidth
+        });
+
+        sbPanel = new M31.dt.BarButtonsPanel({
+            el: 'm31-barbuttons-panel',
+            id: 'BarButtons',
+            region:'center'
+        });
+
+        container = new M31.dt.SpringBarContainer({
+            el: 'm31-springbar',
+            layout: 'border',
+            items: [sbPanel,springbartray]
+        });
+        return this;
+    };
+    return {
+        getInstance : function(args){
+            if(_instance === null){
+               _instance ={
+                    getDesktop:function(){
+                       return _desktop;
+                    },
+                    initBarButtons : function(appsInfo){
+                        sbPanel.addButtons(appsInfo);
+                    },
+                    removeTaskButton : function(btn){
+                        sbPanel.removeButton(btn);
+                    },
+                    setActiveButton : function(btn){
+                        sbPanel.setActiveButton(btn);
+                    }
+               }
+               init(args);
+            }
+            return _instance;
+        }       
+    };
+}();

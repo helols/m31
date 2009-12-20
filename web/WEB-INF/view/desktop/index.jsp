@@ -21,35 +21,46 @@
  	<!-- ENDLIBS -->
 
     <script type="text/javascript" src="/extJS/ext-all-debug.js"></script>
+    <script type="text/javascript" src="/js/common/utils.js"></script>
 
     <!-- DESKTOP -->
+
+
     <script type="text/javascript">
         Ext.ns("M31","M31.dt","M31.app");
         Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
     </script>
 
     <script type="text/javascript" src="/js/plugin/reflection.js"></script>
-    
-
-    <script type="text/javascript" src="/js/desktop/SpringBar.js"></script>
+    <script type="text/javascript" src="/js/desktop/ApplicationRegistry.js"></script>
     <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
+    <script type="text/javascript" src="/js/desktop/SpringBar.js"></script>
     <script type="text/javascript" src="/js/desktop/Module.js"></script>
     <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
-    <script type="text/javascript" src="/js/desktop/sample.js"></script>
-    <script type="text/javascript" src="/js/desktop/ApplicationRegistry.js"></script>
+    <%--<script type="text/javascript" src="/js/desktop/sample.js"></script>--%>
 
-	<!-- Miracle -->
+    <script type="text/javascript">
+         M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
+    </script>
+    <!-- Miracle -->
     <script type="text/javascript" src="/js/application/miracle.js"></script>
-    
-	<!-- Outsider -->
+    <!-- Outsider -->
     <script type="text/javascript" src="/js/application/outsider.js"></script>
-
+    <!-- helols -->
+    <script type="text/javascript" src="/js/application/helols.js"></script>
 
 </head>
 <body id="body" scroll="no">
+<div id="loading-mask"></div>
+<div id="loading">
+    <div class="loading-messge">
+        Loading...<br/>
+        <img src="../../images/ajax-loader.gif" width="220" height="19" style="margin-right:8px;" align="absmiddle"/>
+    </div>
+</div>
 
 <div id="m31-springbar">
-	<div id="m31-barbuttons-panel"></div>
+    <div id="m31-barbuttons-panel"></div>
 	<div class="x-clear"></div>
     <div id="m31-springbar-tray"></div>
 </div>

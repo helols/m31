@@ -15,6 +15,36 @@ html, body {
     height:100%;
     width:100%;
 }
+
+#loading{
+    background:black;
+    position:absolute;
+    z-index:20001;
+    height:100%;
+    width:100%;
+}
+#loading-mask{
+    background:black;
+    position:absolute;
+    z-index:20000;
+    height:100%;
+    width:100%;
+}
+#loading img {
+    margin-bottom:5px;
+}
+#loading .loading-messge{
+	background:black;
+	color:#fff;
+	font:bold 13px tahoma,arial,helvetica;
+	padding:10px;
+	margin:0;
+    text-align:center;
+    height:100%;
+    width:100%;
+    position:absolute;
+    top:40%;
+}
 #m31-desktop {
 	width: 100%;
     border: 0 none;
@@ -123,9 +153,10 @@ ul.m31-barbuttons-strip li.m31-barbuttons-edge {
 
 #m31-springbar .bar-btn-icon{
     width:50px !important;
-    height:50px !important;
+    height:48px !important;
     padding:1px;
     margin-left:4px !important;
+    text-align:center !important;
     background:transparent none;
 
 }

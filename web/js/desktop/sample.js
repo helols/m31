@@ -6,6 +6,7 @@
  */
 
 // Sample desktop configuration
+
 M31Desktop = new M31.Desktop({
 	minHeight : 300,
     minWidth : 1000
@@ -19,8 +20,7 @@ M31Desktop.GridWindow = Ext.extend(M31.app.Module, {
     },
 
     createWindow : function(){
-         var win = this.winManager.createWindow({
-                id: 'grid-win',
+         return {
                 title:'Grid Window',
                 width:740,
                 height:480,
@@ -69,8 +69,7 @@ M31Desktop.GridWindow = Ext.extend(M31.app.Module, {
                             iconCls:'remove'
                         }]
                     })
-            });
-        return win;
+                }
     }
 });
 
