@@ -20,7 +20,7 @@ import static springsprout.m31.common.M31System.JSON_VIEW;
 
 @Controller
 @RequestMapping("/application/*")
-public class AppController {
+public class ApplicationController {
     Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
