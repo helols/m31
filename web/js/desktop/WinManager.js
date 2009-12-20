@@ -50,8 +50,7 @@ M31.WindowsManager = function() {
                                     manager: windows,
                                     minimizable: true,
                                     maximizable: true
-                                })
-                                );
+                                }));
                         win.render(desktopEl);
 //                        win.cmenu = new Ext.menu.Menu({
 //                            items: [
@@ -78,7 +77,7 @@ M31.WindowsManager = function() {
                                 fn: removeWin
                             }
                         });
-
+console.log("createWindow createWindow!!")
                         return win;
                     },
                     getManager : function() {

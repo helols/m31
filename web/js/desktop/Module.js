@@ -11,5 +11,6 @@ M31.app.Module = function(config){
 }
 
 Ext.extend(M31.app.Module, Ext.util.Observable, {
-    init : Ext.emptyFn
+    init : Ext.emptyFn,
+    createCallback : Ext.emptyFn
 });

@@ -88,7 +88,6 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
  * Taskbar 버튼.
  */
 M31.dt.BarButton = function(appInfo, el){
-    this.open = false;
     var iconClsSuffix = '-bar-icon';
     M31.dt.BarButton.superclass.constructor.call(this, {
         id : 'btn-'+ appInfo.appId,
@@ -99,14 +98,15 @@ M31.dt.BarButton = function(appInfo, el){
             var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
             if(!win){
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
-                M31.WindowsManager.getInstance().createWindow(this,
-                            Ext.apply(app.createWindow,{
+                win = M31.WindowsManager.getInstance().createWindow(this,
+                            Ext.apply(app.createWindow(),{
                                 id:appInfo.appId,
                                 title:appInfo.appName,
                                 iconCls:appInfo.appId+'-win-icon'
                             })
-                        ).show();
-
+                        );
+                app.createCallback();
+                win.show();
             }
             else if(win.minimized || win.hidden){
                 win.show();
