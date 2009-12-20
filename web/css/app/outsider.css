@@ -6,3 +6,70 @@
     width:36px;
     height:36px;
 }
+
+/* Spring See */
+#springsee-dlg .details{
+    padding: 10px;
+    text-align: center;
+}
+#springsee-dlg .details-info{
+    border-top: 1px solid #cccccc;
+    font: 11px Arial, Helvetica, sans-serif;
+    margin-top: 5px;
+    padding-top: 5px;
+    text-align: left;
+}
+#springsee-dlg .details-info b{
+    color: #555555;
+    display: block;
+    margin-bottom: 4px;
+}
+#springsee-dlg .details-info span{
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+#springsee-view{
+    background: white;
+    font: 11px Arial, Helvetica, sans-serif;
+}
+#springsee-view .thumb{
+    background: #dddddd;
+    padding: 3px;
+}
+#springsee-view .thumb img{
+    height: 60px;
+    width: 80px;
+}
+#springsee-view .thumb-wrap{
+    float: left;
+    margin: 5px;
+    margin-right: 0;
+    padding: 5px;
+}
+#springsee-view .thumb-wrap span{
+    display: block;
+    overflow: hidden;
+    text-align: center;
+}
+#springsee-view .x-view-over{
+    background: #efefef url(../../images/springsee/row-over.gif) repeat-x left top;
+}
+#springsee-view .x-view-selected{
+    background: #DFEDFF;
+}
+#springsee-view .x-view-selected .thumb{
+    background:transparent;
+}
+#springsee-view .x-view-selected span{
+    color:#1A4D8F;
+}
+#springsee-view .loading-indicator {
+    font-size:11px;
+    background-image:url('../../images/springsee/loading.gif');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left:20px;
+    margin:10px;
+}

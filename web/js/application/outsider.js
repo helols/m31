@@ -15,7 +15,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	init : function(){
 		console.log("init");
 		
-        console.log("before initTemplates");
         this.initTemplates();
         
         this.store = new Ext.data.JsonStore({
@@ -32,7 +31,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 		});
         
         var formatSize = function(data){
-        	console.log("formatSize");
 	        if(data.size < 1024) {
 	            return data.size + " bytes";
 	        } else {
@@ -41,7 +39,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	    };
 	    
         var formatData = function(data){
-        	console.log("formatData");
 	    	data.shortName = data.name.ellipse(15);
 	    	data.sizeString = formatSize(data);
 	    	data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
@@ -70,8 +67,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     },
     
     createCallback : function() {
-        console.log("store!!")
-        this.store.load();
+        //this.store.load();
     },
     
     createWindow : function (){
@@ -84,6 +80,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 			closeAction: 'hide',
 			border: false,
 			items:[{
+				id: 'springsee-view',
 				region: 'center',
 				autoScroll: true,
 				items: this.view,
@@ -140,7 +137,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     },
     
     initTemplates : function(){
-    	console.log("in initTemplates");
 		this.thumbTemplate = new Ext.XTemplate(
 			'<tpl for=".">',
 				'<div class="thumb-wrap" id="{name}">',
@@ -167,7 +163,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	},
     
     showDetails : function(){
-    	console.log("showDetails");
 	    var selNode = this.view.getSelectedNodes();
 	    var detailEl = Ext.getCmp('img-detail-panel').body;
 		if(selNode && selNode.length > 0){
@@ -182,7 +177,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 	},
 
 	onLoadException : function(v,o){
-    	console.log("onLoadException");
 	    this.view.getEl().update('<div style="padding:10px;">Error loading images.</div>');
 	},
 	
@@ -198,7 +192,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     
     //이미지 검색하기
 	getImages : function() {
-		alert("검색");
+		this.store.load();
 	}
 });
 
