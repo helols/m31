@@ -102,9 +102,11 @@ M31.dt.BarButton = function(appInfo, el){
                 M31.WindowsManager.getInstance().createWindow(this,
                             Ext.apply(app.createWindow,{
                                 id:appInfo.appId,
-                                title:appInfo.appName
+                                title:appInfo.appName,
+                                iconCls:appInfo.appId+'-win-icon'
                             })
                         ).show();
+
             }
             else if(win.minimized || win.hidden){
                 win.show();
@@ -116,8 +118,9 @@ M31.dt.BarButton = function(appInfo, el){
         },
         clickEvent:'mousedown',
         template : new Ext.Template(
-                '<div class="bar-btn-icon">',
+                '<div class="bar-btn-icon" style="word-break:break-all;" >',
                     '<button class="{2}" type="{1}"></button>',
+                '<span>'+appInfo.appName+'</span>',
                 '</div>')
     });
 

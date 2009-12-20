@@ -143,14 +143,6 @@ ul.m31-barbuttons-strip li.m31-barbuttons-edge {
 }
 /* spring bar [panel] - end */
 
-#m31-springbar .active_btn{
-    height:36px;
-    width:36px;
-    padding:0 !important;
-    background: transparent url( ../../images/desktop/icon/me2day-active.png) no-repeat;
-    border: 0 none;
-}
-
 #m31-springbar .bar-btn-icon{
     width:50px !important;
     height:48px !important;
@@ -158,43 +150,14 @@ ul.m31-barbuttons-strip li.m31-barbuttons-edge {
     margin-left:4px !important;
     text-align:center !important;
     background:transparent none;
+    cursor:pointer;
 
 }
-/*  실행창 정보 끝(기본)*/
-
-.bogus {
-	background-image: url( ../../images/desktop/bogus.png ) !important;
-}
-
-.logout {
-	background-image: url( ../../images/desktop/logout.gif ) !important;
-}
-
-.settings {
-	background-image: url(../../images/desktop/gears.gif ) !important;
-}
-
-#dpanels {
-	width: 250px;
-	float: right;
-}
-
-#dpanels .x-panel {
-	margin: 15px;
-}
-
-#dpanels .x-date-picker {
-	border: 0 none;
-	border-top: 0 none;
-	background: transparent;
-}
-
-#dpanels .x-date-picker td.x-date-active {
-	background: #ffffff;
-}
-
-#dpanels .x-date-picker {
-	width: 100% !important;
+#m31-springbar .bar-btn-icon span{
+    color:white;
+    display:block;
+    margin-top:-1px;
+    overflow:hidden;
 }
 
 #spacer {
@@ -212,28 +175,6 @@ ul.m31-barbuttons-strip li.m31-barbuttons-edge {
 
 .x-window-maximized .x-window-bc {
 	height:0;
-}
-
-.icon-grid {
-    background-image:url( ../../images/desktop/grid.png ) !important;
-}
-.add {
-    background-image:url(../../extJS/resources/images/icons/fam/add.gif) !important;
-}
-.option {
-    background-image:url(../../extJS/resources/images/icons/fam/plugin.gif) !important;
-}
-.remove {
-    background-image:url(../../extJS/resources/images/icons/fam/delete.gif) !important;
-}
-.save {
-    background-image:url(../../extJS/resources/images/icons/save.gif) !important;
-}
-.accordion {
-    background-image:url(../../images/desktop/accordian.gif) !important;
-}
-.tabs {
-    background-image:url(../../images/desktop/tabs.gif) !important;
 }
 
 #title-bar-wrapper {

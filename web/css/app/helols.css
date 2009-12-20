@@ -5,3 +5,7 @@
     width:36px;
     height:36px;
 }
+
+.setting-win-icon{
+    background-image: url(../../images/desktop/icon/setting_16.png) !important;
+}
