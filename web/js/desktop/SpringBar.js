@@ -69,10 +69,10 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
             var li = this.strip.createChild({tag:'li'}, this.edge);
             new M31.dt.BarButton(appsInfo[x], li);
         }
-        setTimeout(function(){
-                Ext.get('loading').remove();
-                Ext.get('loading-mask').fadeOut({remove:true});
-            }, 250);
+//        setTimeout(function(){
+//                Ext.get('loading').remove();
+//                Ext.get('loading-mask').fadeOut({remove:true});
+//            }, 250);
 	},
 	
 	removeButton : function(btn){
