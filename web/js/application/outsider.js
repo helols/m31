@@ -71,92 +71,95 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
       //this.reset();
     },
 
-    createWindow : {
-    	layout: 'border',
-    	width: 640,
-    	height: 480,
-		minWidth: 640,
-		minHeight: 480,
-		closeAction: 'hide',
-		border: false,
-		items:[{
-			region: 'center',
-			autoScroll: true,
-			items: this.view,
-            tbar:[{
-            	id: 'source',
-            	xtype: 'combo',
-            	store: new Ext.data.ArrayStore({
-                    fields: ['id', 'name'],
-                    data : this.source
-                }),
-                displayField:'name',
-                typeAhead: true,
-                width: 100,
-                mode: 'local',
-                editable: false,
-                displayField: 'name',
-                forceSelection: true,
-                lazyInit: false,
-                triggerAction: 'all',
-                value: '통합검색'
-//                        listeners: {
-//							'select': {fn:this.sortImages, scope:this}
-//					    }
-            },
-            {
-            	text: 'Search:'
-            },{
-            	xtype: 'textfield',
-            	id: 'search',
-            	selectOnFocus: true,
-            	width: 100,
-            	listeners: {
-            		'render': {fn:function(){
-				    	Ext.getCmp('search').getEl().on('keyup', function(){
-				    		this.filter();
-				    	}, this, {buffer:500});
-            		}, scope:this}
-            	}
-            }, ' ', '-', {
-            	text: 'Sort By:'
-            }, {
-            	id: 'sortSelect',
-            	xtype: 'combo',
-		        typeAhead: true,
-		        triggerAction: 'all',
-		        width: 100,
-		        editable: false,
-		        mode: 'local',
-		        displayField: 'desc',
-		        valueField: 'name',
-		        lazyInit: false,
-		        value: 'name',
-		        store: new Ext.data.ArrayStore({
-			        fields: ['name', 'desc'],
-			        data : [['name', 'Name'],['size', 'File Size'],['lastmod', 'Last Modified']]
-			    }),
-			    listeners: {
-					'select': {fn:this.sortImages, scope:this}
-			    }
-		    }, {
-		    	id: 'send',
-		    	xtype: 'button',
-		    	value: 'Send'
-		    }]
-		},{
-			id: 'img-detail-panel',
-			region: 'east',
-			split: true,
-			width: 150,
-			minWidth: 150,
-			maxWidth: 250
-		}],
-		keys: {
-			key: 27, // Esc key
-			handler: function(){ this.win.hide(); },
-			scope: this
-		}
+    createWindow : function(src){
+	    var win = this.winManager.createWindow({
+	    	title: 'Spring See',
+	    	layout: 'border',
+	    	width: 640,
+	    	height: 480,
+			minWidth: 640,
+			minHeight: 480,
+			closeAction: 'hide',
+			border: false,
+			items:[{
+				region: 'center',
+				autoScroll: true,
+				items: this.view,
+	            tbar:[{
+	            	id: 'source',
+	            	xtype: 'combo',
+	            	store: new Ext.data.ArrayStore({
+	                    fields: ['id', 'name'],
+	                    data : this.source
+	                }),
+	                displayField:'name',
+	                typeAhead: true,
+	                width: 100,
+	                mode: 'local',
+	                editable: false,
+	                displayField: 'name',
+	                forceSelection: true,
+	                lazyInit: false,
+	                triggerAction: 'all',
+	                value: '통합검색'
+	//                        listeners: {
+	//							'select': {fn:this.sortImages, scope:this}
+	//					    }
+	            },
+	            {
+	            	text: 'Search:'
+	            },{
+	            	xtype: 'textfield',
+	            	id: 'search',
+	            	selectOnFocus: true,
+	            	width: 100,
+	            	listeners: {
+	            		'render': {fn:function(){
+					    	Ext.getCmp('search').getEl().on('keyup', function(){
+					    		this.filter();
+					    	}, this, {buffer:500});
+	            		}, scope:this}
+	            	}
+	            }, ' ', '-', {
+	            	text: 'Sort By:'
+	            }, {
+	            	id: 'sortSelect',
+	            	xtype: 'combo',
+			        typeAhead: true,
+			        triggerAction: 'all',
+			        width: 100,
+			        editable: false,
+			        mode: 'local',
+			        displayField: 'desc',
+			        valueField: 'name',
+			        lazyInit: false,
+			        value: 'name',
+			        store: new Ext.data.ArrayStore({
+				        fields: ['name', 'desc'],
+				        data : [['name', 'Name'],['size', 'File Size'],['lastmod', 'Last Modified']]
+				    }),
+				    listeners: {
+						'select': {fn:this.sortImages, scope:this}
+				    }
+			    }, {
+			    	id: 'send',
+			    	xtype: 'button',
+			    	value: 'Send'
+			    }]
+			},{
+				id: 'img-detail-panel',
+				region: 'east',
+				split: true,
+				width: 150,
+				minWidth: 150,
+				maxWidth: 250
+			}],
+			keys: {
+				key: 27, // Esc key
+				handler: function(){ this.win.hide(); },
+				scope: this
+			}
+	    });
 
     	//this.store.load();
     	//this.reset(win);
