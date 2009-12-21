@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import static springsprout.m31.common.M31System.ENCODING;
+
 public class OpenApiRequestHelper {
 
     public static InputStream loadApi(String url) {
@@ -43,9 +45,9 @@ public class OpenApiRequestHelper {
 
     public static String loadJSON(String url) {
         StringBuilder jsonBuilder = new StringBuilder();
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(loadApi(url)));
+        BufferedReader in = null;
         try {
+            in = new BufferedReader(new InputStreamReader(loadApi(url), ENCODING));
             String readString = null;
             while ((readString = in.readLine()) != null){
                 jsonBuilder.append(readString);

@@ -7,5 +7,11 @@
  */
 package springsprout.m31.module.app.support;
 
+import springsprout.m31.domain.SpringseeDTO;
+
+import java.util.ArrayList;
+
 public class GoogleAPIHelper {
+    public static void springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo) {
+    }
 }

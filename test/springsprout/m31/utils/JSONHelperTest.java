@@ -67,7 +67,7 @@ public class JSONHelperTest {
 
     @Test
     public void mapInSingleToJSONstr() {
-        HashMap map = new HashMap<String, Member>();
+        HashMap<String,Member> map = new HashMap<String, Member>();
         map.put("helols", helols);
         map.put("miracle", miracle);
         map.put("outsider", outsider);
@@ -121,8 +121,7 @@ public class JSONHelperTest {
 
         assertThat(obj.toString(),is(itemString));
 
-        ArrayList<HashMap<String,String>> r_list = new ArrayList<HashMap<String, String>>();
-        JSONHelper.jsonArrayConverToArrayList(r_list,jsonString,"channel.item");
+        ArrayList<HashMap<String,String>> r_list = JSONHelper.jsonArrayConverToArrayList(jsonString,"channel.item");
 
         assertThat(r_list.get(0).get("thumbnail"),is("http://image02.search.daum-img.net/03/0.c3.b6.BL_shopping-how_472_0.jpg"));
         assertThat(r_list.get(9).get("pubDate"),is("20081224212859"));

@@ -75,6 +75,7 @@ public class JSONHelper {
      * @param jsonString
      * @return HashMap
      */
+    @SuppressWarnings("uncheched")
     public static HashMap covertHashMap(String jsonString) {
         return ((HashMap)JSONObject.toBean(JSONObject.fromObject(jsonString),HashMap.class));
     }
@@ -86,13 +87,16 @@ public class JSONHelper {
      * @param path
      * @return
      */
-    public static void jsonArrayConverToArrayList(ArrayList<HashMap<String, String>> r_list,String jsonString, String path) {
+    @SuppressWarnings("unchecked")
+    public static ArrayList<HashMap<String, String>> jsonArrayConverToArrayList(String jsonString, String path) {
 
+        ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
         String[] paths = path.split("[.]");
         Iterator jsonIter = JSONArray.fromObject(JSONObject.fromObject(JSONObject.fromObject(jsonString).get(paths[0])).get(paths[1])).iterator();
         while(jsonIter.hasNext()){
-            r_list.add(covertHashMap(JSONObject.fromObject(jsonIter.next()).toString()));
+            tmpList.add(covertHashMap(JSONObject.fromObject(jsonIter.next()).toString()));
         }
+        return tmpList;
     }
 
 }

@@ -13,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.domain.SpringseeDTO;
 import springsprout.m31.module.app.support.DaumAPIHelper;
+import springsprout.m31.module.app.support.FlickrAPIHelper;
+import springsprout.m31.module.app.support.GoogleAPIHelper;
+import springsprout.m31.module.app.support.NaverAPIHelper;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -46,20 +50,31 @@ public class OpenApiService {
         throw new OpenApiReadException("none support openApi");
     }
 
-    public ArrayList<HashMap<String, String>> springsee(OpenApi s_type, String query, Integer pageNo) {
-        ArrayList<HashMap<String,String>> r_list = new ArrayList<HashMap<String,String>>();
+    public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
+        ArrayList<SpringseeDTO> r_list = new ArrayList<SpringseeDTO>();
+        Integer totalCount = 0;
+        HashMap<String,Object> r_map = new HashMap<String,Object>();
         switch (s_type) {
+            case ALL:
             case DAUM:
-                DaumAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
-                break;
+                totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(OpenApi.DAUM)) break;
             case NAVER:
-                break;
+                NaverAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(OpenApi.NAVER)) break;
             case GOOGLE:
-                break;
+                GoogleAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(OpenApi.GOOGLE)) break;
             case FLICKR:
+                FlickrAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(OpenApi.FLICKR)) break;
+            default :
                 break;
         }
 
-        return null;
+        r_map.put("imgInfo",r_list);
+        r_map.put("totalCount",totalCount);
+
+        return r_map;
     }
 }

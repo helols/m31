@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import springsprout.m31.common.OpenApi;
-import springsprout.m31.common.util.M31Utils;
 import springsprout.m31.module.app.OpenApiService;
+
+import java.util.HashMap;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
 
@@ -34,10 +35,12 @@ public class OpenApiGateWay {
     @RequestMapping("/gateway/springsee/{search_type}")
     public ModelAndView springsee(@PathVariable String search_type, @RequestParam String query, @RequestParam(defaultValue = "1") Integer pageNo){
         OpenApi openApiType = conversionService.convert(search_type.toUpperCase(),OpenApi.class);
-        query = M31Utils.urlDecode(query);
-        log.debug("search query"+query);
+        log.debug("search query>>"+query);
+        log.debug("openApiType>>"+openApiType);
 
-        return new ModelAndView(JSON_VIEW).addObject("springsee",applicationService.springsee(openApiType,query,pageNo));
+        HashMap<String,Object> springsee = applicationService.springsee(openApiType,query,pageNo);
+        return new ModelAndView(JSON_VIEW).addObject("totalCount",springsee.get("totalCount"))
+                .addObject("imgInfo",springsee.get("imgInfo"));
     }
 
     @RequestMapping("/gateway/springplayer")
