@@ -10,10 +10,7 @@ package springsprout.m31.utils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * json string 관련 util.
@@ -44,7 +41,6 @@ public class JSONHelper {
     public static String domainToJSONstr(Object obj) {
         return JSONObject.fromObject(obj).toString();
     }
-
     /**
      * map 안에 담겨 있는 단일 object를 json String으로 변환해준다.
      * @param map
@@ -82,4 +78,21 @@ public class JSONHelper {
     public static HashMap covertHashMap(String jsonString) {
         return ((HashMap)JSONObject.toBean(JSONObject.fromObject(jsonString),HashMap.class));
     }
+
+    /**
+     * path에 해당하는 json array를 ArrayList안에 hashmap을 넣어서 반환한다.
+     * @see JSONHelperTest.jsonArrayConverToArrayListTest
+     * @param jsonString
+     * @param path
+     * @return
+     */
+    public static void jsonArrayConverToArrayList(ArrayList<HashMap<String, String>> r_list,String jsonString, String path) {
+
+        String[] paths = path.split("[.]");
+        Iterator jsonIter = JSONArray.fromObject(JSONObject.fromObject(JSONObject.fromObject(jsonString).get(paths[0])).get(paths[1])).iterator();
+        while(jsonIter.hasNext()){
+            r_list.add(covertHashMap(JSONObject.fromObject(jsonIter.next()).toString()));
+        }
+    }
+
 }

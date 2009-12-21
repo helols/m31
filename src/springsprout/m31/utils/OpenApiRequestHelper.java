@@ -9,7 +9,6 @@ package springsprout.m31.utils;
 
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
-import org.springframework.stereotype.Component;
 import springsprout.m31.common.OpenApiReadException;
 
 import java.io.BufferedReader;
@@ -18,10 +17,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-@Component
 public class OpenApiRequestHelper {
 
-    public InputStream loadApi(String url) {
+    public static InputStream loadApi(String url) {
         InputStream is = null;
         try {
             is = new URL(url).openConnection().getInputStream();
@@ -31,7 +29,7 @@ public class OpenApiRequestHelper {
         return is;
     }
 
-    public Document loadXml(String url) {
+    public static Document loadXml(String url) {
         Document doc = null;
         SAXBuilder parser = new SAXBuilder();
         parser.setIgnoringElementContentWhitespace(true);
@@ -43,7 +41,7 @@ public class OpenApiRequestHelper {
         return doc;
     }
 
-    public String loadJSON(String url) {
+    public static String loadJSON(String url) {
         StringBuilder jsonBuilder = new StringBuilder();
 
         BufferedReader in = new BufferedReader(new InputStreamReader(loadApi(url)));

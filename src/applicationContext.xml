@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
@@ -10,56 +10,68 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:lang="http://www.springframework.org/schema/lang"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util">
 
-	<!-- ============================================================= -->
-	<!--  Resources                                                    -->
-	<!-- ============================================================= -->
-	<context:property-placeholder location="classpath*:*.properties" />
+    <!-- ============================================================= -->
+    <!--  Resources                                                    -->
+    <!-- ============================================================= -->
+    <context:property-placeholder location="classpath*:*.properties"/>
 
-	<!-- ============================================================= -->
-	<!--  Component Scan                                               -->
-	<!-- ============================================================= -->
-	<context:component-scan base-package="springsprout">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
+    <!-- ============================================================= -->
+    <!--  Component Scan                                               -->
+    <!-- ============================================================= -->
+    <context:component-scan base-package="springsprout">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
-	<!-- ============================================================= -->
+    <!-- ============================================================= -->
     <!--  dataSource                                                  -->
     <!-- ============================================================= -->
-	<!--
-	<bean id="jobDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:comp/env/jdbc/jobDS" />
-    </bean> -->
+    <!--
+   <bean id="jobDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+       <property name="jndiName" value="java:comp/env/jdbc/jobDS" />
+   </bean> -->
 
-	 <bean id="m31DataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource"
-    	p:driverClassName="${jdbc.driverClassName}"
-    	p:url="${jdbc.url}"
-    	p:username="${jdbc.username}"
-    	p:password="${jdbc.password}"
-    	p:maxIdle = "${jdbc.maxIdle}"
-    	p:maxActive="${jdbc.maxActive}"/>
+    <bean id="m31DataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource"
+          p:driverClassName="${jdbc.driverClassName}"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"
+          p:maxIdle="${jdbc.maxIdle}"
+          p:maxActive="${jdbc.maxActive}"/>
 
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-    	p:dataSource-ref = "m31DataSource"/>
+          p:dataSource-ref="m31DataSource"/>
 
-	<!-- ============================================================= -->
+    <!-- ============================================================= -->
     <!--  ibatis                                                  -->
     <!-- ============================================================= -->
-	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-        <property name="configLocation" value="classpath:sqlMapConfig.xml" />
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="classpath:sqlMapConfig.xml"/>
         <property name="dataSource" ref="m31DataSource"/>
     </bean>
-  	<!-- ============================================================= -->
+    <!-- ============================================================= -->
     <!--  Transaction                                                  -->
     <!-- =============================================================-->
-   	<tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- ============================================================= -->
+    <!--  conversionService                                                  -->
+    <!-- =============================================================-->
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <util:set>
+                <bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"/>
+            </util:set>
+        </property>
+    </bean>
 </beans>

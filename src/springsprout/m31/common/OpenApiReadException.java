@@ -11,6 +11,10 @@ public class OpenApiReadException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
+    public OpenApiReadException() {
+        super();
+    }
+
     public OpenApiReadException(Throwable e) {
         super(e);
     }
@@ -19,5 +23,7 @@ public class OpenApiReadException extends RuntimeException{
         super(msg, e);
     }
 
-    
+    public OpenApiReadException(String msg) {
+        super(msg);
+    }
 }

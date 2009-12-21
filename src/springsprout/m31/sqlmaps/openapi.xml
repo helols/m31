@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="openapi">
+
+    <select id="initapiinfo" resultClass="java.util.concurrent.ConcurrentHashMap">
+        SELECT
+              ATI.API_OP
+            , REPLACE(REPLACE(AI.API_URL,'OP_TARGET',ATI.API_TARGET),'OP_API_KEY', AI.API_KEY) AS API_URL
+            , ATI.API_TYPE
+            , ATI.API_OUTPUT
+        FROM API_TARGET_INFO ATI
+        INNER JOIN API_INFO AI ON ATI.API_ID = AI.ID
+    </select>
+</sqlMap>

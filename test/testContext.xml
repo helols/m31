@@ -45,5 +45,13 @@
     <!--  Transaction                                                  -->
     <!-- =============================================================-->
    	<tx:annotation-driven transaction-manager="transactionManager"/>
-    
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <util:set>
+                <bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"/>
+            </util:set>
+        </property>
+    </bean>
+
 </beans>
