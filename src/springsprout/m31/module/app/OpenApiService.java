@@ -40,7 +40,6 @@ public class OpenApiService {
     public String[] getAPIInfo(String api_op,String api_type) {
         for(ConcurrentHashMap<String, String> apiInfo : apisInfo){
             if(apiInfo.get("API_OP").equals(api_op) && apiInfo.get("API_TYPE").equals(api_type)){
-                HashMap<String,String> r_hashMap = new HashMap<String,String>();
                 return new String[]{apiInfo.get("API_URL"),apiInfo.get("API_OUTPUT")};
             }
         }
