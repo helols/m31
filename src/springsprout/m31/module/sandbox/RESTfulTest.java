@@ -7,16 +7,15 @@
  */
 package springsprout.m31.module.sandbox;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/sandbox/*")
+@RequestMapping(value="/sandbox/*")
 public class RESTfulTest {
     Logger log = LoggerFactory.getLogger(getClass());
 
@@ -60,5 +59,10 @@ public class RESTfulTest {
     	log.debug("RESTful images");
     	model.addAttribute("r_method","images");
     	return "/sandbox/images";
+    }
+
+    @RequestMapping(value="RESTfulTest",method = RequestMethod.GET)
+    public String RESTfulTest(){
+        return "/RESTfulTest";
     }
 }

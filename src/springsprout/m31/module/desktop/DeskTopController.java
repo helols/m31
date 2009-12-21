@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/desktop/*")
+@RequestMapping(value="/desktop/*")
 public class DeskTopController {
-    @RequestMapping(value="/desktop/view",method = RequestMethod.GET)
+
+    @RequestMapping(method = RequestMethod.GET)
     public String view(){
         return "/desktop/index";
     }

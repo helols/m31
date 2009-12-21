@@ -6,22 +6,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>ExtTop - Desktop Sample App</title>
 
-    <link rel="stylesheet" type="text/css" href="/extJS/resources/css/ext-all.css" />
-    <link rel="stylesheet" type="text/css" href="/css/desktop/desktop.css" />
-    <link rel="stylesheet" type="text/css" href="/css/app/miracle.css" />
-    <link rel="stylesheet" type="text/css" href="/css/app/outsider.css" />
-    <link rel="stylesheet" type="text/css" href="/css/app/helols.css" />
+
+    <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/miracle.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/outsider.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/helols.css"/>" />
     <!--[if lt IE 7]>
-        <link rel="stylesheet" type="text/css" href="/css/iehack.css"/>
+        <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
     <![endif]-->
     <!-- GC -->
  	<!-- LIBS -->
-    <script type="text/javascript" src="/js/framework/jQuery/jquery-1.3.2.js"></script>
- 	<script type="text/javascript" src="/extJS/adapter/jquery/ext-jquery-adapter-debug.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
+ 	<script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter-debug.js"/>"></script>
  	<!-- ENDLIBS -->
 
-    <script type="text/javascript" src="/extJS/ext-all-debug.js"></script>
-    <script type="text/javascript" src="/js/common/utils.js"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <!-- DESKTOP -->
 
@@ -31,23 +32,23 @@
         Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
     </script>
 
-    <script type="text/javascript" src="/js/plugin/reflection.js"></script>
-    <script type="text/javascript" src="/js/desktop/ApplicationRegistry.js"></script>
-    <script type="text/javascript" src="/js/desktop/WinManager.js"></script>
-    <script type="text/javascript" src="/js/desktop/SpringBar.js"></script>
-    <script type="text/javascript" src="/js/desktop/Module.js"></script>
-    <script type="text/javascript" src="/js/desktop/Desktop.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/reflection.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/ApplicationRegistry.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/WinManager.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/SpringBar.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/Module.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/Desktop.js"/>"></script>
     <%--<script type="text/javascript" src="/js/desktop/sample.js"></script>--%>
 
     <script type="text/javascript">
          M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
     </script>
     <!-- Miracle -->
-    <script type="text/javascript" src="/js/application/miracle.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/miracle.js"/>"></script>
     <!-- Outsider -->
-    <script type="text/javascript" src="/js/application/outsider.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/outsider.js"/>"></script>
     <!-- helols -->
-    <script type="text/javascript" src="/js/application/helols.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/helols.js"/>"></script>
 
 </head>
 <body id="body" scroll="no">
