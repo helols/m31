@@ -36,6 +36,7 @@ M31.WindowsManager = function() {
     function removeWin(win) {
         //    	taskbar.removeTaskButton(win.barButton);
         //        win.destroy();
+        M31.ApplicationRegistry.getInstance().getApp(win.id.replace("-win","")).removeWin();
     };
 
 
@@ -77,14 +78,13 @@ M31.WindowsManager = function() {
                                 fn: removeWin
                             }
                         });
-console.log("createWindow createWindow!!")
                         return win;
                     },
                     getManager : function() {
                         return windows;
                     },
                     getWindow : function(id) {
-                        return windows.get(id);
+                        return windows.get(id+"-win");
                     }
                 }
             }
