@@ -42,12 +42,12 @@ public class OpenApiRequestHelper {
         }
         return doc;
     }
-
-    public static String loadJSON(String url) {
-        StringBuilder jsonBuilder = new StringBuilder();
+    
+    public static String loadJString(String url,String encoding) {
+            StringBuilder jsonBuilder = new StringBuilder();
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(loadApi(url), ENCODING));
+            in = new BufferedReader(new InputStreamReader(loadApi(url), encoding));
             String readString = null;
             while ((readString = in.readLine()) != null){
                 jsonBuilder.append(readString);
@@ -64,5 +64,10 @@ public class OpenApiRequestHelper {
             }
         }
         return jsonBuilder.toString();
+
+    }
+
+    public static String loadJString(String url) {
+        return loadJString(url, ENCODING);
     }
 }

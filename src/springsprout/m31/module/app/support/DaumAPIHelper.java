@@ -13,7 +13,7 @@ import springsprout.m31.utils.JSONHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static springsprout.m31.utils.OpenApiRequestHelper.loadJSON;
+import static springsprout.m31.utils.OpenApiRequestHelper.loadJString;
 
 public class DaumAPIHelper {
 
@@ -21,8 +21,8 @@ public class DaumAPIHelper {
         String api_url = apiInfo[0];
         String api_output = apiInfo[1];
         api_url += query+"&output="+api_output.toLowerCase();
-        ArrayList<HashMap<String, String>> tmpList = JSONHelper.jsonArrayConverToArrayList(loadJSON(api_url),"channel.item");
-        for(HashMap<String, String> tmpMap : tmpList){            
+        ArrayList<HashMap<String, String>> tmpList = JSONHelper.jsonArrayConverToArrayList(loadJString(api_url),"channel.item");
+        for(HashMap<String, String> tmpMap : tmpList){
             r_list.add(
                     new SpringseeDTO(
                             tmpMap.get("thumbnail")
