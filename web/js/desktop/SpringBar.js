@@ -98,7 +98,7 @@ M31.dt.BarButton = function(appInfo, el){
             var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
             if(!win){
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
-                app.beforeCreate(win);
+                app.beforeCreate();
                 win = M31.WindowsManager.getInstance().createWindow(this,
                             Ext.apply(app.createWindow(),{
                                 id:appInfo.appId+'-win',
@@ -106,7 +106,7 @@ M31.dt.BarButton = function(appInfo, el){
                                 iconCls:appInfo.appId+'-win-icon'
                             })
                         );
-                app.createCallback();
+                app.createCallback(win);
                 win.show();
             }
             else if(win.minimized || win.hidden){

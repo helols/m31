@@ -14,5 +14,6 @@ Ext.extend(M31.app.Module, Ext.util.Observable, {
     init : Ext.emptyFn,
     createCallback : Ext.emptyFn,
     beforeCreate : Ext.emptyFn,
-    removeWin : Ext.emptyFn
+    removeWin : Ext.emptyFn,
+    createWindow :Ext.emptyFn
 });

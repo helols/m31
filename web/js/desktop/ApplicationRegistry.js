@@ -37,7 +37,6 @@ M31.ApplicationRegistry = function() {
                     getApp : function(appId) {
                         var app = appInfo[appId].app;
                         if (typeof(app) === 'string') {
-                            console.log('new');
                             app = eval(app);
                             appInfo[appId].app = Ext.apply(app,{id:appId});
                         }

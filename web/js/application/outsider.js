@@ -83,12 +83,13 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
      */
     removeWin: function(){
         this.view = undefined;
+        this.win = undefined;
     },
 
     /**
      *  윈도우를 생성하기 직전에 호출되는 펑션.
      */
-    beforeCreate : function(win) {
+    beforeCreate : function() {
         if(!this.view){
             this.view = this.createView();
         }
@@ -97,7 +98,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     /**
      *  윈도우를 생성된후에 호출되는 펑션.
      */
-    createCallback : function() {
+    createCallback : function(win) {
+        if(!this.win){
+            this.win = win;
+        }
         //this.store.load();
     },
 
