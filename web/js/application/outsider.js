@@ -15,10 +15,18 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     init : function() {
         console.log("init");
         this.initTemplates();
+        this.apiProvider;
+        this.searchText;
 
         this.store = new Ext.data.JsonStore({
-            url: '/sandbox/images', //this.config.url,
             root: 'images',
+            baseParams: {
+                query: ''
+            },
+        	proxy : new Ext.data.HttpProxy({
+                method: 'GET',
+                url: '/gateway/springsee/'
+           }),
             fields: [
                 'name', 'url',
                 {
@@ -123,7 +131,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     items: this.view,
                     tbar:[
                         {
-                            id: 'source',
+                            id: 'springsee-api-provider',
                             xtype: 'combo',
                             store: new Ext.data.ArrayStore({
                                 fields: ['id', 'name'],
@@ -135,10 +143,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             mode: 'local',
                             editable: false,
                             displayField: 'name',
+                            valueField: 'id',
                             forceSelection: true,
                             lazyInit: false,
                             triggerAction: 'all',
-                            value: '통합검색'
+                            value: 'all'
                             //                        listeners: {
                             //							'select': {fn:this.sortImages, scope:this}
                             //					    }
@@ -150,12 +159,12 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         },
                         {
                             xtype: 'textfield',
-                            id: 'search',
+                            id: 'springsee-search',
                             selectOnFocus: true,
                             width: 100
                         },
                         {
-                            id: 'send-btn',
+                            id: 'springsee-send-btn',
                             xtype: 'button',
                             text: 'Send',
                             handler: this.getImages,
@@ -164,7 +173,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     ]
                 },
                 {
-                    id: 'img-detail-panel',
+                    id: 'springsee-img-detail-panel',
                     region: 'east',
                     split: true,
                     width: 150,
@@ -212,7 +221,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     showDetails : function() {
         var selNode = this.view.getSelectedNodes();
-        var detailEl = Ext.getCmp('img-detail-panel').body;
+        var detailEl = Ext.getCmp('springsee-img-detail-panel').body;
         if (selNode && selNode.length > 0) {
             selNode = selNode[0];
             var data = this.lookup[selNode.id];
@@ -230,18 +239,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     //Gallery 실행
     runGallery : function() {
-        alert("run Gallery")
-    },
-
-    // 검색 소스 고르기
-    selectSource : function() {
-        alert(Ext.getCmp('source').getValue());
+        alert("run Gallery");
     },
 
     //이미지 검색하기
     getImages : function() {
+    	this.store.proxy.setUrl(this.store.proxy.url + Ext.getCmp('springsee-api-provider').getValue());
+    	this.store.baseParams.query = Ext.getCmp('springsee-search').getValue();
         this.store.load();
-    }
+    },
 });
 
 String.prototype.ellipse = function(maxLength) {
