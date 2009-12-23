@@ -7,6 +7,7 @@
  */
 package springsprout.m31.common.util;
 
+import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
 
 import java.io.UnsupportedEncodingException;
@@ -15,12 +16,19 @@ import java.net.URLDecoder;
 import static springsprout.m31.common.M31System.ENCODING;
 
 public class M31Utils {
-        public static String urlDecode(String query){
-           try {
+    public static String urlDecode(String query) {
+        try {
             query = URLDecoder.decode(query, ENCODING);
         } catch (UnsupportedEncodingException e) {
-               throw new OpenApiReadException(e);
+            throw new OpenApiReadException(e);
         }
         return query;
+    }
+
+    public static OpenApi convert(String source) {
+        if (source.length() == 0) {
+            return null;
+        }
+        return Enum.valueOf(OpenApi.class, source.trim());
     }
 }

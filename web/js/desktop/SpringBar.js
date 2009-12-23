@@ -75,7 +75,7 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
 //            }, 250);
 	},
 	
-	removeButton : function(btn){
+	updateBarButtons : function(btn){
 
 	},
 	
@@ -223,8 +223,8 @@ M31.dt.SpringBar = function(){
                     initBarButtons : function(appsInfo){
                         sbPanel.addButtons(appsInfo);
                     },
-                    removeTaskButton : function(btn){
-                        sbPanel.removeButton(btn);
+                    updateBarButtons : function(btn){
+                        sbPanel.updateBarButtons(btn);
                     },
                     setActiveButton : function(btn){
                         sbPanel.setActiveButton(btn);

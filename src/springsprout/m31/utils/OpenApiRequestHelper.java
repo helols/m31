@@ -7,20 +7,26 @@
  */
 package springsprout.m31.utils;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import springsprout.m31.common.OpenApiReadException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 
 import static springsprout.m31.common.M31System.ENCODING;
 
 public class OpenApiRequestHelper {
 
+    static HttpClient client = new DefaultHttpClient();
+    static HttpGet apiurl = new HttpGet();
+    
     public static InputStream loadApi(String url) {
         InputStream is = null;
         try {
@@ -44,27 +50,12 @@ public class OpenApiRequestHelper {
     }
     
     public static String loadJString(String url,String encoding) {
-            StringBuilder jsonBuilder = new StringBuilder();
-        BufferedReader in = null;
+        apiurl.setURI((URI.create(url)));
         try {
-            in = new BufferedReader(new InputStreamReader(loadApi(url), encoding));
-            String readString = null;
-            while ((readString = in.readLine()) != null){
-                jsonBuilder.append(readString);
-            }
+            return EntityUtils.toString(client.execute(apiurl).getEntity(),encoding);
         } catch (IOException e) {
-            throw new OpenApiReadException(e);
-        }finally {
-            if(in != null){
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new OpenApiReadException(e);
-                }
-            }
+            throw new OpenApiReadException("loadJString error..");
         }
-        return jsonBuilder.toString();
-
     }
 
     public static String loadJString(String url) {

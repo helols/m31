@@ -16,7 +16,8 @@
     <typeAlias alias="string" type="java.lang.String" />
     <sqlMap resource="springsprout/m31/sqlmaps/member.xml"/>
     <sqlMap resource="springsprout/m31/sqlmaps/desktop.xml"/>
-    
+    <sqlMap resource="springsprout/m31/sqlmaps/openapi.xml"/>
+
 </sqlMapConfig>
 
 

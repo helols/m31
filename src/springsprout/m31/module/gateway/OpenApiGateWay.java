@@ -10,7 +10,6 @@ package springsprout.m31.module.gateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,7 @@ import springsprout.m31.module.app.OpenApiService;
 import java.util.HashMap;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
+import static springsprout.m31.common.util.M31Utils.convert;
 
 @Controller
 public class OpenApiGateWay {
@@ -29,12 +29,11 @@ public class OpenApiGateWay {
 
     @Autowired
     OpenApiService applicationService;
-    @Autowired
-    ConversionService conversionService;
 
     @RequestMapping("/gateway/springsee/{search_type}")
     public ModelAndView springsee(@PathVariable String search_type, @RequestParam String query, @RequestParam(defaultValue = "1") Integer pageNo){
-        OpenApi openApiType = conversionService.convert(search_type.toUpperCase(),OpenApi.class);
+        OpenApi openApiType = convert(search_type.toUpperCase());
+        log.debug("encoding !! ["+System.getProperty("file.encoding")+"]");
         log.debug("search query>>"+query);
         log.debug("openApiType>>"+openApiType);
 

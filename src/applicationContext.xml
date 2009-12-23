@@ -65,7 +65,7 @@
 
     <!-- ============================================================= -->
     <!--  conversionService                                                  -->
-    <!-- =============================================================-->
+    <!-- =============================================================
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
@@ -73,5 +73,5 @@
                 <bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"/>
             </util:set>
         </property>
-    </bean>
+    </bean>-->
 </beans>
