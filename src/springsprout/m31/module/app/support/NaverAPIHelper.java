@@ -12,7 +12,7 @@ import springsprout.m31.domain.SpringseeDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static springsprout.m31.utils.OpenApiRequestHelper.docToMap;
+import static springsprout.m31.utils.OpenApiRequestHelper.docElementValueToMap;
 import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
 
 public class NaverAPIHelper {
@@ -21,7 +21,7 @@ public class NaverAPIHelper {
         String api_url = apiInfo[0];
         api_url += query;
 
-        HashMap<String,Object> rMap =  docToMap(loadXml(api_url));
+        HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url));
         if(rMap.get("item") == null){
             return 0;
         }
