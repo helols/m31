@@ -22,7 +22,6 @@ public class NaverAPIHelper {
         api_url += query;
 
         HashMap<String,Object> rMap =  docToMap(loadXml(api_url));
-        System.out.println("rMap"+rMap);
         if(rMap.get("item") == null){
             return 0;
         }
