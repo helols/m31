@@ -10,9 +10,32 @@ package springsprout.m31.module.app.support;
 import springsprout.m31.domain.SpringseeDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static springsprout.m31.utils.OpenApiRequestHelper.docToMap;
+import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
 
 public class NaverAPIHelper {
-    public static void springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo) {
-        
+
+    public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo) {
+        String api_url = apiInfo[0];
+        api_url += query;
+
+        HashMap<String,Object> rMap =  docToMap(loadXml(api_url));
+        System.out.println("rMap"+rMap);
+        if(rMap.get("item") == null){
+            return 0;
+        }
+        for (HashMap<String, String> tmpMap : (ArrayList<HashMap<String, String>>) rMap.get("item")) {
+            r_list.add(
+                    new SpringseeDTO(
+                            tmpMap.get("thumbnail")
+                            , tmpMap.get("sizewidth")
+                            , tmpMap.get("sizeheight")
+                            , tmpMap.get("title")
+                            , tmpMap.get("link"))
+            );
+        }
+        return new Integer(rMap.get("total").toString());
     }
 }

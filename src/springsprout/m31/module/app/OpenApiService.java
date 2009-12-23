@@ -15,8 +15,6 @@ import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
 import springsprout.m31.domain.SpringseeDTO;
 import springsprout.m31.module.app.support.DaumAPIHelper;
-import springsprout.m31.module.app.support.FlickrAPIHelper;
-import springsprout.m31.module.app.support.GoogleAPIHelper;
 import springsprout.m31.module.app.support.NaverAPIHelper;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static springsprout.m31.common.OpenApi.*;
 
 @Service
 public class OpenApiService {
@@ -47,7 +47,7 @@ public class OpenApiService {
                 return new String[]{apiInfo.get("API_URL"),apiInfo.get("API_OUTPUT")};
             }
         }
-        throw new OpenApiReadException("none support openApi");
+        throw new OpenApiReadException(api_op+"/"+api_type+"is none support openApi");
     }
 
     public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
@@ -57,17 +57,17 @@ public class OpenApiService {
         switch (s_type) {
             case ALL:
             case DAUM:
-                totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
-                if(s_type.equals(OpenApi.DAUM)) break;
+                totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(DAUM.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(DAUM)) break;
             case NAVER:
-                NaverAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
-                if(s_type.equals(OpenApi.NAVER)) break;
+                totalCount += NaverAPIHelper.springsee(r_list,getAPIInfo(NAVER.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(NAVER)) break;
             case GOOGLE:
-                GoogleAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
-                if(s_type.equals(OpenApi.GOOGLE)) break;
+//                GoogleAPIHelper.springsee(r_list,getAPIInfo(GOOGLE.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(GOOGLE)) break;
             case FLICKR:
-                FlickrAPIHelper.springsee(r_list,getAPIInfo(s_type.toString(),"IMAGE"),query,pageNo);
-                if(s_type.equals(OpenApi.FLICKR)) break;
+//                FlickrAPIHelper.springsee(r_list,getAPIInfo(FLICKR.toString(),"IMAGE"),query,pageNo);
+                if(s_type.equals(FLICKR)) break;
             default :
                 break;
         }

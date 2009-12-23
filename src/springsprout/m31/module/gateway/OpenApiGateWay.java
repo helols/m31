@@ -33,24 +33,24 @@ public class OpenApiGateWay {
     @RequestMapping("/gateway/springsee/{search_type}")
     public ModelAndView springsee(@PathVariable String search_type, @RequestParam String query, @RequestParam(defaultValue = "1") Integer pageNo){
         OpenApi openApiType = convert(search_type.toUpperCase());
-        log.debug("encoding !! ["+System.getProperty("file.encoding")+"]");
-        log.debug("search query>>"+query);
-        log.debug("openApiType>>"+openApiType);
+        log.debug("encoding !! ["+System.getProperty("file.encoding")+"]"); // 개발때 확인용
+        log.debug("search query>>"+query); // 개발때 확인용
+        log.debug("openApiType>>"+openApiType);// 개발때 확인용 
 
         HashMap<String,Object> springsee = applicationService.springsee(openApiType,query,pageNo);
         return new ModelAndView(JSON_VIEW).addObject("totalCount",springsee.get("totalCount"))
                 .addObject("imgInfo",springsee.get("imgInfo"));
     }
 
-    @RequestMapping("/gateway/springplayer")
+    @RequestMapping("/gateway/springplayer/{search_type}")
     public ModelAndView springplayer(){
-
+        
         return null;
     }
 
     @RequestMapping("/gateway/weathertray")
     public ModelAndView weathertray(){
-
+        
         return null;
     }
 
