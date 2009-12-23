@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/miracle.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/outsider.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/helols.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/arawn.css"/>" />
     <!--[if lt IE 7]>
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
     <![endif]-->
@@ -41,7 +42,7 @@
     <%--<script type="text/javascript" src="/js/desktop/sample.js"></script>--%>
 
     <script type="text/javascript">
-         M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
+    	// M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
     </script>
     <!-- Miracle -->
     <script type="text/javascript" src="<c:url value="/js/application/miracle.js"/>"></script>
@@ -49,7 +50,8 @@
     <script type="text/javascript" src="<c:url value="/js/application/outsider.js"/>"></script>
     <!-- helols -->
     <script type="text/javascript" src="<c:url value="/js/application/helols.js"/>"></script>
-
+	<!-- arawn -->
+    <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>
 </head>
 <body id="body" scroll="no">
 <%--<div id="loading-mask"></div>--%>
