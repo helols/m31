@@ -20,12 +20,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
         this.store = new Ext.data.JsonStore({
         	url: '/gateway/springsee/search',
-        	method: 'get',
+        	method: 'GET',
             root: 'imgInfo',
-            baseParams: {
-        		search_type: '',
-                query: ''
-            },
             fields: [
                 'title', 'thumbnail'
 //                {
@@ -256,9 +252,12 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     		alert("검색어를 입력하세요.");
     		return;
     	}
-    	this.store.baseParams.search_type = Ext.getCmp('springsee-api-provider').getValue();
-    	this.store.baseParams.query 	  = Ext.getCmp('springsee-search').getValue();
-        this.store.load();
+        this.store.reload({
+        	params: {
+        		search_type: Ext.getCmp('springsee-api-provider').getValue(), 
+        		query: 		 Ext.getCmp('springsee-search').getValue() 
+        	}
+        });
     }
 });
 
