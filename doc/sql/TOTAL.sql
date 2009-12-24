@@ -64,6 +64,10 @@ insert into member values (member_seq.nextval , 'helolsjava@gmail.com','is윤군
 select * from api_info;
 insert into API_INFO values (api_seq.nextval ,  'http://apis.daum.net/search/OP_TARGET?apikey=OP_API_KEY&q=','d15e82f0b108d06e45ec70a9f7eec3aac3c0c61c');
 insert into API_INFO values (api_seq.nextval ,  'http://openapi.naver.com/search?key=OP_API_KEY&target=OP_TARGET&q=','b020ac68a52b2089aae394e4ec7bff2d');
+insert into API_INFO values (api_seq.nextval ,  'http://api.flickr.com/services/rest/?&method=OP_TARGET&api_key=OP_API_KEY&tags=','2852d069b0b45bf17cd976d07b2278ca');
+insert into API_INFO values (api_seq.nextval ,  'http://ajax.googleapis.com/ajax/services/search/OP_TARGET?hl=ko&v=1.0&q=','');
+insert into API_TARGET_INFO values ('IMAGE','FLICKR','image',21, 'JSON');
+insert into API_TARGET_INFO values ('IMAGE','GOOGLE','images',22, 'JSON');
 insert into API_TARGET_INFO values ('VIDEO','DAUM','vclip',5);
 insert into API_TARGET_INFO values ('VIDEO','NAVER','video',6);
 
