@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
-import springsprout.m31.domain.SpringseeDTO;
+import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.module.app.support.DaumAPIHelper;
 import springsprout.m31.module.app.support.NaverAPIHelper;
 

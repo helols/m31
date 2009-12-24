@@ -7,7 +7,7 @@
  */
 package springsprout.m31.module.app.support;
 
-import springsprout.m31.domain.SpringseeDTO;
+import springsprout.m31.dto.SpringseeDTO;
 
 import java.util.ArrayList;
 
