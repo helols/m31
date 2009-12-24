@@ -42,7 +42,7 @@
     <%--<script type="text/javascript" src="/js/desktop/sample.js"></script>--%>
 
     <script type="text/javascript">
-    	// M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
+    	M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
     </script>
     <!-- Miracle -->
     <script type="text/javascript" src="<c:url value="/js/application/miracle.js"/>"></script>
