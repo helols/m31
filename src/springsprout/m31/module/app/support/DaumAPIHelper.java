@@ -15,11 +15,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DaumAPIHelper {
+	
 
-    public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo) {
+    public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
         api_url += query+"&output="+api_output.toLowerCase();
+        api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
+        
         ArrayList<HashMap<String, String>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel.item");
         for(HashMap<String, String> tmpMap : tmpList){
             r_list.add(

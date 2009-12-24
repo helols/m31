@@ -53,7 +53,7 @@ public class RESTfulTest {
         return "/sandbox/join";
     }
     
-    // 봄씨 테스트용
+    // 봄씨 테스트용 
     @RequestMapping(value="images",method = RequestMethod.GET)
     public String images(Model model){
     	log.debug("RESTful images");

@@ -53,14 +53,16 @@ public class OpenApiService {
     public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
         ArrayList<SpringseeDTO> r_list = new ArrayList<SpringseeDTO>();
         Integer totalCount = 0;
+        Integer perPage = 40;
         HashMap<String,Object> r_map = new HashMap<String,Object>();
         switch (s_type) {
             case ALL:
+            	perPage = 10;
             case DAUM:
-                totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(DAUM.toString(),"IMAGE"),query,pageNo);
+                totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(DAUM.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(DAUM)) break;
             case NAVER:
-                totalCount += NaverAPIHelper.springsee(r_list,getAPIInfo(NAVER.toString(),"IMAGE"),query,pageNo);
+                totalCount += NaverAPIHelper.springsee(r_list,getAPIInfo(NAVER.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(NAVER)) break;
             case GOOGLE:
 //                GoogleAPIHelper.springsee(r_list,getAPIInfo(GOOGLE.toString(),"IMAGE"),query,pageNo);

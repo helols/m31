@@ -17,10 +17,11 @@ import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
 
 public class NaverAPIHelper {
 
-    public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo) {
+    public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0];
         api_url += query;
-
+        api_url += "&sort=sim&start="+pageNo + "&display="+perPage;
+         
         HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url));
         if(rMap.get("item") == null){
             return 0;
