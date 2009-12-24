@@ -22,7 +22,7 @@ public class DaumAPIHelper {
         String api_output = apiInfo[1];
         api_url += query+"&output="+api_output.toLowerCase();
         api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
-        
+        System.out.println("Daum api : " + api_url);
         ArrayList<HashMap<String, String>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel.item");
         for(HashMap<String, String> tmpMap : tmpList){
             r_list.add(

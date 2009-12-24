@@ -16,6 +16,8 @@ import springsprout.m31.common.OpenApiReadException;
 import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.module.app.support.DaumAPIHelper;
 import springsprout.m31.module.app.support.NaverAPIHelper;
+import springsprout.m31.module.app.support.FlickrAPIHelper;
+import springsprout.m31.module.app.support.GoogleAPIHelper;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class OpenApiService {
     public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
         ArrayList<SpringseeDTO> r_list = new ArrayList<SpringseeDTO>();
         Integer totalCount = 0;
-        Integer perPage = 40;
+        Integer perPage = 20;
         HashMap<String,Object> r_map = new HashMap<String,Object>();
         switch (s_type) {
             case ALL:
@@ -65,10 +67,10 @@ public class OpenApiService {
                 totalCount += NaverAPIHelper.springsee(r_list,getAPIInfo(NAVER.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(NAVER)) break;
             case GOOGLE:
-//                GoogleAPIHelper.springsee(r_list,getAPIInfo(GOOGLE.toString(),"IMAGE"),query,pageNo);
+            	totalCount += GoogleAPIHelper.springsee(r_list,getAPIInfo(GOOGLE.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(GOOGLE)) break;
             case FLICKR:
-//                FlickrAPIHelper.springsee(r_list,getAPIInfo(FLICKR.toString(),"IMAGE"),query,pageNo);
+            	totalCount += FlickrAPIHelper.springsee(r_list,getAPIInfo(FLICKR.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(FLICKR)) break;
             default :
                 break;

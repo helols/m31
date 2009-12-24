@@ -21,7 +21,7 @@ public class NaverAPIHelper {
         String api_url = apiInfo[0];
         api_url += query;
         api_url += "&sort=sim&start="+pageNo + "&display="+perPage;
-         
+        System.out.println("Naver api : " + api_url); 
         HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url));
         if(rMap.get("item") == null){
             return 0;
