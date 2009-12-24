@@ -4,6 +4,7 @@ M31.ApplicationRegistry = function() {
         setting : {app : 'new M31Desktop.Setting()'},
         springsee :{app : 'new M31Desktop.SpringSee()'}
     };
+    var loaded = false;
     var applicationStore = new Ext.data.JsonStore({
         autoDestroy: true,
         url: '/application/appList',
@@ -13,6 +14,7 @@ M31.ApplicationRegistry = function() {
         idProperty: 'appId',
         fields: [ 'id','appName','appId','appDesc','appInstallYn'],
         listeners: {
+            beforeload:{fn:function(){loaded = true;}},
             load: {
                 fn: function(store, records, options) {
                     console.log(' applicationStore load');
@@ -29,7 +31,9 @@ M31.ApplicationRegistry = function() {
             }
         }
     });
-    applicationStore.load();
+    if(!loaded){
+        applicationStore.load();
+    }
     return {
         getInstance : function() {
             if (_instance === null) {             
@@ -41,6 +45,11 @@ M31.ApplicationRegistry = function() {
                             appInfo[appId].app = Ext.apply(app,{id:appId});
                         }
                         return app;
+                    },
+                    loadApplicationStore : function(){
+                        if(!loaded){
+                            applicationStore.load();
+                        }
                     }
                 };
             }

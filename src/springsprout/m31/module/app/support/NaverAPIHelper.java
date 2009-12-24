@@ -28,7 +28,7 @@ public class NaverAPIHelper {
         for (HashMap<String, String> tmpMap : (ArrayList<HashMap<String, String>>) rMap.get("item")) {
             r_list.add(
                     new SpringseeDTO(
-                            tmpMap.get("thumbnail")
+                              tmpMap.get("thumbnail")
                             , tmpMap.get("sizewidth")
                             , tmpMap.get("sizeheight")
                             , tmpMap.get("title")

@@ -189,9 +189,7 @@ Ext.extend(M31.dt.BarButton, Ext.Button, {
 M31.dt.SpringBar = function(){
     var _instance = null;
     var springbartray, sbPanel ,container;
-    var _desktop = null;
-    function init(desktop){
-         _desktop = desktop;
+    function init(){
         var trayWidth = 200;
         springbartray = new Ext.BoxComponent({
             el: 'm31-springbar-tray',
@@ -211,15 +209,11 @@ M31.dt.SpringBar = function(){
             layout: 'border',
             items: [sbPanel,springbartray]
         });
-        return this;
     };
     return {
-        getInstance : function(args){
+        getInstance : function(){
             if(_instance === null){
                _instance ={
-                    getDesktop:function(){
-                       return _desktop;
-                    },
                     initBarButtons : function(appsInfo){
                         sbPanel.addButtons(appsInfo);
                     },
@@ -230,7 +224,7 @@ M31.dt.SpringBar = function(){
                         sbPanel.setActiveButton(btn);
                     }
                }
-               init(args);
+               init();
             }
             return _instance;
         }       

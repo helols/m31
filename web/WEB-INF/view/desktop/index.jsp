@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+    <%  request.setAttribute("cacheTime",System.currentTimeMillis());%>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>ExtTop - Desktop Sample App</title>
 
@@ -34,7 +35,7 @@
     </script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/reflection.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/desktop/ApplicationRegistry.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/ApplicationRegistry.js"> <c:param value="${cacheTime}" name="_c"/></c:url>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/WinManager.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/SpringBar.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/Module.js"/>"></script>

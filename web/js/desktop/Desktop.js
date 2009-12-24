@@ -20,7 +20,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
     initDesktop : function(){
         this.desktopEl = this.desktopEl || Ext.get('m31-desktop');
         this.springbarEl = this.springbarEl || Ext.get('m31-springbar');
-        this.springbar = M31.dt.SpringBar.getInstance(this);
+//        this.springbar = M31.dt.SpringBar.getInstance(this);
         M31.WindowsManager.getInstance(this.desktopEl);
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
         this.fireEvent('ready', this);
@@ -30,10 +30,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
         Ext.EventManager.onWindowResize(this.layout,this);
     },
     init : Ext.emptyFn,
-
-    getApp : function(appId){
-        return this.appReg.getApp(appId);
-    },
+    
     onReady : function(fn, scope){
         if(!this.isReady){
             this.on('ready', fn, scope);
