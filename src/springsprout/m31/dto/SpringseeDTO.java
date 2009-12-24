@@ -5,7 +5,7 @@
  * Time: 오후 9:40:35
  * enjoy springsprout ! development!
  */
-package springsprout.m31.domain;
+package springsprout.m31.dto;
 
 public class SpringseeDTO {
     private String link;
