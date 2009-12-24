@@ -19,25 +19,24 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.searchText;
 
         this.store = new Ext.data.JsonStore({
-            root: 'images',
+        	url: '/gateway/springsee/search',
+        	method: 'get',
+            root: 'imgInfo',
             baseParams: {
+        		search_type: '',
                 query: ''
             },
-        	proxy : new Ext.data.HttpProxy({
-                method: 'GET',
-                url: '/gateway/springsee/'
-           }),
             fields: [
-                'name', 'url',
-                {
-                    name:'size',
-                    type: 'float'
-                },
-                {
-                    name:'lastmod',
-                    type:'date',
-                    dateFormat:'timestamp'
-                }
+                'title', 'thumbnail'
+//                {
+//                    name:'size',
+//                    type: 'float'
+//                },
+//                {
+//                    name:'lastmod',
+//                    type:'date',
+//                    dateFormat:'timestamp'
+//                }
             ],
             listeners: {
                 'load': {fn:function() {
@@ -60,10 +59,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         };
 
         var formatData = function(data) {
-            data.shortName = data.name.ellipse(15);
-            data.sizeString = formatSize(data);
-            data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
-            this.lookup[data.name] = data;
+            data.shortName = data.title.ellipse(15);
+//            data.sizeString = formatSize(data);
+//            data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
+            this.lookup[data.title] = data;
             return data;
         };
 
@@ -161,7 +160,24 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             xtype: 'textfield',
                             id: 'springsee-search',
                             selectOnFocus: true,
-                            width: 100
+                            width: 100,
+                            enableKeyEvents: true,
+                            listeners: {
+//                        		'render': {fn:function(){
+//    						    	Ext.getCmp('springsee-search').getEl().on('keypress', function(e, cmp){
+//    						    		if (e.keyCode == Ext.EventObject.ENTER) {
+//    						    			console.dir(cmp);
+//    						    			console.dir(this);
+//    						    			tmp.getImages();
+//    						    		}
+//    						    	});
+//                        		}, scope:this},
+                        		'keypress'  : {fn:function(cmp, evt){
+		                        	if (evt.keyCode == Ext.EventObject.ENTER) {
+		                        		this.getImages();
+						    		}
+		    				    }, scope:this}
+                        	}
                         },
                         {
                             id: 'springsee-send-btn',
@@ -171,14 +187,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             scope: this
                         }
                     ]
-                },
-                {
-                    id: 'springsee-img-detail-panel',
-                    region: 'east',
-                    split: true,
-                    width: 150,
-                    minWidth: 150,
-                    maxWidth: 250
                 }
             ],
             keys: {
@@ -197,7 +205,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.thumbTemplate = new Ext.XTemplate(
                 '<tpl for=".">',
                 '<div class="thumb-wrap" id="{name}">',
-                '<div class="thumb"><img src="{url}" title="{name}"></div>',
+                '<div class="thumb"><img src="{thumbnail}" title="{title}"></div>',
                 '<span>{shortName}</span></div>',
                 '</tpl>'
                 );
@@ -206,9 +214,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.detailsTemplate = new Ext.XTemplate(
                 '<div class="details">',
                 '<tpl for=".">',
-                '<img src="{url}"><div class="details-info">',
+                '<img src="{thumbnail}"><div class="details-info">',
                 '<b>Image Name:</b>',
-                '<span>{name}</span>',
+                '<span>{title}</span>',
                 '<b>Size:</b>',
                 '<span>{sizeString}</span>',
                 '<b>Last Modified:</b>',
@@ -220,17 +228,17 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     },
 
     showDetails : function() {
-        var selNode = this.view.getSelectedNodes();
-        var detailEl = Ext.getCmp('springsee-img-detail-panel').body;
-        if (selNode && selNode.length > 0) {
-            selNode = selNode[0];
-            var data = this.lookup[selNode.id];
-            detailEl.hide();
-            this.detailsTemplate.overwrite(detailEl, data);
-            detailEl.slideIn('l', {stopFx:true,duration:.2});
-        } else {
-            detailEl.update('');
-        }
+//        var selNode = this.view.getSelectedNodes();
+//        var detailEl = Ext.getCmp('springsee-img-detail-panel').body;
+//        if (selNode && selNode.length > 0) {
+//            selNode = selNode[0];
+//            var data = this.lookup[selNode.id];
+//            detailEl.hide();
+//            this.detailsTemplate.overwrite(detailEl, data);
+//            detailEl.slideIn('l', {stopFx:true,duration:.2});
+//        } else {
+//            detailEl.update('');
+//        }
     },
 
     onLoadException : function(v, o) {
@@ -244,10 +252,14 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     //이미지 검색하기
     getImages : function() {
-    	this.store.proxy.setUrl(this.store.proxy.url + Ext.getCmp('springsee-api-provider').getValue());
-    	this.store.baseParams.query = Ext.getCmp('springsee-search').getValue();
+    	if (Ext.isEmpty(Ext.getCmp('springsee-search').getValue())) {
+    		alert("검색어를 입력하세요.");
+    		return;
+    	}
+    	this.store.baseParams.search_type = Ext.getCmp('springsee-api-provider').getValue();
+    	this.store.baseParams.query 	  = Ext.getCmp('springsee-search').getValue();
         this.store.load();
-    },
+    }
 });
 
 String.prototype.ellipse = function(maxLength) {
