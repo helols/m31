@@ -112,22 +112,27 @@ public class OpenApiRequestHelper {
     }
 
     private static HashMap<String, Object> docToMap(Document doc, String type) {
-        List<Element> eList = ((Element) doc.getRootElement().getChildren().get(0)).getChildren();
+        String status = "F";
         HashMap<String, Object> rMap = new HashMap<String, Object>();
-        String tmpListName = null;
-        for (Element el : eList) {
-            if (el.getChildren().isEmpty()) {
-                rMap.put(el.getName(), type.equals("V") ? el.getValue() : el.getAttributeValue("data"));
-            } else {
-                if (tmpListName == null || !tmpListName.equals(el.getName())) {
-                    tmpListName = el.getName();
-                    ArrayList<HashMap<String, String>> tList = new ArrayList<HashMap<String, String>>();
-                    rMap.put(el.getName(), covertList(tList, el.getChildren(), type));
+        if(doc != null){
+            List<Element> eList = ((Element) doc.getRootElement().getChildren().get(0)).getChildren();
+            String tmpListName = null;
+            for (Element el : eList) {
+                if (el.getChildren().isEmpty()) {
+                    rMap.put(el.getName(), type.equals("V") ? el.getValue() : el.getAttributeValue("data"));
                 } else {
-                    covertList((ArrayList<HashMap<String, String>>) rMap.get(el.getName()), el.getChildren(), type);
+                    if (tmpListName == null || !tmpListName.equals(el.getName())) {
+                        tmpListName = el.getName();
+                        ArrayList<HashMap<String, String>> tList = new ArrayList<HashMap<String, String>>();
+                        rMap.put(el.getName(), covertList(tList, el.getChildren(), type));
+                    } else {
+                        covertList((ArrayList<HashMap<String, String>>) rMap.get(el.getName()), el.getChildren(), type);
+                    }
                 }
             }
+            status ="S";
         }
+        rMap.put("STATUS",status);
         return rMap;
     }
 

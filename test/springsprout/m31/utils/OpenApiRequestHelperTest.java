@@ -43,11 +43,15 @@ public class OpenApiRequestHelperTest {
     @Test
     public void docAttributeValueToMap() throws Exception {
 
-        String googleUrl = "http://www.google.co.kr/ig/api?weather=seoul";
-        Document doc = loadXml(googleUrl);
+        String googleUrl = "http://www.google.co.kr/ig/api?weather=";
+        Document doc = loadXml(googleUrl+"seoul");
         Assert.assertThat(
                 ((ArrayList < HashMap <String, String>>)OpenApiRequestHelper.docAttributeValueToMap(doc).get("forecast_information"))
                 .get(0).get("city"),is("seoul"));
+        doc = loadXml(googleUrl+"busan");
+        Assert.assertThat(
+                ((ArrayList < HashMap <String, String>>)OpenApiRequestHelper.docAttributeValueToMap(doc).get("forecast_information"))
+                .get(0).get("city"),is("busan"));
     }
 
 }
