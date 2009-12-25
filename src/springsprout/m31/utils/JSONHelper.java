@@ -88,9 +88,9 @@ public class JSONHelper {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static ArrayList<HashMap<String, String>> jsonArrayConverToArrayList(String jsonString, String path) {
+    public static ArrayList<HashMap<String, Object>> jsonArrayConverToArrayList(String jsonString, String path) {
 
-        ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, Object>> tmpList = new ArrayList<HashMap<String, Object>>();
         String[] paths = path.split("[.]");
         Iterator jsonIter = JSONArray.fromObject(JSONObject.fromObject(JSONObject.fromObject(jsonString).get(paths[0])).get(paths[1])).iterator();
         while(jsonIter.hasNext()){

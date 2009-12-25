@@ -23,15 +23,15 @@ public class DaumAPIHelper {
         api_url += query+"&output="+api_output.toLowerCase();
         api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
         System.out.println("Daum api : " + api_url);
-        ArrayList<HashMap<String, String>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel.item");
-        for(HashMap<String, String> tmpMap : tmpList){
+        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel.item");
+        for(HashMap<String, Object> tmpMap : tmpList){
             r_list.add(
                     new SpringseeDTO(
-                            tmpMap.get("thumbnail")
-                           ,tmpMap.get("width")
-                           ,tmpMap.get("height")
-                           ,tmpMap.get("title")
-                           ,tmpMap.get("link"))
+                            tmpMap.get("thumbnail").toString()
+                           ,tmpMap.get("width").toString()
+                           ,tmpMap.get("height").toString()
+                           ,tmpMap.get("title").toString()
+                           ,tmpMap.get("link").toString())
             );
         }
         return 0;
