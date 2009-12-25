@@ -34,6 +34,7 @@
                                 <bean class="org.eclipse.jetty.server.NCSARequestLog">
                                     <constructor-arg value="${m31comet.home}/logs/jetty-yyyy_mm_dd.log"/>
                                     <property name="filenameDateFormat" value="yyyy_MM_dd"/>
+                                    <property name="logTimeZone" value="GMT+9"/>
                                 </bean>
                             </property>
                         </bean>
