@@ -15,4 +15,5 @@ public class M31System {
 	public static final String DEFAULT_STORE_BASE = "/springsprout/upload";
 	public static final String JSON_VIEW  = ModelAndJsonViewResolver.DEFAULT_JSONVIEW_NAME;
 	public static final String CLEAN_KEY  = ModelAndJsonViewResolver.DEFAULT_CLEAR_KEY;
+    public static final String DUMMY_VIEW = "dummyView"; 
 }

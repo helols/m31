@@ -24,8 +24,6 @@
             expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <mvc:annotation-driven />
-
     <mvc:view-controller path="/" view-name="desktop/index"/>
 
     <!-- ============================================================= -->
@@ -49,8 +47,6 @@
 	<!-- ============================================================= -->
 	<!--  Handler Adapter                                              -->
 	<!-- ============================================================= -->
-	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
-
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" p:cacheSeconds="0">
         <property name="customModelAndViewResolver">
             <bean class="springsprout.m31.common.web.support.ModelAndJsonViewResolver">

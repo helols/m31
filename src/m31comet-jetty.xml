@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="jetty.Server" class="org.eclipse.jetty.server.Server" destroy-method="stop">
+        <property name="threadPool">
+            <bean class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+                <property name="minThreads" value="10"/>
+                <property name="maxThreads" value="100"/>
+            </bean>
+        </property>
+        <property name="connectors">
+            <list>
+                <bean class="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                    <property name="port" value="${m31comet.port}"/>
+                    <property name="maxIdleTime" value="30000"/>
+                    <property name="acceptors" value="2"/>
+                    <property name="statsOn" value="false" />
+                    <property name="confidentialPort" value="7443"/>
+	                <property name="lowResourcesConnections" value="20000"/>
+	                <property name="lowResourcesMaxIdleTime" value="5000"/>
+                </bean>
+            </list>
+        </property>
+        <property name="handler">
+            <bean class="org.eclipse.jetty.server.handler.HandlerCollection">
+                <property name="handlers">
+                    <list>
+                        <ref local="jetty.ContextHandlerCollection"/>
+                        <bean class="org.eclipse.jetty.server.handler.DefaultHandler"/>
+                        <bean class="org.eclipse.jetty.server.handler.RequestLogHandler">
+                            <property name="requestLog">
+                                <bean class="org.eclipse.jetty.server.NCSARequestLog">
+                                    <constructor-arg value="${m31comet.home}/logs/jetty-yyyy_mm_dd.log"/>
+                                    <property name="filenameDateFormat" value="yyyy_MM_dd"/>
+                                </bean>
+                            </property>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+
+        <property name="stopAtShutdown" value="true"/>
+        <property name="sendServerVersion" value="true"/>
+        <property name="sendDateHeader" value="true"/>
+        <property name="gracefulShutdown" value="1000"/>
+    </bean>
+
+    <bean id="jetty.ContextHandlerCollection" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
+
+    <bean id="jetty.ContextDeployer" class="org.eclipse.jetty.deploy.ContextDeployer">
+        <property name="contexts" ref="jetty.ContextHandlerCollection"/>
+        <property name="contextsDir" value="${m31comet.home}/contexts"/>
+        <property name="scanInterval" value="3"/>
+    </bean>
+
+    <bean id="jetty.Realm" class="org.eclipse.jetty.security.HashLoginService">
+        <property name="name" value="m31comet"/>
+        <property name="config" value="${m31comet.home}/etc/m31-realm.properties"/>
+        <property name="refreshInterval" value="0"/>
+    </bean>
+</beans>

@@ -68,7 +68,7 @@
     <!--  Transaction                                                  -->
     <!-- =============================================================-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
+    <import resource="m31comet-jetty.xml"/>
     <!-- ============================================================= -->
     <!--  conversionService                                                  -->
     <!-- =============================================================

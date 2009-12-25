@@ -31,4 +31,5 @@
                                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <bean id="jsonView" class="springsprout.m31comet.view.JacksonJsonView"/>
 </beans>
