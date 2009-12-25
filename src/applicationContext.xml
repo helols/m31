@@ -26,7 +26,7 @@
     <!-- ============================================================= -->
     <!--  Component Scan                                               -->
     <!-- ============================================================= -->
-    <context:component-scan base-package="springsprout">
+    <context:component-scan base-package="springsprout.m31">
         <context:exclude-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
