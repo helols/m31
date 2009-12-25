@@ -39,6 +39,7 @@ public class JettyEmbededHelper {
         XmlConfiguration configuration = new XmlConfiguration(fileserver_xml.getInputStream());
         server = (Server)configuration.configure();
         server.start();
+//        server.join();
     }
 
     @PreDestroy

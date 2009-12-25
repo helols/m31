@@ -5,7 +5,7 @@
  * Time: 오전 1:46:50
  * enjoy springsprout ! development!
  */
-package springsprout.m31.common.web.support;
+package springsprout.m31comet.common.web.support;
 
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -100,3 +100,4 @@ public class ModelAndJsonViewResolver implements ModelAndViewResolver {
         return mav;
     }
 }
+

@@ -338,12 +338,7 @@
             <artifactId>com.springsource.org.tuckey.web.filters.urlrewrite</artifactId>
             <version>3.1.0</version>
         </dependency>
-        <!-- JETTY -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>example-jetty-embedded</artifactId>
-            <version>7.0.1.v20091125</version>
-        </dependency>
+        <!-- JETTY -->        
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlets</artifactId>
