@@ -338,6 +338,48 @@
             <artifactId>com.springsource.org.tuckey.web.filters.urlrewrite</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <!-- JETTY -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>example-jetty-embedded</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-continuation</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-deploy</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-xml</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
+        <!-- jetty end-->
     </dependencies>
 
     <build>
@@ -410,12 +452,12 @@
         <repository>
             <id>opensprout nexus</id>
             <name>OpenSprout Nexus public</name>
-            <url>http://dev.springsprout.org/nexus/content/groups/public</url>
+            <url>http://dev.springsprout.org:8001/nexus/content/groups/public</url>
         </repository>
         <repository>
             <id>opensprout snapshots</id>
             <name>OpenSprout Nexus public snapshots</name>
-            <url>http://dev.springsprout.org/nexus/content/groups/public-snapshots/</url>
+            <url>http://dev.springsprout.org:8001/nexus/content/groups/public-snapshots/</url>
         </repository>
         <repository>
             <id>mesir-repo</id>

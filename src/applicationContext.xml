@@ -31,6 +31,12 @@
                                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <bean id = "m31cometHome" class="java.lang.String">
+        <constructor-arg value="${m31comet.home}"/>
+    </bean>
+    <bean id = "m31cometPort" class="java.lang.String">
+        <constructor-arg value="${m31comet.port}"/>
+    </bean>
     <!-- ============================================================= -->
     <!--  dataSource                                                  -->
     <!-- ============================================================= -->
