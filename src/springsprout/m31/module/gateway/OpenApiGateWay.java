@@ -20,7 +20,7 @@ import springsprout.m31.module.app.OpenApiService;
 import java.util.HashMap;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
-import static springsprout.m31.common.util.M31Utils.convert;
+import static springsprout.m31.utils.M31Utils.convert;
 
 @Controller
 public class OpenApiGateWay {

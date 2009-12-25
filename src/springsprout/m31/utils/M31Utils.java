@@ -5,7 +5,7 @@
  * Time: 오전 11:24:55
  * enjoy springsprout ! development!
  */
-package springsprout.m31.common.util;
+package springsprout.m31.utils;
 
 import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
