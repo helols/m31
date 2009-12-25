@@ -2,7 +2,8 @@ M31.ApplicationRegistry = function() {
     var _instance = null;
     var appInfo = {
         setting : {app : 'new M31Desktop.Setting()'},
-        springsee :{app : 'new M31Desktop.SpringSee()'}
+        springsee :{app : 'new M31Desktop.SpringSee()'},
+        springme2day :{app : 'new M31Desktop.SpringMe2Day()'}
     };
     var loaded = false;
     var applicationStore = new Ext.data.JsonStore({
