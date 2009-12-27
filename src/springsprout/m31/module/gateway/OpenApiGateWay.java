@@ -57,6 +57,9 @@ public class OpenApiGateWay {
         log.debug("Criteria : {}",cri);        
         SpringPlayerDTO dto = applicationService.springPlayer(cri);
 
+        /*
+         * 이놈 마음에 안듬.. ^^
+         */
         return new ModelAndView(JSON_VIEW)
                 .addObject("total", dto.getTotal())
                 .addObject("success", dto.isSuccess())

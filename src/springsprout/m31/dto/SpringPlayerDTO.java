@@ -36,4 +36,13 @@ public class SpringPlayerDTO {
     public void setList(List<MovieVO> list) {
         this.list = list;
     }
+
+    @Override
+    public String toString() {
+        return "SpringPlayerDTO{" +
+                "total=" + total +
+                ", success=" + success +
+                ", list=" + list +
+                '}';
+    }
 }

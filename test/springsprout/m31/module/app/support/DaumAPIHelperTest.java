@@ -8,6 +8,9 @@
 package springsprout.m31.module.app.support;
 
 import org.junit.Test;
+import springsprout.m31.common.OpenApi;
+import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
 
 import java.util.ArrayList;
@@ -25,6 +28,19 @@ public class DaumAPIHelperTest {
 
         assertThat(r_list.get(0).getThumbnail(),is("http://image02.search.daum-img.net/03/0.c3.b6.BL_shopping-how_472_0.jpg"));
         assertThat(r_list.get(9).getWidth(),is("600"));
+
+    }
+
+    @Test
+    public void testGetMovie() throws Exception {
+        SpringPlayerCri cri = new SpringPlayerCri();
+        cri.setLimit(20);
+        cri.setQ("test");
+        cri.setStart(0);
+        cri.setType(OpenApi.DAUM);
+
+        SpringPlayerDTO dto = DaumAPIHelper.getMovie(cri);
+        System.out.println(dto);
 
     }
 }

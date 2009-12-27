@@ -90,8 +90,16 @@ public class OpenApiService {
         구글, 다음에서 동영상 검색 및 페이징 처리.
         돌려줄 값. 전체 레코드의 갯수, 리미트까지 결과.
          */
-        SpringPlayerDTO dto = new SpringPlayerDTO();
+        SpringPlayerDTO dto = null;
         List<MovieVO> list = new ArrayList<MovieVO>();
+
+        switch (cri.getType()) {
+            case DAUM:
+                dto = DaumAPIHelper.getMovie(cri);
+                break;
+            case GOOGLE:
+                break;
+        }
 
         dto.setList(list);
         return dto;
