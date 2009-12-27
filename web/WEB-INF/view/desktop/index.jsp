@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"/>" />
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/miracle.css"/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/miracle.css"/>" />    
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/outsider.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/helols.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/arawn.css"/>" />
@@ -25,6 +25,7 @@
 
     <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
 
     <!-- DESKTOP -->
 
