@@ -22,7 +22,7 @@ public class NaverAPIHelper {
         api_url += query;
         api_url += "&sort=sim&start="+pageNo + "&display="+perPage;
         System.out.println("Naver api : " + api_url); 
-        HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url));
+        HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url),false);
         if(rMap.get("item") == null){
             return 0;
         }

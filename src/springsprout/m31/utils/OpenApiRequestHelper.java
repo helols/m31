@@ -103,19 +103,24 @@ public class OpenApiRequestHelper {
      * @param doc
      * @return
      */
-    public static HashMap<String, Object> docElementValueToMap(Document doc) {
-        return docToMap(doc, "V");
+    public static HashMap<String, Object> docElementValueToMap(Document doc, boolean isRoot) {
+        return docToMap(doc, "V",isRoot);
     }
 
-    public static HashMap<String, Object> docAttributeValueToMap(Document doc) {
-        return docToMap(doc, "A");
+    public static HashMap<String, Object> docAttributeValueToMap(Document doc, boolean isRoot) {
+        return docToMap(doc, "A", isRoot);
     }
 
-    private static HashMap<String, Object> docToMap(Document doc, String type) {
+    private static HashMap<String, Object> docToMap(Document doc, String type, boolean isRoot) {
         String status = "F";
         HashMap<String, Object> rMap = new HashMap<String, Object>();
         if(doc != null){
-            List<Element> eList = ((Element) doc.getRootElement().getChildren().get(0)).getChildren();
+            List<Element> eList = new ArrayList<Element>();
+            if(isRoot){
+                eList = doc.getRootElement().getChildren();
+            }else{
+                eList = ((Element) doc.getRootElement().getChildren().get(0)).getChildren();
+            }
             String tmpListName = null;
             for (Element el : eList) {
                 if (el.getChildren().isEmpty()) {
