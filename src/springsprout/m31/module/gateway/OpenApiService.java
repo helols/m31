@@ -5,7 +5,7 @@
  * Time: 오전 2:05:27
  * enjoy springsprout ! development!
  */
-package springsprout.m31.module.app;
+package springsprout.m31.module.gateway;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,10 @@ import springsprout.m31.domain.MovieVO;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
-import springsprout.m31.module.app.support.DaumAPIHelper;
-import springsprout.m31.module.app.support.NaverAPIHelper;
-import springsprout.m31.module.app.support.FlickrAPIHelper;
-import springsprout.m31.module.app.support.GoogleAPIHelper;
+import springsprout.m31.module.gateway.support.DaumAPIHelper;
+import springsprout.m31.module.gateway.support.FlickrAPIHelper;
+import springsprout.m31.module.gateway.support.GoogleAPIHelper;
+import springsprout.m31.module.gateway.support.NaverAPIHelper;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

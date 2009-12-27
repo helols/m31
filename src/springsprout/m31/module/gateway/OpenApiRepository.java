@@ -5,7 +5,7 @@
  * Time: 오전 9:44:31
  * enjoy springsprout ! development!
  */
-package springsprout.m31.module.app;
+package springsprout.m31.module.gateway;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import org.springframework.beans.factory.annotation.Autowired;
