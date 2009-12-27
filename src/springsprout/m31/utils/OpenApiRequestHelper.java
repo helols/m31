@@ -36,8 +36,8 @@ public class OpenApiRequestHelper {
     /**
      * InputStream 이 필요한경우 호출.
      *
-     * @param url
-     * @return InputStream
+     * @param url 읽어올 URL..
+     * @return InputStream 읽어온 Stream.
      */
     public static InputStream loadApi(String url) {
         try {
@@ -52,8 +52,8 @@ public class OpenApiRequestHelper {
     /**
      * jdom 의 Document 가 필요 할경우.. 호출..
      *
-     * @param url
-     * @return jdom.Document
+     * @param url 읽어올 URL..
+     * @return jdom.Document SAX 에서 사용할 수 있는 org.jdom.Document
      */
     public static Document loadXml(String url) {
         Document doc = null;
@@ -73,9 +73,9 @@ public class OpenApiRequestHelper {
     /**
      * 요청 url로 부터 String을 얻는다. ( JSON 일경우에 사용하기 적합.) 지정한 인코딩으로 돌려준다.
      *
-     * @param url
-     * @param encoding
-     * @return
+     * @param url  읽어올 URL..
+     * @param encoding String을 읽어올 때 변환할 인코딩 지정.
+     * @return 읽어 드린 string
      */
     public static String loadString(String url, String encoding) {
         apiurl.setURI((URI.create(url)));
@@ -90,23 +90,31 @@ public class OpenApiRequestHelper {
     /**
      * 요청 url로 부터 String을 얻는다. ( JSON 일경우에 사용하기 적합.) 기본 인코딩 UTF-8
      *
-     * @param url
-     * @return
+     * @param url 읽어올 URL..
+     * @return 읽어 드린 string
      */
     public static String loadString(String url) {
         return loadString(url, ENCODING);
     }
 
     /**
-     * Document 를 HashMap으로 변환해서 돌려준다.. xml을 HashMap으로 사용할때 쓰면좋음.
+     * Document 를 HashMap으로 변환해서 돌려준다.. xml을 HashMap으로 사용할때 쓰면좋음. (엘리먼트의 text값을 읽음.)
      *
-     * @param doc
-     * @return
+     * @param Jdom의 Document.(loadXml에서 읽어 드린 doc.)
+     * @param isRoot .. true : root 부터 파싱 (미투용) //  false : root의 첫번째 엘리먼트의 차일드 엘리먼트 부터 읽음. (네이버 , 다음, 구글용.)
+     * @return xml 형태의 HashMap 객체. 
      */
     public static HashMap<String, Object> docElementValueToMap(Document doc, boolean isRoot) {
         return docToMap(doc, "V",isRoot);
     }
 
+    /**
+     * Document 를 HashMap으로 변환해서 돌려준다.. xml을 HashMap으로 사용할때 쓰면좋음. 엘리먼트의 attr의 값을 읽음. - 구글.. 처럼.
+     *
+     * @param Jdom의 Document.(loadXml에서 읽어 드린 doc.)
+     * @param isRoot .. true : root 부터 파싱 (미투용) //  false : root의 첫번째 엘리먼트의 차일드 엘리먼트 부터 읽음. (네이버 , 다음, 구글용.)
+     * @return xml 형태의 HashMap 객체.
+     */
     public static HashMap<String, Object> docAttributeValueToMap(Document doc, boolean isRoot) {
         return docToMap(doc, "A", isRoot);
     }
