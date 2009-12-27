@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.domain.MovieVO;
+import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.module.app.support.DaumAPIHelper;
 import springsprout.m31.module.app.support.NaverAPIHelper;
@@ -80,5 +83,17 @@ public class OpenApiService {
         r_map.put("totalCount",totalCount);
 
         return r_map;
+    }
+
+    public SpringPlayerDTO springPlayer(final SpringPlayerCri cri) {
+        /*
+        구글, 다음에서 동영상 검색 및 페이징 처리.
+        돌려줄 값. 전체 레코드의 갯수, 리미트까지 결과.
+         */
+        SpringPlayerDTO dto = new SpringPlayerDTO();
+        List<MovieVO> list = new ArrayList<MovieVO>();
+
+        dto.setList(list);
+        return dto;
     }
 }

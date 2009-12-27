@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 public class DaumAPIHelper {
 	
-
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
@@ -35,5 +34,10 @@ public class DaumAPIHelper {
             );
         }
         return 0;
+    }
+
+    public static void springplayer() {
+        
+        return;
     }
 }

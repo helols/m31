@@ -11,11 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import springsprout.m31.common.OpenApi;
+import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.module.app.OpenApiService;
+import springsprout.m31.utils.OpenAPIEditor;
 
 import java.util.HashMap;
 
@@ -28,6 +34,11 @@ public class OpenApiGateWay {
 
     @Autowired
     OpenApiService applicationService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(OpenApi.class, new OpenAPIEditor());
+    }
 
     @RequestMapping("/gateway/springsee/search")
     public ModelAndView springsee(@RequestParam String search_type, @RequestParam String query, @RequestParam(defaultValue = "1") Integer pageNo){
@@ -42,9 +53,14 @@ public class OpenApiGateWay {
     }
 
     @RequestMapping("/gateway/springplayer/search")
-    public ModelAndView springplayer(){
-        
-        return null;
+    public ModelAndView springplayer(SpringPlayerCri cri){
+        log.debug("Criteria : {}",cri);        
+        SpringPlayerDTO dto = applicationService.springPlayer(cri);
+
+        return new ModelAndView(JSON_VIEW)
+                .addObject("total", dto.getTotal())
+                .addObject("success", dto.isSuccess())
+                .addObject("items", dto.getList());
     }
 
     @RequestMapping("/gateway/weathertray/search")
