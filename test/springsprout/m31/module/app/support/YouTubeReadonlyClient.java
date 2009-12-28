@@ -649,6 +649,7 @@ public class YouTubeReadonlyClient {
 
     printUnderlined("Running Search for '" + searchTerms + "'");
     VideoFeed videoFeed = service.query(query, VideoFeed.class);
+    
     for (VideoEntry ve : videoFeed.getEntries()) {
       printVideoEntry("", ve, false);
     }

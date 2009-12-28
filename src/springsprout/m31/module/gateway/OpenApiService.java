@@ -91,17 +91,16 @@ public class OpenApiService {
         돌려줄 값. 전체 레코드의 갯수, 리미트까지 결과.
          */
         SpringPlayerDTO dto = null;
-        List<MovieVO> list = new ArrayList<MovieVO>();
 
         switch (cri.getType()) {
             case DAUM:
                 dto = DaumAPIHelper.getMovie(cri);
                 break;
             case GOOGLE:
+                dto = GoogleAPIHelper.getMovie(cri); 
                 break;
         }
 
-        dto.setList(list);
         return dto;
     }
 }

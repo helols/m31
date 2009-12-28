@@ -79,13 +79,10 @@ public class DaumAPIHelper {
             vo.setSource("daum");
             vo.setTitle(j.getString("title"));
             vo.setAuthor(j.getString("author"));
-            vo.setDuration(j.getString("playtime"));
-            try {
-                vo.setPlayerURL(new URL(j.getString("player_url")));
-                vo.setThumbnailURL(new URL(j.getString("thumbnail")));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+            vo.setDuration(Integer.parseInt(j.getString("playtime")));
+            vo.setPlayerURL(j.getString("player_url"));
+            vo.setThumbnailURL(j.getString("thumbnail"));
+
             list.add(vo);
         }
         
