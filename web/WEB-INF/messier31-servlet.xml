@@ -24,7 +24,10 @@
             expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <mvc:annotation-driven />
+    <!-- ============================================================= -->
+    <!--  Handler Mappings                                             -->
+    <!-- ============================================================= -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" p:order="0"/>
 
     <mvc:view-controller path="/" view-name="desktop/index"/>
 
