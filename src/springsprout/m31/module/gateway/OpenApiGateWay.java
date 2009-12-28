@@ -56,7 +56,7 @@ public class OpenApiGateWay {
         SpringPlayerDTO dto = applicationService.springPlayer(cri);
 
         /*
-         * 이놈 마음에 안듬.. ^^
+         * 낸중에 좀 수정해 주자... 
          */
         return new ModelAndView(JSON_VIEW)
                 .addObject("total", dto.getTotal())

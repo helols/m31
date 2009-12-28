@@ -7,6 +7,8 @@
  */
 package springsprout.m31.module.gateway.support;
 
+import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.utils.JSONHelper;
 import springsprout.m31.utils.OpenApiRequestHelper;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GoogleAPIHelper {
+
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
     	String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
@@ -34,5 +37,11 @@ public class GoogleAPIHelper {
             );
         }
         return 0;
+    }
+
+    public static SpringPlayerDTO getMovie(SpringPlayerCri cri) {
+        SpringPlayerDTO dto = new SpringPlayerDTO();
+         //TODO 여기부터...
+        return null;
     }
 }
