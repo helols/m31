@@ -6,6 +6,8 @@ public class SpringMe2DayDTO {
 	private String apiUrl;
 	private String apiFormat;
 	
+	private String authToken;
+	
 	/** 미투데이 어플케이션 키 */
 	public String getAppKey() {
 		return appKey;
@@ -28,6 +30,14 @@ public class SpringMe2DayDTO {
 	}
 	public String getApiFormat() {
 		return apiFormat;
+	}
+	
+	/** 인증 토큰 */
+	public String getAuthToken() {
+		return authToken;
+	}
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
 	}
 	
 }

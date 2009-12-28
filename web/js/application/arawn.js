@@ -23,6 +23,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     loginCheckAjaxSuccess : function(response, opts){
     	this.loginCheck = true;
     	try { 
+    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
+    		
     		var result = Ext.decode(response.responseText);
 
     		// 로그인 상태
@@ -58,17 +60,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		win.maximize();
 	        		Ext.getCmp('springme2day-postbody-panel').hide();
 	        		
-	        		Ext.MessageBox.show({
-	        	        msg: '로그인을 위해서 미투데이 인증 페이지로 이동 중 입니다.',
-	        	        progressText: '로그인 준비 중...',
-	        	        width:360,
-	        	        wait:true
-	        	    });    
-	        		
-	        		Ext.getCmp('springme2day-login-iframepanel').setSrc(app.authUrl, false, function(){
-	        			Ext.MessageBox.hide();
-	        		});
-	        	}		    	
+	        		Ext.getCmp('springme2day-login-iframepanel').setSrc(app.authUrl, true);
+	        	}
 		    }
 		};
 		var task = {
@@ -265,20 +258,28 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        items:[{
 	        	id: 'springme2day-login-iframepanel',
 	            xtype: 'iframepanel',
-	            title: 'me2day Login...',
-	            autoLoad: false,
-	            loadMask: true,
+	            header: false,
+	            loadMask : {hideOnReady:true, msg:'미투데이 로그인 페이지로 이동 중 입니다.'},
 	            frameConfig: {autoCreate:{id: 'frameSpringMe2DayLogin'}},
 	            listeners: {
-	            	domready : function(frame){
-	            		var doc= frame.getDocument();
-	            		if(doc){ frame.ownerCt.setTitle(doc.title); }
-	         
-	            		var rule = 'p.fancyP {padding:5px 10px 5px 10px;border:1px solid;font:normal 11px tahoma,arial,helvetica,sans-serif;}';
-	            		frame.CSS.createStyleSheet( rule, 'fancyP' );
-	            		frame.select('p').addClass('fancyP');
+	            	domready: function(frame){
+	            		console.log('domready');
+	            	},
+	            	documentloaded: this.loginIFramePanelDocumentLoaded.createDelegate(this),
+	            	exception: function(frame, errmsg){
+	            		console.log('exception');
 	            	}
-	            }
+	            },
+	            tbar:[{
+                          text: '미투데이 인증절차가 완료된 후 우측 버튼을 눌러주세요. ☞ '
+                      },{
+                          id: 'springsee-send-btn',
+                          xtype: 'button',
+                          text: '로그인 계속 진행...',
+                          handler: this.authenticationMe2DayLoginCompleteButtonClick,
+                          scope: this
+                      }
+                  ]
 	        }]
         };
     	
@@ -296,13 +297,34 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     postSend : function(sender){
     	// 전송
 		Ext.getCmp('springme2day-content-text').setValue('');
-		
-		//Ext.getCmp('springme2day-win').setSize({width:640,height:480});
-		//Ext.getCmp('springme2day-login-panel').setSize(Ext.getCmp('springme2day-postbody-panel').getSize());
-		//Ext.getCmp('springme2day-postbody-panel').hide();
-		
-
+    },
+    loginIFramePanelDocumentLoaded : function(frame){
+    },
+    authenticationMe2DayLoginCompleteButtonClick: function(){
+    	Ext.MessageBox.show({
+    		title:'봄미투데이 로그인...',
+    		msg: '미투데이 인증 절차를 마치셨습니까?',
+    		buttons: Ext.Msg.YESNO,
+    		fn: this.authenticationNextProcess.createDelegate(this),
+    		icon: Ext.MessageBox.QUESTION
+    	});
+    },
+    authenticationNextProcess : function(result){
+    	console.log('authenticationNextProcess : ' + this.authToken);
     	
+    	if(result == 'yes'){
+			Ext.Ajax.request({
+    			url: '/app/me2day/isAuthentication',
+    			params: {'authToken':this.authToken},
+    			success: this.authenticationResultCheckerSuccess.createDelegate(this),
+    			failure: this.authenticationResultCheckerFailure.createDelegate(this)
+    		});
+		}
+    },
+    authenticationResultCheckerSuccess : function(response, opts){
+    	console.log(response.responseText);
+    },
+    authenticationResultCheckerFailure : function(response, opts){
     }
 });
 
