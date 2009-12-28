@@ -45,7 +45,8 @@ public class OpenApiRequestHelper {
             factoryHttpClient();
             return client.execute(apiurl).getEntity().getContent();
         } catch (IOException e) {
-            throw new OpenApiReadException(e);
+//            throw new OpenApiReadException(e);
+            return null;
         }
     }
 
@@ -65,7 +66,8 @@ public class OpenApiRequestHelper {
             HttpEntity he = client.execute(apiurl).getEntity();
             doc = parser.build(new InputSource(new InputStreamReader(he.getContent(), EntityUtils.getContentCharSet(he))));
         } catch (Exception e) {
-            throw new OpenApiReadException(e);
+//            throw new OpenApiReadException(e);
+            doc = null;
         }
         return doc;
     }
@@ -83,7 +85,8 @@ public class OpenApiRequestHelper {
         try {
             return EntityUtils.toString(client.execute(apiurl).getEntity(), encoding);
         } catch (IOException e) {
-            throw new OpenApiReadException("loadString error..");
+//            throw new OpenApiReadException("loadString error..");
+            return null;
         }
     }
 
