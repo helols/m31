@@ -1,6 +1,6 @@
 package springsprout.m31.module.app.me2day.support;
 
-public class SpringMe2DaySession {
+public class SpringMe2DayUserSession {
 
 	private String userId;
 	private String authToken;

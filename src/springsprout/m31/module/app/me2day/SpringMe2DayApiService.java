@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
-import springsprout.m31.module.app.me2day.support.SpringMe2DaySession;
+import springsprout.m31.module.app.me2day.support.SpringMe2DayUserSession;
 import springsprout.m31.utils.OpenApiRequestHelper;
 
 @Service
@@ -38,8 +38,8 @@ public class SpringMe2DayApiService {
 	 * @param me2DayDTO
 	 * @return
 	 */
-	public SpringMe2DaySession getAuthenticationResult(SpringMe2DayDTO me2DayDTO) {
-		SpringMe2DaySession session = null;
+	public SpringMe2DayUserSession getAuthenticationResult(SpringMe2DayDTO me2DayDTO) {
+		SpringMe2DayUserSession session = null;
 		
 		if(!StringUtils.hasText(me2DayDTO.getApiUrl())){
 			me2DayDTO.setApiUrl(me2dayapi_get_full_auth_token);
@@ -54,7 +54,7 @@ public class SpringMe2DayApiService {
 		Document document = OpenApiRequestHelper.loadXml(url);
 		if(document != null){
 			HashMap<String, Object> resultMap = OpenApiRequestHelper.docElementValueToMap(document, true);
-			session = new SpringMe2DaySession();
+			session = new SpringMe2DayUserSession();
 			session.setUserId(ObjectUtils.toString(resultMap.get("user_id"), ""));
 			if(StringUtils.hasText(ObjectUtils.toString(resultMap.get("full_auth_token"), ""))){
 				session.setAuthToken(ObjectUtils.toString(resultMap.get("full_auth_token"), ""));
