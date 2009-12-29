@@ -121,10 +121,9 @@ public class JSONHelperTest {
 
         assertThat(obj.toString(),is(itemString));
 
-        ArrayList<HashMap<String,Object>> r_list = JSONHelper.jsonArrayConverToArrayList(jsonString,"channel.item");
-
-        assertThat((String) r_list.get(0).get("thumbnail"),is("http://image02.search.daum-img.net/03/0.c3.b6.BL_shopping-how_472_0.jpg"));
-        assertThat((String) r_list.get(9).get("pubDate"),is("20081224212859"));
+        HashMap<String,Object> r_map = JSONHelper.jsonArrayConverToArrayList(jsonString,"channel");
+        assertThat((Integer)r_map.get("totalCount"),is(51876));
+        assertThat(((ArrayList<HashMap<String,String>>) r_map.get("item")).get(0).get("author"),is("8AFQI"));
     }
 
 }

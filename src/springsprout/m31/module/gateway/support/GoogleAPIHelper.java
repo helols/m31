@@ -50,8 +50,9 @@ public class GoogleAPIHelper {
         api_url += "&start="+pageNo;
         System.out.println("Google api : " + api_url);
 
-        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData.results");
-        for(HashMap<String, Object> tmpMap : tmpList){
+//        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData.results");
+        HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData");
+        for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("results")){
             r_list.add(
                     new SpringseeDTO(
                     		tmpMap.get("tbUrl").toString()

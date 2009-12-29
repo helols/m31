@@ -20,10 +20,7 @@ import springsprout.m31.utils.OpenApiRequestHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DaumAPIHelper {
 
@@ -36,19 +33,23 @@ public class DaumAPIHelper {
         String api_output = apiInfo[1];
         api_url += query+"&output="+api_output.toLowerCase();
         api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
-        System.out.println("Daum api : " + api_url);
-        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel.item");
-        for(HashMap<String, Object> tmpMap : tmpList){
-            r_list.add(
-                    new SpringseeDTO(
-                            tmpMap.get("thumbnail").toString()
-                           ,tmpMap.get("width").toString()
-                           ,tmpMap.get("height").toString()
-                           ,tmpMap.get("title").toString()
-                           ,tmpMap.get("link").toString())
-            );
+        log.debug("Daum api : " + api_url);
+        Integer totalCount = 0;
+        HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel");
+        if("S".equals(jsonMap.get("STATUS"))){
+            for(HashMap<String,Object> tmpMap : (ArrayList<HashMap<String,Object>>)jsonMap.get("item")){
+                r_list.add(
+                        new SpringseeDTO(
+                                tmpMap.get("thumbnail").toString()
+                                ,tmpMap.get("width").toString()
+                                ,tmpMap.get("height").toString()
+                                ,tmpMap.get("title").toString()
+                                ,tmpMap.get("link").toString())
+                );
+            }
+            totalCount = (Integer)jsonMap.get("totalCount");
         }
-        return 0;
+        return totalCount;
     }
 
     /**
