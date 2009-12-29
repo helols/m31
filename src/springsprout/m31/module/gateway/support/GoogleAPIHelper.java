@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GoogleAPIHelper {
 
     /**
@@ -42,13 +45,15 @@ public class GoogleAPIHelper {
     public static final String VIDEOS_FEED = YOUTUBE_GDATA_SERVER + "/feeds/api/videos";
 
     private static final YouTubeService youTubeService = new YouTubeService("m31-YouTube");
+    
+    private final static Logger log = LoggerFactory.getLogger(FlickrAPIHelper.class);
 
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
     	String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
         api_url += query+"&&rsz=large";
         api_url += "&start="+pageNo;
-        System.out.println("Google api : " + api_url);
+        log.debug("Google api : " + api_url);
 
 //        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData.results");
         HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData");
@@ -59,6 +64,7 @@ public class GoogleAPIHelper {
                            ,tmpMap.get("width").toString()
                            ,tmpMap.get("height").toString()
                            ,tmpMap.get("titleNoFormatting").toString()
+                           ,tmpMap.get("url").toString()
                            ,tmpMap.get("url").toString())
             );
         }

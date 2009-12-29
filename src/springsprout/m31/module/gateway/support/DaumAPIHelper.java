@@ -7,6 +7,8 @@
  */
 package springsprout.m31.module.gateway.support;
 
+import static springsprout.m31.utils.OpenApiRequestHelper.docElementValueToMap;
+import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,20 +37,24 @@ public class DaumAPIHelper {
         api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
         log.debug("Daum api : " + api_url);
         Integer totalCount = 0;
-        HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"channel");
-        if("S".equals(jsonMap.get("STATUS"))){
-            for(HashMap<String,Object> tmpMap : (ArrayList<HashMap<String,Object>>)jsonMap.get("item")){
-                r_list.add(
-                        new SpringseeDTO(
-                                tmpMap.get("thumbnail").toString()
-                                ,tmpMap.get("width").toString()
-                                ,tmpMap.get("height").toString()
-                                ,tmpMap.get("title").toString()
-                                ,tmpMap.get("link").toString())
-                );
-            }
-            totalCount = (Integer)jsonMap.get("totalCount");
+
+        HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url),false);
+        if(rMap.get("item") == null){
+            return 0;
         }
+        for (HashMap<String, String> tmpMap : (ArrayList<HashMap<String, String>>) rMap.get("item")) {
+            r_list.add(
+                    new SpringseeDTO(
+                              tmpMap.get("thumbnail")
+                            , tmpMap.get("width")
+                            , tmpMap.get("height")
+                            , tmpMap.get("title")
+                            , tmpMap.get("link")
+                            , tmpMap.get("image"))
+            );
+        }
+        totalCount = new Integer(rMap.get("result").toString());
+
         return totalCount;
     }
 

@@ -13,16 +13,26 @@ public class SpringseeDTO {
     private String width;
     private String height;
     private String title;
+    private String image;
 
-    public SpringseeDTO(String thumbnail, String width, String height, String title, String link) {
+    public SpringseeDTO(String thumbnail, String width, String height, String title, String link, String image) {
         this.thumbnail = thumbnail;
         this.width = width;
         this.height = height;
         this.title = title;
         this.link = link;
+        this.image = image;
     }
 
-    public String getHeight() {
+    public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getHeight() {
         return height;
     }
 

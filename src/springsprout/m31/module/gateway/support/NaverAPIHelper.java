@@ -12,16 +12,21 @@ import springsprout.m31.dto.SpringseeDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static springsprout.m31.utils.OpenApiRequestHelper.docElementValueToMap;
 import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
 
 public class NaverAPIHelper {
+	
+	private final static Logger log = LoggerFactory.getLogger(FlickrAPIHelper.class);
 
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0];
         api_url += query;
         api_url += "&sort=sim&start="+pageNo + "&display="+perPage;
-        System.out.println("Naver api : " + api_url); 
+        log.debug("Naver api : " + api_url); 
         HashMap<String,Object> rMap =  docElementValueToMap(loadXml(api_url),false);
         if(rMap.get("item") == null){
             return 0;
@@ -33,6 +38,7 @@ public class NaverAPIHelper {
                             , tmpMap.get("sizewidth")
                             , tmpMap.get("sizeheight")
                             , tmpMap.get("title")
+                            , tmpMap.get("link")
                             , tmpMap.get("link"))
             );
         }
