@@ -11,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,17 +53,16 @@ public class OpenApiGateWay {
     }
 
     @RequestMapping("/gateway/springplayer/search")
-    public ModelAndView springplayer(SpringPlayerCri cri){
+    public String springplayer(@ModelAttribute("cri") SpringPlayerCri cri, ModelMap model){
         log.debug("Criteria : {}",cri);        
         SpringPlayerDTO dto = applicationService.springPlayer(cri);
 
-        /*
-         * 낸중에 좀 수정해 주자... 
-         */
-        return new ModelAndView(JSON_VIEW)
-                .addObject("total", dto.getTotal())
-                .addObject("success", dto.isSuccess())
-                .addObject("items", dto.getList());
+        model.clear();
+        model.addAttribute("total", dto.getTotal())
+              .addAttribute("success", dto.isSuccess())
+              .addAttribute("items", dto.getList());
+
+        return JSON_VIEW;
     }
 
     @RequestMapping("/gateway/weathertray/search")
