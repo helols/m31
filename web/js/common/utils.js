@@ -21,7 +21,6 @@ m31.util = {
 		script.src = eval("this.JsLibraryManager." + libraryName);
 		
 		if (eval("this.JsLibraryManager." + libraryName)) {
-			console.log("js load");
 			eval("this.JsLibraryManager." + libraryName + "=false;");
 			document.getElementsByTagName('head')[0].appendChild(script);
 		}
