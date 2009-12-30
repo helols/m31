@@ -13,7 +13,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     ],
     lookup : {},
     init : function() {
-        console.log("init");
+        //필요한 JS
+        m31.util.requiredJS("pirobox");
+        
         this.initTemplates();
         this.apiProvider;
         this.searchText;
@@ -23,7 +25,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         	method: 'GET',
             root: 'imgInfo',
             fields: [
-                'title', 'thumbnail'
+                'title', 'thumbnail', 'image'
 //                {
 //                    name:'size',
 //                    type: 'float'
@@ -38,6 +40,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'load': {fn:function() {
                     console.log("store loaded");
                     this.view.select(0);
+                    m31.showImage();
                 }, scope:this, single:true}
             }
         });
@@ -70,8 +73,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             emptyText : '<div style="padding:10px;">No images match the specified search</div>',
             store: this.store,
             listeners: {
-                'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
-                'dblclick'       : {fn:this.runGallery, scope:this},
+                //'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
+                //'dblclick'       : {fn:this.runGallery, scope:this},
                 'loadexception'  : {fn:this.onLoadException, scope:this},
                 'beforeselect'   : {fn:function(view) {
                     return view.store.getRange().length > 0;
@@ -184,14 +187,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         }
                     ]
                 }
-            ],
-            keys: {
-                key: 27, // Esc key
-                handler: function() {
-                    this.win.hide();
-                },
-                scope: this
-            }
+            ]
         };
 
         return otp;
@@ -201,8 +197,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.thumbTemplate = new Ext.XTemplate(
                 '<tpl for=".">',
                 '<div class="thumb-wrap" id="{name}">',
-                '<div class="thumb"><img src="{thumbnail}" title="{title}"></div>',
-                '<span>{shortName}</span></div>',
+                '<div class="thumb"><a href="{image}" class="pirobox_gall" title="{title}"><img src="{thumbnail}" title="{title}"></a></div>',
+                '</div>',
+                //'<span>{shortName}</span></div>',
                 '</tpl>'
                 );
         this.thumbTemplate.compile();
@@ -210,7 +207,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.detailsTemplate = new Ext.XTemplate(
                 '<div class="details">',
                 '<tpl for=".">',
+                '<a href="{img}" class="pirobox_gall" title="{title}">',
                 '<img src="{thumbnail}"><div class="details-info">',
+                '</a>',
                 '<b>Image Name:</b>',
                 '<span>{title}</span>',
                 '<b>Size:</b>',
@@ -241,11 +240,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.view.getEl().update('<div style="padding:10px;">Error loading images.</div>');
     },
 
-    //Gallery 실행
-    runGallery : function() {
-        alert("run Gallery");
-    },
-
     //이미지 검색하기
     getImages : function() {
     	if (Ext.isEmpty(Ext.getCmp('springsee-search').getValue())) {
@@ -266,4 +260,18 @@ String.prototype.ellipse = function(maxLength) {
         return this.substr(0, maxLength - 3) + '...';
     }
     return this;
+};
+
+m31.showImage = function() {
+	$().piroBox({
+		my_speed: 600, //animation speed
+		bg_alpha: 0.5, //background opacity
+		radius: 4, //caption rounded corner
+		scrollImage : false, // true == image follows the page, false == image remains in the same open position
+		pirobox_next : 'piro_next', // Nav buttons -> piro_next == inside piroBox , piro_next_out == outside piroBox
+		pirobox_prev : 'piro_prev',// Nav buttons -> piro_prev == inside piroBox , piro_prev_out == outside piroBox
+		close_all : '.piro_close',// add class .piro_overlay(with comma)if you want overlay click close piroBox
+		slideShow : 'slideshow', // just delete slideshow between '' if you don't want it.
+		slideSpeed : 4 //slideshow duration in seconds(3 to 6 Recommended)
+	});
 };
