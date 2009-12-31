@@ -19,7 +19,6 @@ M31.ApplicationRegistry = function() {
             beforeload:{fn:function(){loaded = true;}},
             load: {
                 fn: function(store, records, options) {
-                    console.log(' applicationStore load');
                     store.each(function(item) {
                         Ext.apply(appInfo[item.data.appId], {
                             appId : item.data.appId,
@@ -28,14 +27,11 @@ M31.ApplicationRegistry = function() {
                             appInstallYn:item.data.appInstallYn
                         });
                     });
-                    M31.dt.SpringBar.getInstance().initBarButtons(appInfo);
+                    SpringDock.getInstance().initDockButton(appInfo);
                 }
             }
         }
     });
-    if(!loaded){
-        applicationStore.load();
-    }
     return {
         getInstance : function() {
             if (_instance === null) {             

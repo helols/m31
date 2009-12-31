@@ -5,7 +5,7 @@
  * http://www.extjs.com/license
  */
 
-M31.Desktop = function(cfg){
+M31.Desktop = function(cfg) {
     Ext.apply(this, cfg);
     this.addEvents({
         'ready' : true,
@@ -17,46 +17,45 @@ M31.Desktop = function(cfg){
 
 Ext.extend(M31.Desktop, Ext.util.Observable, {
     isReady: false,
-    initDesktop : function(){
+    initDesktop : function() {
         this.desktopEl = this.desktopEl || Ext.get('m31-desktop');
-        this.springbarEl = this.springbarEl || Ext.get('m31-springbar');
-//        this.springbar = M31.dt.SpringBar.getInstance(this);
+        //        this.springbarEl = this.springbarEl || Ext.get('m31-springbar');
+//        this.springDock = new M31.dt.SpringDock();
+//        this.springDock.initComponent();
         M31.WindowsManager.getInstance(this.desktopEl);
+        SpringDock.getInstance().init().build();
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
         this.fireEvent('ready', this);
         this.isReady = true;
-        Ext.EventManager.onDocumentReady(this.layout,this);
-//        Ext.EventManager.onDocumentReady(addReflections,this);
-        Ext.EventManager.onWindowResize(this.layout,this);
+        Ext.EventManager.onDocumentReady(this.layout, this);
+        Ext.EventManager.onWindowResize(this.layout, this);
     },
     init : Ext.emptyFn,
-    
-    onReady : function(fn, scope){
-        if(!this.isReady){
+
+    onReady : function(fn, scope) {
+        if (!this.isReady) {
             this.on('ready', fn, scope);
-        }else{
+        } else {
             fn.call(scope, this);
         }
     },
 
-    onUnload : function(e){
-        if(this.fireEvent('beforeunload', this) === false){
+    onUnload : function(e) {
+        if (this.fireEvent('beforeunload', this) === false) {
             e.stopEvent();
         }
     },
 
-   layout : function(){
-        if(Ext.lib.Dom.getViewHeight()-this.springbarEl.getHeight() <= this.minHeight){
+    layout : function() {
+        if (Ext.lib.Dom.getViewHeight() <= this.minHeight) {
             this.desktopEl.setHeight(this.minHeight);
-        }else{
-            this.desktopEl.setHeight(Ext.lib.Dom.getViewHeight()-this.springbarEl.getHeight());
+        } else {
+            this.desktopEl.setHeight(Ext.lib.Dom.getViewHeight());
         }
-        if(Ext.lib.Dom.getViewWidth() <= this.minWidth){
+        if (Ext.lib.Dom.getViewWidth() <= this.minWidth) {
             this.desktopEl.setWidth(this.minWidth);
-            this.springbarEl.setStyle({width:this.minWidth+'px'});
-        }else{
+        } else {
             this.desktopEl.setWidth(Ext.lib.Dom.getViewWidth());
-            this.springbarEl.setStyle({width:Ext.lib.Dom.getViewWidth()+'px'});
         }
     }
 });

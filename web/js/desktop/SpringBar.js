@@ -5,10 +5,10 @@
  * http://www.extjs.com/license
  */
 
-M31.dt.SpringBarContainer = Ext.extend(Ext.Container, {
+M31.dt.SpringBarContainer = Ext.extend(Ext.Panel, {
     initComponent : function() {
         M31.dt.SpringBarContainer.superclass.initComponent.call(this);
-        
+
         this.el = Ext.get(this.el) || Ext.getBody();
         this.el.setHeight = Ext.emptyFn;
         this.el.setWidth = Ext.emptyFn;
@@ -39,7 +39,7 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
     minButtonWidth: 36,
     buttonMargin: 2,
     buttonWidthSet: false,
-	
+
 	initComponent : function() {
         M31.dt.BarButtonsPanel.superclass.initComponent.call(this);
         this.items = [];
@@ -54,7 +54,7 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
         	cls:'m31-barbuttons-strip-spacer'
         });
         this.strip = new Ext.Element(this.stripWrap.dom.firstChild);
-        
+
         this.edge = this.strip.createChild({
         	tag:'li',
         	cls:'m31-barbuttons-edge'
@@ -63,7 +63,7 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
         	cls:'x-clear'
         });
 	},
-	
+
 	addButtons : function(appsInfo){
         for (var x in appsInfo) {
             var li = this.strip.createChild({tag:'li'}, this.edge);
@@ -74,11 +74,11 @@ M31.dt.BarButtonsPanel = Ext.extend(Ext.BoxComponent, {
 //                Ext.get('loading-mask').fadeOut({remove:true});
 //            }, 250);
 	},
-	
+
 	updateBarButtons : function(btn){
 
 	},
-	
+
 	setActiveButton : function(btn){
 		this.activeButton = btn;
 	}
@@ -131,83 +131,23 @@ M31.dt.BarButton = function(appInfo, el){
 Ext.extend(M31.dt.BarButton, Ext.Button, {
     onRender : function(){
         M31.dt.BarButton.superclass.onRender.apply(this, arguments);
-//        this.cmenu = new Ext.menu.Menu({
-//            items: [{
-//                text: 'Restore',
-//                handler: function(){
-//                    if(!this.win.isVisible()){
-//                        this.win.show();
-//                    }else{
-//                        this.win.restore();
-//                    }
-//                },
-//                scope: this
-//            },{
-//                text: 'Minimize',
-//                handler: this.win.minimize,
-//                scope: this.win
-//            },{
-//                text: 'Maximize',
-//                handler: this.win.maximize,
-//                scope: this.win
-//            }, '-', {
-//                text: 'Close',
-//                handler: this.closeWin.createDelegate(this, this.win, true),
-//                scope: this.win
-//            }]
-//        });
-//
-//        this.cmenu.on('beforeshow', function(){
-//            var items = this.cmenu.items.items;
-//            var w = this.win;
-//            items[0].setDisabled(w.maximized !== true && w.hidden !== true);
-//            items[1].setDisabled(w.minimized === true);
-//            items[2].setDisabled(w.maximized === true || w.hidden === true);
-//        }, this);
-
-//        this.el.on('contextmenu', function(e){
-//            e.stopEvent();
-//            if(!this.cmenu.el){
-//                this.cmenu.render();
-//            }
-//            var xy = e.getXY();
-//            xy[1] -= this.cmenu.el.getHeight();
-//            this.cmenu.showAt(xy);
-//        }, this);
-    },
-
-    closeWin : function(cMenu, e, win){
-		if(!win.isVisible()){
-			win.show();
-		}else{
-			win.restore();
-		}
-		win.close();
-	}
+    }
 });
 
 M31.dt.SpringBar = function(){
     var _instance = null;
     var springbartray, sbPanel ,container;
     function init(){
-        var trayWidth = 200;
-        springbartray = new Ext.BoxComponent({
-            el: 'm31-springbar-tray',
-            id: 'SpringBarTray',
-            region:'east',
-            width: trayWidth
-        });
-
         sbPanel = new M31.dt.BarButtonsPanel({
             el: 'm31-barbuttons-panel',
-            id: 'BarButtons',
-            region:'center'
+            id: 'BarButtons'
         });
 
         container = new M31.dt.SpringBarContainer({
             el: 'm31-springbar',
-            layout: 'border',
-            items: [sbPanel,springbartray]
+            layout: 'ux.center',
+            border: false,
+            items: [sbPanel]
         });
     };
     return {
@@ -227,6 +167,6 @@ M31.dt.SpringBar = function(){
                init();
             }
             return _instance;
-        }       
+        }
     };
 }();

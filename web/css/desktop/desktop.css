@@ -6,218 +6,158 @@
  * background:#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top;
  */
 html, body {
-    background:#3d71b8 url(../../images/desktop/wallpapers/desk.jpg) no-repeat center;
+    /*background: #000 url(../../images/desktop/wallpapers/wallpaper-01.png) no-repeat center;*/
+    background-color:#000;
+
     font: normal 12px tahoma, arial, verdana, sans-serif;
-	margin: 0;
-	padding: 0;
-	border: 0 none;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
     overflow: hidden;
-    height:100%;
-    width:100%;
+    height: 100%;
+    width: 100%;
 }
 
-#loading{
-    background:black;
-    position:absolute;
-    z-index:20001;
-    height:100%;
-    width:100%;
+#loading {
+    background: black;
+    position: absolute;
+    z-index: 20001;
+    height: 100%;
+    width: 100%;
 }
-#loading-mask{
-    background:black;
-    position:absolute;
-    z-index:20000;
-    height:100%;
-    width:100%;
+
+#loading-mask {
+    background: black;
+    position: absolute;
+    z-index: 20000;
+    height: 100%;
+    width: 100%;
 }
+
 #loading img {
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
-#loading .loading-messge{
-	background:black;
-	color:#fff;
-	font:bold 13px tahoma,arial,helvetica;
-	padding:10px;
-	margin:0;
-    text-align:center;
-    height:100%;
-    width:100%;
-    position:absolute;
-    top:40%;
+
+#loading .loading-messge {
+    background: black;
+    color: #fff;
+    font: bold 13px tahoma, arial, helvetica;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 40%;
 }
+
 #m31-desktop {
-	width: 100%;
+    width: 100%;
     border: 0 none;
     position: relative;
-    overflow:hidden;
-    zoom:1;
+    overflow: hidden;
+    zoom: 1;
 }
+
 /* spring bar - start*/
-#m31-springbar {
-	background:transparent none;
-	height:50px !important;
-	margin:0;
-	padding:0;
-	position:relative;
-	z-index:12001;
-}
 
 #m31-springbar .x-btn {
-	margin: 1px 0 0 1px;
+    margin: 1px 0 0 1px;
 }
 
-#m31-springbar .x-splitbar-h {
-	background:#000000 url( ../../images/desktop/taskbar/black/taskbar-split-h.gif ) no-repeat 0 0;
-	width:8px;
+#m31-springbar button {
+/*일단 dock 가면 이놈 삭제대상*/
+    /* width: 150px;
+     overflow: hidden; */
+    text-align: left;
+    color: #ffffff;
 }
 
-#m31-springbar button { /*일단 dock 가면 이놈 삭제대상*/
-	/* width: 150px;
-	overflow: hidden; */
-	text-align: left;
-	color: #ffffff;
-}
 /* spring bar - end*/
-
-
-/* spring bar [tray]- start*/
-#m31-springbar-tray {
-	background:transparent url(../../images/desktop/taskbar/default/spring-bar-bg.png) repeat-x left top;
-	left:0px;
-	padding:0;
-	position:absolute;
-}
-/* spring bar [tray]- end*/
-
-/* spring bar [panel] - start  */
-#m31-barbuttons-panel {
-	background:transparent url( ../../images/desktop/taskbar/default/spring-bar-bg.png) repeat-x left top;
-    /*opacity:.5;*/
-    /*-moz-opacity:.5;*/
-    /*filter:alpha(opacity=50);*/
-	padding-top:0;
-	position:relative;
-}
-
-.m31-barbuttons-strip-wrap {
-	/* overflow:hidden;
-	position:relative;
-	width:100%; */
-
-	width:100%;
-    overflow:hidden;
-    position:relative;
-    zoom:1;
-}
-ul.m31-barbuttons-strip {
-	display:block;
-	width:5000px;
-    zoom:1;
-}
-
-ul.m31-barbuttons-strip li {
-    float:left;
-    margin-left:2px;
-}
-
-
-ul.m31-barbuttons-strip li.m31-barbuttons-edge {
-    float:left;
-    margin:0 !important;
-    padding:0 !important;
-    border:0 none !important;
-    font-size:1px !important;
-    line-height:1px !important;
-    overflow:hidden;
-    zoom:1;
-    background:transparent !important;
-    width:1px;
-}
-
 .x-clear {
-    clear:both;
-    height:0;
-    overflow:hidden;
-    line-height:0;
-    font-size:0;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    line-height: 0;
+    font-size: 0;
 }
+
 /* spring bar [panel] - end */
 
-#m31-springbar .bar-btn-icon{
-    width:50px !important;
-    height:48px !important;
-    padding:1px;
-    margin-left:4px !important;
-    text-align:center !important;
-    background:transparent none;
-    cursor:pointer;
+#m31-springbar .bar-btn-icon {
+    width: 50px !important;
+    height: 48px !important;
+    padding: 1px;
+    margin-left: 4px !important;
+    text-align: center !important;
+    background: transparent none;
+    cursor: pointer;
 
 }
-#m31-springbar .bar-btn-icon span{
-    color:white;
-    display:block;
-    margin-top:-1px;
-    overflow:hidden;
+
+#m31-springbar .bar-btn-icon span {
+    color: white;
+    display: block;
+    margin-top: -1px;
+    overflow: hidden;
 }
 
 #spacer {
-	height: 25px;
-	float: left;
-	width: 0;
-	overflow: hidden;
-	margin-top: 2px;
+    height: 25px;
+    float: left;
+    width: 0;
+    overflow: hidden;
+    margin-top: 2px;
 }
 
-.x-window-body p,.x-panel-body p {
-	padding: 10px;
-	margin: 0;
+.x-window-body p, .x-panel-body p {
+    padding: 10px;
+    margin: 0;
 }
 
 .x-window-maximized .x-window-bc {
-	height:0;
+    height: 0;
 }
 
 #title-bar-wrapper {
-	height:35px;
+    height: 35px;
 }
 
 #title-bar {
-	color: #225599;
-	padding: 9px 7px;
-	font: bold 16px tahoma,arial,verdana,sans-serif;
-	float:left;
+    color: #225599;
+    padding: 9px 7px;
+    font: bold 16px tahoma, arial, verdana, sans-serif;
+    float: left;
 }
 
 #x-logout {
-	float:right;
-	padding:6px 7px;
+    float: right;
+    padding: 6px 7px;
 }
 
 .x-btn-text-icon .x-btn-center .logout {
-	background-position:0pt 3px;
-	background-repeat:no-repeat;
-	padding:3px 0pt 3px 18px;
+    background-position: 0pt 3px;
+    background-repeat: no-repeat;
+    padding: 3px 0pt 3px 18px;
 }
 
-
-
 .ux-toolmenu-sep {
-	background-color:#18191a;
-	border-bottom:1px solid #858789;
-	display:block;
-	font-size:1px;
-	line-height:1px;
-	margin:2px 3px;
+    background-color: #18191a;
+    border-bottom: 1px solid #858789;
+    display: block;
+    font-size: 1px;
+    line-height: 1px;
+    margin: 2px 3px;
 }
 
 .x-window-header-text {
-	cursor:default;
+    cursor: default;
 }
 
-.x-resizable-proxy{
-    background:#C7DFFC;
-    opacity:.5;
-    -moz-opacity:.5;
-    filter:alpha(opacity=50);
+.x-resizable-proxy {
+    background: #C7DFFC;
+    opacity: .5;
+    -moz-opacity: .5;
+    filter: alpha(opacity = 50);
     border: 1px solid #3b5a82;
 }
