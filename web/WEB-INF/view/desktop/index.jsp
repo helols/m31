@@ -11,10 +11,11 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/springdock.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/miracle.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/outsider.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/helols.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/app/arawn.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/miracle.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/outsider.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/helols.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/arawn.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/xtheme-vistaglass/css/xtheme-vistaglass.css"/>"/>
     <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
     <![endif]-->

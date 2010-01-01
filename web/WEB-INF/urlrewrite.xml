@@ -19,6 +19,14 @@
 		<from>/extJS/**</from>
 		<to>/extJS/$1</to>
 	</rule>
+    <rule>
+		<from>/themes/**</from>
+		<to>/themes/$1</to>
+	</rule>
+    <rule>
+		<from>/favicon*</from>
+		<to>/$1</to>
+	</rule>
 	<rule>
 		<from>/**</from>
 		<to>/app/$1</to>
