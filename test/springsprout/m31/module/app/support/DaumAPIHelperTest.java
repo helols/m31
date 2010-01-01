@@ -8,7 +8,7 @@
 package springsprout.m31.module.app.support;
 
 import org.junit.Test;
-import springsprout.m31.common.OpenApi;
+import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;

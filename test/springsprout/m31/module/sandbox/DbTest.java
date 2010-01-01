@@ -26,6 +26,6 @@ public class DbTest {
 
     @Rollback(true)
     @Test public void dbConnectTest(){
-        Assert.assertNotNull(memberRepository.getMember("helolsjava@gmail.com"));
+        Assert.assertNotNull(memberRepository.getMemberByEmail("helolsjava@gmail.com"));
     }
 }

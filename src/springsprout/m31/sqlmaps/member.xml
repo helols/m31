@@ -2,13 +2,25 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 <sqlMap namespace="member">
 	<resultMap id="member" class="springsprout.m31.domain.Member">
-        <result property = "id"         column = "ID"/>
+        <result property = "id"            column = "ID"/>
         <result property = "email"         column = "EMAIL"/>
 		<result property = "name"          column = "NAME"/>
+		<result property = "password"          column = "PASSWD"/>
+		<result property = "location"          column = "LOCATION"/>
+
 	</resultMap>
 
-	<select id="getMember" resultMap="member" parameterClass="string">
-		SELECT ID , EMAIL , NAME FROM MEMBER WHERE EMAIL = #EMAIL#
+    <sql id="getMember">
+        SELECT ID , EMAIL , NAME, PASSWD, LOCATION FROM MEMBER WHERE
+    </sql>
+	<select id="getMemberByEmail" resultMap="member" parameterClass="string">
+        <include refid="getMember"/>
+        EMAIL = #EMAIL#
+	</select>
+
+    <select id="getMemberById" resultMap="member" parameterClass="integer">
+		<include refid="getMember"/>
+        id = #id#
 	</select>
 
     <!--

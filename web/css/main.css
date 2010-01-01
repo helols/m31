@@ -1,0 +1,9 @@
+html, body {
+    background: #000 url(../images/desktop/wallpapers/springsprout-simple.png) no-repeat top center;
+    font: normal 12px tahoma, arial, verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+}
