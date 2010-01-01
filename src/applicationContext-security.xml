@@ -6,4 +6,43 @@
     					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
+    <http>
+
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<form-login login-page="/desktop/view"
+			authentication-success-handler-ref="authenticationSuccessSuppotAJAXHandler"
+			authentication-failure-handler-ref="simpleUrlAuthenticationFailureHandler"/>
+		<logout logout-success-url="/desktop/view" />
+		<remember-me />
+		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
+	</http>
+
+    <!-- custom filter -->
+    <beans:bean id="ajaxSessionTimeoutFilter" class="springsprout.m31.common.web.AjaxSessionTimeoutFilter" />
+
+    <!-- AJAX Login Setting -->
+	<beans:bean id="authenticationSuccessSuppotAJAXHandler" class="springsprout.m31.service.security.AuthenticationSuccessSuppotAJAXHandler">
+		<beans:property name="ajaxHeaderName" value="AJAX"/>
+		<beans:property name="defaultTargetUrl" value="/login/loginSuccessProcess"/>
+	</beans:bean>
+
+	<beans:bean id="simpleUrlAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="useForward" value="true"/>
+		<beans:property name="defaultFailureUrl" value="/login/loginFailProcess"/>
+	</beans:bean>
+
+	<!-- Authentication Provider Setting -->
+    <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+        <beans:constructor-arg value="256" />
+    </beans:bean>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="springSproutUserDetailsService">
+		  <password-encoder ref="passwordEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+
+
+	<global-method-security secured-annotations="enabled"
+		jsr250-annotations="enabled" pre-post-annotations="enabled" />
 </beans:beans>
