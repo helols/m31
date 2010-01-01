@@ -1,6 +1,6 @@
 package springsprout.m31.dto;
 
-import springsprout.m31.common.OpenApi;
+import springsprout.m31.domain.enums.OpenApi;
 
 public class SpringPlayerCri {
     private int start;

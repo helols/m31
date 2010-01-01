@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import springsprout.m31.common.OpenApi;
+import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.utils.OpenAPIEditor;

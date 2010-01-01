@@ -11,9 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springsprout.m31.common.OpenApi;
 import springsprout.m31.common.OpenApiReadException;
-import springsprout.m31.domain.MovieVO;
+import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
@@ -28,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static springsprout.m31.common.OpenApi.*;
+import static springsprout.m31.domain.enums.OpenApi.*;
 
 @Service
 public class OpenApiService {

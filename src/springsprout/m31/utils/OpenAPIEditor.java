@@ -1,6 +1,6 @@
 package springsprout.m31.utils;
 
-import springsprout.m31.common.OpenApi;
+import springsprout.m31.domain.enums.OpenApi;
 
 import java.beans.PropertyEditorSupport;
 

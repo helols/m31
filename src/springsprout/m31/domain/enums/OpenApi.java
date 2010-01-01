@@ -5,7 +5,7 @@
  * Time: 오전 11:39:31
  * enjoy springsprout ! development!
  */
-package springsprout.m31.common;
+package springsprout.m31.domain.enums;
 
 public enum OpenApi {
     DAUM, NAVER, GOOGLE, FLICKR, ALL
