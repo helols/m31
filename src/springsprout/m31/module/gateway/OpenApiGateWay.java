@@ -46,6 +46,7 @@ public class OpenApiGateWay {
         log.debug("encoding !! ["+System.getProperty("file.encoding")+"]"); // 개발때 확인용
         log.debug("search query>>"+query); // 개발때 확인용
         log.debug("openApiType>>"+openApiType);// 개발때 확인용 
+        log.debug("pageNo>>"+pageNo);// 개발때 확인용
 
         HashMap<String,Object> springsee = applicationService.springsee(openApiType,query,pageNo);
         return new ModelAndView(JSON_VIEW).addObject("totalCount",springsee.get("totalCount"))

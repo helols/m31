@@ -11,19 +11,20 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         ['naver', 'Naver'],
         ['flickr', 'Flickr']
     ],
+    currentPage:1,
+    loadMask : null, 
     lookup : {},
     init : function() {
         //필요한 JS
         m31.util.requiredJS("pirobox");
         
         this.initTemplates();
-        this.apiProvider;
-        this.searchText;
 
         this.store = new Ext.data.JsonStore({
         	url: '/gateway/springsee/search',
         	method: 'GET',
             root: 'imgInfo',
+            autoload: true,
             fields: [
                 'title', 'thumbnail', 'image'
 //                {
@@ -108,7 +109,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         if(!this.win){
             this.win = win;
         }
-        //this.store.load();
     },
 
     createWindow : function () {
@@ -126,6 +126,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     id: 'springsee-view',
                     region: 'center',
                     autoScroll: true,
+                    loadMask: {msg:'Loading Feed...'},
                     items: this.view,
                     tbar:[
                         {
@@ -184,12 +185,29 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             text: 'Send',
                             handler: this.getImages,
                             scope: this
+                        },
+                        {xtype: 'tbfill'},
+                        {
+                            id: 'springsee-prev-btn',
+                            xtype: 'button',
+                            text: 'Prev',
+                            disabled: true,
+                            handler: this.getImages.createDelegate(this, [-1], true),
+                            scope: this
+                        },
+                        {
+                            id: 'springsee-Next-btn',
+                            xtype: 'button',
+                            text: 'Next',
+                            disabled: true,
+                            handler: this.getImages.createDelegate(this, [1], true),
+                            scope: this
                         }
                     ]
                 }
             ]
         };
-
+        
         return otp;
     },
 
@@ -222,36 +240,36 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.detailsTemplate.compile();
     },
 
-    showDetails : function() {
-//        var selNode = this.view.getSelectedNodes();
-//        var detailEl = Ext.getCmp('springsee-img-detail-panel').body;
-//        if (selNode && selNode.length > 0) {
-//            selNode = selNode[0];
-//            var data = this.lookup[selNode.id];
-//            detailEl.hide();
-//            this.detailsTemplate.overwrite(detailEl, data);
-//            detailEl.slideIn('l', {stopFx:true,duration:.2});
-//        } else {
-//            detailEl.update('');
-//        }
-    },
-
     onLoadException : function(v, o) {
         this.view.getEl().update('<div style="padding:10px;">Error loading images.</div>');
     },
 
     //이미지 검색하기
-    getImages : function() {
+    getImages : function(button, event, cmd) {
     	if (Ext.isEmpty(Ext.getCmp('springsee-search').getValue())) {
     		alert("검색어를 입력하세요.");
     		return;
     	}
+    	if (cmd) {
+    		this.currentPage += parseInt(cmd);
+    	} else {
+    		this.currentPage = 1;
+    	}
+    	if (this.currentPage < 1) {
+    		this.currentPage = 1;
+    		return;
+    	}
+    	new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."});
         this.store.reload({
         	params: {
         		search_type: Ext.getCmp('springsee-api-provider').getValue(), 
-        		query: 		 Ext.getCmp('springsee-search').getValue() 
+        		query: 		 Ext.getCmp('springsee-search').getValue(),
+        		pageNo:		 this.currentPage
         	}
         });
+        
+        Ext.getCmp('springsee-prev-btn').enable();
+    	Ext.getCmp('springsee-Next-btn').enable();
     }
 });
 

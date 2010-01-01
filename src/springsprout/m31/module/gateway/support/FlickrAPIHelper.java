@@ -29,7 +29,7 @@ public class FlickrAPIHelper {
 
         String resultFlickr = OpenApiRequestHelper.loadString(api_url);
         resultFlickr = resultFlickr.replace("jsonFlickrApi(", "").replace(")", "");
-//        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(resultFlickr,"photos.photo");
+
         HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(resultFlickr,"photos");
         for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("photo")){
         	String photoUrl  = "http://farm" + tmpMap.get("farm") + ".static.flickr.com/" + tmpMap.get("server") + "/" + tmpMap.get("id") + "_" + tmpMap.get("secret") + "_s.jpg";

@@ -51,6 +51,7 @@ public class GoogleAPIHelper {
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
     	String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
+        pageNo = (pageNo -1) * 8 + 1;
         api_url += query+"&&rsz=large";
         api_url += "&start="+pageNo;
         log.debug("Google api : " + api_url);

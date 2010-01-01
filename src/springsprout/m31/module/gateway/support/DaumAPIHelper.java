@@ -33,6 +33,7 @@ public class DaumAPIHelper {
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0]; //
         String api_output = apiInfo[1];
+        if (perPage > 20) {perPage = 20;}
         api_url += query+"&output="+api_output.toLowerCase();
         api_url += "&sort=1&pageno="+pageNo + "&result="+perPage;
         log.debug("Daum api : " + api_url);

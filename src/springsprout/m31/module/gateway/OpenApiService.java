@@ -57,11 +57,11 @@ public class OpenApiService {
     public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
         ArrayList<SpringseeDTO> r_list = new ArrayList<SpringseeDTO>();
         Integer totalCount = 0;
-        Integer perPage = 20;
+        Integer perPage = 60;
         HashMap<String,Object> r_map = new HashMap<String,Object>();
         switch (s_type) {
             case ALL:
-            	perPage = 10;
+            	perPage = 20;
             case DAUM:
                 totalCount += DaumAPIHelper.springsee(r_list,getAPIInfo(DAUM.toString(),"IMAGE"),query,pageNo, perPage);
                 if(s_type.equals(DAUM)) break;

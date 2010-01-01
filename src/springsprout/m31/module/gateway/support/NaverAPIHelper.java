@@ -24,6 +24,7 @@ public class NaverAPIHelper {
 
     public static Integer springsee(ArrayList<SpringseeDTO> r_list, String[] apiInfo, String query, Integer pageNo, Integer perPage) {
         String api_url = apiInfo[0];
+        pageNo = (pageNo -1) * perPage + 1;
         api_url += query;
         api_url += "&sort=sim&start="+pageNo + "&display="+perPage;
         log.debug("Naver api : " + api_url); 
