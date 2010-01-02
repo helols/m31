@@ -3134,7 +3134,8 @@ Ext.Element.addMethods({
         html = html || "";
 
         if(loadScripts !== true){
-            this.dom.innerHTML = html;
+            if(this.dom.nodeName !== "IMG")
+                this.dom.innerHTML = html; //helols
             if(Ext.isFunction(callback)){
                 callback();
             }
