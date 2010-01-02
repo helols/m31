@@ -41,6 +41,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     console.log("store loaded");
                     this.view.select(0);
                     m31.showImage();
+                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
                     this.dragZone = new ImageDragZone(this.view, {containerScroll:true, ddGroup: 'explorerDD'});
                 }, scope:this, single:false}
             }
@@ -114,7 +115,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     createWindow : function () {
         var otp = {
-            layout: 'fit',
+            layout: 'border',
             width: 640,
             height: 480,
             minWidth: 640,
@@ -127,7 +128,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     id: 'springsee-view',
                     region: 'center',
                     autoScroll: true,
-                    items: this.view,
+                    items: {
+						xtype: 'panel',
+						id: 'springsee-view-body',
+						items:this.view
+					},
                     tbar:[
                         {
                             id: 'springsee-api-provider',
