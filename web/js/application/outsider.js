@@ -40,9 +40,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'load': {fn:function() {
                     console.log("store loaded");
                     this.view.select(0);
-                    //m31.showImage();
+                    m31.showImage();
                     this.dragZone = new ImageDragZone(this.view, {containerScroll:true, ddGroup: 'explorerDD'});
-                    //initializePatientDragZone(Ext.get('springsee-view').select('div.thumb'));
                 }, scope:this, single:false}
             }
         });
@@ -72,9 +71,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             singleSelect: true,
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
-            multiSelect: true,
             emptyText : '<div style="padding:10px;">No images match the specified search</div>',
-            plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+            //plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
                 //'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
@@ -112,12 +110,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         if(!this.win){
             this.win = win;
         }
-        Ext.getCmp('springsee-explorer-panel').collapse();
     },
 
     createWindow : function () {
         var otp = {
-            layout: 'border',
+            layout: 'fit',
             width: 640,
             height: 480,
             minWidth: 640,
@@ -214,17 +211,13 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     id: 'springsee-explorer-panel',
                     autoScroll: true,
                     collapsible: true,
+                    collapsed:true,
                     ddGroup: 'explorerDD',
                     split: true,
                     margins: '0 0 0 0',
                     cmargins: '2 2 2 2',
                     height: 100,
-                    html: "Drag Images to here...",
-                    listeners: {
-                		'render': {fn:function() {
-                            //initializeHospitalDropZone(this.view);
-                        }, scope:this}
-                	}
+                    html: "Drag Images to here..."
                 }
             ]
         };
@@ -322,7 +315,7 @@ m31.showImage = function() {
  * Create a DragZone instance for our JsonView
  */
 ImageDragZone = function(view, config){
-    this.view = view;
+    this.viewClone = view;
     ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
 Ext.extend(ImageDragZone, Ext.dd.DragZone, {
@@ -330,10 +323,9 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // override the default registry lookup to fetch the image 
     // from the event instead
     getDragData : function(e){
-		console.log("call getDragData");
         var target = e.getTarget('.thumb-wrap');
         if(target){
-            var view = this.view;
+            var view = this.viewClone;
             if(!view.isSelected(target)){
                 view.onClick(e);
             }
@@ -369,7 +361,7 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // to get the new tree node (there are also other way, but this is easiest)
     getTreeNode : function(){
         var treeNodes = [];
-        var nodeData = this.view.getRecords(this.dragData.nodes);
+        var nodeData = this.viewviewClone.getRecords(this.dragData.nodes);
         for(var i = 0, len = nodeData.length; i < len; i++){
             var data = nodeData[i].data;
             treeNodes.push(new Ext.tree.TreeNode({
@@ -404,7 +396,6 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
 });
 
 Ext.DataView.DragSelector = function(cfg){
-	console.log("DragSelector");
     cfg = cfg || {};
     var view, proxy, tracker;
     var rs, bodyRegion, dragRegion = new Ext.lib.Region(0,0,0,0);
@@ -432,7 +423,6 @@ Ext.DataView.DragSelector = function(cfg){
     }
 
     function onStart(e){
-    	console.log("onStart");
         view.on('containerclick', cancelClick, view, {single:true});
         if(!proxy){
             proxy = view.el.createChild({cls:'x-view-selector'});
