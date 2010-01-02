@@ -120,3 +120,14 @@ a.play{position:absolute;bottom:10px!important;bottom:2px;right:10px!important;r
 a:hover.play{background:url(../../images/apps/springsee/pirobox/play_h.png) no-repeat;}
 a.stop{position:absolute;bottom:10px!important;bottom:2px;right:10px!important;right:2px;width:40px; height:40px; margin:0; outline:none; display:block;background:url(../../images/apps/springsee/pirobox/pause.png) no-repeat;text-indent:-999em; border:none;cursor:pointer;}
 a:hover.stop{background:url(../../images/apps/springsee/pirobox/pause_h.png) no-repeat;}
+
+
+.x-dd-drag-proxy .multi-proxy .thumb-img{
+    height: 20px;
+    width: 30px;
+    margin:1px;
+}
+.x-dd-drag-proxy .thumb-img{
+    height: 60px;
+    width: 80px;
+}
