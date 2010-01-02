@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import springsprout.m31.module.app.me2day.entity.AuthenticationInfo;
+import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
+import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
 import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
@@ -26,15 +28,23 @@ public class SpringMe2DayController {
 	@Autowired SpringMe2DayApiService me2DayApiService;
 
 	/**
+	 * 봄미투데이 초기화
 	 * 사용자 로그인 여부를 파악하고 로그인이 안되어 있으면 미투데이로부터 인증 주소를 얻어온다.
+	 * 로그인이 되어있다면 사용자 인증이 올바르게 일어나는지 확인하고, 기본 사용자 정보를 미투데이로
+	 * 부터 얻어온다.
 	 * @param me2DayDTO
 	 * @param httpSession
 	 * @return
 	 * @throws Me2DayApiRequestException
 	 */
 	@RequestMapping
-	public ModelAndView isLogin(SpringMe2DayDTO me2DayDTO, HttpSession httpSession) throws Me2DayApiRequestException {
+	public ModelAndView initializing(HttpSession httpSession) throws Me2DayApiRequestException {
 		ModelAndView mav = new ModelAndView(JSON_VIEW);
+		
+		boolean state = false;
+		AuthenticationUrl authenticationUrl = null;
+		AuthenticationInfo authenticationInfo = null;
+		Person person = null;
 		
 		// 테스트를 위해서 무조건 arawn 의 인증정보를 저장해둔다. 
 		if(httpSession.getAttribute(SpringMe2DayUserSession) == null){
@@ -44,14 +54,26 @@ public class SpringMe2DayController {
 			httpSession.setAttribute(SpringMe2DayUserSession, info);
 		}
 		
-		if(httpSession.getAttribute(SpringMe2DayUserSession) == null){
-			mav.addObject(me2DayApiService.getAuthenticationUrl());
-			mav.addObject("state", false);
+		authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
+		if(authenticationInfo == null){
+			authenticationUrl = me2DayApiService.getAuthenticationUrl();
 		}
 		else{
-			mav.addObject("state", true);
-			mav.addObject(httpSession.getAttribute(SpringMe2DayUserSession));
+			// 미투데이 인증 확인
+			if(me2DayApiService.noop(authenticationInfo)){
+				state = true;
+				person = me2DayApiService.getPerson(authenticationInfo.getUser_id());
+			}
+			else{
+				// 인증실패시 미투데이로부터 인증요청주소를 얻어온다.
+				authenticationUrl = me2DayApiService.getAuthenticationUrl();
+			}
 		}
+		
+		mav.addObject("state", state);
+		mav.addObject("authenticationUrl", authenticationUrl);
+		mav.addObject("authenticationInfo", authenticationInfo);
+		mav.addObject("person", person);
 		
 		return mav;
 	}

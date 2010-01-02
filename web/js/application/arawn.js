@@ -14,7 +14,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	if(!this.win){ this.win = win; }
     	this.win.app = this;
     	
-    	this.loadMask = new Ext.LoadMask(win.getEl(), {msg:"봄미투데이를 초기화 중 입니다."});
+    	this.loadMask = new Ext.LoadMask(this.win.body, {msg:"봄미투데이를 초기화 중 입니다."});
     	this.loadMask.show();
     	
     	this.springMe2dayReady();
@@ -22,7 +22,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     beforeCreate: function(){
     	console.log("beforeCreate");
     	
-    	this.loginModule.loginCheck(this);
+    	this.loginModule.initializing(this);
     },
     removeWin: function(){
     	console.log("removeWin");
@@ -95,15 +95,15 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	/* 미투데이 인증처리용 토큰 */
     	authToken: '',
     	/* 미투데이 로그인 여부 검증 */
-    	loginCheck: function(app){
+    	initializing: function(app){
 	    	Ext.Ajax.request({
-				url: '/app/me2day/isLogin',
-				success: this.loginCheckSuccess.createDelegate(app),
-				failure: this.loginCheckFailure.createDelegate(app)
+				url: '/app/me2day/initializing',
+				success: this.initializingSuccess.createDelegate(app),
+				failure: this.initializingFailure.createDelegate(app)
 			});
     	},
     	/* loginCheck 함수에서 사용하는 콜백 : ajax 성공 */
-		loginCheckSuccess: function(response, opts){
+    	initializingSuccess: function(response, opts){
 	    	try { 
 	    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
 	    		
@@ -123,6 +123,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    				friendPostView: true,
 	    				commentView: true
 	    			};
+	    			
+	    			console.log(result.person);
+	    	        this.me2DayModule.iconStore.loadData(result.person.postIcons, false);
 	    		}
 	    		else{
 	    			// 인증 요청 url
@@ -133,13 +136,19 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    		console.log('loginModule.loginState : ' + this.loginModule.loginState);
 	    		console.log('loginModule.authUrl : ' + this.loginModule.authUrl);
 	    		console.log('loginModule.authToken : ' + this.loginModule.authToken);
+	    		
+	    		this.springMe2dayReady();
 	    	}
-			catch(e){}
-			
-			this.springMe2dayReady();
+			catch(e){
+				console.log('초기화 중 오류가 발생했습니다. (' + e + ')');
+				
+				this.loadMask.hide();
+				this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다.\n봄미투데이를 다시 시작해주세요."});
+		    	this.loadMask.show();
+			}
     	},
-    	/* loginCheck 함수에서 사용하는 콜백 : ajax 실패 */
-    	loginCheckFailure: function(response, opts){
+    	/* initializing 함수에서 사용하는 콜백 : ajax 실패 */
+    	initializingFailure: function(response, opts){
     		console.log('loginCheckAjaxSuccess : ' + response.responseText);
     		this.loginModule.loginState = false;
     	},
@@ -271,6 +280,17 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     },
     me2DayModule: {
     	apiUrl: '/app/me2day/',
+        iconStore: new Ext.data.JsonStore({
+        	autoLoad: false,
+        	autoDestroy: true,
+        	remoteSort: false,
+            fields: [
+                'iconIndex',
+                'iconType',
+                'description',
+                'url'
+            ]
+        }),    	
     	get_posts: function(config){
     		var url = this.apiUrl + 'postList';
     		if(config.post_id){
@@ -291,55 +311,76 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		console.log('me2DayModule.createView()');
     		
 	        // 글쓰기 패널
-	        this.writePanel = new Ext.Panel({
+	        this.writePanel = new Ext.form.FormPanel({
 	            id: 'me2day-writePanel',
 	            title: '글쓰기',
 	            collapsedTitle: '글쓰기',
 	            region: 'north',
 	            layout: 'border',
-	            height: 81,
+	            height: 100,
 	            plain:true,
 	            collapsible: true,
 	            titleCollapse: true,
-	            items:[new Ext.Panel({
+	            items:[ new Ext.Panel({
 	            	region: 'center',
-	            	layout: 'fit',
+	            	layout: 'border',
 	            	border: false,
 	            	margins: { top: 2, right: 2, bottom: 2, left: 2 },
 	            	items:[{
+	            		region: 'center',
 	            		xtype: 'textarea',
-	            		id: 'springme2day-content-text',
+	            		id: 'springme2day-form-body',
+	            		name: 'body',
+	            		minLength: 1,
+	            		minLengthText : '최소 한자 이상 글을 쓰세요!',
 	            		maxLength: 150,
-	            		maxLengthText: '글이 너무 깁니다.'
+	            		maxLengthText: '글이 너무 깁니다!',
+	            		emptyText: '현재 기분을 150자로 내로 남겨주세요!',
+	            		enableKeyEvents: true,
+	            		disableKeyFilter: true,
+	            		listeners: {
+	                    	keyup: function(sender, event){
+	            				console.log(event.keycode);
+	                    	}
+	                    }
+	            	},{
+	            		region: 'south',
+	            		xtype: 'textarea',
+	            		id: 'springme2day-form-tags',
+	            		name: 'tags',
+	            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)',
+	            		height: 20
 	            	}]
-	            }),new Ext.Panel({
+	            }), new Ext.Panel({
 	            	region: 'east',
-	            	layout: 'fit',
-	            	width:70,
+	            	width:90,
 	            	border: false,
 	            	margins: { top: 2, right: 2, bottom: 2, left: 0 },
+	            	layout:'anchor',
 	            	items:[{
+	            		xtype: 'box',
+	            		anchor:'100% 35%',
+	            		html: '<div>150</div>'
+	            	},{
 	            		xtype: 'combo',
 	            		id: 'springme2day-em-combo',
-	            		typeAhead: true,
-		                triggerAction: 'all',
+	            		anchor:'100%',
 		                mode: 'local',
-		                store: new Ext.data.ArrayStore({
-		                    id: 0,
-		                    fields: [
-		                        'myId',
-		                        'displayText'
-		                    ],
-		                    data: [[1, 'item1'], [2, 'item2']]
-		                }),
-		                valueField: 'myId',
-		                displayField: 'displayText'
+		                store: this.iconStore,
+		                valueField: 'iconIndex',
+		                displayField: 'description',
+		                editable: false,
+		            	selectOnFocus: true,
+		            	forceSelection: true,
+		            	triggerAction: 'all',
+		            	listeners:{
+	            			render: function(sender){ sender.setValue(1); }
+	            		}
 	            	},{
 	            		xtype: 'button',
 	            		id: 'springme2day-post-send-btn',
-	            		text: 'Send',
-	            		height: 26,
-	            		width: 70,
+	            		anchor:'100%',
+	            		text: '전송',
 	            		style: { marginTop: '2px' },
 	            		handler: this.postSend.createDelegate(app)
 		            }]
@@ -366,9 +407,10 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                'iconUrl',
 	                'icon',
 	                'body',
-	                'pubDate',
+	                'pubDateText',
 	                'metooCount',
-	                'commentsCount',
+	                {name:'commentsCount', mapping: 'commentsCount', renderer: Ext.util.Format.number},
+	                'comments',
 	                {name:'location', mapping: 'location.name'},
 	                {name:'writerId', mapping: 'author.id'},
 	                {name:'writerNick', mapping: 'author.nickname'},
@@ -376,7 +418,22 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            ]
 	        });	
 	        
-	        
+	        var expander = new Ext.ux.grid.RowExpander({
+	        	getRowClass: function(record, rowIndex, p, ds){
+		        	if(record.data.commentsCount > 0){
+		        		var templet = '<span style="padding-left:15px;"><b>{0}</b></span> : {1}</span>';
+		        		var body = '';
+		        		Ext.each(record.data.comments, function(item, index){
+		        			body += String.format(templet, item.author.nickname, item.body);
+		        			if(index < record.data.commentsCount-1) body += '<br />';
+		        		});
+	        			p.body = body;
+	        			return 'x-grid3-row-collapsed';
+	        		}
+		        	// 'x-grid3-row-expanded' : 'x-grid3-row-collapsed';
+		        	return 'x-grid3-row-expanded';
+	        	}
+            });
 	        // 글목록 그리드
 	        this.postGrid = new Ext.grid.GridPanel({
 	        	id: 'springme2day-postGrid',
@@ -388,8 +445,24 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                    menuDisabled:true
 	                },
 	                columns: [
-	                    {header: 'me2day', dataIndex: 'post_id', align:'right', renderer: function(value, p, record){
-	                    	return record.data.pubDate + ' (' + record.data.location + ') by ' + record.data.writerNick;
+	                    expander,
+	                    {header: 'me2day', dataIndex: 'post_id', align:'center', renderer: function(value, p, record){
+	                    	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
+	                    	body += '<tr>';
+	                    	body += '<td width="50" rowspan="2"><img src="' + record.data.face + '" alt="' + record.data.writerNick + '님 프로필 사진" width="50" height="50" /></td>';
+	                    	if(record.data.iconUrl){
+	                    		body += '<td width="40" rowspan="2"><img src="' + record.data.iconUrl + '" width="36" height="36" /></td>';
+	                    	}
+	                    	else{
+	                    		body += '<td width="40" rowspan="2"><img src="' + record.data.icon + '" width="36" height="36" /></td>';
+	                    	}
+	                    	body += '<td align="left"><p>'+record.data.body+'</p>' + record.data.tagText + '</td>';
+	                    	body += '</tr>';
+	                    	body += '<tr>';
+	                    	body += '<td align="right">'+record.data.pubDateText + ' (' + record.data.location + ') by ' + record.data.writerNick+'</td>';
+	                    	body += '</tr>';
+	                    	body += '</table>';
+	                    	return body;
 	                    }}
 	                ]
 	            }),
@@ -398,18 +471,18 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 					forceFit:true,
 					enableRowBody:true,
 					deferEmptyText:'', 
-					emptyText: '글이 없습니다.',
-					showPreview:true,
-		            getRowClass : function(record, rowIndex, p, store){
+					emptyText: '글이 없습니다.'
+					//showPreview:true,
+		            /*getRowClass : function(record, rowIndex, p, store){
 		                if(this.showPreview){
 		                	var body = '<table>';
 	                    	body += '<tr>';
-	                    	body += '<td width="60"><img src="' + record.data.face + '" alt="' + record.data.writerNick + '님 프로필 사진" width="60" height="60" /></td>';
+	                    	body += '<td width="40"><img src="' + record.data.face + '" alt="' + record.data.writerNick + '님 프로필 사진" width="40" height="40" /></td>';
 	                    	if(record.data.iconUrl != null){
-	                    		body += '<td width="50"><img src="' + record.data.iconUrl + '" width="44" height="44" /></td>';
+	                    		body += '<td width="40"><img src="' + record.data.iconUrl + '" width="36" height="36" /></td>';
 	                    	}
 	                    	else{
-	                    		body += '<td width="50"><img src="' + record.data.icon + '" width="44" height="44" /></td>';
+	                    		body += '<td width="40"><img src="' + record.data.icon + '" width="36" height="36" /></td>';
 	                    	}
 	                    	body += '<td><p>'+record.data.body+'</p></td>';
 	                    	body += '</tr>';
@@ -420,11 +493,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		                    return 'x-grid3-row-expanded';
 		                }
 		                return 'x-grid3-row-collapsed';
-		            }
+		            }*/
 	            },
 	            header: false,
+	            enableColumnResize: false,
+	            columnLines: true,
 	            loadMask: {msg:'글을 불러오는 중 입니다.'},
-				tbar: [{
+	            plugins: expander,
+				tbar: ['->',{
 					xtype: 'button',
 					text: '새로고침',
 					handler: this.postListRefrash.createDelegate(app)
@@ -433,7 +509,12 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		            	text: '필터설정',
 		            	handler: this.postListFilter.createDelegate(app)
 		            }
-				]            
+				],
+				listeners: {
+	            	render: function(grid){
+	            		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
+	            	}
+	            }
 	        });
 	        
         	this.postPanel = new Ext.Container({
@@ -456,6 +537,16 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	
         	// 글목록 부르기!
         	this.postStore.load();
+        	this.postStore.on('load', function(){
+        		var grid = Ext.getCmp('springme2day-postGrid');
+        		var els = grid.getEl().select('div[class="x-grid3-row-expander]', true);
+        		// if(els){ els.setStyle('display', 'none'); }
+        		Ext.each(els.elements, function(el){
+        			if(el.getStyle('background-position') == "-21px 2px"){
+        				el.setStyle('display', 'none');
+        			}
+        		});
+        	});
     		
         	return this.postPanel;
     	},
@@ -465,7 +556,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		this.loadMask = new Ext.LoadMask(this.me2DayModule.postPanel.getEl(), {msg:"미투데이에 글을 전송 중 입니다."});
         	this.loadMask.show();
         	
-        	Ext.getCmp('springme2day-content-text').setValue('');
+        	Ext.getCmp('springme2day-form-body').setValue('');
         	
         	this.loadMask.hide();
         },

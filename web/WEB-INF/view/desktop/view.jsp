@@ -27,7 +27,7 @@
     <!-- ENDLIBS -->
 
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
-
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
 
     <script type="text/javascript">
         Ext.ns("M31", "M31.dt", "M31.app", "M31.util");

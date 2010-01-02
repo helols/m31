@@ -264,7 +264,7 @@ public class SpringMe2DayApiService {
 				@Override
 				public int compare(Comment source, Comment target) {
 					// 내림정렬
-					return source.getPubDate().compareTo(target.getPubDate()) * -1;
+					return source.getPubDate().compareTo(target.getPubDate());
 				}
 			});
 			
@@ -348,7 +348,23 @@ public class SpringMe2DayApiService {
 				List<PostIcon> icons = new ArrayList<PostIcon>();
 				for(Element tagEl : iconEls){
 					PostIcon icon = (PostIcon) convertElementToBean(tagEl.getChildren(), PostIcon.class);
-					if(icon != null){ icons.add(icon); }
+					if(icon != null){
+						switch (icon.getIconIndex()) {
+						case 1:
+							icon.setDescription("생각");
+							break;
+						case 2:
+							icon.setDescription("느낌");
+							break;
+						case 3:
+							icon.setDescription("알림");
+							break;
+						default:
+							icon.setDescription("Empty");
+							break;
+						}
+						icons.add(icon);
+					}
 				}
 				person.setPostIcons(icons);
 			}

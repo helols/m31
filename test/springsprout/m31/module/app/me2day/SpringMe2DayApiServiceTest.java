@@ -72,8 +72,9 @@ public class SpringMe2DayApiServiceTest {
 		}
 	}
 
+	@Test
 	public void 댓글얻어오기() throws Me2DayApiRequestException {
-		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p4vln3");
+		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p4wlce");
 		if(!CollectionUtils.isEmpty(comments)){
 			for(Comment comment : comments){
 				System.out.println(comment);
@@ -141,7 +142,6 @@ public class SpringMe2DayApiServiceTest {
 		System.out.println(service.createPost(postDto, info));
 	}
 	
-	@Test
 	public void 덧글쓰기테스트() throws Me2DayApiRequestException {
 		AuthenticationInfo info = new AuthenticationInfo();
 		info.setUser_id("arawn");

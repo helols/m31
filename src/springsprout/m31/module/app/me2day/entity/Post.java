@@ -3,9 +3,12 @@ package springsprout.m31.module.app.me2day.entity;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang.time.FastDateFormat;
 
 
 public class Post {
@@ -20,6 +23,7 @@ public class Post {
 	private String tagText;
 	private String me2dayPage;
 	private Date pubDate;
+	private String pubDateText;
 	private int commentsCount;
 	private int metooCount;
 	private boolean commentClosed;
@@ -94,6 +98,13 @@ public class Post {
 	}
 	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
+		if(pubDate != null){
+			pubDateText = FastDateFormat.getInstance("yyyy/MM/dd hh:mm a", 
+					TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH).format(pubDate);
+		}
+	}
+	public String getPubDateText() {
+		return pubDateText;
 	}
 	
 	public int getCommentsCount() {
