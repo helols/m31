@@ -34,9 +34,8 @@ M31.WindowsManager = function() {
     };
 
     function removeWin(win) {
-        //    	taskbar.removeTaskButton(win.barButton);
-        //        win.destroy();
         M31.ApplicationRegistry.getInstance().getApp(win.id.replace("-win","")).removeWin();
+        win.destroy();
     };
 
 
