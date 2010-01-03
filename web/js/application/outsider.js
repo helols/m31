@@ -41,8 +41,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     console.log("store loaded");
                     this.view.select(0);
                     m31.showImage();
-                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
-                    this.dragZone = new ImageDragZone(this.view, {containerScroll:true, ddGroup: 'explorerDD'});
+                   $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+                    this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'explorerDD'});
                 }, scope:this, single:false}
             }
         });
@@ -73,7 +73,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
             emptyText : '<div style="padding:10px;">No images match the specified search</div>',
-            //plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+            plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
                 //'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
@@ -123,6 +123,14 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             closeAction: 'close',
             constrainHeader:true,
             border: false,
+            listeners: {
+                'resize'  : {fn:function(win, width, height) {
+		        	$("#springsee-view-body div.x-panel-body div:first").height(0);
+        		}, scope:this},
+        		'afterlayout'  : {fn:function(win, width, height) {
+        			$("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+        		}, scope:this, single:false}
+            },
             items:[
                 {
                     id: 'springsee-view',
@@ -217,7 +225,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     autoScroll: true,
                     collapsible: true,
                     collapsed:true,
-                    ddGroup: 'explorerDD',
                     split: true,
                     margins: '0 0 0 0',
                     cmargins: '2 2 2 2',
@@ -321,6 +328,8 @@ m31.showImage = function() {
  */
 ImageDragZone = function(view, config){
     this.viewClone = view;
+//    this.explorerDDTarget = new Ext.dd.DDTarget('springsee-explorer-panel', 'explorerDD');//DropZone
+    this.imageDropZone = new ImageDropZone('springsee-explorer-panel', {ddGroup: 'explorerDD'});
     ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
 Ext.extend(ImageDragZone, Ext.dd.DragZone, {
@@ -365,6 +374,7 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // this method is called by the TreeDropZone after a node drop
     // to get the new tree node (there are also other way, but this is easiest)
     getTreeNode : function(){
+    	console.log("getTreeNode");
         var treeNodes = [];
         var nodeData = this.viewviewClone.getRecords(this.dragData.nodes);
         for(var i = 0, len = nodeData.length; i < len; i++){
@@ -398,6 +408,14 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
         }
         return false;
     }
+});
+
+ImageDropZone = function(view, config){
+    this.viewClone = view;
+    ImageDropZone.superclass.constructor.call(this, view, config);
+};
+Ext.extend(ImageDropZone, Ext.dd.DropZone, {
+
 });
 
 Ext.DataView.DragSelector = function(cfg){
