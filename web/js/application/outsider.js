@@ -26,15 +26,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             autoload: true,
             fields: [
                 'title', 'thumbnail', 'image'
-//                {
-//                    name:'size',
-//                    type: 'float'
-//                },
-//                {
-//                    name:'lastmod',
-//                    type:'date',
-//                    dateFormat:'timestamp'
-//                }
             ],
             listeners: {
                 'load': {fn:function() {
@@ -60,13 +51,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         };
 
         var formatData = function(data) {
-            data.shortName = data.title.ellipse(15);
-//            data.sizeString = formatSize(data);
-//            data.dateString = new Date(data.lastmod).format("m/d/Y g:i a");
             this.lookup[data.title] = data;
             return data;
         };
-
+        
         return new Ext.DataView({
             tpl: this.thumbTemplate,
             singleSelect: true,
@@ -76,8 +64,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
-                //'selectionchange': {fn:this.showDetails, scope:this, buffer:100},
-                //'dblclick'       : {fn:this.runGallery, scope:this},
                 'loadexception'  : {fn:this.onLoadException, scope:this},
                 'beforeselect'   : {fn:function(view) {
                     return view.store.getRange().length > 0;
@@ -160,9 +146,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             lazyInit: false,
                             triggerAction: 'all',
                             value: 'all'
-                            //                        listeners: {
-                            //							'select': {fn:this.sortImages, scope:this}
-                            //					    }
                         },
                         ' ',
                         '-',
@@ -174,15 +157,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             width: 100,
                             enableKeyEvents: true,
                             listeners: {
-//                        		'render': {fn:function(){
-//    						    	Ext.getCmp('springsee-search').getEl().on('keypress', function(e, cmp){
-//    						    		if (e.keyCode == Ext.EventObject.ENTER) {
-//    						    			console.dir(cmp);
-//    						    			console.dir(this);
-//    						    			tmp.getImages();
-//    						    		}
-//    						    	});
-//                        		}, scope:this},
                         		'keypress'  : {fn:function(cmp, evt){
 		                        	if (evt.keyCode == Ext.EventObject.ENTER) {
 		                        		this.getImages();
@@ -243,7 +217,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 '<div class="thumb-wrap" id="{name}">',
                 '<div class="thumb"><a href="{image}" class="pirobox_gall" title="{title}"><img src="{thumbnail}" title="{title}"></a></div>',
                 '</div>',
-                //'<span>{shortName}</span></div>',
                 '</tpl>'
                 );
         this.thumbTemplate.compile();
@@ -299,13 +272,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     }
 });
 
-String.prototype.ellipse = function(maxLength) {
-    if (this.length > maxLength) {
-        return this.substr(0, maxLength - 3) + '...';
-    }
-    return this;
-};
-
 m31.showImage = function() {
 	$(".piro_overlay").remove();
 	$(".pirobox_content").remove();
@@ -328,8 +294,15 @@ m31.showImage = function() {
  */
 ImageDragZone = function(view, config){
     this.viewClone = view;
-//    this.explorerDDTarget = new Ext.dd.DDTarget('springsee-explorer-panel', 'explorerDD');//DropZone
-    this.imageDropZone = new ImageDropZone('springsee-explorer-panel', {ddGroup: 'explorerDD'});
+    this.explorerDDTarget = new Ext.dd.DropTarget('springsee-explorer-panel', {ddGroup: 'explorerDD'});//DropZone
+    this.explorerDDTarget.notifyDrop= function(dd, e, data){
+    	console.log("notifyDrop");
+    	console.log(dd);
+    	console.log(e);
+    	console.log(data);
+        return true;
+    };
+    
     ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
 Ext.extend(ImageDragZone, Ext.dd.DragZone, {
@@ -410,14 +383,7 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     }
 });
 
-ImageDropZone = function(view, config){
-    this.viewClone = view;
-    ImageDropZone.superclass.constructor.call(this, view, config);
-};
-Ext.extend(ImageDropZone, Ext.dd.DropZone, {
-
-});
-
+// 멀티셀렉트
 Ext.DataView.DragSelector = function(cfg){
     cfg = cfg || {};
     var view, proxy, tracker;
