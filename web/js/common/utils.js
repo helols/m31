@@ -1,3 +1,13 @@
+if (Ext.isIE) {
+    var console = function() {
+        return {log : function(log) {
+            Ext.getBody().insertHtml(
+            	'afterBegin',
+	            '<div style="background:#FFF; color:#000">'+log+'</div>'
+            );
+        }}
+    }();
+}
 // namespace
 var m31 = {};
 
