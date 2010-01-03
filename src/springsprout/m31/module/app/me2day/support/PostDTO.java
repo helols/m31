@@ -21,7 +21,7 @@ import springsprout.m31.module.app.me2day.entity.Location;
 public class PostDTO {
 	
 	private String body;
-	private String[] tags;
+	private String tags;
 	private int icon;
 	private boolean receive_sms;
 	private String icon_url;
@@ -39,10 +39,10 @@ public class PostDTO {
 		this.body = body;
 	}
 	
-	public String[] getTags() {
+	public String getTags() {
 		return tags;
 	}
-	public void setTags(String[] tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 	

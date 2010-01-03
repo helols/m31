@@ -25,3 +25,15 @@
     background-repeat:no-repeat;
     background-color:transparent;
 }
+
+.notification .x-box-mc {
+    font-size:14px !important;
+}
+
+.m31-notification-div {
+    position:absolute !important;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000 !important;
+}

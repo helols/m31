@@ -16,6 +16,7 @@ import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
 import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
 import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
+import springsprout.m31.module.app.me2day.support.PostDTO;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
 import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
 
@@ -32,7 +33,6 @@ public class SpringMe2DayController {
 	 * 사용자 로그인 여부를 파악하고 로그인이 안되어 있으면 미투데이로부터 인증 주소를 얻어온다.
 	 * 로그인이 되어있다면 사용자 인증이 올바르게 일어나는지 확인하고, 기본 사용자 정보를 미투데이로
 	 * 부터 얻어온다.
-	 * @param me2DayDTO
 	 * @param httpSession
 	 * @return
 	 * @throws Me2DayApiRequestException
@@ -102,5 +102,30 @@ public class SpringMe2DayController {
 		List<Post> postList = me2DayApiService.getPosts(param);
 		return new ModelAndView(JSON_VIEW).addObject(postList);
 	}
+	
+	/**
+	 * 글쓰기
+	 * @param param
+	 * @return
+	 * @throws Me2DayApiRequestException
+	 */
+	@RequestMapping
+	public ModelAndView postSend(PostDTO postDTO, HttpSession httpSession) {
+		String msg = "";
+		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
+		if(authenticationInfo == null){
+			msg = "springme2day_not_login";
+		}
+		else{
+			try{
+				me2DayApiService.createPost(postDTO, authenticationInfo);
+				msg = "springme2day_postsend_success";
+			}
+			catch (Me2DayApiRequestException e) {
+				msg = e.getDescription();
+			}
+		}
+		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
+	}	
 	
 }

@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -400,18 +399,18 @@ public class SpringMe2DayApiService {
 	 */
 	public Post createPost(PostDTO postDto, AuthenticationInfo info) throws Me2DayApiRequestException {
 		if(!StringUtils.hasText(postDto.getBody())){
-			throw new Me2DayApiRequestException(-1, "본문이 비어있습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_postsend_body_blank");
 		}
 		else if(postDto.getBody().length() > 150){
-			throw new Me2DayApiRequestException(-1, "본문이 150자가 넘습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_postsend_body_maxlength_over");
 		}
 		
 		try {
 			String requestUrl = createMe2DayRequestUrl(String.format(me2dayapi_create_post, info.getUser_id()), info);	
 			
 			requestUrl += "&post[body]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
-			if(!ArrayUtils.isEmpty(postDto.getTags())){
-				requestUrl += "&post[tags]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
+			if(StringUtils.hasText(postDto.getTags())){
+				requestUrl += "&post[tags]=" + URLEncoder.encode(postDto.getTags(), "utf-8");
 			}
 			if(postDto.getIcon() > 0){
 				requestUrl += "&post[icon]=" + postDto.getIcon();
@@ -436,7 +435,7 @@ public class SpringMe2DayApiService {
 			
 			return convertElementToPost(requestMe2Day(requestUrl).getRootElement());
 		} catch (UnsupportedEncodingException e) {
-			throw new Me2DayApiRequestException(-1, "미투에 글 작성 중 네트워크 오류가 발생했습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_postsend_error");
 		}
 	}
 	
