@@ -104,22 +104,24 @@ public class JSONHelper {
         HashMap<String, Object> rMap = new HashMap<String, Object>();
         if (jsonString != null) {
             JSONObject rootJson = JSONObject.fromObject(jsonString).getJSONObject(rootPath);
-            Iterator jsonIter = rootJson.keys();
-            while (jsonIter.hasNext()) {
-                String keyName = jsonIter.next().toString();
-                Object obj = rootJson.get(keyName);
-                if (obj instanceof JSONArray) {
-                    Iterator s_jsonIter = JSONArray.fromObject(obj).iterator();
-                    ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
-                    while (s_jsonIter.hasNext()) {
-                        tmpList.add(covertHashMap(JSONObject.fromObject(s_jsonIter.next()).toString()));
+            if(rootJson != null){
+                Iterator jsonIter = rootJson.keys();
+                while (jsonIter.hasNext()) {
+                    String keyName = jsonIter.next().toString();
+                    Object obj = rootJson.get(keyName);
+                    if (obj instanceof JSONArray) {
+                        Iterator s_jsonIter = JSONArray.fromObject(obj).iterator();
+                        ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
+                        while (s_jsonIter.hasNext()) {
+                            tmpList.add(covertHashMap(JSONObject.fromObject(s_jsonIter.next()).toString()));
+                        }
+                        rMap.put(keyName,tmpList);
+                    } else {
+                        rMap.put(keyName, obj);
                     }
-                    rMap.put(keyName,tmpList);
-                } else {
-                    rMap.put(keyName, obj);
                 }
+                status = "S";
             }
-            status = "S";
         }
         rMap.put("STATUS", status);
         return rMap;
