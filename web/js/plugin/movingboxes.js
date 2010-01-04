@@ -223,7 +223,7 @@ movingbox = function() {
             el.down('div.j_password').setVisible(true,true);
             el.down('div.inside').setWidth(256).setHeight(192,true);
         }else{
-            el.down('div.j_password').setVisible(false,true);
+            el.down('div.j_password').setVisible(false);
             el.down('div.inside').setWidth(216).setHeight(162);
 
         }
