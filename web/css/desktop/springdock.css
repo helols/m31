@@ -1,17 +1,20 @@
 #m31-springdock {
 	position: relative;
-	height: 50px !important;
+	height: 60px !important;
 	text-align: center;
 }
 #m31-springdock-container {
 	position: absolute;
-	height: 49px;
+	height: 59px;
+    background: transparent url(../../images/desktop/springdock/dock-bg.png);	
+}
+.container{
     background: transparent url(../../images/desktop/springdock/dock-bg.png);
-	border-color:#EEEFF4;
+	border-color:#E4E4E4;
 	border-style:solid;
-	border-left-width:1px;
-	border-right-width:1px;
-	border-bottom-width:1px;
+	border-left-width:2px;
+	border-right-width:2px;
+	border-bottom-width:2px;
 	border-top-width:0;
 	-moz-border-radius-bottomleft:5px;
 	-moz-border-radius-bottomright:5px;
@@ -20,7 +23,7 @@
 }
 span.m31-springdock-item {
 	display: block;
-	width: 40px;
+	width: 50px;
 	color: #000;
 	position: absolute;
 	top: 0px;
@@ -33,7 +36,7 @@ img.m31-springdock-item-img{
 	border: none;
 	margin: 5px 0px;
 	width: 100%;
-	opacity:0.7;
+	/*opacity:0.7; *//* IE 도 적용해주기.*/
 }
 span.m31-springdock-item-text{
 	display: none;

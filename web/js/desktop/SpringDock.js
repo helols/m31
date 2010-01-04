@@ -17,9 +17,9 @@ SpringDock = function() {
                             el :'m31-springdock-container',
                             border: false,
                             itemMaxWidth: 10,
-                            itemWidth: 40,
-                            itemWidthEdge : 48,
-                            proximity: 40
+                            itemWidth: 50,
+                            itemWidthEdge : 58,
+                            proximity: 50
                         });
 
                         var opt = {
@@ -42,8 +42,11 @@ SpringDock = function() {
                         for (var x in appInfos) {
                            springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
                         }
+                        Ext.select('.m31-springdock-item-img').setOpacity(.8);
                         springdockcontainer.positionContainer(0);
+                        springdockcontainer.el.addClass('container');
                         springdockcontainer.positionItems();
+
                         //        setTimeout(function(){
                         //                Ext.get('loading').remove();
                         //                Ext.get('loading-mask').fadeOut({remove:true});
@@ -122,7 +125,7 @@ M31.dt.SpringDockContainer = Ext.extend(Ext.BoxComponent, {
     },
     positionItems : function() {
         var _self = this;
-        Ext.each(this.dockbtns,
+        Ext.each(_self.dockbtns,
                 function(item, idx) {
                     item.el.setStyle({
                         width: _self.itemWidth + 'px',
@@ -206,7 +209,7 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
     },
     onMouseLeave : function() {
         Ext.fly(this.id).select('.m31-springdock-item-text').setStyle('display', 'none');
-        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(.7);
+        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(.8);
     },
 
     onMouseEnter : function() {
