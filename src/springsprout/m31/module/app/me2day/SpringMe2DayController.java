@@ -15,6 +15,7 @@ import springsprout.m31.module.app.me2day.entity.AuthenticationInfo;
 import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
 import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
+import springsprout.m31.module.app.me2day.support.CommentDTO;
 import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
 import springsprout.m31.module.app.me2day.support.PostDTO;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
@@ -127,5 +128,30 @@ public class SpringMe2DayController {
 		}
 		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
 	}	
+	
+	/**
+	 * 댓글 전송
+	 * @param commentDTO
+	 * @param httpSession
+	 * @return
+	 */
+	@RequestMapping
+	public ModelAndView commentSend(CommentDTO commentDTO, HttpSession httpSession){
+		String msg = "";
+		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
+		if(authenticationInfo == null){
+			msg = "springme2day_not_login";
+		}
+		else{
+			try{
+				me2DayApiService.createComment(commentDTO, authenticationInfo);
+				msg = "springme2day_commentsend_success";
+			}
+			catch (Me2DayApiRequestException e) {
+				msg = e.getDescription();
+			}
+		}
+		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
+	}
 	
 }

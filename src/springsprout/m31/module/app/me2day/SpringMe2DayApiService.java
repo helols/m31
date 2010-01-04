@@ -448,13 +448,13 @@ public class SpringMe2DayApiService {
 	 */
 	public boolean createComment(CommentDTO commentDTO, AuthenticationInfo info) throws Me2DayApiRequestException {
 		if(!StringUtils.hasText(commentDTO.getBody())){
-			throw new Me2DayApiRequestException(-1, "본문이 비어있습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_commentsend_body_blank");
 		}
 		else if(commentDTO.getBody().length() > 150){
-			throw new Me2DayApiRequestException(-1, "본문이 150자가 넘습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_commentsend_body_maxlength_over");
 		}
 		else if(!StringUtils.hasText(commentDTO.getPost_id())){
-			throw new Me2DayApiRequestException(-1, "덧글을 작성할 글정보가 올바르지 않습니다.");
+			throw new Me2DayApiRequestException(-1, "springme2day_commentsend_post_id_is_null");
 		}
 		
 		try {

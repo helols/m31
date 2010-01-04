@@ -33,7 +33,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	this.state = null;
     	this.loadMask = null;
     	
-    	this.win.destroy();
     	this.win = null;
     },
     createWindow: function(){
@@ -348,11 +347,23 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                    }
 	            	},{
 	            		region: 'south',
-	            		xtype: 'textarea',
-	            		id: 'springme2day-form-tags',
-	            		name: 'tags',
-	            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)',
-	            		height: 20
+	            		xtype: 'container',
+	            		layout:'border',
+	            		layoutConfig: {columns: 2},
+	            		height: 20,
+	            		items:[{
+	            			region: 'center',
+		            		xtype: 'textarea',
+		            		id: 'springme2day-form-tags',
+		            		name: 'tags',
+		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)',
+		            	},{
+	            			region: 'east',
+		            		xtype: 'box',
+		            		id: 'springme2day-form-body-length',
+		            		html: '<div style="margin-top:3px" align="center">150<div>',
+		            		width: 30
+		            	}]
 	            	}]
 	            }), new Ext.Panel({
 	            	region: 'east',
@@ -361,12 +372,15 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            	margins: { top: 2, right: 2, bottom: 2, left: 0 },
 	            	layout:'anchor',
 	            	items:[{
-	            		xtype: 'box',
-	            		anchor:'100% 35%',
-	            		html: '<div>150</div>'
+	            		xtype: 'checkbox',
+	            		id: 'springme2day-form-comment-close',
+	            		anchor:'80% 35%',
+	            		style: {marginLeft:'5px'},
+	            		name: 'close_comment',
+	            		boxLabel: '덧글 닫기'
 	            	},{
 	            		xtype: 'combo',
-	            		id: 'springme2day-em-combo',
+	            		id: 'springme2day-form-icon',
 	            		name: 'icon',
 	            		hiddenName: 'icon',
 	            		anchor:'100%',
@@ -444,6 +458,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                'metooCount',
 	                {name:'commentsCount', mapping: 'commentsCount', renderer: Ext.util.Format.number},
 	                'comments',
+	                'commentClosed',
 	                {name:'location', mapping: 'location.name'},
 	                {name:'writerId', mapping: 'author.id'},
 	                {name:'writerNick', mapping: 'author.nickname'},
@@ -494,7 +509,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                    {header: 'me2day', dataIndex: 'post_id', align:'center', renderer: function(value, p, record){
 	                    	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
 	                    	body += '<tr>';
-	                    	body += '<td width="50" rowspan="2"><img src="' + record.data.face + '" alt="' + record.data.writerNick + '님 프로필 사진" width="50" height="50" /></td>';
+	                    	body += '<td width="50"><img src="' + record.data.face + '" alt="' + record.data.writerNick + '님 프로필 사진" width="50" height="50" /></td>';
 	                    	if(record.data.iconUrl){
 	                    		body += '<td width="40" rowspan="2"><img src="' + record.data.iconUrl + '" width="36" height="36" /></td>';
 	                    	}
@@ -504,6 +519,12 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                    	body += '<td align="left"><p>'+record.data.body+'</p>' + record.data.tagText + '</td>';
 	                    	body += '</tr>';
 	                    	body += '<tr>';
+	                    	if(record.data.commentClosed){
+	                    		body += '<td class="springme2day-comment-close-text">댓글 닫힘</td>';
+	                    	}
+	                    	else{
+	                    		body += '<td align="center" class="springme2day-comment-write-text" id="' + record.data.post_id + '">댓글 쓰기</td>';
+	                    	}
 	                    	body += '<td align="right">'+record.data.pubDateText + ' (' + record.data.location + ') by ' + record.data.writerNick+'</td>';
 	                    	body += '</tr>';
 	                    	body += '</table>';
@@ -562,15 +583,22 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	// 글목록 부르기!
         	this.postStore.load();
         	this.postStore.on('load', function(){
-        		var grid = Ext.getCmp('springme2day-postGrid');
-        		var els = grid.getEl().select('div[class="x-grid3-row-expander]', true);
-        		// if(els){ els.setStyle('display', 'none'); }
+        		var els = this.me2DayModule.postGrid.getEl().select('div[class="x-grid3-row-expander]', true);
+        		// 덧글이 없는 글은 펼침, 접기 아이콘 숨기기
         		Ext.each(els.elements, function(el){
         			if(el.getStyle('background-position') == "-21px 2px"){
         				el.setStyle('display', 'none');
         			}
         		});
-        	});
+        		
+        		// 덧글 쓰기에 이벤트 걸기
+        		els = this.me2DayModule.postGrid.getEl().select('td[class="springme2day-comment-write-text]', true);
+        		Ext.each(els.elements, function(el){
+        			el.on('click', function(event, sender){
+        				this.me2DayModule.showCommentDlg(this.win, sender.id);
+        			}, this);
+        		}, this);
+        	}, app);
     		
         	return this.postPanel;
     	},
@@ -662,6 +690,76 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         },
         postListFilterCancle: function(sender, event){
         	this.loadMask.hide();
+        },
+        showCommentDlg: function(win, post_id){
+        	var btnWrite = new Ext.Button({ text: '쓰기' });
+        	var btnCancel = new Ext.Button({ text: '취소' });
+        	var dlg = new Ext.Window({
+        		id: 'springme2day-comment-dlg',
+                title:'덧글 쓰기',
+                // 모달로!
+                modal: true,
+                // 설정창이 봄미투데이 밖으로 못빠져 나가게 막아라
+                constrain:true,
+                // 크기 조절은 없다!
+                resizable:false,
+                // constrainHeader:true,
+                // 최소화, 최대화, 닫기 버튼은 없다!
+                minimizable : false,
+                maximizable : false,
+                closable:false,
+                // buttonAlign:"center",
+                width:win.width-40,
+                height:140,
+                layout: 'fit',
+                items:[{
+                	xtype: 'form',
+                	id: 'springme2day-comment-dlg-form',
+                	header: false,
+                	layout: 'fit',
+                	waitMsgTarget: true,
+                    items:[{
+	            		xtype: 'textarea',
+	            		name: 'body',
+	            		emptyText: '댓글을 150자로 내로 남겨주세요!',
+	            		allowBlank: false,
+	            		blankText: '최소 한자 이상의 글을 남기셔야합니다.',
+	            		maxLength: 150,
+	            		maxLengthText: '댓글이 너무 깁니다!'
+	            	},{
+	            		xtype: 'hidden',
+	            		name: 'post_id',
+	            		value: post_id,
+	            		
+	            	}],
+                    buttonAlign: 'center',
+                    buttons:[btnWrite,btnCancel]
+                }]
+            });
+        	btnWrite.on('click',function(event, sender){
+        		dlg.get('springme2day-comment-dlg-form').getForm().submit({
+        			url:'/app/me2day/commentSend', 
+        			waitMsg:'미투데이에 글을 전송 중 입니다.'
+        		});
+        	}, dlg);
+        	btnCancel.on('click',function(event, sender){ dlg.destroy(); }, dlg);
+        	dlg.get('springme2day-comment-dlg-form').getForm().on(
+    			'actioncomplete',
+    			function(form, action){
+    				dlg.destroy();
+    			}
+        	), dlg;
+        	dlg.get('springme2day-comment-dlg-form').getForm().on(
+    			'actionfailed',
+    			function(form, action){}
+        	), dlg;
+        	dlg.get('springme2day-comment-dlg-form').getForm().on(
+    			'beforeaction',
+    			function(form, action){ if(!form.isValid()) return false; }
+        	), dlg;
+        	
+    		dlg.render(win.body);
+            dlg.show();
         }
     }
 });
