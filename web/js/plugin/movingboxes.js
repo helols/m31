@@ -138,7 +138,7 @@ movingbox = function() {
                 function(item, idx) {
                     var el = Ext.fly(item);
                     el.setLeft(edge + (el.getWidth() + itemEdge) * idx)
-                            .setOpacity(.5)
+                            .setOpacity(.7)
                             .hover(onItemMouseEnter, onItemMouseLeave, this)
                             .on('mousedown', onItemMouseDonw, this);
                 });
@@ -151,7 +151,7 @@ movingbox = function() {
     var onItemMouseDonw = function(e, t) {
         var el = Ext.get(this);
         if (actItem === this || totalCnt != 0) {
-            e.preventDefault();
+//            e.preventDefault();
             return false;
         }
         var clickIdx = -1;
@@ -168,7 +168,7 @@ movingbox = function() {
                 function(item, idx) {
                     var type = "N";
                     var left = 0;
-                    var iel = Ext.fly(item);
+                    var iel = Ext.get(item);
                     if (_self === this) {
                         actItem = _self;
                         type = 'L';
@@ -200,9 +200,14 @@ movingbox = function() {
      */
     var itemMoveAnime = function(el,left,type) {
         type = type||'N';
-        var opt = {opactiy:.7,height:162,width:216,top:30}
+        var opt = {opactiy:.7,height:162,width:216,top:30};
         if(type === 'L'){
-            opt = {opactiy:1,height:232,width:256,top:0}
+            opt = {opactiy:1,height:232,width:256,top:0};
+//            el.down('div.j_password').setVisible(true);
+//            el.down('div.inside').setWidth(256).setHeight(192); //250
+        }else{
+//            el.down('div.inside').setWidth(216).setHeight(162);
+//            el.down('div.j_password').setVisible(false);
         }
         el.animate({
             opacity: {to: opt.opactiy, from: .7},
@@ -210,27 +215,39 @@ movingbox = function() {
             width: {to: opt.width, from: 0},
             top : {to:opt.top, from:0},
             left: {to:left, from:0}
-        }, .35, function(){totalCnt--;});
+        }, .35,itemMoveAfterCallback);
     };
+
+    var itemMoveAfterCallback = function(el){
+        if(actItem.id === el.id){
+            el.down('div.j_password').setVisible(true,true);
+            el.down('div.inside').setWidth(256).setHeight(192,true);
+        }else{
+            el.down('div.j_password').setVisible(false,true);
+            el.down('div.inside').setWidth(216).setHeight(162);
+
+        }
+        totalCnt--;
+    }
     /**
      * 아이템위에 마우스가 올라왔을때.
      */
-    var onItemMouseEnter = function() {
+    var onItemMouseEnter = function(e) {
         if(actItem === this){
-            e.preventDefault();
             return false;
-        }
-        Ext.fly(this).setOpacity(.7);
+        }else{
+            Ext.fly(this).setOpacity(.9);
+        }        
     };
     /**
      * 아이템에서 마우스가 떠났을때.
      */
-    var onItemMouseLeave = function() {
+    var onItemMouseLeave = function(e) {
         if(actItem === this){
-            e.preventDefault();
             return false;
+        }else{
+            Ext.fly(this).setOpacity(.7);
         }
-        Ext.fly(this).setOpacity(.5);
     };
 
     /**
@@ -258,7 +275,7 @@ movingbox = function() {
 
     return {
         init: function() {
-            Ext.select('div.name_text').setOpacity(.5);
+            Ext.select('div.name_text').setOpacity(.6);
             this.layout();
             positionItem();
 

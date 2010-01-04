@@ -38,6 +38,9 @@ M31.WindowsManager = function() {
         win.destroy();
     };
 
+    function maxWin(win){
+//        alert('max')
+    };
 
     return {
         getInstance : function(args) {
@@ -72,6 +75,9 @@ M31.WindowsManager = function() {
                             },
                             'minimize': {
                                 fn: minimizeWin
+                            },
+                            'maximize' : {
+                                fn:maxWin
                             },
                             'close': {
                                 fn: removeWin

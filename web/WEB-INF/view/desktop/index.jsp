@@ -39,7 +39,7 @@
         if(user !== null){
             users = user.split(":")
         }
-        console.log(users)
+//        console.log(users)
 
 //        Ext.util.Cookies.set("springsprout", "helolsjava@gmail.com:helols@naver.com", new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
         //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
@@ -64,10 +64,11 @@
             <div class="inside">
                 <img src="<c:url value="/images/main/demo-logo.png"/>"
                      alt="picture"/>
-                <div class="name_text" style="">Demo User</div>
+                <div class="name_text">Demo User</div>
             </div>
             <div class="j_password">
-                <input type="text">
+                <input type="hidden" id="j_username" value="springsprout@springsprout.org">
+                <input type="password" id="j_password" value="springsprout" >
             </div>
         </div>
         <div class="panel" id="panel_chage">
