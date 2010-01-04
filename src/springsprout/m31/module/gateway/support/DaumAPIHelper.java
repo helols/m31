@@ -9,6 +9,8 @@ package springsprout.m31.module.gateway.support;
 
 import static springsprout.m31.utils.OpenApiRequestHelper.docElementValueToMap;
 import static springsprout.m31.utils.OpenApiRequestHelper.loadXml;
+
+import com.google.gdata.util.common.net.UriEncoder;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,8 +22,10 @@ import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.utils.JSONHelper;
 import springsprout.m31.utils.OpenApiRequestHelper;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 public class DaumAPIHelper {
@@ -66,8 +70,9 @@ public class DaumAPIHelper {
      */
     public static SpringPlayerDTO getMovie(SpringPlayerCri cri) {
         SpringPlayerDTO dto = new SpringPlayerDTO();
-        int pageno = (cri.getStart() / cri.getLimit()) + 1;        
-        String url = MOVIE_URL + "&output=json&sort=exact&tagsearch=off&q="+cri.getQ()+"&result=" + cri.getLimit() + "&pageno=" + pageno;
+        int pageno = (cri.getStart() / cri.getLimit()) + 1;
+        String url = MOVIE_URL + "&output=json&sort=exact&tagsearch=off&q="+ UriEncoder.encode(cri.getQ())+"&result=" + cri.getLimit() + "&pageno=" + pageno;
+
         log.debug("getMovie 요청 URL : {}",url);
         
         String response = OpenApiRequestHelper.loadString(url);
@@ -75,7 +80,12 @@ public class DaumAPIHelper {
 
         JSONObject json = JSONObject.fromObject(response).getJSONObject("channel");
         dto.setSuccess(true);
-        dto.setTotal(json.getInt("totalCount"));
+        //Daum API의 pageno의 최대값은 500.
+        if(json.getInt("totalCount") < 500 * cri.getLimit()) {
+            dto.setTotal(json.getInt("totalCount"));
+        } else {
+            dto.setTotal(500 * cri.getLimit());
+        }
 
         List<MovieVO> list = new ArrayList<MovieVO>();
         JSONArray jsonArray = json.getJSONArray("item");

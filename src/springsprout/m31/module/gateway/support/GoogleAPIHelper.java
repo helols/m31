@@ -90,7 +90,13 @@ public class GoogleAPIHelper {
 
             VideoFeed videoFeed = youTubeService.query(query, VideoFeed.class);
 
-            dto.setTotal(videoFeed.getTotalResults());
+            //Youtube는 총 1000개까지 가능하나 1000개시 이상 동작해서 900개로 제한.
+            int total = videoFeed.getTotalResults();
+            if(total < 900) {
+                dto.setTotal(total);
+            } else {
+                dto.setTotal(900);
+            }
             dto.setSuccess(true);
 
             List<MovieVO> list = new ArrayList<MovieVO>();

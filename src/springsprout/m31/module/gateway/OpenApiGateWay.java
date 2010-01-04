@@ -54,16 +54,14 @@ public class OpenApiGateWay {
     }
 
     @RequestMapping("/gateway/springplayer/search")
-    public String springplayer(@ModelAttribute("cri") SpringPlayerCri cri, ModelMap model){
+    public ModelAndView springplayer(@ModelAttribute("cri") SpringPlayerCri cri){
         log.debug("Criteria : {}",cri);        
         SpringPlayerDTO dto = applicationService.springPlayer(cri);
 
-        model.clear();
-        model.addAttribute("total", dto.getTotal())
-              .addAttribute("success", dto.isSuccess())
-              .addAttribute("items", dto.getList());
-
-        return JSON_VIEW;
+        log.debug("Response : {}", dto);
+        return new ModelAndView(JSON_VIEW).addObject("total", dto.getTotal())
+                .addObject("success", dto.isSuccess())
+                .addObject("items", dto.getList());
     }
 
     @RequestMapping("/gateway/weathertray/search")

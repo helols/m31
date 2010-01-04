@@ -17,7 +17,23 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
          this.ds = new Ext.data.JsonStore({
              url: '/gateway/springplayer/search',
              restful : true,
-             root: 'items'
+             remoteSort : true,
+             root: 'items',
+
+             fields : ['source', 'duration', 'author', 'title', 'thumbnailURL', 'playerURL'],
+
+             listeners : {
+                 beforeload : function(store, options) {
+                     // 검색어가 없을 경우 스토어를 초기화 시킨다.
+                     if(options.params['q'] == '') {
+                        store.removeAll();
+                        return false;
+                     }
+                     options.params['q'] = Ext.getCmp('springplayer-serach-textfield').getRawValue();
+                     options.params['limit'] = 20;
+                     options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
+                 }
+             }
          });
 
          // 동영상 검색 부분
@@ -49,12 +65,17 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                      }, '-',
                      // 검색 필드
                      new Ext.app.SearchField({
-                        width:200,
-                        store : this.ds
+                         id : 'springplayer-serach-textfield',
+                         width:200,
+                         store : this.ds,
+                         paramName : 'q'
                      })
                  ],
 
-                 bbar : ['test']
+                 bbar: new Ext.PagingToolbar({
+                     pageSize: 20,
+                     store : this.ds
+                 })
              }, {
                  title : '탐색기',
                  region : 'south',
