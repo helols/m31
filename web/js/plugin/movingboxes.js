@@ -151,19 +151,19 @@ movingbox = function() {
     var onItemMouseDonw = function(e, t) {
         var el = Ext.get(this);
         if (actItem === this || totalCnt != 0) {
-//            e.preventDefault();
+            //            e.preventDefault();
             return false;
         }
         var clickIdx = -1;
         var _self = this;
-        Ext.each(Ext.select('div.panel').elements,function(item,idx){
-            if(_self === this){
+        Ext.each(Ext.select('div.panel').elements, function(item, idx) {
+            if (_self === this) {
                 clickIdx = idx;
             }
-            totalCnt = idx+1;
+            totalCnt = idx + 1;
         });
         var preLeftEdge = ((sliderWidth / 2 ) - (256 / 2)) - el.getLeft();
-        var sufLeftEdge =  40+preLeftEdge;
+        var sufLeftEdge = 40 + preLeftEdge;
         Ext.each(Ext.select('div.panel').elements,
                 function(item, idx) {
                     var type = "N";
@@ -175,21 +175,21 @@ movingbox = function() {
                         left = (sliderWidth / 2 ) - (256 / 2);
                         preLeftEdge = sufLeftEdge;
                     } else {
-                        if(actIdx == -1){
-                            left = iel.getLeft()+preLeftEdge;
-                        }else{
+                        if (actIdx == -1) {
+                            left = iel.getLeft() + preLeftEdge;
+                        } else {
                             var iLeft = iel.getLeft();
-                            if(actIdx > clickIdx && actIdx < idx ){
+                            if (actIdx > clickIdx && actIdx < idx) {
                                 iLeft -= 40;
-                            }else if(actIdx < clickIdx && actIdx >= idx && clickIdx > idx){
+                            } else if (actIdx < clickIdx && actIdx >= idx && clickIdx > idx) {
                                 iLeft += 40;
                             }
-                            left = iLeft+preLeftEdge;
+                            left = iLeft + preLeftEdge;
                         }
                     }
-                    itemMoveAnime(iel,left,type);
+                    itemMoveAnime(iel, left, type);
                 });
-            actIdx = clickIdx;
+        actIdx = clickIdx;
     };
 
     /**
@@ -198,16 +198,15 @@ movingbox = function() {
      * @param left
      * @param type
      */
-    var itemMoveAnime = function(el,left,type) {
-        type = type||'N';
+    var itemMoveAnime = function(el, left, type) {
+        type = type || 'N';
         var opt = {opactiy:.7,height:162,width:216,top:30};
-        if(type === 'L'){
+        if (type === 'L') {
             opt = {opactiy:1,height:232,width:256,top:0};
-//            el.down('div.j_password').setVisible(true);
-//            el.down('div.inside').setWidth(256).setHeight(192); //250
-        }else{
-//            el.down('div.inside').setWidth(216).setHeight(162);
-//            el.down('div.j_password').setVisible(false);
+            el.down('div.d_password').setVisible(true, true);
+            el.down('div.inside').scale(256, 192, true).down('div.name_text').setWidth(256, true).update(el.child('input.j_username').getValue());
+        } else {
+            el.down('div.inside').scale(216, 162, true).down('div.name_text').setWidth(216, true).update(el.child('input.j_title').getValue());
         }
         el.animate({
             opacity: {to: opt.opactiy, from: .7},
@@ -215,17 +214,12 @@ movingbox = function() {
             width: {to: opt.width, from: 0},
             top : {to:opt.top, from:0},
             left: {to:left, from:0}
-        }, .35,itemMoveAfterCallback);
+        }, .35, itemMoveAfterCallback);
     };
 
-    var itemMoveAfterCallback = function(el){
-        if(actItem.id === el.id){
-            el.down('div.j_password').setVisible(true,true);
-            el.down('div.inside').setWidth(256).setHeight(192,true);
-        }else{
-            el.down('div.j_password').setVisible(false);
-            el.down('div.inside').setWidth(216).setHeight(162);
-
+    var itemMoveAfterCallback = function(el) {
+        if (actItem.id !== el.id) {
+            el.down('div.d_password').setVisible(false);
         }
         totalCnt--;
     }
@@ -233,19 +227,19 @@ movingbox = function() {
      * 아이템위에 마우스가 올라왔을때.
      */
     var onItemMouseEnter = function(e) {
-        if(actItem === this){
+        if (actItem === this) {
             return false;
-        }else{
+        } else {
             Ext.fly(this).setOpacity(.9);
-        }        
+        }
     };
     /**
      * 아이템에서 마우스가 떠났을때.
      */
     var onItemMouseLeave = function(e) {
-        if(actItem === this){
+        if (actItem === this) {
             return false;
-        }else{
+        } else {
             Ext.fly(this).setOpacity(.7);
         }
     };

@@ -62,7 +62,7 @@ div.panel img {
 }
 
 div.name_text {
-    width: 196px;
+    width: 210px;
     height: 20px;
     background: #797979 none repeat scroll 0 0;
     color: #FFF;
@@ -75,7 +75,7 @@ div.name_text {
     text-align: left;
 }
 
-.j_password {
+.d_password {
     display:none;
     left:0px;
     bottom:0px;
@@ -88,13 +88,13 @@ div.name_text {
     z-index:9999;
 }
 
-.j_password input{
+.d_password input{
     height:26px;
     padding:2px;
     border: 2px solid #cccccc;
     width:249px;
     font-size:16pt;
 }
-div.j_password .password{
+div.d_password .password{
     background:url("../images/main/password-bk.gif") no-repeat;   
 }

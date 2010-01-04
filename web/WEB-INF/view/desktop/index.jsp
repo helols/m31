@@ -63,32 +63,37 @@
         <div class="panel" id="panel_demo">
             <div class="inside">
                 <img src="<c:url value="/images/main/demo-logo.png"/>"
-                     alt="picture"/>
+                     alt="demo"/>
                 <div class="name_text">Demo User</div>
             </div>
-            <div class="j_password">
-                <input type="hidden" id="j_username" value="springsprout@springsprout.org">
-                <input type="password" id="j_password" value="springsprout" >
+            <div class="d_password">
+                <input type="hidden" name="j_username" class="j_username" value="springsprout@springsprout.org">
+                <input type="hidden" name="j_title"    class="j_title" value="Demo User">
+                <input type="password" name="j_password" class="j_password" value="" >
             </div>
         </div>
         <div class="panel" id="panel_chage">
             <div class="inside">
                 <img src="<c:url value="/images/main/change-logo.png"/>"
-                     alt="picture"/>
+                     alt="change user"/>
                 <div class="name_text" style="">Change User</div>
             </div>
-            <div class="j_password">
-                <input type="text">
+            <div class="d_password">
+                <input type="hidden" name="j_username" class="j_username" value="Change User">
+                <input type="hidden" name="j_title"    class="j_title" value="Change User">
+                <input type="password" name="j_password" class="j_password" value="" >
             </div>
         </div>
         <div class="panel" id="panel_newuser">
             <div class="inside">
                 <img src="<c:url value="/images/main/newuser-logo.png"/>"
-                     alt="picture"/>
+                     alt="new user"/>
                 <div class="name_text" style="">New User</div>
             </div>
-            <div class="j_password">
-                <input type="text">
+            <div class="d_password">
+                <input type="hidden" name="j_username" class="j_username" value="New User">
+                <input type="hidden" name="j_title"    class="j_title" value="New User">
+                <input type="password" name="j_password" class="j_password" value="" >
             </div>
         </div>    
        
