@@ -17,26 +17,16 @@ html, body {
     /*border: 1px #F00 solid;*/
 }
 
-.arrow{
+#arrow{
     display:block;
-    color:white;
-    font-size:72px;
-    height:242px;
-    line-height:242px;
-    cursor:pointer;
-    z-index:20000;
-}
-.arrowleft{
-    left:0px;
-    margin-left:-5px;
-    width:45px;
-}
-.arrowright{
-    right:0px;
-    margin-right:5px;
-    width:40px;
+    position:relative;
+    text-align:center;
 }
 
+#arrow img{
+    display:none;
+    cursor:pointer;
+}
 #slider div.panel {
     left: 0px;
     position: absolute;
@@ -75,7 +65,8 @@ div.name_text {
     text-align: left;
 }
 
-.d_password {
+.addition {
+    background-color:#FFF;
     display:none;
     left:0px;
     bottom:0px;
@@ -83,18 +74,26 @@ div.name_text {
     position:absolute;
     height: 30px;
     border-top: 10px solid #f5f5f5;
-    background-color:#FFF;
     text-align:left;
     z-index:9999;
 }
 
-.d_password input{
-    height:26px;
-    padding:2px;
+.addition input{
+    height:25px;
     border: 2px solid #cccccc;
-    width:249px;
-    font-size:16pt;
+    padding-bottom:1px;
+    width:252px;
+    font-size:14pt;
 }
-div.d_password .password{
+div.addition .password{
     background:url("../images/main/password-bk.gif") no-repeat;   
+}
+
+div.addition .email{
+    background:url("../images/main/email-bk.gif") no-repeat;   
+}
+
+div.addition img{
+    cursor:pointer;
+    background-color:#000;
 }

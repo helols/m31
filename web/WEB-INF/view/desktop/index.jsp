@@ -19,6 +19,7 @@
     <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/Spotlight.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/movingboxes.js"/>"></script>
     <!-- ENDLIBS -->
 
@@ -66,20 +67,20 @@
                      alt="demo"/>
                 <div class="name_text">Demo User</div>
             </div>
-            <div class="d_password">
+            <div class="addition">
                 <input type="hidden" name="j_username" class="j_username" value="springsprout@springsprout.org">
                 <input type="hidden" name="j_title"    class="j_title" value="Demo User">
                 <input type="password" name="j_password" class="j_password" value="" >
             </div>
         </div>
-        <div class="panel" id="panel_chage">
+        <div class="panel" id="panel_change">
             <div class="inside">
                 <img src="<c:url value="/images/main/change-logo.png"/>"
                      alt="change user"/>
                 <div class="name_text" style="">Change User</div>
             </div>
-            <div class="d_password">
-                <input type="hidden" name="j_username" class="j_username" value="Change User">
+            <div class="addition">
+                <input type="hidden" name="j_username" class="j_username" value="E-mail 정보를 입력해주세요.">
                 <input type="hidden" name="j_title"    class="j_title" value="Change User">
                 <input type="password" name="j_password" class="j_password" value="" >
             </div>
@@ -90,10 +91,10 @@
                      alt="new user"/>
                 <div class="name_text" style="">New User</div>
             </div>
-            <div class="d_password">
-                <input type="hidden" name="j_username" class="j_username" value="New User">
+            <div class="addition">
+                <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
                 <input type="hidden" name="j_title"    class="j_title" value="New User">
-                <input type="password" name="j_password" class="j_password" value="" >
+                <img id="nextBtnImg"class = "nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>"/>
             </div>
         </div>    
        
@@ -108,6 +109,10 @@
         <%--</div>--%>
         <%--</div>--%>
         <%--</div>--%>
+    </div>
+    <div id="arrow" >
+        <img style = "margin-right:50px" src="<c:url value="/images/main/icon-pre-arrow.gif"/>"/>
+        <img src="<c:url value="/images/main/icon-next-arrow.gif"/>"/>
     </div>
 <%--<a class="arrow arrowleft">&nbsp;</a>--%>
 <%--<a class="arrow arrowright">&nbsp;</a>--%>
