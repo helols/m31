@@ -17,7 +17,7 @@ html, body {
 }
 
 #loading {
-    background: black;
+    background: #000;
     position: absolute;
     z-index: 20001;
     height: 100%;
@@ -46,7 +46,7 @@ html, body {
     height: 100%;
     width: 100%;
     position: absolute;
-    top: 40%;
+    top: 30%;
 }
 
 #m31-desktop {
