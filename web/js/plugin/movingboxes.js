@@ -203,10 +203,23 @@ movingbox = function() {
         var opt = {opactiy:.7,height:162,width:216,top:30};
         if (type === 'L') {
             opt = {opactiy:1,height:232,width:256,top:0};
-            el.down('div.d_password').setVisible(true, true);
-            el.down('div.inside').scale(256, 192, true).down('div.name_text').setWidth(256, true).update(el.child('input.j_username').getValue());
+            el.down('div.d_password')
+                    .setVisible(true, true)
+                    .down('input.j_password')
+                    .addClass('password')
+                    .on('focus',focusPasswordFeld)
+                    .on('blur',blurPasswordField);
+            el.down('div.inside')
+                    .scale(256, 192, true)
+                    .down('div.name_text')
+                    .setWidth(256, true)
+                    .update(el.child('input.j_username').getValue());
         } else {
-            el.down('div.inside').scale(216, 162, true).down('div.name_text').setWidth(216, true).update(el.child('input.j_title').getValue());
+            el.down('div.inside')
+                    .scale(216, 162, true)
+                    .down('div.name_text')
+                    .setWidth(216, true)
+                    .update(el.child('input.j_title').getValue());
         }
         el.animate({
             opacity: {to: opt.opactiy, from: .7},
@@ -217,9 +230,24 @@ movingbox = function() {
         }, .35, itemMoveAfterCallback);
     };
 
+    var focusPasswordFeld = function(e,t){
+        Ext.fly(t).removeClass('password');
+    };
+    var blurPasswordField = function(e,t){        
+        if(Ext.fly(t).getValue().length == 0){
+            Ext.fly(t).addClass('password');
+        }
+    };
+
     var itemMoveAfterCallback = function(el) {
         if (actItem.id !== el.id) {
-            el.down('div.d_password').setVisible(false);
+            el.child('input.j_password')
+                    .removeClass('password')
+                    .un('focus',focusPasswordFeld)
+                    .un('blur',blurPasswordField)
+                    .up('div.d_password')
+                    .setVisible(false);
+            el.child('input.j_password').dom.value = '';
         }
         totalCnt--;
     }
