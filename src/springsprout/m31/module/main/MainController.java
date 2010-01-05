@@ -10,14 +10,13 @@ package springsprout.m31.module.main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import springsprout.m31.module.member.MemberService;
+import springsprout.m31.service.security.SecurityService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +30,8 @@ public class MainController {
 
     @Autowired
     MemberService memberService;
+    @Autowired
+    SecurityService securityService;
 
     @RequestMapping("/main/index")
     public String index(){
@@ -40,26 +41,14 @@ public class MainController {
     @RequestMapping("/main/loginSuccessProcess")
     public ModelAndView loginSuccessProcess(HttpServletRequest req, HttpServletResponse res) {
         clearAJAXHeader(res);
-        ModelMap model = new ModelMap();
-        model.addAttribute("loginResult", "success");
-        model.addAttribute("isGuest", isGuest());
-        return new ModelAndView(JSON_VIEW).addObject("loginResult", "success").addObject("isGuest", isGuest());
+        return new ModelAndView(JSON_VIEW).addObject("loginResult", "success").addObject("isGuest", securityService.isGuest());
     }
 
     @RequestMapping("/main/loginFailProcess")
     public ModelAndView loginFailProcess(HttpServletRequest req, HttpServletResponse res, HttpSession session) {
         log.debug("loginFailProcess");
-        Object obj = session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION_KEY");
-        if (obj != null) {
-            if ("User is disabled".equals(((BadCredentialsException) obj).getMessage())) {
-                return new ModelAndView(JSON_VIEW).addObject("loginResult", "fail").addObject("joinwait", session.getAttribute("SPRING_SECURITY_LAST_USERNAME"));
-            }
-        }
-
         clearAJAXHeader(res);
         return new ModelAndView(JSON_VIEW).addObject("loginResult", "fail");
-
-//    	return new ModelAndView("redirect:/login.do?loginFail=true");
     }
 
     private boolean isAjaxLogin(HttpServletRequest req) {
