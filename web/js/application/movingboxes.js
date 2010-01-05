@@ -7,11 +7,11 @@ movingbox = function() {
     var totalCnt = 0;
     var itemWidth = 236;
     var DEMO = "panel_demo" ,
-        CHANGE = "panel_change" ,
-        NEW ="panel_newuser",
-        LOGIN_AFT = "LA",
-        CHANGE_AFT = "CA",
-        NEW_AFT ="NA"; 
+            CHANGE = "panel_change" ,
+            NEW = "panel_newuser",
+            LOGIN_AFT = "LA",
+            CHANGE_AFT = "CA",
+            NEW_AFT = "NA";
     /**
      * 아이템들의 사이즈가 slider 보다 작을때.. 가운데 정렬을 위한 edge 를 구하는 곳.
      */
@@ -19,7 +19,7 @@ movingbox = function() {
         var el = Ext.fly('slider');
         sliderWidth = el.getWidth();
         var itemSize = Ext.select('div.panel').elements.length;
-        var totalWidth = (itemWidth+itemEdge) * itemSize + itemEdge;
+        var totalWidth = (itemWidth + itemEdge) * itemSize + itemEdge;
         edge = sliderWidth - totalWidth > 0 ? (sliderWidth / 2 ) - (totalWidth / 2) + itemEdge : 0;
     };
 
@@ -30,12 +30,12 @@ movingbox = function() {
         Ext.each(Ext.select('div.panel').elements,
                 function(item, idx) {
                     var el = Ext.get(item);
-                    if(el.getWidth() != itemWidth){
+                    if (el.getWidth() != itemWidth) {
                         actItem = undefined;
                         totalCnt = 1;
                         actIdx = -1;
-                        itemMoveAnime(el, edge + (itemWidth + itemEdge) * idx,"N");
-                    }else{
+                        itemMoveAnime(el, edge + (itemWidth + itemEdge) * idx, "N");
+                    } else {
                         el.setLeft(edge + (itemWidth + itemEdge) * idx)
                                 .setOpacity(.7)
                                 .hover(onItemMouseEnter, onItemMouseLeave, this)
@@ -103,21 +103,22 @@ movingbox = function() {
         var opt = {opactiy:.7,height:162,width:216,top:30};
         if (type === 'L') {
             opt = {opactiy:1,height:232,width:256,top:0};
-//            var cssName = 'password';
-//            if(el.id == 'panel_chage') {cssName = 'email'} else if(el.id == 'panel_newuser') {cssName = ''}
-            if(el.id === NEW){
+            //            var cssName = 'password';
+            //            if(el.id == 'panel_chage') {cssName = 'email'} else if(el.id == 'panel_newuser') {cssName = ''}
+            if (el.id === NEW) {
                 el.down('div.addition').setVisible(true, true);
-            }else if(el.id === DEMO){
-                el.down('div.addition')
-                    .setVisible(true, true)
-                    .down('input.j_password').dom.value ="springsprout";
-            }else{                
+            } else if (el.id === DEMO) {
+                el.down('div.addition').setVisible(true, true)
+                        .down('img.nextbtn').on('mousedown', signin)
+                        .prev('input.j_password').dom.value = "springsprout";
+            } else {
                 el.down('div.addition')
                         .setVisible(true, true)
-                        .down('input.j_password')
-                        .addClass(el.id === CHANGE?'email':'password')
-                        .on('focus',focusField)
-                        .on('blur',blurField);
+                        .down('img.nextbtn').on('mousedown', signin)
+                        .prev('input.j_password')
+                        .addClass(el.id === CHANGE ? 'email' : 'password')
+                        .on('focus', focusField)
+                        .on('blur', blurField);
             }
             el.down('div.inside')
                     .scale(256, 192, true)
@@ -152,16 +153,17 @@ movingbox = function() {
     });
     var itemMoveAfterCallback = function(el) {
         if ((!actItem) || actItem.id !== el.id) {
-            if(el.id === NEW){
-                 el.child('div.addition').setVisible(false);
-            }else{
+            if (el.id === NEW) {
+                el.child('div.addition').setVisible(false);
+            } else {
                 el.child('input.j_password').dom.value = '';
                 el.child('input.j_password')
-                    .removeClass(el.id === CHANGE?'email':'password')
-                    .un('focus',focusField)
-                    .un('blur',blurField)
-                    .up('div.addition')
-                    .setVisible(false);
+                        .removeClass(el.id === CHANGE ? 'email' : 'password')
+                        .un('focus', focusField)
+                        .un('blur', blurField)
+                        .up('div.addition')
+                        .setVisible(false)
+                        .down('img.nextbtn').un('mousedown', signin);
             }
         }
         totalCnt--;
@@ -171,12 +173,12 @@ movingbox = function() {
      * @param el
      * @param actionTpye
      */
-    var childAction = function(el,actionTpye){
-        switch(actionTpye){
+    var childAction = function(el, actionTpye) {
+        switch (actionTpye) {
             case DEMO :
 
                 break;
-            
+
         }
     };
     /**
@@ -184,9 +186,9 @@ movingbox = function() {
      * @param e
      * @param t
      */
-    var focusField = function(e,t){
+    var focusField = function(e, t) {
         var tel = Ext.fly(t);
-        tel.removeClass(tel.hasClass('password')?'password':'email');
+        tel.removeClass(tel.hasClass('password') ? 'password' : 'email');
     };
 
     /**
@@ -194,10 +196,10 @@ movingbox = function() {
      * @param e
      * @param t
      */
-    var blurField = function(e,t){
-        var tel =  Ext.fly(t);
-        if(tel.getValue().length == 0){
-            tel.addClass(tel.up('#'+CHANGE,2)?'email':'password');
+    var blurField = function(e, t) {
+        var tel = Ext.fly(t);
+        if (tel.getValue().length == 0) {
+            tel.addClass(tel.up('#' + CHANGE, 2) ? 'email' : 'password');
         }
     };
 
@@ -245,19 +247,39 @@ movingbox = function() {
         Ext.fly(this).update('&nbsp;');
     };
 
+    var signin = function(e, t) {
+        var tEl = Ext.fly(this);
+        Ext.Ajax.request({
+            method:'POST',
+            url: '/j_spring_security_check',
+            params: {
+                j_username: tEl.parent().down("input.j_username").getValue(),
+                j_password: tEl.prev('input.j_password').getValue()
+            },
+            success: function(response, opts) {
+                var obj = Ext.decode(response.responseText);
+                console.dir(obj);
+            },
+            failure: function(response, opts) {
+                console.log('server-side failure with status code ' + response.status);
+            }
+        });
+    };
     return {
         init: function() {
             Ext.select('div.name_text').setOpacity(.7);
             this.layout();
             positionItem();
-            Ext.fly('newNextBtnImg').on('mousedown',function(){spot.show(NEW)});
+            Ext.fly('newNextBtnImg').on('mousedown', function() {
+                spot.show(NEW)
+            });
 
         },
         layout : function() {
             var top = Ext.lib.Dom.getViewHeight() / 2 - (Ext.fly('slider').getHeight() / 2);
             Ext.fly('slider').setTop(top);
             Ext.select('.arrow').setTop(top);
-//            Ext.fly('arrow').setTop(top+30);
+            //            Ext.fly('arrow').setTop(top+30);
             calcEdge();
             positionItem();
         }
