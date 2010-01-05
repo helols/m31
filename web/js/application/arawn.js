@@ -309,6 +309,32 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	},
     	/** 미투데이 패널 생성 : 글쓰기 and 글목록 */
     	createView: function(app){
+
+            var intervalID = null;
+            var tcnt = 10000; //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
+            /**
+             * f/f 229  한글 글자 수 관련 setInterval시에 생성된 ID 제거.
+             */
+            var clearIntrvalFF = function(){
+                if(intervalID !== null) {
+                    clearInterval(intervalID);
+                    tcnt = 10000;
+                }
+            };
+
+            /**
+             * 카운트 해주는 곳. 기존 text와 현제 length 가 같다면 update 안하고 skip.. 이것도 f/f 를 대비해서 넣은 코드.
+             */
+            var bodyTextLengthUpdate = function(){
+                tcnt--;
+                if(parseInt(jQuery('#springme2day-form-body-length').text()) !== (150-Ext.fly('springme2day-form-body').getValue().length)){
+                     Ext.get('springme2day-form-body-length')
+                        .update(150-Ext.fly('springme2day-form-body').getValue().length);
+                }
+                if(tcnt < 0){
+                    clearIntrvalFF();
+                }
+            };
     		console.log('me2DayModule.createView()');
     		
 	        // 글쓰기 패널
@@ -340,10 +366,26 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		maxLengthText: '글이 너무 깁니다!',
 	            		enableKeyEvents: true,
 	            		disableKeyFilter: true,
+                        validationEvent : 'keydown',
 	            		listeners: {
-	                    	keyup: function(sender, event){
-	            				// console.log(event.keycode);
-	                    	}
+                            keyup : function(sender,event){
+                              clearIntrvalFF();
+                              bodyTextLengthUpdate();
+                            },
+                            keydown: function(sender,event){
+                                if(event.getKey() == 229 & Ext.isGecko){
+                                    if(intervalID == null){
+                                        intervalID = setInterval(bodyTextLengthUpdate,300);
+                                    }else{
+                                        clearIntrvalFF();
+                                        intervalID = setInterval(bodyTextLengthUpdate,300);
+                                    }
+                                    event.stopEvent();
+                                }
+                            },
+                            blur : function(sender,event){
+                                clearIntrvalFF();
+                            }
 	                    }
 	            	},{
 	            		region: 'south',
@@ -360,8 +402,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		            	},{
 	            			region: 'east',
 		            		xtype: 'box',
+                            cls :'body-length',
 		            		id: 'springme2day-form-body-length',
-		            		html: '<div style="margin-top:3px" align="center">150<div>',
+		            		html: '<div class="body-length">150<div>',
 		            		width: 30
 		            	}]
 	            	}]

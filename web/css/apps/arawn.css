@@ -52,3 +52,7 @@
 	white-space:nowrap;
 	font-size:9;
 }
+div#springme2day-form-body-length.body-length{
+    margin-top:3px;
+    text-align:center;
+}
