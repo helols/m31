@@ -28,6 +28,11 @@ public class ApplicationController {
     DeskTopService deskTopService;
     @Autowired
     SecurityService securityService;
+
+    /**
+     * application list를 리턴한다...
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list(){
         return new ModelAndView(JSON_VIEW).addObject("appList",deskTopService.getAppList(securityService.getCurrentMemberId()));

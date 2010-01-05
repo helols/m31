@@ -249,6 +249,7 @@ movingbox = function() {
 
     var signin = function(e, t) {
         var tEl = Ext.fly(this);
+        m31.util.loading({imgRoot:'../../images'});
         Ext.Ajax.request({
             method:'POST',
             url: '/j_spring_security_check',
@@ -257,8 +258,8 @@ movingbox = function() {
                 j_password: tEl.prev('input.j_password').getValue()
             },
             success: function(response, opts) {
-                var obj = Ext.decode(response.responseText);
-                console.dir(obj);
+
+//                window.location.href="/desktop/view";
             },
             failure: function(response, opts) {
                 console.log('server-side failure with status code ' + response.status);
@@ -273,6 +274,7 @@ movingbox = function() {
             Ext.fly('newNextBtnImg').on('mousedown', function() {
                 spot.show(NEW)
             });
+            Ext.EventManager.onWindowResize(movingbox.layout, this);
 
         },
         layout : function() {

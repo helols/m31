@@ -6,47 +6,7 @@
  * background:#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top;
  */
 html, body {
-    background: #000 url(../../images/desktop/wallpapers/springsprout-light.png) no-repeat top center;
-    font: normal 12px tahoma, arial, verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    border: 0 none;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-}
-
-#loading {
-    background: #000;
-    position: absolute;
-    z-index: 20001;
-    height: 100%;
-    width: 100%;
-}
-
-#loading-mask {
-    background: black;
-    position: absolute;
-    z-index: 20000;
-    height: 100%;
-    width: 100%;
-}
-
-#loading img {
-    margin-bottom: 5px;
-}
-
-#loading .loading-messge {
-    background: black;
-    color: #fff;
-    font: bold 13px tahoma, arial, helvetica;
-    padding: 10px;
-    margin: 0;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 30%;
+    background: #000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center;
 }
 
 #m31-desktop {

@@ -9,6 +9,7 @@
 
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/common.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/springdock.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/miracle.css"/>"/>
@@ -32,7 +33,6 @@
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/plugin/reflection.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/SpringDock.js"/>"></script>
     <script type="text/javascript"
     src="<c:url value="/js/desktop/ApplicationRegistry.js"> <c:param value="${cacheTime}" name="_c"/></c:url>"></script>

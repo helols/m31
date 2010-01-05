@@ -82,6 +82,23 @@ m31.util = {
             es.visibility = oldVisibility;
         }
         return {x:x, y:y};
+    },
+
+    loading : function(opt){
+        var imgRoot = opt.imgRoot || '../../../images';
+        var loadingHtml = [ ' <div id="loading-mask"></div> '
+                            , '     <div id="loading"> '
+                            , '         <div class="loading-messge"> '
+                            , '             <img class="loading-img" src="'+imgRoot+'/loading-logo.png"/><br/>'
+                            , '            Loading...<br/>'
+                            , '             <img class="loader-img" src="'+imgRoot+'/ajax-loader.gif" align="absmiddle"/>'
+                            , '         </div>'
+                            , '</div>' ].join('');
+//        var el =  Ext.getBody().insertHtml('afterBegin', loadingHtml);
+        var el = Ext.DomHelper.append(Ext.getBody(), loadingHtml, true)
+                .prev('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .5, from: 1}})
+                .next('#loading').setVisible(true,true);
+        console.log(el)
     }
 };
 

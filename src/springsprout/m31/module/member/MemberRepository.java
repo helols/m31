@@ -32,7 +32,9 @@ public class MemberRepository extends SqlMapClientDaoSupport{
     public Member getMemberById(Integer id) {
         return getMemberRoles((Member)getSqlMapClientTemplate().queryForObject("member.getMemberById", id));
     }
-    public Member getMemberRoles(Member member){
+
+    @SuppressWarnings("unchecked")
+    private Member getMemberRoles(Member member){
         if(member == null) {
             return member;
         }
