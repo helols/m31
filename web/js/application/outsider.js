@@ -16,6 +16,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     init : function() {
         //필요한 JS
         m31.util.requiredJS("pirobox");
+        m31.util.requiredJS("clipboard");
         
         this.initTemplates();
 
@@ -39,6 +40,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         });
 
         this.view = this.createView();
+        this.view.on("contextmenu", this.onContextClick, this);
     },
     
     createView : function() {
@@ -269,6 +271,56 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         
         Ext.getCmp('springsee-prev-btn').enable();
     	Ext.getCmp('springsee-Next-btn').enable();
+    },
+    
+    // contextMenu
+    onContextClick : function(view, index, obj, evt) {
+    	this.linkUrl = this.store.getAt(index).data.image;
+    	this.checkClipboard = false;
+    	
+    	if(!this.menu){ // create context menu on first right click
+    		this.menu = new Ext.menu.Menu({
+                id:'springsee-ctx',
+                items: [{
+                    iconCls: 'new-win',
+                    text: 'View in new window',
+                    scope:this,
+                    handler: function(){
+                        window.open(this.linkUrl);
+                    }
+                },{
+                    iconCls: 'new-win',
+                    id: 'springsee-copymenu',
+                    text: 'Copy this Image URL',
+                    scope:this
+                },'-',{
+                    text:'미투포토로 전송하기',
+                    scope:this,
+                    handler: function(){
+                        console.log("미투데이 포토로 전송합니다.");
+                    }
+                },{
+                    text:'배경화면 지정하기',
+                    scope:this,
+                    handler: function(){
+                        console.log("배경화면 지정하기.");
+                    }
+                }]
+            });
+    		this.menu.on('hide', function() {setTimeout("M31.ApplicationRegistry.getInstance().getApp('springsee').clipboard.destroy();", 500);}, this);
+        }
+    	evt.stopEvent();
+        this.menu.showAt(evt.getXY());
+        
+        this.clipboard = new ZeroClipboard.Client();
+    	this.clipboard.glue( 'x-menu-el-springsee-copymenu' );
+    	this.clipboard.setText( this.store.getAt(index).data.image );
+    	this.clipboard.addEventListener('onMouseOver', function(client) {
+    		$("#x-menu-el-springsee-copymenu").addClass("x-menu-item-active");
+		});
+    	this.clipboard.addEventListener('onMouseOut', function(client) {
+    		$("#x-menu-el-springsee-copymenu").removeClass("x-menu-item-active");
+    	});
     }
 });
 
