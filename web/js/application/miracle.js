@@ -24,12 +24,13 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
              listeners : {
                  beforeload : function(store, options) {
-                     // 검색어가 없을 경우 스토어를 초기화 시킨다.
-                     if(options.params['q'] == '') {
-                        store.removeAll();
-                        return false;
+                     var textfield = Ext.getCmp('springplayer-serach-textfield');
+
+                     // 페이징시 검색어가 안 넘어가서 추가.
+                     if(options.params['q'] != '') {
+                        var q = textfield.getRawValue();
+                        options.params['q'] = (q === null) ? '' : q;
                      }
-                     options.params['q'] = Ext.getCmp('springplayer-serach-textfield').getRawValue();
                      options.params['limit'] = 20;
                      options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
                  }
@@ -139,6 +140,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     hasSearch : false,
     paramName : 'query',
 
+    // X버튼 클릭시
     onTrigger1Click : function(){
         if(this.hasSearch){
             var o = {start: 0};
@@ -149,7 +151,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.hasSearch = false;
         }
     },
-
+    // 검색(돋보기) 클릭시
     onTrigger2Click : function(){
         var v = this.getRawValue();
         if(v.length < 1){

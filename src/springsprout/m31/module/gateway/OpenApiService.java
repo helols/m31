@@ -85,21 +85,24 @@ public class OpenApiService {
     }
 
     public SpringPlayerDTO springPlayer(final SpringPlayerCri cri) {
-        /*
-        구글, 다음에서 동영상 검색 및 페이징 처리.
-        돌려줄 값. 전체 레코드의 갯수, 리미트까지 결과.
-         */
         SpringPlayerDTO dto = null;
 
-        switch (cri.getType()) {
-            case DAUM:
-                dto = DaumAPIHelper.getMovie(cri);
-                break;
-            case GOOGLE:
-                dto = GoogleAPIHelper.getMovie(cri); 
-                break;
+        //검색어가 없는 요청은 결과가 없음.
+        if(cri.getQ().length() == 0) {
+           dto = new SpringPlayerDTO();
+           dto.setSuccess(true);
+           dto.setTotal(0);
+           dto.setList(new ArrayList());
+        } else {
+            switch (cri.getType()) {
+                case DAUM:
+                    dto = DaumAPIHelper.getMovie(cri);
+                    break;
+                case GOOGLE:
+                    dto = GoogleAPIHelper.getMovie(cri);
+                    break;
+            }
         }
-
         return dto;
     }
 }
