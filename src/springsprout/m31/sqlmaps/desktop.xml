@@ -7,6 +7,7 @@
 		<result property = "appId"            column = "APP_ID"/>
 		<result property = "appDesc"          column = "APP_DESC"/>
 		<result property = "appInstallYn"    column = "INSTALL_YN"/>
+		<result property = "appOrder"         column = "APP_ORDER"/>
 	</resultMap>
 
 	<select id="getAppList" resultMap="application" parameterClass="string">
@@ -16,6 +17,7 @@
           , AI.APP_DESC
           , AI.APP_ID
           , MA.INSTALL_YN
+          , MA.APP_ORDER
         FROM
             APPLICATION_INFO AI
             INNER JOIN MEMBER_APPS MA ON AI.ID = MA.APP_ID

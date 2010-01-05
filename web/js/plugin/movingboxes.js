@@ -123,12 +123,14 @@ movingbox = function() {
                     .scale(256, 192, true)
                     .down('div.name_text')
                     .setWidth(256, true)
+                    .setOpacity(1)
                     .update(el.child('input.j_username').getValue());
         } else {
             el.down('div.inside')
                     .scale(216, 162, true)
                     .down('div.name_text')
                     .setWidth(216, true)
+                    .setOpacity(.7)
                     .update(el.child('input.j_title').getValue());
         }
         el.animate({
@@ -245,7 +247,7 @@ movingbox = function() {
 
     return {
         init: function() {
-            Ext.select('div.name_text').setOpacity(.6);
+            Ext.select('div.name_text').setOpacity(.7);
             this.layout();
             positionItem();
             Ext.fly('newNextBtnImg').on('mousedown',function(){spot.show(NEW)});

@@ -13,6 +13,7 @@ public class Application {
     private String appId;
     private String appDesc;
     private String appInstallYn;
+    private Integer appOrder;
 
     public String getAppDesc() {
         return appDesc;
@@ -52,5 +53,13 @@ public class Application {
 
     public void setAppInstallYn(String appInstallYn) {
         this.appInstallYn = appInstallYn;
+    }
+
+    public Integer getAppOrder() {
+        return appOrder;
+    }
+
+    public void setAppOrder(Integer appOrder) {
+        this.appOrder = appOrder;
     }
 }
