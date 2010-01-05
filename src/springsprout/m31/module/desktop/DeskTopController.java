@@ -21,11 +21,6 @@ import static springsprout.m31.common.M31System.JSON_VIEW;
 public class DeskTopController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String index(){
-        return "/desktop/index";
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView initDeskTop(){
         String guestAvartarUrl = M31System.AVATAR_URL + MD5Util.md5Hex(M31System.GUEST_MAIL)+"?r=X&size=128";
         return new ModelAndView(JSON_VIEW).addObject("guestAvartarUrl", guestAvartarUrl);
