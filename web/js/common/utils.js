@@ -4,13 +4,13 @@ Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
 if (Ext.isIE) {
     var console = function() {
         return {log : function(log) {
-            if(Ext.fly('log') === null){
-                Ext.getBody().insertHtml(
-                        'afterBegin',
-                        '<div id="log" style="background:#FFF; color:#000;overflow:hidden;">'+log+'</div>');
-            }else{
-                Ext.fly('log').update(Ext.fly('log').dom.innerHTML+log);
-            }
+//            if(Ext.fly('log') === null){
+//                Ext.getBody().insertHtml(
+//                        'afterBegin',
+//                        '<div id="log" style="background:#FFF; color:#000;overflow:hidden;">'+log+'</div>');
+//            }else{
+//                Ext.fly('log').update(Ext.fly('log').dom.innerHTML+log);
+//            }
         }}
     }();
 }
