@@ -130,7 +130,6 @@ ZeroClipboard.Client.prototype = {
 		appendElem.appendChild(this.div);
 		
 		this.div.innerHTML = this.getHTML( box.width, box.height );
-		return this.div;
 	},
 	
 	getHTML: function(width, height) {

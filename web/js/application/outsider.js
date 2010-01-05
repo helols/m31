@@ -16,7 +16,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     init : function() {
         //필요한 JS
         m31.util.requiredJS("pirobox");
-        m31.util.requiredJS("clipboard");
         
         this.initTemplates();
 
