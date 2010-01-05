@@ -2,6 +2,7 @@ package springsprout.m31.module.app.me2day;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -98,9 +99,14 @@ public class SpringMe2DayController {
 	 * @return
 	 * @throws Me2DayApiRequestException
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping
-	public ModelAndView postList(PostSearchParam param) throws Me2DayApiRequestException {
-		List<Post> postList = me2DayApiService.getPosts(param);
+	public ModelAndView postList(PostSearchParam param, HttpSession httpSession) throws Me2DayApiRequestException {
+		List<Post> postList = Collections.EMPTY_LIST;
+		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
+		if(authenticationInfo != null){
+			postList = me2DayApiService.getPosts(param, authenticationInfo);
+		}
 		return new ModelAndView(JSON_VIEW).addObject(postList);
 	}
 	
@@ -152,6 +158,31 @@ public class SpringMe2DayController {
 			}
 		}
 		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
+	}
+	
+	/**
+	 * 댓글 삭제
+	 * @param commentDTO
+	 * @param httpSession
+	 * @return
+	 */
+	@RequestMapping
+	public ModelAndView commentDelete(CommentDTO commentDTO, HttpSession httpSession){
+		String msg = "";
+		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
+		if(authenticationInfo == null){
+			msg = "springme2day_not_login";
+		}
+		else{
+			try{
+				me2DayApiService.deleteComment(commentDTO.getCommentId(), authenticationInfo);
+				msg = "springme2day_commentdelete_success";
+			}
+			catch (Me2DayApiRequestException e) {
+				msg = e.getDescription();
+			}
+		}
+		return new ModelAndView(JSON_VIEW).addObject("msg", msg);
 	}
 	
 }

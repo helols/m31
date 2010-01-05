@@ -7,6 +7,7 @@ public class CommentDTO {
 
 	private String post_id;
 	private String body;
+	private String commentId;
 	
 	public String getPost_id() {
 		return post_id;
@@ -21,7 +22,14 @@ public class CommentDTO {
 	public void setBody(String body) {
 		this.body = body;
 	}
-
+	
+	public String getCommentId() {
+		return commentId;
+	}
+	public void setCommentId(String commentId) {
+		this.commentId = commentId;
+	}
+	
 	@Override
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

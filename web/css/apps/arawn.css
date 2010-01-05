@@ -52,7 +52,22 @@
 	white-space:nowrap;
 	font-size:9;
 }
+
 div#springme2day-form-body-length.body-length{
     margin-top:3px;
     text-align:center;
+}
+
+.springme2day-comment-nickname {
+	font-weight:bold; !important;
+}
+.springme2day-comment-pubtime {
+	color:#888888;
+	text-decoration:none;
+	white-space:nowrap;
+	font-size:7; !important;
+}
+
+.springme2day-comment-delete-btn{
+	cursor: pointer;
 }

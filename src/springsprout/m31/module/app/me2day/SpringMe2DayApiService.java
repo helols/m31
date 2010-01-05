@@ -69,7 +69,8 @@ public class SpringMe2DayApiService {
 	private final String me2dayapi_create_post = "http://me2day.net/api/create_post/%s";
 	/** 미투 덧글쓰기 요청 주소 */
 	private final String me2dayapi_create_comment = "http://me2day.net/api/create_comment";
-	
+	/** 미투 덧글삭제 요청 주소 */
+	private final String me2dayapi_delete_comment = "http://me2day.net/api/delete_comment";
 	
 	/** 미투데이 응답형식 지정 */
 	private Me2DayResponseType responseType = Me2DayResponseType.xml;
@@ -110,7 +111,7 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException 
 	 */
-	public List<Post> getPosts(PostSearchParam param) throws Me2DayApiRequestException{
+	public List<Post> getPosts(PostSearchParam param, AuthenticationInfo info) throws Me2DayApiRequestException{
 		ArrayList<Post> posts = new ArrayList<Post>();
 		
 		String requestUrl = "";
@@ -127,8 +128,7 @@ public class SpringMe2DayApiService {
 			if(param.isMyPostView()){
 				requestUrlList.add(String.format(requestUrl, param.getId()));	
 			}
-			System.out.println("내글볼끄야?" + param.isMyPostView());
-			
+
 			// 친구글도 같이 볼것인가?
 			if(param.isFriendPostView()){
 				requestUrlList.add(String.format(requestUrl, param.getId()) + "&scope=friend[all]");
@@ -155,7 +155,7 @@ public class SpringMe2DayApiService {
 				requestUrl = createMe2DayRequestUrl(me2dayapi_get_comments) + "&post_id=%s";
 				for(Post post : posts){
 					if(post.getCommentsCount() > 0){
-						post.setComments(getRequestComments(String.format(requestUrl, post.getPost_id())));
+						post.setComments(getRequestComments(String.format(requestUrl, post.getPost_id()), info));
 					}
 				}	
 			}
@@ -244,7 +244,7 @@ public class SpringMe2DayApiService {
 	 * @throws Me2DayApiRequestException 
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Comment> getRequestComments(String requestUrl) throws Me2DayApiRequestException {
+	public List<Comment> getRequestComments(String requestUrl, AuthenticationInfo info) throws Me2DayApiRequestException {
 		List<Element> elements = requestMe2Day(requestUrl).detachRootElement().getChildren("comment");
 		if(!CollectionUtils.isEmpty(elements)){
 			List<Comment> comments = new ArrayList<Comment>();
@@ -254,6 +254,9 @@ public class SpringMe2DayApiService {
 					Element authorEl = element.getChild("author");
 					if(authorEl != null){
 						comment.setAuthor((Author) convertElementToBean(authorEl.getChildren(), Author.class));							
+					}
+					if(comment.getAuthor() != null){
+						comment.setRemove(info.getUser_id().equals(comment.getAuthor().getId()));
 					}
 					comments.add(comment);
 				}
@@ -483,7 +486,7 @@ public class SpringMe2DayApiService {
 		}
 		
 		try {
-			String requestUrl = createMe2DayRequestUrl(me2dayapi_create_comment, info);
+			String requestUrl = createMe2DayRequestUrl(me2dayapi_delete_comment, info);
 			requestUrl += "&comment_id=" + comment_id;
 			requestMe2Day(requestUrl);
 			return false;

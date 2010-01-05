@@ -5,10 +5,14 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -58,13 +62,17 @@ public class SpringMe2DayApiServiceTest {
 	}
 	
 	public void 글목록얻어오기() throws Me2DayApiRequestException {
+		AuthenticationInfo info = new AuthenticationInfo();
+		info.setUser_id("arawn");
+		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
+		
 		PostSearchParam param = new PostSearchParam();
 		param.setId("arawn");
 		param.setForm("2009-12-31T00:00:00+0900");
 		param.setFriendPostView(true);
 		param.setCommentView(true);
 		// param.setPost_id("p4vln3");
-		List<Post> posts = service.getPosts(param);
+		List<Post> posts = service.getPosts(param, info);
 		if(!CollectionUtils.isEmpty(posts)){
 			for(Post post : posts){
 				System.out.println(post);
@@ -72,9 +80,12 @@ public class SpringMe2DayApiServiceTest {
 		}
 	}
 
-	@Test
 	public void 댓글얻어오기() throws Me2DayApiRequestException {
-		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p4wlce");
+		AuthenticationInfo info = new AuthenticationInfo();
+		info.setUser_id("arawn");
+		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
+		
+		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p4wlce", info);
 		if(!CollectionUtils.isEmpty(comments)){
 			for(Comment comment : comments){
 				System.out.println(comment);
@@ -137,7 +148,7 @@ public class SpringMe2DayApiServiceTest {
 		param.setId("arawn");
 		
 		PostDTO postDto = new PostDTO();
-		postDto.setBody("봄미투데이  테스트 글쓰기 " + service.getPosts(param).size() + " 번째 글입니다.");
+		postDto.setBody("봄미투데이  테스트 글쓰기 " + service.getPosts(param, info).size() + " 번째 글입니다.");
 		
 		System.out.println(service.createPost(postDto, info));
 	}
@@ -152,6 +163,20 @@ public class SpringMe2DayApiServiceTest {
 		commentDTO.setBody("봄미투데에서 덧글 쓰기 테스트를 합니다.");
 		
 		System.out.println(service.createComment(commentDTO, info));
-	}	
+	}
+	
+	@Test
+	public void 댓글날짜계산() throws Exception {
+		// Calendar.getInstance(TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
+		Date curDate = new Date();
+		
+		FastDateFormat format = FastDateFormat.getInstance("yyyy/MM/dd", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+		
+		Date date = dateFormat.parse("2010/01/03 08:00");
+		
+		
+	}
 
 }
