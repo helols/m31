@@ -104,6 +104,7 @@ public class OpenApiService {
                     break;
             }
         }
+        log.debug("Lise Size : {}", dto.getList().size());
         return dto;
     }
 }

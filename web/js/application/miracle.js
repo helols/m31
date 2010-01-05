@@ -16,8 +16,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         // 스토어
          this.ds = new Ext.data.JsonStore({
              url: '/gateway/springplayer/search',
-             restful : true,
-             remoteSort : true,
+             //restful : true,
+             //remoteSort : true,
+             
              root: 'items',
 
              fields : ['source', 'duration', 'author', 'title', 'thumbnailURL', 'playerURL'],
@@ -33,17 +34,17 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                      }
                      options.params['limit'] = 20;
                      options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
-                 }
+                 },
+                 load : function(s) { console.log(s);}
              }
         });
 
         this.thumbnailtpl = new Ext.XTemplate(
 		    '<tpl for=".">',
             '<div class="thumb-wrap">',
-		    '<div class="thumb"><img src=""></div>',
+		    '<div class="thumb"><img src="{thumbnailURL}"></div>',
 		    '<span>{title}</span></div>',
-            '</tpl>',
-            '<div class="x-clear"></div>'
+            '</tpl>'
 	    );
 
          // 동영상 검색 부분
@@ -67,11 +68,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         multiSelect: true,
 
                         autoHeight:true,
-                        overClass:'x-view-over',
                         itemSelector:'div.thumb-wrap',
-                        emptyText: 'No images to display',
-
-                        prepareData: function(data) {console.log(data)}
+                        emptyText: 'No images to display'
                     }
                  },
 
