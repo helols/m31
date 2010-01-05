@@ -5,6 +5,7 @@ M31.ApplicationRegistry = function() {
         springsee :{app : 'new M31Desktop.SpringSee()'},
         springme2day :{app : 'new M31Desktop.SpringMe2Day()'},
         springplayer :{app : 'new M31Desktop.SpringPlayer()'},
+        springtwitter :{app : 'new M31Desktop.SpringTwitter()'},
         signout :{app : 'new M31Desktop.Signout()'}
     };
     var loaded = false;
