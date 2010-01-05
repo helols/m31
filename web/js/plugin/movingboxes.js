@@ -6,7 +6,7 @@ movingbox = function() {
     var actIdx = -1;
     var totalCnt = 0;
     var itemWidth = 236;
-    var LOGIN = "panel_demo" ,
+    var DEMO = "panel_demo" ,
         CHANGE = "panel_change" ,
         NEW ="panel_newuser",
         LOGIN_AFT = "LA",
@@ -106,9 +106,12 @@ movingbox = function() {
 //            var cssName = 'password';
 //            if(el.id == 'panel_chage') {cssName = 'email'} else if(el.id == 'panel_newuser') {cssName = ''}
             if(el.id === NEW){
-               el.down('div.addition').setVisible(true, true); 
-            }
-            else{
+                el.down('div.addition').setVisible(true, true);
+            }else if(el.id === DEMO){
+                el.down('div.addition')
+                    .setVisible(true, true)
+                    .down('input.j_password').dom.value ="springsprout";
+            }else{                
                 el.down('div.addition')
                         .setVisible(true, true)
                         .down('input.j_password')
@@ -168,7 +171,7 @@ movingbox = function() {
      */
     var childAction = function(el,actionTpye){
         switch(actionTpye){
-            case LOGIN :
+            case DEMO :
 
                 break;
             
@@ -245,7 +248,7 @@ movingbox = function() {
             Ext.select('div.name_text').setOpacity(.6);
             this.layout();
             positionItem();
-            Ext.fly('nextBtnImg').on('mousedown',function(){spot.show(NEW)});
+            Ext.fly('newNextBtnImg').on('mousedown',function(){spot.show(NEW)});
 
         },
         layout : function() {

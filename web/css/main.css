@@ -80,9 +80,9 @@ div.name_text {
 
 .addition input{
     height:25px;
-    border: 2px solid #cccccc;
+    border: 2px solid #CCC;
     padding-bottom:1px;
-    width:252px;
+    width:220px;
     font-size:14pt;
 }
 div.addition .password{
@@ -93,7 +93,15 @@ div.addition .email{
     background:url("../images/main/email-bk.gif") no-repeat;   
 }
 
-div.addition img{
+div.addition img.new_nextbtn{
     cursor:pointer;
     background-color:#000;
+}
+
+div.addition img.nextbtn{
+    width:24px;
+    height:24px;
+    vertical-align : top;
+    padding-top:3px;
+    cursor:pointer;
 }

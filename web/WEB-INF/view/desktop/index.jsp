@@ -70,7 +70,8 @@
             <div class="addition">
                 <input type="hidden" name="j_username" class="j_username" value="springsprout@springsprout.org">
                 <input type="hidden" name="j_title"    class="j_title" value="Demo User">
-                <input type="password" name="j_password" class="j_password" value="" >
+                <input type="password" name="j_password" class="j_password">
+                <img id="loginNextBtn" class ="nextbtn" src="<c:url value="/images/main/next_btn.png"/>"/>
             </div>
         </div>
         <div class="panel" id="panel_change">
@@ -83,6 +84,7 @@
                 <input type="hidden" name="j_username" class="j_username" value="E-mail 정보를 입력해주세요.">
                 <input type="hidden" name="j_title"    class="j_title" value="Change User">
                 <input type="password" name="j_password" class="j_password" value="" >
+                <img id="changeNextBtn" class ="nextbtn" src="<c:url value="/images/main/next_btn.png"/>"/>
             </div>
         </div>
         <div class="panel" id="panel_newuser">
@@ -94,7 +96,7 @@
             <div class="addition">
                 <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
                 <input type="hidden" name="j_title"    class="j_title" value="New User">
-                <img id="nextBtnImg"class = "nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>"/>
+                <img id="newNextBtnImg"class = "new_nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>"/>
             </div>
         </div>    
        
