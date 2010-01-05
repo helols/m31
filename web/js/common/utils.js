@@ -1,3 +1,6 @@
+Ext.ns("M31", "M31.dt", "M31.app");
+Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
+
 if (Ext.isIE) {
     var console = function() {
         return {log : function(log) {

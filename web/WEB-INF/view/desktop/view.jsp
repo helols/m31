@@ -29,10 +29,6 @@
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
 
-    <script type="text/javascript">
-        Ext.ns("M31", "M31.dt", "M31.app", "M31.util");
-        Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
-    </script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/reflection.js"/>"></script>
@@ -65,7 +61,18 @@
 <%--</div>--%>
 <script type="text/javascript">
     Ext.onReady(function(){
-        M31.ApplicationRegistry.getInstance().loadApplicationStore();
+       // M31.ApplicationRegistry.getInstance().loadApplicationStore();
+        Ext.Ajax.request({
+            method:'POST',
+            url: '/j_spring_security_check',
+            params: {
+                j_username: 'springsprout@springsprout.org',
+                j_password: 'springsprout'
+            },
+            success: function(response, opts) {
+                M31.ApplicationRegistry.getInstance().loadApplicationStore();
+            }
+        });
     })
 </script>
 <div id="m31-desktop">

@@ -40,9 +40,11 @@ SpringDock = function() {
                     },
                     initDockButton : function(appInfos) {
                         for (var x in appInfos) {
-                           springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
+                            if(appInfos[x].appInstallYn === "Y"){
+                                springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
+                            }
                         }
-                        Ext.select('.m31-springdock-item-img').setOpacity(.8);
+                        Ext.select('.m31-springdock-item-img').setOpacity(.7);
                         springdockcontainer.positionContainer(0);
                         springdockcontainer.el.addClass('container');
                         springdockcontainer.positionItems();
@@ -209,7 +211,7 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
     },
     onMouseLeave : function() {
         Ext.fly(this.id).select('.m31-springdock-item-text').setStyle('display', 'none');
-        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(.8);
+        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(.7);
     },
 
     onMouseEnter : function() {
