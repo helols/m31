@@ -356,7 +356,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		            		xtype: 'textarea',
 		            		id: 'springme2day-form-tags',
 		            		name: 'tags',
-		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)',
+		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)'
 		            	},{
 	            			region: 'east',
 		            		xtype: 'box',
@@ -729,8 +729,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            	},{
 	            		xtype: 'hidden',
 	            		name: 'post_id',
-	            		value: post_id,
-	            		
+	            		value: post_id
 	            	}],
                     buttonAlign: 'center',
                     buttons:[btnWrite,btnCancel]
