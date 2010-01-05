@@ -23,7 +23,7 @@ Ext.extend(M31.Desktop, Ext.util.Observable, {
 //        this.springDock = new M31.dt.SpringDock();
 //        this.springDock.initComponent();
         M31.WindowsManager.getInstance(this.desktopEl);
-        SpringDock.getInstance().init().build();
+        this.springDock = SpringDock.getInstance().init().build();
         Ext.EventManager.on(window, 'beforeunload', this.onUnload, this);
         this.fireEvent('ready', this);
         this.isReady = true;

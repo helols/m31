@@ -10,7 +10,7 @@
 		<result property = "appOrder"         column = "APP_ORDER"/>
 	</resultMap>
 
-	<select id="getAppList" resultMap="application" parameterClass="string">
+	<select id="getAppList" resultMap="application" parameterClass="int">
 		SELECT
             AI.ID
           , AI.APP_NAME
@@ -21,8 +21,6 @@
         FROM
             APPLICATION_INFO AI
             INNER JOIN MEMBER_APPS MA ON AI.ID = MA.APP_ID
-            INNER JOIN MEMBER MB
-                    ON  MA.MEMBER_ID = MB.ID
-                    AND MB.EMAIL = #EMAIL#
+                                        AND MA.MEMBER_ID = #id#
 	</select>
 </sqlMap>

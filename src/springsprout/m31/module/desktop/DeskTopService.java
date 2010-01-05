@@ -17,7 +17,13 @@ import java.util.ArrayList;
 public class DeskTopService {
     @Autowired
     DeskTopRepository deskTopRepository;
-    public ArrayList<Application> getAppList(String memberId) {
+
+    /**
+     * member id로 해당 유저의 applist 정보를 가져옵니다.
+     * @param memberId
+     * @return appList 정보.
+     */
+    public ArrayList<Application> getAppList(Integer memberId) {
         return deskTopRepository.getAppList(memberId);
     }
 }
