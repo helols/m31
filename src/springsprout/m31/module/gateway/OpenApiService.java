@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.domain.MovieVO;
 import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
@@ -38,7 +39,7 @@ public class OpenApiService {
     OpenApiRepository openApiRepository;
     List<ConcurrentHashMap<String, String>> apisInfo = new ArrayList<ConcurrentHashMap<String, String>>();
 
-    @SuppressWarnings("uncheched")
+    @SuppressWarnings("unchecked")
     @PostConstruct
     public void initAPIInfo() {
         apisInfo = openApiRepository.initAPIInfo();
@@ -92,7 +93,7 @@ public class OpenApiService {
            dto = new SpringPlayerDTO();
            dto.setSuccess(true);
            dto.setTotal(0);
-           dto.setList(new ArrayList());
+           dto.setList(new ArrayList<MovieVO>());
         } else {
             switch (cri.getType()) {
                 case DAUM:
