@@ -12,5 +12,7 @@ public interface SecurityService {
 
 	public boolean isAdmin();
 
+    public boolean isGuest();
+
 	public boolean isCurrentUserOrAdmin(int id);
 }

@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="EUC-KR"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
 <sqlMap namespace="member">
-	<resultMap id="member" class="springsprout.m31.domain.Member">
-        <result property = "id"            column = "ID"/>
-        <result property = "email"         column = "EMAIL"/>
-		<result property = "name"          column = "NAME"/>
-		<result property = "password"          column = "PASSWD"/>
-		<result property = "location"          column = "LOCATION"/>
+    <resultMap id="member" class="springsprout.m31.domain.Member">
+        <result property="id" column="ID"/>
+        <result property="email" column="EMAIL"/>
+        <result property="name" column="NAME"/>
+        <result property="password" column="PASSWD"/>
+        <result property="location" column="LOCATION"/>
+    </resultMap>
 
-	</resultMap>
+    <resultMap id="role" class="springsprout.m31.domain.Role">
+        <result property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="descr" column="DESCR"/>
+    </resultMap>
 
     <sql id="getMember">
         SELECT ID , EMAIL , NAME, PASSWD, LOCATION FROM MEMBER WHERE
     </sql>
-	<select id="getMemberByEmail" resultMap="member" parameterClass="string">
+    <select id="getMemberByEmail" resultMap="member" parameterClass="string">
         <include refid="getMember"/>
         EMAIL = #EMAIL#
-	</select>
+    </select>
 
-    <select id="getMemberById" resultMap="member" parameterClass="integer">
-		<include refid="getMember"/>
+    <select id="getMemberById" resultMap="member" parameterClass="int">
+        <include refid="getMember"/>
         id = #id#
-	</select>
+    </select>
 
+    <select id="getMemberRoles" resultMap="role" parameterClass="int">
+        SELECT
+            R.id ,
+            R.name,
+            R.descr
+        FROM MEMBER_ROLES MR
+            INNER JOIN ROLE R ON R.ID = MR.ROLE_ID
+        WHERE MR.MEMBER_ID = #id#
+    </select>
     <!--
     <selectkey>
         SELECT ID FROM MEMBER WHERE EMAIL = 'helolsjava@gmail.com'

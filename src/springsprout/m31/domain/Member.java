@@ -7,14 +7,14 @@
  */
 package springsprout.m31.domain;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.List;
 
-public class Member {
-
+public class Member implements Serializable{
     private Integer id;
     private String email;
     private String name;
-    private Set<Role> roles;
+    private List<Role> roles;
     private String password;
     private String location;
 
@@ -42,24 +42,20 @@ public class Member {
         this.name = name;
     }
 
-    public Set<Role> getRoles() {
-        return null;                
+    public List<Role> getRoles() {
+        return roles;                
     }
 
     public String getPassword() {
-        return null;
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public boolean hasRole(Role role) {
-        return getRoles().contains(role);
     }
 
     public String getLocation() {

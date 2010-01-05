@@ -7,6 +7,8 @@
  */
 package springsprout.m31.module.main;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,28 +26,32 @@ import javax.servlet.http.HttpSession;
 import static springsprout.m31.common.M31System.JSON_VIEW;
 
 @Controller
-@RequestMapping("/login/*")
-public class LoginController {
+public class MainController {
+    Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     MemberService memberService;
 
+    @RequestMapping("/main/index")
+    public String index(){
+        return "/index";
+    }
+
+    @RequestMapping("/main/loginSuccessProcess")
     public ModelAndView loginSuccessProcess(HttpServletRequest req, HttpServletResponse res) {
-//    	if(isAjaxLogin(req)){
         clearAJAXHeader(res);
         ModelMap model = new ModelMap();
         model.addAttribute("loginResult", "success");
         model.addAttribute("isGuest", isGuest());
         return new ModelAndView(JSON_VIEW).addObject("loginResult", "success").addObject("isGuest", isGuest());
-//    	}
-//    	return new ModelAndView("redirect:/mypage/index.do");
     }
 
+    @RequestMapping("/main/loginFailProcess")
     public ModelAndView loginFailProcess(HttpServletRequest req, HttpServletResponse res, HttpSession session) {
+        log.debug("loginFailProcess");
         Object obj = session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION_KEY");
         if (obj != null) {
             if ("User is disabled".equals(((BadCredentialsException) obj).getMessage())) {
-//    			return new ModelAndView("redirect:/signup_joinwait.do?email="+session.getAttribute("SPRING_SECURITY_LAST_USERNAME"));
                 return new ModelAndView(JSON_VIEW).addObject("loginResult", "fail").addObject("joinwait", session.getAttribute("SPRING_SECURITY_LAST_USERNAME"));
             }
         }

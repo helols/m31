@@ -8,7 +8,6 @@ import springsprout.m31.domain.Role;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 public class SpringSproutUserDetail implements UserDetails {
@@ -18,7 +17,7 @@ public class SpringSproutUserDetail implements UserDetails {
 
 	public SpringSproutUserDetail(Member member) {
 		this.member = member;
-		Set<Role> roles = member.getRoles();
+		List<Role> roles = member.getRoles();
 
 		if(roles == null || roles.size() == 0) return;
 

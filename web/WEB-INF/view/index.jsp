@@ -20,14 +20,9 @@
     <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/Spotlight.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/plugin/movingboxes.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/movingboxes.js"/>"></script>
     <!-- ENDLIBS -->
-
-
-    <script type="text/javascript">
-        Ext.ns("M31", "M31.dt", "M31.app", "M31.util");
-        Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
-    </script>
+  
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
 </head>

@@ -7,7 +7,9 @@
  */
 package springsprout.m31.domain;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable {
 	private int id;
 
 	private String name;

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 import org.springframework.stereotype.Repository;
 import springsprout.m31.domain.Member;
-import springsprout.m31.domain.Role;
 
 import javax.annotation.PostConstruct;
 
@@ -27,14 +26,18 @@ public class MemberRepository extends SqlMapClientDaoSupport{
 	}
 
     public Member getMemberByEmail(String email){
-        return (Member)getSqlMapClientTemplate().queryForObject("member.getMemberByEmail", email);
+        return getMemberRoles((Member)getSqlMapClientTemplate().queryForObject("member.getMemberByEmail", email));
     }
 
     public Member getMemberById(Integer id) {
-        return (Member)getSqlMapClientTemplate().queryForObject("member.getMemberById", id);
+        return getMemberRoles((Member)getSqlMapClientTemplate().queryForObject("member.getMemberById", id));
     }
+    public Member getMemberRoles(Member member){
+        if(member == null) {
+            return member;
+        }
+        member.setRoles(getSqlMapClientTemplate().queryForList("member.getMemberRoles",member.getId()));
+        return member;
 
-    public Role getAdminRole() {
-        return (Role)getSqlMapClientTemplate().queryForObject("member.getAdminRole");
     }
 }

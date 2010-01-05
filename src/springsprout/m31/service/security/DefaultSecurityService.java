@@ -40,11 +40,29 @@ public class DefaultSecurityService implements SecurityService {
 	}
 
 	public boolean isAdmin() {
-		Role adminRole = memberRepository.getAdminRole();
-		return getCurrentMember().hasRole(adminRole);
+        if (hasRole("ADMIN")) return true;
+		return false;
 	}
 
-	public boolean isCurrentUserOrAdmin(int id) {
+    public boolean isGuest() {
+        if (hasRole("GUEST")) return true;
+        return false;
+    }
+    /**
+     * role을 가지고 있는지... 확인한다.
+     * @param roleName
+     * @return
+     */
+    private boolean hasRole(String roleName) {
+        for(Role role :getCurrentMember().getRoles()){
+            if(roleName.equals(role.getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCurrentUserOrAdmin(int id) {
 		if(!isCurrentMembersInfo(id) && !isAdmin())
 			throw new AccessDeniedException("다른 회원의 정보에 접근을 시도할 경우 계정이 차단 됩니다.");
 		return true;

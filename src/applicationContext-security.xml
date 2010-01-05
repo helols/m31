@@ -9,10 +9,10 @@
     <http>
 
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<form-login login-page="/desktop/view"
+		<form-login login-page="/app/main/index"
 			authentication-success-handler-ref="authenticationSuccessSuppotAJAXHandler"
 			authentication-failure-handler-ref="simpleUrlAuthenticationFailureHandler"/>
-		<logout logout-success-url="/desktop/view" />
+		<logout logout-success-url="/app/main/index" />
 		<remember-me />
 		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
 	</http>
@@ -23,12 +23,12 @@
     <!-- AJAX Login Setting -->
 	<beans:bean id="authenticationSuccessSuppotAJAXHandler" class="springsprout.m31.service.security.AuthenticationSuccessSuppotAJAXHandler">
 		<beans:property name="ajaxHeaderName" value="AJAX"/>
-		<beans:property name="defaultTargetUrl" value="/login/loginSuccessProcess"/>
+		<beans:property name="defaultTargetUrl" value="/app/main/loginSuccessProcess"/>
 	</beans:bean>
 
 	<beans:bean id="simpleUrlAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
 		<beans:property name="useForward" value="true"/>
-		<beans:property name="defaultFailureUrl" value="/login/loginFailProcess"/>
+		<beans:property name="defaultFailureUrl" value="/app/main/loginFailProcess"/>
 	</beans:bean>
 
 	<!-- Authentication Provider Setting -->
