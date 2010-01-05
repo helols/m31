@@ -35,7 +35,16 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                      options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
                  }
              }
-         });
+        });
+
+        this.thumbnailtpl = new Ext.XTemplate(
+		    '<tpl for=".">',
+            '<div class="thumb-wrap">',
+		    '<div class="thumb"><img src=""></div>',
+		    '<span>{title}</span></div>',
+            '</tpl>',
+            '<div class="x-clear"></div>'
+	    );
 
          // 동영상 검색 부분
          this.serchePanel = new Ext.Panel({
@@ -44,6 +53,28 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
              items: [{
                  region : 'center',
+
+                 items : {
+                     xtype : 'panel',
+                     layout : 'fit',
+                     id : 'dddasfsadf',
+                     autoHeight:true,
+                     items : {
+                        xtype : 'dataview',
+                        id : 'asdfasdfasdfa',
+                        store: this.ds,
+                        tpl: this.thumbnailtpl,
+                        multiSelect: true,
+
+                        autoHeight:true,
+                        overClass:'x-view-over',
+                        itemSelector:'div.thumb-wrap',
+                        emptyText: 'No images to display',
+
+                        prepareData: function(data) {console.log(data)}
+                    }
+                 },
+
                  tbar : [
                      //  검색 콤보 박스
                      {
