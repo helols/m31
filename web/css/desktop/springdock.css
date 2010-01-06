@@ -20,6 +20,7 @@
 	-moz-border-radius-bottomright:5px;
 	-webkit-border-bottom-left-radius:5px;
 	-webkit-border-bottom-right-radius:5px;
+    padding:0 10px;
 }
 span.m31-springdock-item {
 	display: block;

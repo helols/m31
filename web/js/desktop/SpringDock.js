@@ -119,7 +119,7 @@ M31.dt.SpringDockContainer = Ext.extend(Ext.BoxComponent, {
                     extraWidth = _self.itemMaxWidth * distance / _self.proximity;
                     item.el.setStyle({
                         width: _self.itemWidth + extraWidth + 'px',
-                        left:  (_self.itemWidthEdge * idx) + toAdd + 'px'
+                        left:  (_self.itemWidthEdge * idx)+10+ + toAdd + 'px'
                     });
                     toAdd += extraWidth;
                 });
@@ -131,7 +131,7 @@ M31.dt.SpringDockContainer = Ext.extend(Ext.BoxComponent, {
                 function(item, idx) {
                     item.el.setStyle({
                         width: _self.itemWidth + 'px',
-                        left:_self.itemWidthEdge * idx + 'px'
+                        left:_self.itemWidthEdge * idx +10+ 'px'
                     });
                 });
     }
