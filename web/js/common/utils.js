@@ -84,21 +84,52 @@ m31.util = {
         return {x:x, y:y};
     },
 
-    loading : function(opt){
-        var imgRoot = opt.imgRoot || '../../../images';
+    /**
+     * 로딩 layer 띄우기.
+     * 첫번째 인자로 ... 에니메이션 및 투명화 옵션..
+     * ex ) m31.util.loading(true);
+     * @param anime  default : false
+     */
+    loading : function(anime){
+        var anime = anime || false;
         var loadingHtml = [ ' <div id="loading-mask"></div> '
                             , '     <div id="loading"> '
                             , '         <div class="loading-messge"> '
-                            , '             <img class="loading-img" src="'+imgRoot+'/loading-logo.png"/><br/>'
+                            , '             <img class="loading-img" src="../../../images/loading-logo.png"/><br/>'
                             , '            Loading...<br/>'
-                            , '             <img class="loader-img" src="'+imgRoot+'/ajax-loader.gif" align="absmiddle"/>'
+                            , '             <img class="loader-img" src="../../../images/ajax-loader.gif" align="absmiddle"/>'
                             , '         </div>'
                             , '</div>' ].join('');
-//        var el =  Ext.getBody().insertHtml('afterBegin', loadingHtml);
-        var el = Ext.DomHelper.append(Ext.getBody(), loadingHtml, true)
-                .prev('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .5, from: 1}})
-                .next('#loading').setVisible(true,true);
-        console.log(el)
+        var el = Ext.DomHelper.append(Ext.fly('tdiv'), loadingHtml, true);
+        if(anime){
+                el.prev('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .6, from: .11}})
+                  .next('#loading').setVisible(true,true);
+        }else{
+            el.prev('#loading-mask').setVisible(true)
+               .next('#loading').setVisible(true,true);
+        }
+    },
+
+    /**
+     * 로딩이미지 제거 ..
+     * @param anime_time 삭제 시간 제어. 기본 250 ms  
+     */
+    loading_remove: function(anime_time){
+        setTimeout(function(){
+            Ext.get('loading').remove();
+            Ext.get('loading-mask').fadeOut({remove:true});
+        }, anime_time||250);
+    },
+
+    /**
+     * gritter 옵션과 동일.. 다만  이미지는 무조건 .. logo로 ..
+     * @param opt gritter 옵션 참조. http://boedesign.com/blog/2009/07/11/growl-for-jquery-gritter/
+     */
+    notification : function(opt){
+        opt.title = opt.title||'Notification...';
+        opt.text = opt.text||'';
+        opt.image = '../../../../../images/plugin/notication-logo.png';
+        $.gritter.add(opt);
     }
 };
 

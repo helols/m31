@@ -30,6 +30,7 @@
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
 
+    <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js"/>"></script>
@@ -42,7 +43,6 @@
 
     <script type="text/javascript">
         M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
-        
         ZeroClipboard.setMoviePath( '/js/plugin/ZeroClipboard.swf' );
     </script>
     <!-- Miracle -->
@@ -55,6 +55,7 @@
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>
 </head>
 <body id="body" scroll="no">
+<div id="tdiv"></div>
 <%--<div id="loading-mask"></div>--%>
 <%--<div id="loading">--%>
 <%--<div class="loading-messge">--%>

@@ -247,24 +247,27 @@ movingbox = function() {
         Ext.fly(this).update('&nbsp;');
     };
 
+    var loading_remove = function(){
+        m31.util.loading_remove(500);
+    };
     var signin = function(e, t) {
-        var tEl = Ext.fly(this);
-        m31.util.loading({imgRoot:'../../images'});
-        Ext.Ajax.request({
-            method:'POST',
-            url: '/j_spring_security_check',
-            params: {
-                j_username: tEl.parent().down("input.j_username").getValue(),
-                j_password: tEl.prev('input.j_password').getValue()
-            },
-            success: function(response, opts) {
-
-//                window.location.href="/desktop/view";
-            },
-            failure: function(response, opts) {
-                console.log('server-side failure with status code ' + response.status);
-            }
-        });
+        m31.util.notification({title:'signin...',text:'Test'});
+//        var tEl = Ext.get(this);
+//        m31.util.loading('../../images',true);
+//        Ext.Ajax.request({
+//            method:'POST',
+//            url: '/j_spring_security_check',
+//            params: {
+//                j_username: tEl.parent().down("input.j_username").getValue(),
+//                j_password: tEl.prev('input.j_password').getValue()
+//            },
+//            success: function(response, opts) {
+////                window.location.href="/desktop/view";
+//            },
+//            failure: function(response, opts) {
+//                loading_remove();
+//            }
+//        });
     };
     return {
         init: function() {
@@ -275,6 +278,7 @@ movingbox = function() {
                 spot.show(NEW)
             });
             Ext.EventManager.onWindowResize(movingbox.layout, this);
+            m31.util.loading_remove(500);
 
         },
         layout : function() {

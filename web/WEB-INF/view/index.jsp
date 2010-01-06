@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/common.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/main.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/framework/plugin/gritter.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>"/>
     <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
@@ -21,13 +22,16 @@
     <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/Spotlight.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/application/movingboxes.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
     <!-- ENDLIBS -->
 
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
 </head>
 <body id="body">
+<div id="tdiv"></div>
 <script type="text/javascript">
+    m31.util.loading();
     Ext.onReady(function() {
         var user = Ext.util.Cookies.get("springsprout");
         var users = [];
@@ -40,11 +44,6 @@
         //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
         //http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256
         movingbox.init();
-
-//                setTimeout(function(){
-//                        Ext.get('loading').remove();
-//                        Ext.get('loading-mask').fadeOut({remove:true});
-//                    }, 500);
     });
 </script>
 <div id="slider">
