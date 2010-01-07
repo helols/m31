@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import springsprout.m31.module.app.me2day.entity.AuthenticationInfo;
 import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
 import springsprout.m31.module.app.me2day.entity.Author;
 import springsprout.m31.module.app.me2day.entity.Comment;
 import springsprout.m31.module.app.me2day.entity.Flickr;
 import springsprout.m31.module.app.me2day.entity.Location;
+import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 import springsprout.m31.module.app.me2day.entity.Metoo;
 import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
@@ -99,10 +99,10 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException 
 	 */
-	public AuthenticationInfo getAuthenticationInfo(SpringMe2DayDTO me2DayDTO) throws Me2DayApiRequestException {
-		return (AuthenticationInfo) convertDocumentToBean(
+	public Me2DayUserInfo getAuthenticationInfo(SpringMe2DayDTO me2DayDTO) throws Me2DayApiRequestException {
+		return (Me2DayUserInfo) convertDocumentToBean(
 				requestMe2Day(createMe2DayRequestUrl(me2dayapi_get_full_auth_token) + "&token=" + me2DayDTO.getAuthToken()), 
-				AuthenticationInfo.class);
+				Me2DayUserInfo.class);
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException 
 	 */
-	public List<Post> getPosts(PostSearchParam param, AuthenticationInfo info) throws Me2DayApiRequestException{
+	public List<Post> getPosts(PostSearchParam param, Me2DayUserInfo info) throws Me2DayApiRequestException{
 		ArrayList<Post> posts = new ArrayList<Post>();
 		
 		String requestUrl = "";
@@ -125,12 +125,12 @@ public class SpringMe2DayApiService {
 			ArrayList<String> requestUrlList = new ArrayList<String>();
 			
 			// 내글 볼꺼야?
-			if(param.isMyPostView()){
+			if("Y".equals(param.getMyPostView())){
 				requestUrlList.add(String.format(requestUrl, param.getId()));	
 			}
 
 			// 친구글도 같이 볼것인가?
-			if(param.isFriendPostView()){
+			if("Y".equals(param.getFriendPostView())){
 				requestUrlList.add(String.format(requestUrl, param.getId()) + "&scope=friend[all]");
 				
 				//List<Person> friends = getFriends(param.getId());
@@ -151,7 +151,7 @@ public class SpringMe2DayApiService {
 		
 		if(!CollectionUtils.isEmpty(posts)){
 			// 덧글 가져오기
-			if(param.isCommentView()){
+			if("Y".equals(param.getCommentView())){
 				requestUrl = createMe2DayRequestUrl(me2dayapi_get_comments) + "&post_id=%s";
 				for(Post post : posts){
 					if(post.getCommentsCount() > 0){
@@ -244,7 +244,7 @@ public class SpringMe2DayApiService {
 	 * @throws Me2DayApiRequestException 
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Comment> getRequestComments(String requestUrl, AuthenticationInfo info) throws Me2DayApiRequestException {
+	public List<Comment> getRequestComments(String requestUrl, Me2DayUserInfo info) throws Me2DayApiRequestException {
 		List<Element> elements = requestMe2Day(requestUrl).detachRootElement().getChildren("comment");
 		if(!CollectionUtils.isEmpty(elements)){
 			List<Comment> comments = new ArrayList<Comment>();
@@ -384,7 +384,7 @@ public class SpringMe2DayApiService {
 	 * @param info
 	 * @return
 	 */
-	public boolean noop(AuthenticationInfo info){
+	public boolean noop(Me2DayUserInfo info){
 		try {
 			requestMe2Day(createMe2DayRequestUrl(me2dayapi_noop, info));
 			return false;
@@ -400,7 +400,7 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException
 	 */
-	public Post createPost(PostDTO postDto, AuthenticationInfo info) throws Me2DayApiRequestException {
+	public Post createPost(PostDTO postDto, Me2DayUserInfo info) throws Me2DayApiRequestException {
 		if(!StringUtils.hasText(postDto.getBody())){
 			throw new Me2DayApiRequestException(-1, "springme2day_postsend_body_blank");
 		}
@@ -449,7 +449,7 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException
 	 */
-	public boolean createComment(CommentDTO commentDTO, AuthenticationInfo info) throws Me2DayApiRequestException {
+	public boolean createComment(CommentDTO commentDTO, Me2DayUserInfo info) throws Me2DayApiRequestException {
 		if(!StringUtils.hasText(commentDTO.getBody())){
 			throw new Me2DayApiRequestException(-1, "springme2day_commentsend_body_blank");
 		}
@@ -480,7 +480,7 @@ public class SpringMe2DayApiService {
 	 * @return
 	 * @throws Me2DayApiRequestException
 	 */
-	public boolean deleteComment(String comment_id, AuthenticationInfo info) throws Me2DayApiRequestException {
+	public boolean deleteComment(String comment_id, Me2DayUserInfo info) throws Me2DayApiRequestException {
 		if(!StringUtils.hasText(comment_id)){
 			throw new Me2DayApiRequestException(-1, "삭제할 덧글 아이디가 올바르지 않습니다.");
 		}
@@ -516,7 +516,7 @@ public class SpringMe2DayApiService {
 	 * @param info
 	 * @return
 	 */
-	private String createMe2DayRequestUrl(String url, AuthenticationInfo info){
+	private String createMe2DayRequestUrl(String url, Me2DayUserInfo info){
 		if(StringUtils.hasText(url)){
 			url += "." + responseType.name();
 			url += "?akey=" + me2DayApplicationKey;

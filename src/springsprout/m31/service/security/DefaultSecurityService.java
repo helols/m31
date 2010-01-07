@@ -6,16 +6,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import springsprout.m31.domain.Member;
 import springsprout.m31.domain.Role;
+import springsprout.m31.module.app.me2day.SpringMe2DayRepository;
+import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 import springsprout.m31.module.member.MemberRepository;
 
 @Service
 @Transactional
 public class DefaultSecurityService implements SecurityService {
 
-	@Autowired
-    MemberRepository memberRepository;
+	@Autowired MemberRepository memberRepository;
+	
+	@Autowired SpringMe2DayRepository me2DayRepository;
 
 	public Member getCurrentMember() {
 		if(SecurityContextHolder.getContext().getAuthentication() == null)
@@ -81,5 +85,27 @@ public class DefaultSecurityService implements SecurityService {
 		public boolean isAnonymous() {
 			return true;
 		}
+	}
+
+	public Me2DayUserInfo getCurrentMemberMe2DayUserInfo() {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			return ((SpringSproutUserDetail) princial).getMe2DayUserInfo();
+		}
+		return null;
+	}
+
+	@Override
+	public Me2DayUserInfo getPersistentMemberMe2DayUserInfo() {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			((SpringSproutUserDetail) princial).setMe2DayUserInfo(
+					me2DayRepository.getMe2DayUserInfoByMemberId(getCurrentMemberId())
+			);
+			return ((SpringSproutUserDetail) princial).getMe2DayUserInfo();
+		}
+		return null;
 	}
 }

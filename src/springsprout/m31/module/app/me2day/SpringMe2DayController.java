@@ -12,15 +12,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import springsprout.m31.module.app.me2day.entity.AuthenticationInfo;
 import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
+import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
 import springsprout.m31.module.app.me2day.support.CommentDTO;
 import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
+import springsprout.m31.module.app.me2day.support.Me2DayUserInfoDTO;
 import springsprout.m31.module.app.me2day.support.PostDTO;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
 import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
+import springsprout.m31.service.security.SecurityService;
 
 @Controller
 @RequestMapping(value="/app/me2day/*")
@@ -29,6 +31,8 @@ public class SpringMe2DayController {
 	private final String SpringMe2DayUserSession = "springMe2DayUserSession";
 	
 	@Autowired SpringMe2DayApiService me2DayApiService;
+	@Autowired SpringMe2DayService me2DayService;
+	@Autowired SecurityService securityService;
 
 	/**
 	 * 봄미투데이 초기화
@@ -45,26 +49,26 @@ public class SpringMe2DayController {
 		
 		boolean state = false;
 		AuthenticationUrl authenticationUrl = null;
-		AuthenticationInfo authenticationInfo = null;
+		Me2DayUserInfo userInfo = null;
 		Person person = null;
 		
 		// 테스트를 위해서 무조건 arawn 의 인증정보를 저장해둔다. 
-		if(httpSession.getAttribute(SpringMe2DayUserSession) == null){
-			AuthenticationInfo info = new AuthenticationInfo();
+		/*if(httpSession.getAttribute(SpringMe2DayUserSession) == null){
+			Me2DayUserInfo info = new Me2DayUserInfo();
 			info.setUser_id("arawn");
 			info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
 			httpSession.setAttribute(SpringMe2DayUserSession, info);
-		}
+		}*/
 		
-		authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
-		if(authenticationInfo == null){
+		userInfo = securityService.getPersistentMemberMe2DayUserInfo();
+		if(userInfo == null){
 			authenticationUrl = me2DayApiService.getAuthenticationUrl();
 		}
 		else{
 			// 미투데이 인증 확인
-			if(me2DayApiService.noop(authenticationInfo)){
+			if(me2DayApiService.noop(userInfo)){
 				state = true;
-				person = me2DayApiService.getPerson(authenticationInfo.getUser_id());
+				person = me2DayApiService.getPerson(userInfo.getUser_id());
 			}
 			else{
 				// 인증실패시 미투데이로부터 인증요청주소를 얻어온다.
@@ -74,7 +78,7 @@ public class SpringMe2DayController {
 		
 		mav.addObject("state", state);
 		mav.addObject("authenticationUrl", authenticationUrl);
-		mav.addObject("authenticationInfo", authenticationInfo);
+		mav.addObject("userInfo", userInfo);
 		mav.addObject("person", person);
 		
 		return mav;
@@ -101,11 +105,11 @@ public class SpringMe2DayController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping
-	public ModelAndView postList(PostSearchParam param, HttpSession httpSession) throws Me2DayApiRequestException {
+	public ModelAndView postList(PostSearchParam param) throws Me2DayApiRequestException {
 		List<Post> postList = Collections.EMPTY_LIST;
-		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
-		if(authenticationInfo != null){
-			postList = me2DayApiService.getPosts(param, authenticationInfo);
+		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
+		if(userInfo != null){
+			postList = me2DayApiService.getPosts(param, userInfo);
 		}
 		return new ModelAndView(JSON_VIEW).addObject(postList);
 	}
@@ -119,13 +123,13 @@ public class SpringMe2DayController {
 	@RequestMapping
 	public ModelAndView postSend(PostDTO postDTO, HttpSession httpSession) {
 		String msg = "";
-		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
-		if(authenticationInfo == null){
+		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
+		if(userInfo == null){
 			msg = "springme2day_not_login";
 		}
 		else{
 			try{
-				me2DayApiService.createPost(postDTO, authenticationInfo);
+				me2DayApiService.createPost(postDTO, userInfo);
 				msg = "springme2day_postsend_success";
 			}
 			catch (Me2DayApiRequestException e) {
@@ -144,13 +148,13 @@ public class SpringMe2DayController {
 	@RequestMapping
 	public ModelAndView commentSend(CommentDTO commentDTO, HttpSession httpSession){
 		String msg = "";
-		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
-		if(authenticationInfo == null){
+		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
+		if(userInfo == null){
 			msg = "springme2day_not_login";
 		}
 		else{
 			try{
-				me2DayApiService.createComment(commentDTO, authenticationInfo);
+				me2DayApiService.createComment(commentDTO, userInfo);
 				msg = "springme2day_commentsend_success";
 			}
 			catch (Me2DayApiRequestException e) {
@@ -169,13 +173,13 @@ public class SpringMe2DayController {
 	@RequestMapping
 	public ModelAndView commentDelete(CommentDTO commentDTO, HttpSession httpSession){
 		String msg = "";
-		AuthenticationInfo authenticationInfo = (AuthenticationInfo) httpSession.getAttribute(SpringMe2DayUserSession);
-		if(authenticationInfo == null){
+		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
+		if(userInfo == null){
 			msg = "springme2day_not_login";
 		}
 		else{
 			try{
-				me2DayApiService.deleteComment(commentDTO.getCommentId(), authenticationInfo);
+				me2DayApiService.deleteComment(commentDTO.getCommentId(), userInfo);
 				msg = "springme2day_commentdelete_success";
 			}
 			catch (Me2DayApiRequestException e) {
@@ -183,6 +187,22 @@ public class SpringMe2DayController {
 			}
 		}
 		return new ModelAndView(JSON_VIEW).addObject("msg", msg);
+	}
+	
+	@RequestMapping
+	public ModelAndView configSave(Me2DayUserInfoDTO infoDTO){
+		String msg = "";
+		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
+		if(userInfo == null){
+			msg = "springme2day_not_login";
+		}
+		else{
+			infoDTO.setMember_id(userInfo.getMember_id());
+			userInfo = me2DayService.updateUserInfo(infoDTO);
+			
+			msg = "springme2day_configsave_success";
+		}
+		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg).addObject("userInfo", userInfo);
 	}
 	
 }

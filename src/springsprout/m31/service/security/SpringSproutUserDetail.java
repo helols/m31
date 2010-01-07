@@ -1,18 +1,21 @@
 package springsprout.m31.service.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import springsprout.m31.domain.Member;
 import springsprout.m31.domain.Role;
-
-import java.util.ArrayList;
-import java.util.List;
+import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 
 @SuppressWarnings("serial")
 public class SpringSproutUserDetail implements UserDetails {
 	
 	private Member member;
+	private Me2DayUserInfo me2DayUserInfo;
 	private List<GrantedAuthority> authorities;
 
 	public SpringSproutUserDetail(Member member) {
@@ -58,6 +61,13 @@ public class SpringSproutUserDetail implements UserDetails {
 
 	public Member getMember() {
 		return member;
+	}
+
+	public Me2DayUserInfo getMe2DayUserInfo() {
+		return me2DayUserInfo;
+	}
+	public void setMe2DayUserInfo(Me2DayUserInfo me2DayUserInfo) {
+		this.me2DayUserInfo = me2DayUserInfo;
 	}
 
 }

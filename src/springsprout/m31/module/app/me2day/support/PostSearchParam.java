@@ -68,30 +68,30 @@ public class PostSearchParam {
 	}
 
 	/** 내글 볼거야? */
-	private boolean myPostView;
-	public boolean isMyPostView() {
+	private String myPostView;
+	public String getMyPostView() {
 		return myPostView;
 	}
-	public void setMyPostView(boolean myPostView) {
+	public void setMyPostView(String myPostView) {
 		this.myPostView = myPostView;
 	}
 
 	/** 친구글도 같이 볼것인가? */
-	private boolean friendPostView;
-	public boolean isFriendPostView() {
+	private String friendPostView;
+	public String getFriendPostView() {
 		return friendPostView;
 	}
-	public void setFriendPostView(boolean friendPostView) {
+	public void setFriendPostView(String friendPostView) {
 		this.friendPostView = friendPostView;
 	}
 
 	/** 덧글도 같이 볼것인가? */
-	private boolean commentView;
-	public boolean isCommentView() {
+	private String commentView;
+	public String getCommentView() {
 		return commentView;
 	}
-	public void setCommentView(boolean commentsView) {
-		this.commentView = commentsView;
+	public void setCommentView(String commentView) {
+		this.commentView = commentView;
 	}
 
 	/** 글에 미투한 사람도 같이 볼것인가? */

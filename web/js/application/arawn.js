@@ -72,6 +72,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		id: 'springme2day-win',
     		width:500,
 	        height:300,
+	        minWidth: 400,
+            minHeight: 200,
 	        layout:'fit',
 	        constrainHeader:true,
 	        closeAction: 'close',
@@ -113,14 +115,17 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    		if(result.state){
 	    			// 사용자 정보
 	    			this.userInfo = {
-	    				id: result.authenticationInfo.user_id
+	    				id: result.userInfo.user_id
 	    			};
+	    			console.log(result.userInfo);
 	    			// 사용자 환경설정
 	    			this.userConfig = {
-	    				myPostView: true,
-	    				friendPostView: true,
-	    				commentView: true
+	    				myPostView: result.userInfo.myPostView,
+	    				friendPostView: result.userInfo.friendPostView,
+	    				commentView: result.userInfo.commentView
 	    			};
+	    			console.log(this.userConfig);
+	    			
 	    	        this.me2DayModule.createIconStore().loadData(result.person.postIcons, false);
 	    		}
 	    		else{
@@ -243,14 +248,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     				this.loadMask.hide();
     			}
     		}
-    		
-        	/*Ext.MessageBox.show({
-        		title:'봄미투데이 로그인...',
-        		msg: '미투데이 인증 절차를 마치셨습니까?',
-        		buttons: Ext.Msg.YESNO,
-        		fn: this.loginModule.springMe2DayLoginProcess.createDelegate(this),
-        		icon: Ext.MessageBox.QUESTION
-        	});*/
     	},
     	/* 미투데이 로그인 후 봄미투데이 인증 ajax 콜백함수 */
     	me2DayAuthenticationSuccess: function(response, opts){
@@ -297,9 +294,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		}
     		else{
     			url += '?id=' + config.userId;
-    			if(config.myPostView){ url += '&myPostView=true'; }
-    			if(config.friendPostView){ url += '&friendPostView=true'; }
-    			if(config.commentView){ url += '&commentView=true'; }
+    			url += '&myPostView=' + config.myPostView;
+    			url += '&friendPostView=' + config.friendPostView;
+    			url += '&commentView=' + config.commentView;
     		}
     		
     		console.log('me2DayModule.get_posts() : ' + url);
@@ -451,8 +448,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		            	invalidText: '아이콘을 선택해주세요.',
 		            	validator: function(value){ return value != '' ? true : false; },
 		            	listeners:{
-	            			render: function(sender){ sender.setValue(1); },
-		            		change: function(sender, n, o){ console.log(n); }
+	            			render: function(sender){ sender.setValue(1); }
 	            		}
 	            	},{
 	            		xtype: 'button',
@@ -460,7 +456,12 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		anchor:'100%',
 	            		text: '전송',
 	            		style: { marginTop: '2px' },
-	            		handler: this.postSend.createDelegate(app)
+	            		handler: function(sender, event){
+	            			this.postFormPanel.getForm().submit({
+	                			url:'/app/me2day/postSend', 
+	                			waitMsg:'미투데이에 글을 전송 중 입니다.'
+	                		});
+	            		}.createDelegate(this)
 		            }]
 	            })],
 	            listeners: {
@@ -608,17 +609,23 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            loadMask: {msg:'글을 불러오는 중 입니다.'},
 	            plugins: expander,
 				tbar: ['->',{
-					xtype: 'button',
-					text: '새로고침',
-					handler: function(sender, event){
-							this.me2DayModule.postStore.proxy.setUrl(this.me2DayModule.get_posts(
-				        			Ext.apply({userId:this.userInfo.id}, this.userConfig)));
-				        	this.me2DayModule.postStore.load();
-						}.createDelegate(app)
+						xtype: 'button',
+						text: '새로고침',
+						handler: function(sender, event){
+								this.me2DayModule.postStore.proxy.setUrl(
+									this.me2DayModule.get_posts(
+										Ext.apply({userId:this.userInfo.id}, this.userConfig)));
+					        	this.me2DayModule.postStore.load();
+							}.createDelegate(app)
 					},'-',{
 		            	xtype: 'button',
-		            	text: '필터설정',
-		            	handler: this.postListFilter.createDelegate(app)
+		            	text: '설정',
+		            	handler: this.configPopup.createDelegate(app)
+		            },'-',{
+		            	xtype: 'button',
+		            	text: '친구관리',
+		            	handler: this.friendManagementPopup.createDelegate(app),
+		            	hidden: true
 		            }
 				],
 				listeners: {
@@ -703,97 +710,163 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		
         	return this.postPanel;
     	},
-    	/** 글쓰기 */
-        postSend: function(sender, event){
-        	// 전송
-    		this.me2DayModule.postFormPanel.getForm().submit({
-    			url:'/app/me2day/postSend', 
-    			waitMsg:'미투데이에 글을 전송 중 입니다.'
-    		});
-        },
-        /** 새로고침 : 버튼이벤트 */
-        postListRefrash: function(sender, event){
-        	this.me2DayModule.postStore.proxy.setUrl(this.me2DayModule.get_posts(
-        			Ext.apply({userId:this.userInfo.id}, this.userConfig)));
-        	this.me2DayModule.postStore.load();
-        },
-        /** 필터설정 버튼 */
-        postListFilter: function(sender, event){
-        	var dlg = new Ext.Window({
-        		id: 'springme2day-filterconfig-panel',
-                // autoCreate : true,
-                title:'필터설정',
-                // 설정창은 모달로!
+        /** 친구관리 버튼 */
+        friendManagementPopup: function(sender, event){
+    		this.dialogue = new Ext.Window({
+    			id: 'springme2day-friend-dlg',
+    			title:'친구관리',
+                // 모달로!
                 modal: true,
-                // 설정창이 봄미투데이 밖으로 못빠져 나가게 막아라
+                // 창이 봄미투데이 밖으로 못빠져 나가게 막아라
                 constrain:true,
                 // 크기 조절은 없다!
                 resizable:false,
-                // constrainHeader:true,
                 // 최소화, 최대화, 닫기 버튼은 없다!
                 minimizable : false,
                 maximizable : false,
                 closable:false,
-                // buttonAlign:"center",
-                width:300,
-                height:200,
-                bodyStyle: 'padding:3px;',
-                items:[new Ext.FormPanel({
-                	id: 'springme2day-filter-form-panel',
+                width: this.win.width - 40,
+                height: this.win.height - 100,
+                layout: 'fit',
+                items:[{
+                	xtype: 'form',
+                	id: 'springme2day-friend-dlg-form',
                 	header: false,
-                    border: false,
-                    items:[{
-                    	 xtype: 'fieldset',
-                         title: '모아보는 설정',
-                         autoHeight: true,
-                         layout: 'form',
-                         items: [{
-                             xtype: 'checkboxgroup',
-                             hideLabel: true,
-                             columns: 3,
-                             items: [
-                                 {boxLabel: '나는', name: 'myPostView', checked: true},
-                                 {boxLabel: '모는 친구', name: 'friendPostView', checked: true},
-                                 {boxLabel: '댓글', name: 'commentView', checked: true}
-                             ]
-                         }]                         
+                	layout: 'fit',
+                	waitMsgTarget: true,
+                    buttonAlign: 'center',
+                    buttons:[{
+                    	xtype:'button',
+                    	text: '닫기',
+                    	handler: function(sender, event){
+                    		this.dialogue.destroy();
+                    	}.createDelegate(this)
                     }]
-                })],
-				tbar: [{
-					xtype: 'button',
-					text: '적용',
-					handler : this.me2DayModule.postListFilterCommand.createDelegate(this)
-					},'-',{
-		            	xtype: 'button',
-		            	text: '닫기',
-		            	handler: this.me2DayModule.postListFilterCommand.createDelegate(this)
-		            }
-				]
+                }]
             });
-            dlg.render(this.win.body);
-            dlg.show();
-        },
-        postListFilterCommand: function(sender, event){
-        	if(sender.text == '적용'){
-        		var values = Ext.getCmp('springme2day-filter-form-panel').getForm().getValues();
-        		
-        		this.userConfig.myPostView = values["myPostView"] == 'on' ? true : false;
-        		this.userConfig.friendPostView = values["friendPostView"] == 'on' ? true : false;
-        		this.userConfig.commentView = values["commentView"] == 'on' ? true : false;
-        		
-        		this.me2DayModule.postStore.proxy.setUrl(this.me2DayModule.get_posts(
-            			Ext.apply({userId:this.userInfo.id}, this.userConfig)));
-            	this.me2DayModule.postStore.load();
-        	}
-			
-			// 설정 패널 파괴
-			Ext.getCmp('springme2day-filterconfig-panel').destroy();
-        },
-        postListFilterCancle: function(sender, event){
-        	this.loadMask.hide();
+        	// 친구관리 폼 전송 후 발생되는 이벤트 처리 정의
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
+        		// 성공적으로 폼 전송이 끝났을때...
+        		'actioncomplete',
+    			function(form, action){
+    				this.destroy();
+    			},
+    			this.dialogue);
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
+        		// 폼 전송 중 오류가 발생했을때...
+    			'actionfailed',
+    			function(form, action){},
+    			this.dialogue);
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
+        		// 폼 전송 전...
+    			'beforeaction',
+    			function(form, action){ if(!form.isValid()) return false; },
+    			this.dialogue);
+        	this.dialogue.render(win.body);
+        	this.dialogue.show();    		
+        },    	
+        /** 설정 팝업 */
+        configPopup: function(sender, event){
+        	this.dialogue = new Ext.Window({
+    			id: 'springme2day-filterconfig-dlg',
+    			title:'필터설정',
+                // 모달로!
+                modal: true,
+                // 창이 봄미투데이 밖으로 못빠져 나가게 막아라
+                constrain:true,
+                // 크기 조절은 없다!
+                resizable:false,
+                // 최소화, 최대화, 닫기 버튼은 없다!
+                minimizable : false,
+                maximizable : false,
+                closable:false,
+                width: 300,
+                height: 150,
+                layout: 'fit',
+                items:[{
+                	xtype: 'form',
+                	id: 'springme2day-filterconfig-dlg-form',
+                	header: false,
+                	layout: 'fit',
+                	waitMsgTarget: true,
+                    buttonAlign: 'center',
+                    buttons:[{
+                    	xtype:'button',
+                    	text: '적용',
+                    	handler: function(sender, event){
+                    		this.dialogue.get('springme2day-filterconfig-dlg-form').getForm().submit({
+                    			url:'/app/me2day/configSave', 
+                    			waitMsg:'설정을 적용 중 입니다.'
+                    		});
+                    	}.createDelegate(this)
+                    },{
+                    	xtype:'button',
+                    	text: '취소',
+                    	handler: function(sender, event){
+                    		this.dialogue.destroy();
+                    	}.createDelegate(this)
+                    }],
+                    bodyStyle: 'padding: 3px;',
+                    items:[{
+	                   	 xtype: 'fieldset',
+	                     title: '모아보는 설정',
+	                     autoHeight: true,
+	                     layout: 'form',
+	                     items: [{
+	                         xtype: 'checkboxgroup',
+	                         hideLabel: true,
+	                         columns: 3,
+	                         items: [
+	                             {boxLabel: '나는', name: 'myPostView', checked: this.userConfig.myPostView == 'Y' ? true : false},
+	                             {boxLabel: '모는 친구', name: 'friendPostView', checked: this.userConfig.friendPostView == 'Y' ? true : false},
+	                             {boxLabel: '댓글', name: 'commentView', checked: this.userConfig.commentView == 'Y' ? true : false}
+	                         ]
+	                     }]                         
+	                }]
+                }]
+            });
+        	var form = this.dialogue.get('springme2day-filterconfig-dlg-form').getForm();
+        	// 설정 폼 전송 후 발생되는 이벤트 처리 정의
+        	// 성공적으로 폼 전송이 끝났을때...
+        	form.on('actioncomplete',
+        		function(form, action){
+	        		var result = Ext.decode(action.response.responseText);
+					var msg = '';
+					if(result.msg == 'springme2day_not_login'){
+						m31.notification.msg({target:this.body,text:'로그인이 되어있지 않습니다.'});
+	    			}
+					else{
+						if(result.msg == 'springme2day_configsave_success'){
+	        				msg = '설정을 적용했습니다.';
+	        			}
+	        			else{
+	        				msg = '네트워크 장애가 발생했습니다.';
+	        			}
+	    				m31.notification.msg({target:this.body,text:msg});
+					}
+					
+					console.log(result.userInfo);
+				
+					this.userConfig.myPostView = result.userInfo.myPostView;
+	        		this.userConfig.friendPostView = result.userInfo.friendPostView;
+	        		this.userConfig.commentView = result.userInfo.commentView;
+	        		
+	        		this.me2DayModule.postStore.proxy.setUrl(
+	        			this.me2DayModule.get_posts(
+	            			Ext.apply({userId:this.userInfo.id}, this.userConfig)));
+	            	this.me2DayModule.postStore.load()
+    				this.dialogue.destroy();
+    			}, this);
+    		// 폼 전송 중 오류가 발생했을때...        	
+        	form.on('actionfailed', function(form, action){}, this.dialogue);
+        	// 폼 전송 전...
+        	form.on('beforeaction',
+    			function(form, action){ if(!form.isValid()) return false; }, this.dialogue);
+        	this.dialogue.render(this.win.body);
+        	this.dialogue.show();    		
         },
         showCommentDlg: function(win, post_id){
-        	this.commentDlg = new Ext.Window({
+        	this.dialogue = new Ext.Window({
         		id: 'springme2day-comment-dlg',
                 title:'댓글 쓰기',
                 // 모달로!
@@ -835,7 +908,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                     	xtype:'button',
                     	text: '전송',
                     	handler: function(sender, event){
-                    		this.commentDlg.get('springme2day-comment-dlg-form').getForm().submit({
+                    		this.dialogue.get('springme2day-comment-dlg-form').getForm().submit({
                     			url:'/app/me2day/commentSend', 
                     			waitMsg:'댓글을 전송 중 입니다.'
                     		});
@@ -844,13 +917,13 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                     	xtype:'button',
                     	text: '취소',
                     	handler: function(sender, event){
-                    		this.commentDlg.destroy();
+                    		this.dialogue.destroy();
                     	}.createDelegate(this)
                     }]
                 }]
             });
         	// 댓글 폼 전송 후 발생되는 이벤트 처리 정의
-        	this.commentDlg.get('springme2day-comment-dlg-form').getForm().on(
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
         		// 성공적으로 폼 전송이 끝났을때...
         		'actioncomplete',
     			function(form, action){
@@ -876,20 +949,20 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     				}
     				this.destroy();
     			},
-    			this.commentDlg);
-        	this.commentDlg.get('springme2day-comment-dlg-form').getForm().on(
+    			this.dialogue);
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
         		// 폼 전송 중 오류가 발생했을때...
     			'actionfailed',
     			function(form, action){},
-    			this.commentDlg);
-        	this.commentDlg.get('springme2day-comment-dlg-form').getForm().on(
+    			this.dialogue);
+        	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
         		// 폼 전송 전...
     			'beforeaction',
     			function(form, action){ if(!form.isValid()) return false; },
-    			this.commentDlg);
+    			this.dialogue);
         	
-        	this.commentDlg.render(win.body);
-        	this.commentDlg.show();
+        	this.dialogue.render(win.body);
+        	this.dialogue.show();
         }
     }
 });

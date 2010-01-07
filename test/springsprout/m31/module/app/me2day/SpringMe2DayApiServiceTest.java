@@ -16,8 +16,8 @@ import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
-import springsprout.m31.module.app.me2day.entity.AuthenticationInfo;
 import springsprout.m31.module.app.me2day.entity.Comment;
+import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 import springsprout.m31.module.app.me2day.entity.Metoo;
 import springsprout.m31.module.app.me2day.entity.Person;
 import springsprout.m31.module.app.me2day.entity.Post;
@@ -49,7 +49,7 @@ public class SpringMe2DayApiServiceTest {
 	
 	public void 사용자인증테스트() throws Me2DayApiRequestException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		// b08b5e4b6ef0b86cb73729da267139a8
-		AuthenticationInfo info = new AuthenticationInfo();
+		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
 		
 		// 진짜 인증키
@@ -62,15 +62,15 @@ public class SpringMe2DayApiServiceTest {
 	}
 	
 	public void 글목록얻어오기() throws Me2DayApiRequestException {
-		AuthenticationInfo info = new AuthenticationInfo();
+		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
 		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
 		
 		PostSearchParam param = new PostSearchParam();
 		param.setId("arawn");
 		param.setForm("2009-12-31T00:00:00+0900");
-		param.setFriendPostView(true);
-		param.setCommentView(true);
+		// param.setFriendPostView(true);
+		// param.setCommentView(true);
 		// param.setPost_id("p4vln3");
 		List<Post> posts = service.getPosts(param, info);
 		if(!CollectionUtils.isEmpty(posts)){
@@ -81,7 +81,7 @@ public class SpringMe2DayApiServiceTest {
 	}
 
 	public void 댓글얻어오기() throws Me2DayApiRequestException {
-		AuthenticationInfo info = new AuthenticationInfo();
+		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
 		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
 		
@@ -140,7 +140,7 @@ public class SpringMe2DayApiServiceTest {
 	}
 	
 	public void 글쓰기테스트() throws Me2DayApiRequestException {
-		AuthenticationInfo info = new AuthenticationInfo();
+		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
 		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
 
@@ -154,7 +154,7 @@ public class SpringMe2DayApiServiceTest {
 	}
 	
 	public void 덧글쓰기테스트() throws Me2DayApiRequestException {
-		AuthenticationInfo info = new AuthenticationInfo();
+		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
 		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
 
