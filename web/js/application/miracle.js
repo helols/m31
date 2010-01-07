@@ -13,6 +13,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     },
     beforeCreate : function(){
         console.log("beforeCreate");
+
         // 스토어
          this.ds = new Ext.data.JsonStore({
              url: '/gateway/springplayer/search',
@@ -21,7 +22,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
              
              root: 'items',
 
-             fields : ['source', 'duration', 'author', 'title', 'thumbnailURL', 'playerURL'],
+             fields : ['source', 'duration', 'author', 'title', 'thumbnailURL', 'playerURL', 'htmlLink'],
 
              listeners : {
                  beforeload : function(store, options) {
@@ -32,7 +33,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         var q = textfield.getRawValue();
                         options.params['q'] = (q === null) ? '' : q;
                      }
-                     options.params['limit'] = 20;
+                     options.params['limit'] = 10;
                      options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
                  },
                  load : function(s) { console.log(s);}
@@ -41,9 +42,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
         this.thumbnailtpl = new Ext.XTemplate(
             '<tpl for="."><div class="thumb-wrap"><table>',
-            '<tr><td class="thumb" rowspan="3"><img src="{thumbnailURL}" alt="{title}"></td><td>{title}</td></tr>',
-            '<tr><td>{author}</td></tr>',
-            '<tr><td>Play / New Window / Me2Day</td></tr>',
+            '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><img class="player-icon" src="../../images/apps/springplayer/title.png"/><span>{title}</span></td></tr>',
+            '<tr><td><img class="player-icon" src="../../images/apps/springplayer/author.png"/><span>{author}</span></td></tr>',
+            '<tr><td><img class="player-icon" src="../../images/apps/springplayer/play.png"/><span>Play</span> <a href="{htmlLink}"><img class="player-icon" src="../../images/apps/springplayer/link.png"/><span>{source}</span></a> / <span>Me2Day</span></td></tr>',
             '</table></div></tpl>'
         );
 
@@ -97,7 +98,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                  ],
                  // 페이징 툴바
                  bbar: new Ext.PagingToolbar({
-                     pageSize: 20,
+                     pageSize: 10,
                      store : this.ds                     
                  })
              }, {

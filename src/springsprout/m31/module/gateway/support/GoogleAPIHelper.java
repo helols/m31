@@ -44,7 +44,7 @@ public class GoogleAPIHelper {
      */
     public static final String VIDEOS_FEED = YOUTUBE_GDATA_SERVER + "/feeds/api/videos";
 
-    private static final YouTubeService youTubeService = new YouTubeService("m31-YouTube");
+    private static final YouTubeService youTubeService = new YouTubeService("m31-youtube", "AI39si5R2quWQm8lLxiCVFmztEGZonOQAnuOFcqnAYEJi4-NYNBRC2I-xMPFUkng-nO5yjvB45tRhvnz_VKig7_Xp6AccbaxIw");
     
     private final static Logger log = LoggerFactory.getLogger(FlickrAPIHelper.class);
 
@@ -78,20 +78,16 @@ public class GoogleAPIHelper {
         try {
             YouTubeQuery query = new YouTubeQuery(new URL(VIDEOS_FEED));
 
-            // order results by the number of views (most viewed first)
             query.setOrderBy(YouTubeQuery.OrderBy.VIEW_COUNT);            
-            // do not exclude restricted content from the search results
-            query.setSafeSearch(YouTubeQuery.SafeSearch.NONE);
-
+//            query.setSafeSearch(YouTubeQuery.SafeSearch.STRICT);
             query.setStartIndex(cri.getStart()+1); // YouTube Index는 1부터 시작.
             query.setMaxResults(cri.getLimit());
-
             query.setFullTextQuery(cri.getQ());
-
             VideoFeed videoFeed = youTubeService.query(query, VideoFeed.class);
 
             //Youtube는 총 1000개까지 가능하나 1000개시 이상 동작해서 900개로 제한.
             int total = videoFeed.getTotalResults();
+            log.debug("Total result Size : {}", total);
             if(total < 900) {
                 dto.setTotal(total);
             } else {
@@ -100,31 +96,26 @@ public class GoogleAPIHelper {
             dto.setSuccess(true);
 
             List<MovieVO> list = new ArrayList<MovieVO>();
+            log.debug("videoFeed Size : {}",videoFeed.getEntries().size());
+            if(videoFeed.getNextLink() != null) {
+                log.debug("{}",videoFeed.getNextLink().getHref());
+            }
             for (VideoEntry ve : videoFeed.getEntries()) {
                 MovieVO vo = new MovieVO();
                 vo.setSource("google");
                 vo.setTitle(ve.getTitle().getPlainText());
-
+                vo.setHtmlLink(ve.getHtmlLink().getHref());
                 YouTubeMediaGroup mediaGroup = ve.getMediaGroup();
                 vo.setThumbnailURL(mediaGroup.getThumbnails().get(0).getUrl());
                 vo.setAuthor(mediaGroup.getUploader());
                 
-                boolean sw = false;
                 for(YouTubeMediaContent mediaContent : mediaGroup.getYouTubeContents()) {
                    if("application/x-shockwave-flash".equals(mediaContent.getType())) {                       
                         vo.setPlayerURL(mediaContent.getUrl());
                         vo.setDuration(mediaContent.getDuration());
-
-                        sw = true;
                         break;
                     }
                 }
-
-                // 소스가 공개되지 않은 동영상은 Web 페이지 링크만 제공하여 무시함.
-                if(sw == false) {
-                    continue;
-                }
-
                 list.add(vo);
             }
             

@@ -8,6 +8,7 @@ public class MovieVO {
     private String thumbnailURL;
     private String playerURL;
     private String author;
+    private String htmlLink;
     private int duration;
 
     public String getAuthor() {
@@ -58,6 +59,14 @@ public class MovieVO {
         this.playerURL = playerURL;
     }
 
+    public String getHtmlLink() {
+        return htmlLink;
+    }
+
+    public void setHtmlLink(String htmlLink) {
+        this.htmlLink = htmlLink;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +76,7 @@ public class MovieVO {
 
         if (duration != movieVO.duration) return false;
         if (author != null ? !author.equals(movieVO.author) : movieVO.author != null) return false;
+        if (htmlLink != null ? !htmlLink.equals(movieVO.htmlLink) : movieVO.htmlLink != null) return false;
         if (playerURL != null ? !playerURL.equals(movieVO.playerURL) : movieVO.playerURL != null) return false;
         if (source != null ? !source.equals(movieVO.source) : movieVO.source != null) return false;
         if (thumbnailURL != null ? !thumbnailURL.equals(movieVO.thumbnailURL) : movieVO.thumbnailURL != null)
@@ -83,6 +93,7 @@ public class MovieVO {
         result = 31 * result + (thumbnailURL != null ? thumbnailURL.hashCode() : 0);
         result = 31 * result + (playerURL != null ? playerURL.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (htmlLink != null ? htmlLink.hashCode() : 0);
         result = 31 * result + duration;
         return result;
     }
@@ -92,10 +103,11 @@ public class MovieVO {
         return "MovieVO{" +
                 "source='" + source + '\'' +
                 ", title='" + title + '\'' +
-                ", thumbnailURL=" + thumbnailURL +
-                ", playerURL=" + playerURL +
+                ", thumbnailURL='" + thumbnailURL + '\'' +
+                ", playerURL='" + playerURL + '\'' +
                 ", author='" + author + '\'' +
-                ", duration='" + duration + '\'' +
+                ", htmlLink='" + htmlLink + '\'' +
+                ", duration=" + duration +
                 '}';
     }
 }

@@ -100,7 +100,7 @@ public class DaumAPIHelper {
             vo.setDuration(Integer.parseInt(j.getString("playtime")));
             vo.setPlayerURL(j.getString("player_url"));
             vo.setThumbnailURL(j.getString("thumbnail"));
-
+            vo.setHtmlLink(j.getString("link"));
             list.add(vo);
         }
         
