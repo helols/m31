@@ -40,11 +40,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         });
 
         this.thumbnailtpl = new Ext.XTemplate(
-            '<tpl for="."><table>',
-            '<tr><td rowspan="3"><img src="{thumbnailURL}"></td><td>{title}</td></tr>',
+            '<tpl for="."><div class="thumb-wrap"><table>',
+            '<tr><td class="thumb" rowspan="3"><img src="{thumbnailURL}" alt="{title}"></td><td>{title}</td></tr>',
             '<tr><td>{author}</td></tr>',
             '<tr><td>Play / New Window / Me2Day</td></tr>',
-            '</table></tpl>'
+            '</table></div></tpl>'
         );
 
          // 동영상 검색 부분
@@ -60,8 +60,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     xtype : 'dataview',
                     store: this.ds,
                     tpl: this.thumbnailtpl,
-                    multiSelect: true,
-                    itemSelector:'div.thumb-wrap',
+                    overClass:'x-view-over',
+                    itemSelector: 'div.thumb-wrap',
+                    singleSelect : true,
+                    plugins: new Ext.DataView.DragSelector({dragSafe:true}),
                     emptyText: 'No images to display'
                 },
 
@@ -72,7 +74,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                          xtype: 'combo',
                          store: new Ext.data.ArrayStore({
                              fields: ['id', 'name'],
-                             data : [['google', 'Google'],['daum', 'Daum']]
+                             data : [['google', 'Youtube'],['daum', 'Daum']]
                          }),
                          typeAhead: true,
                          width: 100,

@@ -1,2 +1,31 @@
 @charset "utf-8";
 
+#springplayer-dataview .thumb{
+    background: #dddddd;
+    padding: 3px;
+}
+#springplayer-dataview .thumb img{
+    width: 120px;
+}
+#springplayer-dataview .thumb-wrap{
+    margin: 5px;
+    margin-right: 0;
+    padding: 5px;
+}
+#springplayer-dataview .thumb-wrap span{
+    display: block;
+    overflow: hidden;
+    text-align: center;
+}
+#springplayer-dataview .x-view-over{
+    background: #efefef url(../../images/apps/springsee/row-over.gif) repeat-x left top;
+}
+#springplayer-dataview .x-view-selected{
+    background: #DFEDFF;
+}
+#springplayer-dataview .x-view-selected .thumb{
+    background:transparent;
+}
+#springplayer-dataview .x-view-selected span{
+    color:#1A4D8F;
+}
