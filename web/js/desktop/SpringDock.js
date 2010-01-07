@@ -167,7 +167,7 @@ M31.dt.DockButton = function(appInfo, el) {
         renderTo: el,
         iconCls:'m31-springdock-item-img',
         buttonSelector : 'img',
-        handler : function() {
+        handler : function(t,e) {
             var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
             if (!win) {
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
@@ -190,7 +190,7 @@ M31.dt.DockButton = function(appInfo, el) {
                 win.toFront();
             }
         },
-        clickEvent:'mousedown',
+        clickEvent:'click',
         template : new Ext.Template(
                 '<span id="{0}" class="m31-springdock-item">',
                 '<img class="{3}" src="{1}" alt="{2}"/>',
@@ -210,13 +210,17 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
         Ext.fly(this.id).hover(this.onMouseEnter, this.onMouseLeave, this);
     },
     onMouseLeave : function() {
-        Ext.fly(this.id).select('.m31-springdock-item-text').setStyle('display', 'none');
-        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(.7);
+        this.toggleBtn(this.id,'L');
     },
 
     onMouseEnter : function() {
-        Ext.fly(this.id).select('.m31-springdock-item-text').setStyle('display', 'block');
-        Ext.fly(this.id).select('.m31-springdock-item-img').setOpacity(1);
+        this.toggleBtn(this.id,'E');
+    },
+
+    toggleBtn : function(cmp_id,type){
+        Ext.fly(cmp_id).select('.m31-springdock-item-text').setStyle('display', type === 'E'?'block':'none');
+        Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E'?1:.7);    
+
     }
 
 });
