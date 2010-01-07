@@ -8,15 +8,17 @@
 package springsprout.m31.utils;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.xml.sax.InputSource;
-import springsprout.m31.common.OpenApiReadException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,12 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 import static springsprout.m31.common.M31System.ENCODING;
 
 public class OpenApiRequestHelper {
 
-    static HttpClient client = null;
+    static AbstractHttpClient client = null;
     static HttpGet apiurl = new HttpGet();
+    static final HttpHost hcProxyHost = new HttpHost("dev.springsprout.org", 8088, "http");
 
     /**
      * InputStream 이 필요한경우 호출.
@@ -170,6 +174,8 @@ public class OpenApiRequestHelper {
 
     private static void factoryHttpClient(){
         client = new DefaultHttpClient();
+        client.getCredentialsProvider().setCredentials(new AuthScope("dev.springsprout.org",8088),new UsernamePasswordCredentials("",""));
+        client.getParams().setParameter(DEFAULT_PROXY, hcProxyHost);
     }
 
 }
