@@ -16,8 +16,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         // 스토어
          this.ds = new Ext.data.JsonStore({
              url: '/gateway/springplayer/search',
-             //restful : true,
-             //remoteSort : true,
+             restful : true,
+             remoteSort : true,
              
              root: 'items',
 
@@ -40,38 +40,30 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         });
 
         this.thumbnailtpl = new Ext.XTemplate(
-		    '<tpl for=".">',
-            '<div class="thumb-wrap">',
-		    '<div class="thumb"><img src="{thumbnailURL}"></div>',
-		    '<span>{title}</span></div>',
-            '</tpl>'
-	    );
+            '<tpl for="."><table>',
+            '<tr><td rowspan="3"><img src="{thumbnailURL}"></td><td>{title}</td></tr>',
+            '<tr><td>{author}</td></tr>',
+            '<tr><td>Play / New Window / Me2Day</td></tr>',
+            '</table></tpl>'
+        );
 
          // 동영상 검색 부분
          this.serchePanel = new Ext.Panel({
-             id : 'springPlayer-serach',
+             id : 'springplayer-serach',
              layout : 'border',
 
              items: [{
-                 region : 'center',
-
-                 items : {
-                     xtype : 'panel',
-                     layout : 'fit',
-                     id : 'dddasfsadf',
-                     autoHeight:true,
-                     items : {
-                        xtype : 'dataview',
-                        id : 'asdfasdfasdfa',
-                        store: this.ds,
-                        tpl: this.thumbnailtpl,
-                        multiSelect: true,
-
-                        autoHeight:true,
-                        itemSelector:'div.thumb-wrap',
-                        emptyText: 'No images to display'
-                    }
-                 },
+                region : 'center',
+                id : 'springplayer-dataview',
+                autoScroll : true,
+                items : {
+                    xtype : 'dataview',
+                    store: this.ds,
+                    tpl: this.thumbnailtpl,
+                    multiSelect: true,
+                    itemSelector:'div.thumb-wrap',
+                    emptyText: 'No images to display'
+                },
 
                  tbar : [
                      //  검색 콤보 박스
@@ -101,10 +93,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                          paramName : 'q'
                      })
                  ],
-
+                 // 페이징 툴바
                  bbar: new Ext.PagingToolbar({
                      pageSize: 20,
-                     store : this.ds
+                     store : this.ds                     
                  })
              }, {
                  title : '탐색기',
@@ -141,7 +133,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     html : '<h1>This is Player Panel</h1>'
                 }]
         };
-        
         return config;
     }
 });
