@@ -54,6 +54,15 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <servlet>
+        <servlet-name>m31Img</servlet-name>
+        <servlet-class>springsprout.m31.module.loadimg.LoadimgServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>m31Img</servlet-name>
+        <url-pattern>/m31Img/view</url-pattern>
+    </servlet-mapping>
     <!-- Spring Front Controller -->
     <servlet>
         <servlet-name>messier31</servlet-name>

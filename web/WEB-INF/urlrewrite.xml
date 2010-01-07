@@ -27,9 +27,14 @@
 		<from>/favicon*</from>
 		<to>/$1</to>
 	</rule>
+
     <rule>
 		<from>/html/**</from>
 		<to>/html/$1</to>
+	</rule>
+    <rule>
+		<from>/m31Img/**</from>
+		<to>/m31Img/$1</to>
 	</rule>
 	<rule>
 		<from>/**</from>

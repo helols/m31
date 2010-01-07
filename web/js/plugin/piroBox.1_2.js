@@ -274,11 +274,16 @@
 							});			
 						}
 			  		}
+                    var p = /.+\.([jpg|JPG|PNG|png|gif|GIF|BMP|bmp]+)?$/;
+                    var naver = /^http:\/\/openapi.naver.com{1}.?/;
+                    if(!p.test(my_url) && !naver.test(my_url)){
+                        my_url = '/m31Img/view?imgsrc='+encodeURIComponent(my_url.replace(/\+/g, '%2B').replace(/\"/g, '%22').replace(/\'/g, '%27'));
+                    }
 					img.src = my_url;
 					var win_h = $(window).height();
 					var nav_h = $('.piro_prev_out').height();
 					$('.piro_prev_out').add('.piro_next_out').css({marginTop : parseInt($(document).scrollTop())+(win_h/nav_h-125)});	
-					$('.caption p').css({'-moz-border-radius':opt.radius+'px','-khtml-border-radius':opt.radius+'px','-webkit-border-radius':opt.radius+'px','border-radius':opt.radius+'px'});	  
+					$('.caption p').css({'-moz-border-radius':opt.radius+'px','-khtml-border-radius':opt.radius+'px','-webkit-border-radius':opt.radius+'px','border-radius':opt.radius+'px'});
 					piro_stop.bind('click',function(x){
 						x.preventDefault();
 						clearTimeout(timer);

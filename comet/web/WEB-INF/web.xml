@@ -51,7 +51,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Spring Front Controller -->
     <servlet>
         <servlet-name>m31comet</servlet-name>
         <servlet-class>springsprout.m31comet.module.comet.M31CometServlet</servlet-class>
@@ -60,6 +59,17 @@
     <servlet-mapping>
         <servlet-name>m31comet</servlet-name>
         <url-pattern>/m31comet/request</url-pattern>
+    </servlet-mapping>
+
+       <!-- Spring Front Controller -->
+    <servlet>
+        <servlet-name>m31Img</servlet-name>
+        <servlet-class>springsprout.m31.module.loadimg.LoadimgServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>m31Img</servlet-name>
+        <url-pattern>/m31Img/view</url-pattern>
     </servlet-mapping>
     <!--
     <filter>

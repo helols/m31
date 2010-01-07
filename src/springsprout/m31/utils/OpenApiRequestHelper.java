@@ -8,9 +8,7 @@
 package springsprout.m31.utils;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -33,7 +31,6 @@ public class OpenApiRequestHelper {
 
     static AbstractHttpClient client = null;
     static HttpGet apiurl = new HttpGet();
-    static final HttpHost proxy = new HttpHost("dev.springsprout.org", 8088);
 
     /**
      * InputStream 이 필요한경우 호출.
@@ -172,6 +169,5 @@ public class OpenApiRequestHelper {
 
     private static void factoryHttpClient() {
         client = new DefaultHttpClient();
-        client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
     }
 }
