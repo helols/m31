@@ -9,9 +9,8 @@ package springsprout.m31.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -28,14 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 import static springsprout.m31.common.M31System.ENCODING;
 
 public class OpenApiRequestHelper {
 
     static AbstractHttpClient client = null;
     static HttpGet apiurl = new HttpGet();
-    static final HttpHost hcProxyHost = new HttpHost("dev.springsprout.org", 8088, "http");
+    static final HttpHost proxy = new HttpHost("dev.springsprout.org", 8088);
 
     /**
      * InputStream 이 필요한경우 호출.
@@ -79,7 +77,7 @@ public class OpenApiRequestHelper {
     /**
      * 요청 url로 부터 String을 얻는다. ( JSON 일경우에 사용하기 적합.) 지정한 인코딩으로 돌려준다.
      *
-     * @param url  읽어올 URL..
+     * @param url      읽어올 URL..
      * @param encoding String을 읽어올 때 변환할 인코딩 지정.
      * @return 읽어 드린 string
      */
@@ -107,18 +105,18 @@ public class OpenApiRequestHelper {
     /**
      * Document 를 HashMap으로 변환해서 돌려준다.. xml을 HashMap으로 사용할때 쓰면좋음. (엘리먼트의 text값을 읽음.)
      *
-     * @param Jdom의 Document.(loadXml에서 읽어 드린 doc.)
+     * @param Jdom의  Document.(loadXml에서 읽어 드린 doc.)
      * @param isRoot .. true : root 부터 파싱 (미투용) //  false : root의 첫번째 엘리먼트의 차일드 엘리먼트 부터 읽음. (네이버 , 다음, 구글용.)
-     * @return xml 형태의 HashMap 객체. 
+     * @return xml 형태의 HashMap 객체.
      */
     public static HashMap<String, Object> docElementValueToMap(Document doc, boolean isRoot) {
-        return docToMap(doc, "V",isRoot);
+        return docToMap(doc, "V", isRoot);
     }
 
     /**
      * Document 를 HashMap으로 변환해서 돌려준다.. xml을 HashMap으로 사용할때 쓰면좋음. 엘리먼트의 attr의 값을 읽음. - 구글.. 처럼.
      *
-     * @param Jdom의 Document.(loadXml에서 읽어 드린 doc.)
+     * @param Jdom의  Document.(loadXml에서 읽어 드린 doc.)
      * @param isRoot .. true : root 부터 파싱 (미투용) //  false : root의 첫번째 엘리먼트의 차일드 엘리먼트 부터 읽음. (네이버 , 다음, 구글용.)
      * @return xml 형태의 HashMap 객체.
      */
@@ -129,11 +127,11 @@ public class OpenApiRequestHelper {
     private static HashMap<String, Object> docToMap(Document doc, String type, boolean isRoot) {
         String status = "F";
         HashMap<String, Object> rMap = new HashMap<String, Object>();
-        if(doc != null){
+        if (doc != null) {
             List<Element> eList = new ArrayList<Element>();
-            if(isRoot){
+            if (isRoot) {
                 eList = doc.getRootElement().getChildren();
-            }else{
+            } else {
                 eList = ((Element) doc.getRootElement().getChildren().get(0)).getChildren();
             }
             String tmpListName = null;
@@ -150,9 +148,9 @@ public class OpenApiRequestHelper {
                     }
                 }
             }
-            status ="S";
+            status = "S";
         }
-        rMap.put("STATUS",status);
+        rMap.put("STATUS", status);
         return rMap;
     }
 
@@ -172,10 +170,8 @@ public class OpenApiRequestHelper {
         return tList;
     }
 
-    private static void factoryHttpClient(){
+    private static void factoryHttpClient() {
         client = new DefaultHttpClient();
-        client.getCredentialsProvider().setCredentials(new AuthScope("dev.springsprout.org",8088),new UsernamePasswordCredentials("",""));
-        client.getParams().setParameter(DEFAULT_PROXY, hcProxyHost);
+        client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
     }
-
 }
