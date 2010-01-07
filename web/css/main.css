@@ -1,7 +1,7 @@
+* {margin:0; padding:0;}
 html, body {
-    background: #000;
+background: #000;
 }
-
 #slider {
     position: relative;
     height: 252px;
@@ -72,30 +72,51 @@ div.name_text {
     z-index:9999;
 }
 
-.addition input{
-    height:25px;
+.change-addition{
+    height: 60px;
+}
+
+.addition input.j_password{
+    height:27px;
     border: 2px solid #CCC;
-    padding-bottom:1px;
+    padding:0px;
     width:220px;
     font-size:14pt;
 }
+.addition input.j_email{
+    height:27px;
+    border: 2px solid #CCC;
+    border-bottom:0px;
+    width:220px;
+    font-size:14pt;
+}
+
 div.addition .password{
-    background:url("../images/main/password-bk.gif") no-repeat;   
+    background:url("../images/main/password-bk.png") no-repeat;   
 }
 
 div.addition .email{
-    background:url("../images/main/email-bk.gif") no-repeat;   
+    background:url("../images/main/email-bk.png") no-repeat;
 }
 
 div.addition img.new_nextbtn{
     cursor:pointer;
     background-color:#000;
 }
+div.addition img.changeImg{
+    margin-top:-10px;
+}
 
-div.addition img.nextbtn{
-    width:24px;
-    height:24px;
-    vertical-align : top;
-    padding-top:3px;
+div.addition img.nextbtn, div.addition img.email_btn{
+    width:27px;
+    height:27px;
+    vertical-align : top;    
     cursor:pointer;
 }
+
+/* ie .... */
+.addition input.j_email_ie{
+    margin-top:-1px !important;
+}
+.addition input.j_password_ie{
+    margin-top:-2px !important;

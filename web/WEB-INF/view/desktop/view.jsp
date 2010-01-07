@@ -55,14 +55,7 @@
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>
 </head>
 <body id="body" scroll="no">
-<div id="tdiv"></div>
-<%--<div id="loading-mask"></div>--%>
-<%--<div id="loading">--%>
-<%--<div class="loading-messge">--%>
-<%--Loading...<br/>--%>
-<%--<img src="../../images/ajax-loader.gif" width="220" height="19" style="margin-right:8px;" align="absmiddle"/>--%>
-<%--</div>--%>
-<%--</div>--%>
+<div id="loading-mask"></div>
 <script type="text/javascript">
     Ext.onReady(function(){
        // M31.ApplicationRegistry.getInstance().loadApplicationStore();

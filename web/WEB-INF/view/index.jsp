@@ -29,9 +29,10 @@
 
 </head>
 <body id="body">
-<div id="tdiv"></div>
+<div id="start-mask"></div>
+<div id="loading-mask"></div>
 <script type="text/javascript">
-    m31.util.loading();
+//    m31.util.loading();
     Ext.onReady(function() {
         var user = Ext.util.Cookies.get("springsprout");
         var users = [];
@@ -44,6 +45,14 @@
         //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
         //http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256
         movingbox.init();
+        /**
+         * 서글 IE가 참으로 고맙게도 동작해주는 관계로.. 예외처리함.
+         */
+        if(Ext.isIE){
+            Ext.get('changeNextBtn')
+                    .prev('.j_password').addClass('j_password_ie')
+                    .prev('.email_btn').prev('.j_email').addClass('j_email_ie');
+        }
     });
 </script>
 <div id="slider">
@@ -58,21 +67,23 @@
             <input type="hidden" name="j_username" class="j_username" value="springsprout@springsprout.org">
             <input type="hidden" name="j_title" class="j_title" value="Demo User">
             <input type="password" name="j_password" class="j_password">
-            <img id="loginNextBtn" class="nextbtn" src="<c:url value="/images/main/next_btn.png"/>"/>
+            <img id="loginNextBtn" class="nextbtn" src="<c:url value="/images/main/login.png"/>" title="Login!"/>
         </div>
     </div>
     <div class="panel" id="panel_change">
         <div class="inside">
-            <img src="<c:url value="/images/main/change-logo.png"/>"
+            <img class="changeImg" src="<c:url value="/images/main/change-logo.png"/>"
                  alt="change user"/>
 
             <div class="name_text" style="">Change User</div>
         </div>
-        <div class="addition">
-            <input type="hidden" name="j_username" class="j_username" value="E-mail 정보를 입력해주세요.">
+        <div class="addition change-addition">
+            <input type="hidden" name="j_username" class="j_username" value="User 정보를 입력해주세요.">
             <input type="hidden" name="j_title" class="j_title" value="Change User">
+            <input type="input"  name="j_email" class="j_email" value="">
+            <img id="email_btn" class="email_btn" src="<c:url value="/images/main/email-add.png"/>" title="Email 기억 여부"/>
             <input type="password" name="j_password" class="j_password" value="">
-            <img id="changeNextBtn" class="nextbtn" src="<c:url value="/images/main/next_btn.png"/>"/>
+            <img id="changeNextBtn" class="nextbtn" src="<c:url value="/images/main/login.png"/>" title="Login!"/>
         </div>
     </div>
     <div class="panel" id="panel_newuser">
@@ -85,7 +96,7 @@
         <div class="addition">
             <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
             <input type="hidden" name="j_title" class="j_title" value="New User">
-            <img id="newNextBtnImg" class="new_nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>"/>
+            <img id="newNextBtnImg" class="new_nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>" title="SignUp"/>
         </div>
     </div>
 

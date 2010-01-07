@@ -38,8 +38,7 @@ movingbox = function() {
                     } else {
                         el.setLeft(edge + (itemWidth + itemEdge) * idx)
                                 .setOpacity(.7)
-                                .hover(onItemMouseEnter, onItemMouseLeave, this)
-                                .on('mousedown', onItemMouseDonw, this);
+                                .hover(onItemMouseEnter, onItemMouseLeave, this);
                     }
                 });
     };
@@ -109,19 +108,23 @@ movingbox = function() {
                 el.down('div.addition').setVisible(true, true);
             } else if (el.id === DEMO) {
                 el.down('div.addition').setVisible(true, true)
-                        .down('img.nextbtn').on('mousedown', signin)
-                        .prev('input.j_password').dom.value = "springsprout";
+                        .down('input.j_password').dom.value = "springsprout";
+            } else if (el.id === CHANGE) {
+                el.down('div.addition')
+                        .setVisible(true, true)
+                        .down('input.j_password')
+                        .addClass('password')
+                        .prev('input.j_email')
+                        .addClass('email')
             } else {
                 el.down('div.addition')
                         .setVisible(true, true)
                         .down('img.nextbtn').on('mousedown', signin)
                         .prev('input.j_password')
-                        .addClass(el.id === CHANGE ? 'email' : 'password')
-                        .on('focus', focusField)
-                        .on('blur', blurField);
+                        .addClass('password')
             }
             el.down('div.inside')
-                    .scale(256, 192, true)
+                    .scale(256, el.id === CHANGE ? 162 : 192, true)
                     .down('div.name_text')
                     .setWidth(256, true)
                     .setOpacity(1)
@@ -159,11 +162,9 @@ movingbox = function() {
                 el.child('input.j_password').dom.value = '';
                 el.child('input.j_password')
                         .removeClass(el.id === CHANGE ? 'email' : 'password')
-                        .un('focus', focusField)
-                        .un('blur', blurField)
                         .up('div.addition')
                         .setVisible(false)
-                        .down('img.nextbtn').un('mousedown', signin);
+                        .down('img.nextbtn').un('click', signin);
             }
         }
         totalCnt--;
@@ -188,9 +189,27 @@ movingbox = function() {
      */
     var focusField = function(e, t) {
         var tel = Ext.fly(t);
-        tel.removeClass(tel.hasClass('password') ? 'password' : 'email');
+        tel.removeClass(tel.hasClass('j_email') ? 'email' : 'password');
+        if (tel.hasClass('j_email')) {
+            emailSaveNoti();
+        }
     };
 
+    /**
+     * 자동 email 클릭시 노티..
+     * @param e
+     * @param t
+     */
+
+    var emailSaveNoti = function() {
+        emailSaveNotiId = m31.util.notification({
+            title:'Login Info'
+            , text:Ext.get('email_btn').dom.src.indexOf("add") != -1 ? 'E-mail 기억 모드 Off.' : 'E-mail 기억 모드 On.'
+            , remove : true
+            , time:2500
+        });
+
+    }
     /**
      * passwordField에서 focus가 떠났을때... bk css 추가.(값이 있을경우.)
      * @param e
@@ -199,7 +218,7 @@ movingbox = function() {
     var blurField = function(e, t) {
         var tel = Ext.fly(t);
         if (tel.getValue().length == 0) {
-            tel.addClass(tel.up('#' + CHANGE, 2) ? 'email' : 'password');
+            tel.addClass(tel.hasClass('j_email') ? 'email' : 'password');
         }
     };
 
@@ -247,39 +266,62 @@ movingbox = function() {
         Ext.fly(this).update('&nbsp;');
     };
 
-    var loading_remove = function(){
+    var loading_remove = function() {
         m31.util.loading_remove(500);
     };
     var signin = function(e, t) {
         m31.util.notification({title:'signin...',text:'Test'});
-//        var tEl = Ext.get(this);
-//        m31.util.loading('../../images',true);
-//        Ext.Ajax.request({
-//            method:'POST',
-//            url: '/j_spring_security_check',
-//            params: {
-//                j_username: tEl.parent().down("input.j_username").getValue(),
-//                j_password: tEl.prev('input.j_password').getValue()
-//            },
-//            success: function(response, opts) {
-////                window.location.href="/desktop/view";
-//            },
-//            failure: function(response, opts) {
-//                loading_remove();
-//            }
-//        });
+        //        var tEl = Ext.get(this);
+        //        m31.util.loading('../../images',true);
+        //        Ext.Ajax.request({
+        //            method:'POST',
+        //            url: '/j_spring_security_check',
+        //            params: {
+        //                j_username: tEl.parent().down("input.j_username").getValue(),
+        //                j_password: tEl.prev('input.j_password').getValue()
+        //            },
+        //            success: function(response, opts) {
+        ////                window.location.href="/desktop/view";
+        //            },
+        //            failure: function(response, opts) {
+        //                loading_remove();
+        //            }
+        //        });
     };
     return {
         init: function() {
             Ext.select('div.name_text').setOpacity(.7);
             this.layout();
             positionItem();
-            Ext.fly('newNextBtnImg').on('mousedown', function() {
+            Ext.fly('newNextBtnImg').on('click', function() {
                 spot.show(NEW)
             });
-            Ext.EventManager.onWindowResize(movingbox.layout, this);
-            m31.util.loading_remove(500);
+            Ext.get('email_btn').on('click', function(e, t) {
+                var src = "../../images/main/email-";
+                if (this.dom.src.indexOf("add") != -1) {
+                    src += "del.png";
 
+                } else {
+                    src += "add.png";
+                }
+                this.dom.src = src;
+                emailSaveNoti();
+            });
+
+            Ext.select('input.j_password').on('focus', focusField).on('blur', blurField);
+            Ext.select('input.j_email').on('focus', focusField).on('blur', blurField);
+            Ext.select('div.panel').on('click', onItemMouseDonw);
+            Ext.select('img.nextbtn').on('click', signin);
+            Ext.EventManager.onWindowResize(movingbox.layout, this);
+
+            setTimeout(function() {
+                Ext.fly('start-mask').fadeOut({
+                    endOpacity: 0,
+                    easing: 'easeIn',
+                    duration: .5,
+                    remove: true
+                });
+            }, 300);
         },
         layout : function() {
             var top = Ext.lib.Dom.getViewHeight() / 2 - (Ext.fly('slider').getHeight() / 2);

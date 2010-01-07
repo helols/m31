@@ -17,7 +17,7 @@ if (Ext.isIE) {
 
 // namespace
 var m31 = {};
-
+var noti_unique_id = null;
 // 유틸리티 함수
 m31.util = {
 
@@ -92,21 +92,20 @@ m31.util = {
      */
     loading : function(anime){
         var anime = anime || false;
-        var loadingHtml = [ ' <div id="loading-mask"></div> '
-                            , '     <div id="loading"> '
+        var loadingHtml = [   '     <div id="loading"> '
                             , '         <div class="loading-messge"> '
                             , '             <img class="loading-img" src="../../../images/loading-logo.png"/><br/>'
                             , '            Loading...<br/>'
                             , '             <img class="loader-img" src="../../../images/ajax-loader.gif" align="absmiddle"/>'
                             , '         </div>'
                             , '</div>' ].join('');
-        var el = Ext.DomHelper.append(Ext.fly('tdiv'), loadingHtml, true);
+        var el = Ext.DomHelper.append(Ext.fly('loading-mask'), loadingHtml, true);
         if(anime){
-                el.prev('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .6, from: .11}})
-                  .next('#loading').setVisible(true,true);
+                el.parent('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .6, from: .11}})
+                  .down('#loading').setVisible(true,true);
         }else{
-            el.prev('#loading-mask').setVisible(true)
-               .next('#loading').setVisible(true,true);
+            el.parent('#loading-mask').setVisible(true)
+               .down('#loading').setVisible(true,true);
         }
     },
 
@@ -117,19 +116,28 @@ m31.util = {
     loading_remove: function(anime_time){
         setTimeout(function(){
             Ext.get('loading').remove();
-            Ext.get('loading-mask').fadeOut({remove:true});
+            Ext.get('loading-mask').fadeOut({remove:false});
         }, anime_time||250);
     },
 
     /**
      * gritter 옵션과 동일.. 다만  이미지는 무조건 .. logo로 ..
+     * opt.remove : true . 입력시 이전 노티 삭제후 새로운 노티만 표시해줌.
      * @param opt gritter 옵션 참조. http://boedesign.com/blog/2009/07/11/growl-for-jquery-gritter/
      */
     notification : function(opt){
         opt.title = opt.title||'Notification...';
         opt.text = opt.text||'';
         opt.image = '../../../../../images/plugin/notication-logo.png';
-        $.gritter.add(opt);
+        opt.time = 5000;
+        if(opt.remove && noti_unique_id !== null){
+            $.gritter.remove(noti_unique_id, {
+        	    fade: false,
+	            speed: 'fast'
+            });
+        }
+        noti_unique_id =  $.gritter.add(opt);
+        return noti_unique_id;
     }
 };
 
