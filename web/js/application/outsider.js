@@ -28,6 +28,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'title', 'thumbnail', 'image'
             ],
             listeners: {
+                beforeload : function(store, options) {
+                    store.loadMask.show();
+                },
                 'load': { fn:function() {
                     console.log("store loaded");
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
@@ -100,6 +103,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         if(!this.win){
             this.win = win;
         }
+
+        this.store.loadMask = new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."}); 
     },
 
     createWindow : function () {
@@ -261,8 +266,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     		this.currentPage = 1;
     		return;
     	}
-    	new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."});
-        this.store.reload({
+    	this.store.reload({
         	params: {
         		search_type: Ext.getCmp('springsee-api-provider').getValue(), 
         		query: 		 Ext.getCmp('springsee-search').getValue(),
