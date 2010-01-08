@@ -28,13 +28,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'title', 'thumbnail', 'image'
             ],
             listeners: {
-                'load': {fn:function() {
+                'load': { fn:function() {
                     console.log("store loaded");
+                    Ext.getCmp("springsee-view").body.scrollTo('top', 0);
                     this.view.select(0);
                     m31.showImage();
-                   $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
                     this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'explorerDD'});
-                }, scope:this, single:false}
+                }, scope:this, single:false
+                }
             }
         });
 
