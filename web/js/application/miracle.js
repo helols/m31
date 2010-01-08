@@ -6,7 +6,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         console.log("Init Call.....");
     },
     createCallback : function(win) {
-       console.log("Create Call Back.....");
+        console.log("Create Call Back.....");
+        if (undefined !== win) {
+
+        }
         // Load Mask
         this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
     },
@@ -41,6 +44,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         comboValue = 'google';
 
                      options.params['type'] = comboValue;
+                 },
+                 load : function(store) {
+                     Ext.select("#springplayer-dataview .x-panel-body").scrollTo('top', 0);
                  }
              }
         });
@@ -60,16 +66,17 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
              items: [{
                 region : 'center',
+                xtype : 'panel',
                 id : 'springplayer-dataview',
                 autoScroll : true,
                 items : {
                     xtype : 'dataview',
+                    id : 'springplayer-dataview-view',
                     store: this.ds,
                     tpl: this.thumbnailtpl,
                     overClass:'x-view-over',
                     itemSelector: 'div.thumb-wrap',
                     singleSelect : true,
-                    loadMask : true,
                     plugins: new Ext.DataView.DragSelector({dragSafe:true}),
                     emptyText: 'No images to display'
                 },
@@ -124,18 +131,19 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     createWindow : function() {
         console.log("CreateWindow");
 
-        var config = {
-                id : 'springplayer',
-                title : 'Spring Player',
-                width: 640,
-                height: 480,
-                minWidth: 640,
-                minHeight: 480,
+        var config;
+        config = {
+            id : 'springplayer',
+            title : 'Spring Player',
+            width: 640,
+            height: 480,
+            minWidth: 640,
+            minHeight: 480,
 
-                layout : 'card',
-                activeItem : 0,
+            layout : 'card',
+            activeItem : 0,
 
-                items : [ this.serchePanel,
+            items : [ this.serchePanel,
                 {
                     id : 'springPlayer-player',
                     tbar : ["Title"],
