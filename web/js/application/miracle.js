@@ -8,7 +8,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     createCallback : function(win) {
        console.log("Create Call Back.....");
         // Load Mask
-        this.ds.loadMask = new Ext.LoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
+        this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
     },
     beforeCreate : function(){
         console.log("beforeCreate");
@@ -35,9 +35,13 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         options.params['q'] = (q === null) ? '' : q;
                      }
                      options.params['limit'] = 10;
-                     options.params['type'] = Ext.getCmp('springplayer-serach-combo').getValue();
-                 },
-                 load : function(s) { console.log(s);}
+                     
+                     var comboValue = Ext.getCmp('springplayer-serach-combo').getValue();
+                     if(comboValue === 'Youtube')
+                        comboValue = 'google';
+
+                     options.params['type'] = comboValue;
+                 }
              }
         });
 
@@ -88,7 +92,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                          forceSelection: true,
                          lazyInit: false,
                          triggerAction: 'all',
-                         value: 'Google'
+                         value : 'Youtube'
                      }, '-',
                      // 검색 필드
                      new Ext.app.SearchField({
@@ -188,5 +192,15 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.store.reload({params:o});
         this.hasSearch = true;
         this.triggers[0].show();
+    }
+});
+
+Ext.app.CustomLoadMask = Ext.extend(Ext.LoadMask, {
+    /* Override */
+    onLoad : function() {
+        var self = this;
+        window.setTimeout(function() {
+            self.el.unmask(self.removeMask);
+        }, 500);
     }
 });

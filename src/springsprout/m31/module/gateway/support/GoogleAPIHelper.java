@@ -102,7 +102,7 @@ public class GoogleAPIHelper {
             }
             for (VideoEntry ve : videoFeed.getEntries()) {
                 MovieVO vo = new MovieVO();
-                vo.setSource("google");
+                vo.setSource("YouTube");
                 vo.setTitle(ve.getTitle().getPlainText());
                 vo.setHtmlLink(ve.getHtmlLink().getHref());
                 YouTubeMediaGroup mediaGroup = ve.getMediaGroup();
