@@ -46,7 +46,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                      options.params['type'] = comboValue;
                  },
                  load : function(store) {
-                     Ext.select("#springplayer-dataview .x-panel-body").scrollTo('top', 0);
+                     Ext.getCmp("springplayer-dataview").body.scrollTo('top', 0);
                  }
              }
         });
