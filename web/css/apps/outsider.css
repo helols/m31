@@ -121,18 +121,33 @@ a:hover.play{background:url(../../images/apps/springsee/pirobox/play_h.png) no-r
 a.stop{position:absolute;bottom:10px!important;bottom:2px;right:10px!important;right:2px;width:40px; height:40px; margin:0; outline:none; display:block;background:url(../../images/apps/springsee/pirobox/pause.png) no-repeat;text-indent:-999em; border:none;cursor:pointer;}
 a:hover.stop{background:url(../../images/apps/springsee/pirobox/pause_h.png) no-repeat;}
 
-/*
-.x-dd-drag-proxy .multi-proxy .thumb-img{
-    height: 20px;
-    width: 30px;
-    margin:1px;
-}
-.x-dd-drag-proxy .thumb-img{
-    height: 60px;
-    width: 80px;
-}
-*/
+
+
 /* Spring Twitter */
-.springtwitter_win_icon{
+.springtwitter-win-icon{
     background-image: url(../../images/apps/win-icon/springtwitter_win_icon.png) !important;
+}
+
+#springtwitter-login {
+	background-color: #6F6F6F;
+}
+
+.search-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    padding:3px 10px 3px 10px;
+    border-bottom:1px solid #eeeeee;
+}
+.search-item h3 {
+    display:block;
+    font:inherit;
+    font-weight:bold;
+}
+
+.search-item h3 span {
+    float: right;
+    font-weight:normal;
+    margin:0 0 5px 5px;
+    width:100px;
+    display:block;
+    clear:none;
 }

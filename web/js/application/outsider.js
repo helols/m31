@@ -538,5 +538,202 @@ Ext.DataView.DragSelector = function(cfg){
 **************************
 */
 M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
+    init : function() {
+		
+    },
     
+    createView : function() {
+    },
+    
+    /**
+     *  해당 app의 window가 제거 될때 호출되는 콜백.
+     */
+    removeWin: function(){
+        this.view = undefined;
+        this.win = undefined;
+    },
+
+    /**
+     *  윈도우를 생성하기 직전에 호출되는 펑션.
+     */
+    beforeCreate : function() {
+        if(!this.view){
+            this.view = this.createView();
+        }
+    },
+
+    /**
+     *  윈도우를 생성된후에 호출되는 펑션.
+     */
+    createCallback : function(win) {
+        if(!this.win){
+            this.win = win;
+        }
+    },
+
+    createWindow : function () {
+        var otp = {
+            layout: 'card',
+            width: 400,
+            height: 200,
+            head: false,
+            maximizable: false,
+            resizeHandles: 'n s',
+            //autoHeight: true,
+            //resizable: false,
+            closeAction: 'close',
+            constrainHeader:true,
+            border: false,
+            activeItem: 0,
+            items:[
+                   this.startForm,
+                   this.twitterFrame,
+                   this.loginForm
+            ],
+            listeners: {
+	    		resize: function(){
+	    		}
+	    	}
+        };
+        
+        return otp;
+    },
+    
+    // Layout 정의
+    startForm: new Ext.form.FormPanel({
+        layout: 'form',
+        border: false,
+        header: false,
+        padding: 10,
+        id: 'springtwitter-start',
+        region: 'center',
+        labelWidth: 60,
+        align: 'bottom',
+        labelAlign: 'right',
+        waitMsgTarget: true,
+
+        // configs apply to child items
+        defaults: {
+    		anchor: 'border',
+    		layout: 'form',
+    		boxMinWidth : 100
+        }, // provide some room on right for validation errors
+        items: [{
+        	xtype: 'button',
+        	text: 'Twitter 시작하기',
+        	handler: function(b, e){
+        		M31.ApplicationRegistry.getInstance().getApp('springtwitter').startForm.getForm().submit({
+	    			url:'/app/twitter/requestAuthToTwitter', 
+	    			waitMsg:'Loading...'
+	    		});
+	        }
+        }],
+        listeners: {
+    		actioncomplete: function(form, action){
+    			console.log('actioncomplete');
+    			
+    			var result = Ext.decode(action.response.responseText);
+    			
+    			if(result.success){
+    				var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    				self.cardNavigation(1);
+    				console.log(Ext.getCmp('springtwitter-iframepanel'));
+    				self.win.resizeHandles = "all";
+    				self.win.setSize(600, 400);
+//    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
+    				window.open(result.authURL);
+    			}
+    			else{
+    				console.log("fail getting AuthURL");
+    			}
+    		}.createDelegate(this),
+    		actionfailed: function(form, action){
+    			console.log('action failed');
+    		}
+    	}
+    }),
+    
+    twitterFrame: new Ext.Panel({
+    	id: 'springtwitter-twitterpanel',
+    	layout:'fit',
+    	html: 'ttt',
+    	hideBorders: true,
+        items:[{
+        	id: 'springtwitter-iframepanel',
+            xtype: 'iframepanel',
+            header: false,
+            loadMask : {hideOnReady:true, msg:'loading....'},
+            frameConfig: {autoCreate:{id: 'frameSpringMe2DayLogin'}},
+            listeners: {
+        		resize: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+        			// console.log('springme2day-login-iframepanel.resize(' + adjWidth + ', ' + adjHeight + ', ' + rawWidth + ', ' + rawHeight + ')');
+        		}
+        	}
+        }]
+    }),
+    
+    loginForm: new Ext.form.FormPanel({
+        layout: 'form',
+        border: false,
+        header: false,
+        padding: 10,
+        id: 'springtwitter-login',
+        region: 'center',
+        labelWidth: 60,
+        align: 'bottom',
+        labelAlign: 'right',
+        waitMsgTarget: true,
+        buttons:[{
+            text: 'Login',
+        	handler: function(){
+        		M31.ApplicationRegistry.getInstance().getApp('springtwitter').loginForm.getForm().submit({
+        			url:'/app/twitter/authentication', 
+        			waitMsg:'Login...'
+        		});
+            }
+        }],
+
+        // configs apply to child items
+        defaults: {
+    		anchor: 'border',
+    		layout: 'form',
+    		boxMinWidth : 100
+        }, // provide some room on right for validation errors
+        defaultType: 'textfield',
+        items: [{
+            fieldLabel: 'Username',
+            name: 'userName',
+            allowBlank:false
+        },{
+            fieldLabel: 'Password',
+            name: 'userPw',
+            inputType: 'password',
+            allowBlank:false
+        },{
+        	xtype: 'checkbox',
+        	boxLabel:'Username 기억하기'
+        }],
+        listeners: {
+    		actioncomplete: function(form, action){
+    			console.log('actioncomplete');
+    			var result = Ext.decode(action.response.responseText);
+    			
+    			if(result.msg){
+    				alert(result.authURL);
+    			}
+    			else{
+    				console.log("fail getting AuthURL")
+    			}
+    		},
+    		actionfailed: function(form, action){
+    			console.log('action failed');
+    		}
+    	}
+    }),
+    
+    cardNavigation: function(idx){
+    	console.log("called cardNavigation");
+    	var l = M31.ApplicationRegistry.getInstance().getApp('springtwitter').win.getLayout();
+    	l.setActiveItem(idx);
+    }
 });
