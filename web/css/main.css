@@ -1,42 +1,52 @@
-* {margin:0; padding:0;}
-html, body {
-background: #000;
+* {
+    margin: 0;
+    padding: 0;
 }
+
+html, body {
+    background: #000;
+}
+
 #slider {
     position: relative;
-    height: 252px;
+    height: 282px;
     left: 0px;
     text-align: center;
-    overflow: hidden;
-    /*border: 1px #F00 solid;*/
+    overflow: hidden; /*border: 1px #F00 solid;*/
 }
 
-#arrow{
-    display:block;
-    position:relative;
-    text-align:center;
+#arrow {
+    display: block;
+    position: relative;
+    text-align: center;
 }
 
-#arrow img{
-    display:none;
-    cursor:pointer;
+#arrow img {
+    display: none;
+    cursor: pointer;
 }
+
 #slider div.panel {
     left: 0px;
     position: absolute;
-    width: 216px;  /* 256 */
+    width: 216px; /* 256 */
     height: 162px; /* 232 */
-    top: 30px;
+    top: 40px;
     border: 10px solid #f5f5f5;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
+
+#panel_newuser {
+    z-index: 9000;
+}
+
 .inside {
-    left:0px;
-    top:0px;
-    width: 216px;  /* 256 */
+    left: 0px;
+    top: 0px;
+    width: 216px; /* 256 */
     height: 162px; /* 192 */
-    position:absolute;
+    position: absolute;
 }
 
 div.panel img {
@@ -51,7 +61,7 @@ div.name_text {
     background: #797979 none repeat scroll 0 0;
     color: #FFF;
     font-size: 12pt;
-    font-weight:bold;
+    font-weight: bold;
     left: 0px;
     padding: 0px 3px;
     position: absolute;
@@ -60,63 +70,110 @@ div.name_text {
 }
 
 .addition {
-    background-color:#FFF;
-    display:none;
-    left:0px;
-    bottom:0px;
+    background-color: #FFF;
+    display: none;
+    left: 0px;
+    bottom: 0px;
     width: 256px;
-    position:absolute;
+    position: absolute;
     height: 30px;
     border-top: 10px solid #f5f5f5;
-    text-align:left;
-    z-index:9999;
+    text-align: left;
+    z-index: 9999;
 }
 
-.change-addition{
+.change-addition {
     height: 60px;
 }
 
-.addition input.j_password{
-    height:27px;
+.addition input.j_password {
+    height: 27px;
     border: 2px solid #CCC;
-    padding:0px;
-    width:220px;
-    font-size:14pt;
+    padding: 0px;
+    width: 220px;
+    font-size: 14pt;
 }
-.addition input.j_email{
-    height:27px;
+
+.addition input.j_email {
+    height: 27px;
     border: 2px solid #CCC;
-    border-bottom:0px;
-    width:220px;
-    font-size:14pt;
+    border-bottom: 0px;
+    width: 220px;
+    font-size: 14pt;
 }
 
-div.addition .password{
-    background:url("../images/main/password-bk.png") no-repeat;   
+div.addition .password {
+    background: url("../images/main/password-bk.png") no-repeat;
 }
 
-div.addition .email{
-    background:url("../images/main/email-bk.png") no-repeat;
+div.addition .email {
+    background: url("../images/main/email-bk.png") no-repeat;
 }
 
-div.addition img.new_nextbtn{
-    cursor:pointer;
-    background-color:#000;
-}
-div.addition img.changeImg{
-    margin-top:-10px;
+div.addition img.new_nextbtn {
+    cursor: pointer;
+    background-color: #000;
 }
 
-div.addition img.nextbtn, div.addition img.email_btn{
-    width:27px;
-    height:27px;
-    vertical-align : top;    
-    cursor:pointer;
+div.addition img.changeImg {
+    margin-top: -10px;
+}
+
+div.addition img.nextbtn, div.addition img.email_btn {
+    width: 27px;
+    height: 27px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+div.x-spotlight {
+    background-color: #444 !important;
+}
+
+div.newuser {
+    width: 216px;
+    height: 162px;
+}
+
+div.signup {
+    width: 256px;
+    height: 192px;
+    text-align: left;
+    display: none;
+}
+
+div.signup input {
+    height: 23px;
+    border: 1px solid #CCC;
+    padding: 2px 1px 1px 1px;
+    margin-left: 10px;
+    width: 234px;
+    font-size: 14pt;
+}
+
+div.signup label {
+    color: #FFF;
+    font-size: 13pt;
+}
+
+div.signup dl {
+    padding-top:6px;
+}
+
+div.signup dt {
+    padding-left: 10px;
+}
+
+div.signup dd {
+    padding:5px 0;
 }
 
 /* ie .... */
-.addition input.j_email_ie{
-    margin-top:-1px !important;
+.addition input.j_email_ie {
+    margin-top: -1px !important;
 }
-.addition input.j_password_ie{
-    margin-top:-2px !important;
+
+.addition input.j_password_ie {
+    margin-top: -2px !important;
+}
+

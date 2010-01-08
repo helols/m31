@@ -47,7 +47,7 @@ movingbox = function() {
      * @param e
      * @param t
      */
-    var onItemMouseDonw = function(e, t) {
+    var onItemMouseDown = function(e, t) {
         var el = Ext.get(this);
         if (actItem === this || totalCnt != 0) {
             //            e.preventDefault();
@@ -99,13 +99,15 @@ movingbox = function() {
      */
     var itemMoveAnime = function(el, left, type) {
         type = type || 'N';
-        var opt = {opactiy:.7,height:162,width:216,top:30};
+        var opt = {opactiy:.7,height:162,width:216,top:40};
         if (type === 'L') {
-            opt = {opactiy:1,height:232,width:256,top:0};
+            opt = {opactiy:1,height:232,width:256,top:10};
             //            var cssName = 'password';
             //            if(el.id == 'panel_chage') {cssName = 'email'} else if(el.id == 'panel_newuser') {cssName = ''}
             if (el.id === NEW) {
                 el.down('div.addition').setVisible(true, true);
+                el.down('div.inside').down('div.newuser').scale(256, 192, true)
+                        .scale(256, 192, true);
             } else if (el.id === DEMO) {
                 el.down('div.addition').setVisible(true, true)
                         .down('input.j_password').dom.value = "springsprout";
@@ -125,14 +127,16 @@ movingbox = function() {
             }
             el.down('div.inside')
                     .scale(256, el.id === CHANGE ? 162 : 192, true)
-                    .down('div.name_text')
+                    .child('div.name_text')
                     .setWidth(256, true)
                     .setOpacity(1)
-                    .update(el.child('input.j_username').getValue());
+                    .update(el.child('div.addition input.j_username').getValue());
         } else {
-            el.down('div.inside')
-                    .scale(216, 162, true)
-                    .down('div.name_text')
+            var inside = el.down('div.inside').scale(216, 162, true);
+            if (el.id === NEW) {
+                inside = inside.down('div.newuser').scale(216, 162, true);
+            }
+            inside.child('div.name_text')
                     .setWidth(216, true)
                     .setOpacity(.7)
                     .update(el.child('input.j_title').getValue());
@@ -157,7 +161,9 @@ movingbox = function() {
     var itemMoveAfterCallback = function(el) {
         if ((!actItem) || actItem.id !== el.id) {
             if (el.id === NEW) {
+                //                el.down('div.inside').down('div.newuser').scale(216, 162, true);
                 el.child('div.addition').setVisible(false);
+
             } else {
                 el.child('input.j_password').dom.value = '';
                 el.child('input.j_password')
@@ -165,6 +171,11 @@ movingbox = function() {
                         .up('div.addition')
                         .setVisible(false)
                         .down('img.nextbtn').un('click', signin);
+            }
+        } else {
+            if (actItem.id === NEW) {
+
+                //                $('.newuser').removeAttr('style');
             }
         }
         totalCnt--;
@@ -288,13 +299,16 @@ movingbox = function() {
         //            }
         //        });
     };
+
     return {
         init: function() {
             Ext.select('div.name_text').setOpacity(.7);
             this.layout();
             positionItem();
             Ext.fly('newNextBtnImg').on('click', function() {
-                spot.show(NEW)
+                spot.show(NEW);
+                $.quickFlip.flip(0);
+
             });
             Ext.get('email_btn').on('click', function(e, t) {
                 var src = "../../images/main/email-";
@@ -310,7 +324,7 @@ movingbox = function() {
 
             Ext.select('input.j_password').on('focus', focusField).on('blur', blurField);
             Ext.select('input.j_email').on('focus', focusField).on('blur', blurField);
-            Ext.select('div.panel').on('click', onItemMouseDonw);
+            Ext.select('div.panel').on('click', onItemMouseDown);
             Ext.select('img.nextbtn').on('click', signin);
             Ext.EventManager.onWindowResize(movingbox.layout, this);
 
@@ -324,12 +338,17 @@ movingbox = function() {
             }, 300);
         },
         layout : function() {
-            var top = Ext.lib.Dom.getViewHeight() / 2 - (Ext.fly('slider').getHeight() / 2);
-            Ext.fly('slider').setTop(top);
-            Ext.select('.arrow').setTop(top);
-            //            Ext.fly('arrow').setTop(top+30);
-            calcEdge();
-            positionItem();
+            if (!spot.active) {
+                var top = Ext.lib.Dom.getViewHeight() / 2 - (Ext.fly('slider').getHeight() / 2);
+                Ext.fly('slider').setTop(top);
+                Ext.select('.arrow').setTop(top);
+
+//                $.quickFlip.flip(0);
+//                $.quickFlip.removeFlipDivs(0);
+//                spot.hide();
+                calcEdge();
+                positionItem();
+            }
         }
     }
 }();

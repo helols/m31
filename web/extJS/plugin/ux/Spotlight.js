@@ -68,7 +68,13 @@ Ext.ux.Spotlight.prototype = {
     applyBounds : function(basePts, anim, doHide, callback, scope){
 
         var rg = this.el.getRegion();
-
+        if(!Ext.isIE){
+            rg.right -= 5;
+            rg.bottom -= 5;
+            rg.top += 5;
+            rg.left += 5;
+        }
+        
         var dw = Ext.lib.Dom.getViewWidth(true);
         var dh = Ext.lib.Dom.getViewHeight(true);
 

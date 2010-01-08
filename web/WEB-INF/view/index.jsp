@@ -23,6 +23,7 @@
     <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/Spotlight.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/application/movingboxes.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/quickflip.js"/>"></script>
     <!-- ENDLIBS -->
 
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
@@ -32,7 +33,7 @@
 <div id="start-mask"></div>
 <div id="loading-mask"></div>
 <script type="text/javascript">
-//    m31.util.loading();
+    //    m31.util.loading();
     Ext.onReady(function() {
         var user = Ext.util.Cookies.get("springsprout");
         var users = [];
@@ -48,11 +49,12 @@
         /**
          * 서글 IE가 참으로 고맙게도 동작해주는 관계로.. 예외처리함.
          */
-        if(Ext.isIE){
+        if (Ext.isIE) {
             Ext.get('changeNextBtn')
                     .prev('.j_password').addClass('j_password_ie')
                     .prev('.email_btn').prev('.j_email').addClass('j_email_ie');
         }
+        $('.quickFlip').quickFlip({panelWidth:256,panelHeight:192,removeStyle:true});
     });
 </script>
 <div id="slider">
@@ -80,23 +82,49 @@
         <div class="addition change-addition">
             <input type="hidden" name="j_username" class="j_username" value="User 정보를 입력해주세요.">
             <input type="hidden" name="j_title" class="j_title" value="Change User">
-            <input type="input"  name="j_email" class="j_email" value="">
-            <img id="email_btn" class="email_btn" src="<c:url value="/images/main/email-add.png"/>" title="Email 기억 여부"/>
+            <input type="input" name="j_email" class="j_email" value="">
+            <img id="email_btn" class="email_btn" src="<c:url value="/images/main/email-add.png"/>"
+                 title="Email 기억 여부"/>
             <input type="password" name="j_password" class="j_password" value="">
             <img id="changeNextBtn" class="nextbtn" src="<c:url value="/images/main/login.png"/>" title="Login!"/>
         </div>
     </div>
     <div class="panel" id="panel_newuser">
-        <div class="inside">
-            <img src="<c:url value="/images/main/newuser-logo.png"/>"
-                 alt="new user"/>
+        <div class="inside quickFlip">
+            <div class="newuser">
+                <img src="http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256"
+                     alt="new user"/>
 
-            <div class="name_text" style="">New User</div>
+                <div class="name_text" style="">New User</div>
+            </div>
+            <div class="signup">
+                <dl>
+                    <dt>
+                        <label>E-mail address</label>
+                    </dt>
+                    <dd>
+                        <input type="text" name="j_username" class="j_username" value="">
+                    </dd>
+                    <dt>
+                        <label>Password</label>
+                    </dt>
+                    <dd>
+                        <input type="password" name="j_password" class="j_password" value="">
+                    </dd>
+                    <dt>
+                        <label>Nickname</label>
+                    </dt>
+                    <dd>
+                        <input type="password" name="j_password" class="j_password" value="">
+                    </dd>
+                </dl>
+            </div>
         </div>
         <div class="addition">
             <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
             <input type="hidden" name="j_title" class="j_title" value="New User">
-            <img id="newNextBtnImg" class="new_nextbtn" src="<c:url value="/images/main/newuser-next-btn.gif"/>" title="SignUp"/>
+            <img id="newNextBtnImg" class="new_nextbtn quickFlipCta"
+                 src="<c:url value="/images/main/newuser-next-btn.gif"/>" title="SignUp"/>
         </div>
     </div>
 
