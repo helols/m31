@@ -7,9 +7,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     },
     createCallback : function(win) {
        console.log("Create Call Back.....");
-        if(win == undefined) {
-
-        }
+        // Load Mask
+        this.ds.loadMask = new Ext.LoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
     },
     beforeCreate : function(){
         console.log("beforeCreate");
@@ -26,6 +25,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
              listeners : {
                  beforeload : function(store, options) {
+                     console.debug(this);
+                     this.loadMask.show();
                      var textfield = Ext.getCmp('springplayer-serach-textfield');
 
                      // 페이징시 검색어가 안 넘어가서 추가.
@@ -42,9 +43,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
         this.thumbnailtpl = new Ext.XTemplate(
             '<tpl for="."><div class="thumb-wrap"><table>',
-            '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><img class="player-icon" src="../../images/apps/springplayer/title.png"/><span>{title}</span></td></tr>',
-            '<tr><td><img class="player-icon" src="../../images/apps/springplayer/author.png"/><span>{author}</span></td></tr>',
-            '<tr><td><img class="player-icon" src="../../images/apps/springplayer/play.png"/><span>Play</span> <a href="{htmlLink}"><img class="player-icon" src="../../images/apps/springplayer/link.png"/><span>{source}</span></a> / <span>Me2Day</span></td></tr>',
+            '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><span><img class="player-icon" src="../../images/apps/springplayer/title.png"/>{title}</span></td></tr>',
+            '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/author.png"/>{author}</span></td></tr>',
+            '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span> <a href="{htmlLink}"><span><img class="player-icon" src="../../images/apps/springplayer/link.png"/>{source}</span></a> / <span>Me2Day</span></td></tr>',
             '</table></div></tpl>'
         );
 
@@ -64,6 +65,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     overClass:'x-view-over',
                     itemSelector: 'div.thumb-wrap',
                     singleSelect : true,
+                    loadMask : true,
                     plugins: new Ext.DataView.DragSelector({dragSafe:true}),
                     emptyText: 'No images to display'
                 },
