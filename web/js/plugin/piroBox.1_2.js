@@ -183,8 +183,7 @@
 						$('.c_c div').children().remove();
 						main_cont.show();
 						bg_overlay.fadeIn(300,function(){
-							load_img(my_url);
-
+                            load_img(my_url);
 						});
 					}
 				}
@@ -193,16 +192,8 @@
 				main_cont.addClass('loading');
 				var img = new Image();
 				img.onerror = function (){
-					var main_cont_h = $(main_cont).height();
-					main_cont.css({marginTop : parseInt($(document).scrollTop())-(main_cont_h/1.9)});
-				  $('.c_c div').append('<p class="err_mess">There seems to be an Error:&nbsp;<a href="#close" class="close_pirobox">Close Pirobox</a></p>');
-					$('.close_pirobox').bind('click',function() {
-						$('.err_mess').remove();
-						main_cont.add(bg_overlay).fadeOut(opt.close_speed);
-						main_cont.removeClass('loading');
-						$('.c_c').append(piro_play);
-						return false;
-					});
+                    img.src = "/images/apps/springsee/404.jpg";
+                    $('div.caption p').text('이미지를 찾을 수 없습니다');
 				}
 				img.onload = function() {
 					var imgH = img.height;
