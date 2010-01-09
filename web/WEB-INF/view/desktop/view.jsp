@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/common.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/framework/plugin/gritter.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/springdock.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/miracle.css"/>"/>
