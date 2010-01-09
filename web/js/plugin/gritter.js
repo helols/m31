@@ -103,7 +103,7 @@
 				item_class = params.class_name || '',
 				time_alive = params.time || '';
 			
-			this._verifyWrapper(params.targetId);
+			this._verifyWrapper();
 			
 			this._item_count++;
 			var number = this._item_count, 
@@ -337,9 +337,10 @@
 		* A check to make sure we have something to wrap our notices with
 		* @private
 		*/  
-		_verifyWrapper: function(targetId){
+		_verifyWrapper: function(){
+
 			if($('#gritter-notice-wrapper').length == 0){
-				$(targetId || 'body').append(this._tpl_wrap);
+				$('body').append(this._tpl_wrap);
 			}
 		
 		}
