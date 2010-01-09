@@ -8,8 +8,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     createCallback : function(win) {
         console.log("Create Call Back.....");
         if (undefined !== win) {
-
+            this.win = win;
         }
+
         // Load Mask
         this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
     },
@@ -28,7 +29,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
              listeners : {
                  beforeload : function(store, options) {
-                     console.debug(this);
                      this.loadMask.show();
                      var textfield = Ext.getCmp('springplayer-serach-textfield');
                      var combo = Ext.getCmp('springplayer-serach-combo');
@@ -67,7 +67,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
             '<tpl for="."><div class="thumb-wrap"><table>',
             '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><span><img class="player-icon" src="../../images/apps/springplayer/title.png"/>{title}</span></td></tr>',
             '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/author.png"/>{author}</span></td></tr>',
-            '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span> <a href="{htmlLink}"><span><img class="player-icon" src="../../images/apps/springplayer/link.png"/>{source}</span></a> / <span>Me2Day</span></td></tr>',
+            '<tr><td><a href="{playerURL}" class="player-play" title="{title}"><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span></a><a href="{htmlLink}" class="player-link"><span><img class="player-icon" src="../../images/apps/springplayer/link.png"/>{source}</span></a> / <span>Me2Day</span></td></tr>',
             '</table></div></tpl>'
         );
 
@@ -90,7 +90,20 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     itemSelector: 'div.thumb-wrap',
                     singleSelect : true,
                     plugins: new Ext.DataView.DragSelector({dragSafe:true}),
-                    emptyText: 'No images to display'
+                    emptyText: 'No images to display',
+                    listeners : {
+                        click : function(dataview, index, node, e) {
+                            var springPlayer = this;
+                            var target = null;
+                            // Player로 전환.
+                            if((target = e.getTarget("a .player-play")) !== null) {
+                                springPlayer.play(target.title,target.href);
+                            // 새창에 소스 홈페이지 오픈.
+                            } else if((target = e.getTarget("a .player-link")) !== null) {
+                                window.open(target.href);
+                            }
+                        }.createDelegate(this)
+                    }
                 },
 
                  tbar : [
@@ -163,6 +176,12 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                 }]
         };
         return config;
+    },
+    // 내가 추가한 함수.
+    play : function(title, url) {
+
+        console.log("title : " + title);
+        console.log("url : " + url);
     }
 });
 
