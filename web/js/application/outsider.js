@@ -34,6 +34,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'load': { fn:function() {
                     console.log("store loaded");
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
+                    Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
+                    Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
                     this.view.select(0);
                     m31.showImage();
                     $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
@@ -253,6 +255,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
     //이미지 검색하기
     getImages : function(button, event, cmd) {
+        var combo = Ext.getCmp('springsee-api-provider');
+        var search = Ext.getCmp('springsee-search');
+
     	if (Ext.isEmpty(Ext.getCmp('springsee-search').getValue())) {
     		alert("검색어를 입력하세요.");
     		return;
@@ -266,10 +271,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     		this.currentPage = 1;
     		return;
     	}
+        //검색조건이 변경되었으면, 다시 검색함.
+        if(combo.isDirty() || search.isDirty()) {
+            this.currentPage = 1;
+        }
+        
     	this.store.reload({
         	params: {
-        		search_type: Ext.getCmp('springsee-api-provider').getValue(), 
-        		query: 		 Ext.getCmp('springsee-search').getValue(),
+        		search_type: combo.getValue(),
+        		query: 		 search.getValue(),
         		pageNo:		 this.currentPage
         	}
         });
