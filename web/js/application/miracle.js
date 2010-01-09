@@ -31,22 +31,34 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                      console.debug(this);
                      this.loadMask.show();
                      var textfield = Ext.getCmp('springplayer-serach-textfield');
+                     var combo = Ext.getCmp('springplayer-serach-combo');
 
                      // 페이징시 검색어가 안 넘어가서 추가.
                      if(options.params['q'] != '') {
                         var q = textfield.getRawValue();
                         options.params['q'] = (q === null) ? '' : q;
-                     }
-                     options.params['limit'] = 10;
-                     
-                     var comboValue = Ext.getCmp('springplayer-serach-combo').getValue();
+                     }    
+
+                     // 보이는건 Youtube지만 실제 전송되는 값은 google이여야 함.
+                     var comboValue = combo.getValue();
                      if(comboValue === 'Youtube')
                         comboValue = 'google';
-
                      options.params['type'] = comboValue;
+
+                     options.params['limit'] = 10;
+
+                     // 텍스트 필드나 콤보박스의 값이 바뀌면 새로 검색.
+                     if(textfield.isDirty() || combo.isDirty()) {
+                         options.params['start'] = 0;
+                     }
                  },
                  load : function(store) {
-                     Ext.getCmp("springplayer-dataview").body.scrollTo('top', 0);
+                    Ext.getCmp("springplayer-dataview").body.scrollTo('top', 0);
+                     // Dirty 채크를 위해서 검색어 저장.
+                     var textfield = Ext.getCmp('springplayer-serach-textfield');
+                     var combo = Ext.getCmp('springplayer-serach-combo');
+                     textfield.originalValue = textfield.getValue();
+                     combo.originalValue = combo.getValue();                     
                  }
              }
         });
