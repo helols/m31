@@ -25,7 +25,7 @@
 	</rule>
     <rule>
 		<from>/favicon*</from>
-		<to>/$1</to>
+		<to>/favicon.ico</to>
 	</rule>
 
     <rule>
