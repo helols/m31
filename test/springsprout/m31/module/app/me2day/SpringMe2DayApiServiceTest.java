@@ -5,14 +5,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -61,6 +57,7 @@ public class SpringMe2DayApiServiceTest {
 		Assert.assertFalse(service.noop(info));
 	}
 	
+	@Test
 	public void 글목록얻어오기() throws Me2DayApiRequestException {
 		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
@@ -68,14 +65,16 @@ public class SpringMe2DayApiServiceTest {
 		
 		PostSearchParam param = new PostSearchParam();
 		param.setId("arawn");
-		param.setForm("2009-12-31T00:00:00+0900");
-		// param.setFriendPostView(true);
-		// param.setCommentView(true);
+		param.setForm("2010-01-09T24:00:00+0900");
+		param.setTo("2009-12-01T00:00:00+0900");
+		param.setMyPostView("Y");
+		param.setFriendPostView("Y");
+		// param.setCommentView("Y");
 		// param.setPost_id("p4vln3");
 		List<Post> posts = service.getPosts(param, info);
 		if(!CollectionUtils.isEmpty(posts)){
 			for(Post post : posts){
-				System.out.println(post);
+				System.out.println(post.getPubDateText());
 			}
 		}
 	}
@@ -165,18 +164,4 @@ public class SpringMe2DayApiServiceTest {
 		System.out.println(service.createComment(commentDTO, info));
 	}
 	
-	@Test
-	public void 댓글날짜계산() throws Exception {
-		// Calendar.getInstance(TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
-		Date curDate = new Date();
-		
-		FastDateFormat format = FastDateFormat.getInstance("yyyy/MM/dd", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
-		
-		Date date = dateFormat.parse("2010/01/03 08:00");
-		
-		
-	}
-
 }

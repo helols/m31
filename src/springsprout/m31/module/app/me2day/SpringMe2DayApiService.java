@@ -132,16 +132,15 @@ public class SpringMe2DayApiService {
 			// 친구글도 같이 볼것인가?
 			if("Y".equals(param.getFriendPostView())){
 				requestUrlList.add(String.format(requestUrl, param.getId()) + "&scope=friend[all]");
-				
-				//List<Person> friends = getFriends(param.getId());
-				//for(Person person : friends){
-				//	requestUrlList.add(person.getId());		
-				//}
 			}
 			
 			String requestParameter = "";
 			if(StringUtils.hasText(param.getForm())){
 				requestParameter += "&from=" + param.getForm();
+			}
+			
+			if(StringUtils.hasText(param.getTo())){
+				requestParameter += "&to=" + param.getTo();
 			}
 			
 			for(String url : requestUrlList){
@@ -150,12 +149,13 @@ public class SpringMe2DayApiService {
 		}
 		
 		if(!CollectionUtils.isEmpty(posts)){
-			// 덧글 가져오기
+			// 댓글 가져오기
 			if("Y".equals(param.getCommentView())){
 				requestUrl = createMe2DayRequestUrl(me2dayapi_get_comments) + "&post_id=%s";
 				for(Post post : posts){
 					if(post.getCommentsCount() > 0){
 						post.setComments(getRequestComments(String.format(requestUrl, post.getPost_id()), info));
+						post.setCommentView(true);
 					}
 				}	
 			}
@@ -412,7 +412,7 @@ public class SpringMe2DayApiService {
 			String requestUrl = createMe2DayRequestUrl(String.format(me2dayapi_create_post, info.getUser_id()), info);	
 			
 			requestUrl += "&post[body]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
-			if(StringUtils.hasText(postDto.getTags())){
+			if(StringUtils.hasText(postDto.getTags()) && !"태그를 입력하세요 (공백으로 구분합니다.)".equals(postDto.getTags())){
 				requestUrl += "&post[tags]=" + URLEncoder.encode(postDto.getTags(), "utf-8");
 			}
 			if(postDto.getIcon() > 0){

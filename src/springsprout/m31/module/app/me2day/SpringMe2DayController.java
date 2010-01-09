@@ -133,7 +133,7 @@ public class SpringMe2DayController {
 				msg = "springme2day_postsend_success";
 			}
 			catch (Me2DayApiRequestException e) {
-				msg = e.getDescription();
+				msg = e.getMessage();
 			}
 		}
 		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);

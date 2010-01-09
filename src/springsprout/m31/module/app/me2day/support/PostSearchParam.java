@@ -1,5 +1,7 @@
 package springsprout.m31.module.app.me2day.support;
 
+import org.springframework.util.StringUtils;
+
 public class PostSearchParam {
 	
 	private String id;
@@ -36,6 +38,7 @@ public class PostSearchParam {
 		return form;
 	}
 	public void setForm(String form) {
+		if(StringUtils.hasText(form)){ form += "T24:00:00+0900"; }
 		this.form = form;
 	}
 	
@@ -43,6 +46,7 @@ public class PostSearchParam {
 		return to;
 	}
 	public void setTo(String to) {
+		if(StringUtils.hasText(to)){ to += "T24:00:00+0900"; }
 		this.to = to;
 	}
 	

@@ -297,6 +297,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     			url += '&myPostView=' + config.myPostView;
     			url += '&friendPostView=' + config.friendPostView;
     			url += '&commentView=' + config.commentView;
+    			
+    			if(config.form){ url += '&form=' + config.form; }
+    			if(config.to){ url += '&to=' + config.to; }
     		}
     		
     		console.log('me2DayModule.get_posts() : ' + url);
@@ -468,24 +471,27 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		actioncomplete: function(form, action){
 	        			console.log('actioncomplete');
 	        			var result = Ext.decode(action.response.responseText);
+	        			console.log(result);
+	        			var msg = '전송 중 네트워크 장애가 발생했습니다.';
 	        			if(result.msg == 'springme2day_not_login'){
-	        				
+	        				msg = '미투데이 인증에 실패했습니다.';
 	        			}
 	        			else if(result.msg == 'springme2day_postsend_success'){
-	        				m31.notification.msg({target:'springme2day-win',text:'미투데이에 글을 성공적으로 전송했습니다.'});
+	        				msg = '미투데이에 글을 성공적으로 전송했습니다.';
+	        				
+	        				form.reset();
+		        			form.findField('springme2day-form-icon').setValue(1);
 	        			}
 	        			else if(result.msg == 'springme2day_postsend_body_blank'){
+	        				msg = '본문이 비어있습니다.';
 	        			}
 	        			else if(result.msg == 'springme2day_postsend_body_maxlength_over'){
+	        				msg = '본문이 150자를 넘습니다.';
 	        			}
-	        			else{
-	        				m31.notification.msg({target:'springme2day-win',text:'미투데이에 글을 전송 중 네트워크 장애가 발생했습니다.'});
-	        			}
+	        			m31.util.notification({title:'봄미투데이',text:msg});
 	        		},
-	        		actionfailed: function(form, action){
-	        			console.log('actionfailed');
-	        		},
-	        		beforeaction: function(form, action){
+	        		actionfailed: function(form, action){ console.log('actionfailed'); },
+	        		beforeaction: function(form, action){ 
 	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
 	        		}
@@ -516,30 +522,76 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	                {name:'commentsCount', mapping: 'commentsCount', renderer: Ext.util.Format.number},
 	                'comments',
 	                'commentClosed',
+	                'commentView',
 	                {name:'location', mapping: 'location.name'},
 	                {name:'writerId', mapping: 'author.id'},
 	                {name:'writerNick', mapping: 'author.nickname'},
 	                {name:'face', mapping: 'author.face'}
-	            ]
+	            ],
+	            listeners: {
+	        		load: function(){
+		        		var els = this.me2DayModule.postGrid.getEl().select('div[class="x-grid3-row-expander]', true);
+		        		// 댓글이 없는 글은 펼침, 접기 아이콘 숨기기
+		        		Ext.each(els.elements, function(el){
+		        			if(el.getStyle('background-position') == "-21px 2px"){
+		        				el.setStyle('display', 'none');
+		        			}
+		        		});
+		        		
+		        		// 앵커 태그에 처리 함수달기!
+		        		els = this.me2DayModule.postGrid.getEl().select('a', true);
+		        		Ext.each(els.elements, function(el){
+		        			el.addListener('click', function(event, sender){
+		        				// TODO 구현하자!
+		        				event.preventDefault();
+		        			});
+		        		}, this);
+		        		
+		        		// 댓글 쓰기에 이벤트 걸기
+		        		els = this.me2DayModule.postGrid.getEl().select('td[class="springme2day-comment-write-text]', true);
+		        		Ext.each(els.elements, function(el){
+		        			el.on('click', function(event, sender){
+		        				this.me2DayModule.showCommentDlg(this.win, sender.id);
+		        			}, this);
+		        		}, this);
+		        		
+		        		// 댓글 삭제에 이벤트 걸기
+		        		els = this.me2DayModule.postGrid.getEl().select('img[class="springme2day-comment-delete-btn]', true);
+		        		Ext.each(els.elements, function(el){
+		        			el.on('click', function(event, sender){
+		        				Ext.Ajax.request({
+		        					url: '/app/me2day/commentDelete',
+		        					params: {commentId:sender.id},
+		        					success: function(response, opts){
+		        						console.log('commentDeleteSuccess : ' + response.responseText);
+		        						console.log(this);
+		        			    		try{
+		        			    			var result = Ext.decode(response.responseText);
+		        			    			if(result.msg == 'springme2day_commentdelete_success'){
+		        			    				result.msg = '댓글을 삭제했습니다.';
+		        			    			}
+		        			    			this.me2DayModule.postStore.reload();
+		        			    			m31.util.notification({title:'봄미투데이',text:result.msg});	
+		        			    		}
+		        			    		catch(e){}
+		        					}.createDelegate(this),
+		        					failure: function(response, opts){
+		        						console.log('commentDeleteFailure: ' + response.responseText);
+		        					}.createDelegate(this)
+		        				});
+		        			}, this);
+		        		}, this);
+	        		}.createDelegate(app)
+	        	}
 	        });	
 	        
 	        // 댓글 접기 and 펼치기를 처리할 extjs grid plugin 
 	        var expander = new Ext.ux.grid.RowExpander({
 	        	getRowClass: function(record, rowIndex, p, ds){
-	        		p.cols = p.cols-1;
-		            var content = this.bodyContent[record.id];
-		            if(!content){
-		                content = this.getBodyContent(record, rowIndex);
-		            }
-		            p.body = content;
-		            return content == '' ? 'x-grid3-row-expanded' : 'x-grid3-row-collapsed';
-	        	},
-	        	getBodyContent : function(record, index){
-	                var content = this.bodyContent[record.id];
-	                if(!content){
-	                	var body = '';
-	                	if(record.data.commentsCount > 0){
-	                		body += '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
+	        		var body = '';
+	            	if(record.data.commentsCount > 0){
+	            		if(record.data.commentView){
+	            			body += '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
 	                		Ext.each(record.data.comments, function(item, index){
 	                			body += '<tr>';
 	                			body += '<td width="8"></td>';
@@ -552,12 +604,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    	                	body += '</tr>';
 	                		});
 	                		body += '</table>';
-	                	}
-	                    content = body;
-	                    this.bodyContent[record.id] = content;
-	                }
-	                return content;
-	            }
+	            		}
+	            		else{
+	            			body += '&nbsp;&nbsp;&nbsp;&nbsp;현재 댓글 보기 설정이 미적용되어 있습니다. (댓글 수 : ' + record.data.commentsCount + ')';
+	            		}
+	            	}
+	            	p.body = body;
+		            return body == '' ? 'x-grid3-row-expanded' : 'x-grid3-row-collapsed';
+	        	}
             });
 	        // 글목록 그리드
 	        this.postGrid = new Ext.grid.GridPanel({
@@ -608,7 +662,31 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            columnLines: true,
 	            loadMask: {msg:'글을 불러오는 중 입니다.'},
 	            plugins: expander,
-				tbar: ['->',{
+				tbar: [{
+						xtype: 'tbtext',
+						text: '',
+						width: 5
+					},{
+						xtype: 'datefield',
+						id: 'springme2day-postlist-form-to',
+						editable: false,
+						format: 'Y-m-d',
+						value: new Date(),
+						width: 85,
+						listeners: {
+							select: function(sender, date){
+								this.userConfig.form = date.format('Y-m-d');
+								this.userConfig.to = date.add(Date.DAY, -7).format('Y-m-d');
+								this.me2DayModule.postStore.proxy.setUrl(
+									this.me2DayModule.get_posts(
+										Ext.apply({userId:this.userInfo.id}, this.userConfig)));
+						        this.me2DayModule.postStore.load();
+							}.createDelegate(app)
+						}
+					},{
+						xtype: 'tbtext',
+						text: '로 부터 이전 7일간의 글을 봅니다.'
+					},'->',{
 						xtype: 'button',
 						text: '새로고침',
 						handler: function(sender, event){
@@ -657,57 +735,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	
         	// 글목록 부르기!
         	this.postStore.load();
-        	this.postStore.on('load', function(){
-        		var els = this.me2DayModule.postGrid.getEl().select('div[class="x-grid3-row-expander]', true);
-        		// 댓글이 없는 글은 펼침, 접기 아이콘 숨기기
-        		Ext.each(els.elements, function(el){
-        			if(el.getStyle('background-position') == "-21px 2px"){
-        				el.setStyle('display', 'none');
-        			}
-        		});
-        		
-        		// 댓글 쓰기에 이벤트 걸기
-        		els = this.me2DayModule.postGrid.getEl().select('a', true);
-        		Ext.each(els.elements, function(el){
-        			console.log(el);
-        		}, this);
-        		
-        		// 댓글 쓰기에 이벤트 걸기
-        		els = this.me2DayModule.postGrid.getEl().select('td[class="springme2day-comment-write-text]', true);
-        		Ext.each(els.elements, function(el){
-        			el.on('click', function(event, sender){
-        				this.me2DayModule.showCommentDlg(this.win, sender.id);
-        			}, this);
-        		}, this);
-        		
-        		// 댓글 삭제에 이벤트 걸기
-        		els = this.me2DayModule.postGrid.getEl().select('img[class="springme2day-comment-delete-btn]', true);
-        		Ext.each(els.elements, function(el){
-        			el.on('click', function(event, sender){
-        				Ext.Ajax.request({
-        					url: '/app/me2day/commentDelete',
-        					params: {commentId:sender.id},
-        					success: function(response, opts){
-        						console.log('commentDeleteSuccess : ' + response.responseText);
-        						console.log(this);
-        			    		try{
-        			    			var result = Ext.decode(response.responseText);
-        			    			if(result.msg == 'springme2day_commentdelete_success'){
-        			    				result.msg = '댓글을 삭제했습니다.';
-        			    			}
-        			    			this.me2DayModule.postStore.reload();
-        			    			m31.notification.msg({target:this.me2DayModule.postPanel.getEl(),text:result.msg});	
-        			    		}
-        			    		catch(e){}
-        					}.createDelegate(this),
-        					failure: function(response, opts){
-        						console.log('commentDeleteFailure: ' + response.responseText);
-        					}.createDelegate(this)
-        				});
-        			}, this);
-        		}, this);
-        	}, app);
-    		
+        	
         	return this.postPanel;
     	},
         /** 친구관리 버튼 */
@@ -833,7 +861,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		var result = Ext.decode(action.response.responseText);
 					var msg = '';
 					if(result.msg == 'springme2day_not_login'){
-						m31.notification.msg({target:this.body,text:'로그인이 되어있지 않습니다.'});
+						m31.util.notification({title:'봄미투데이',text:'로그인이 되어있지 않습니다.'});
 	    			}
 					else{
 						if(result.msg == 'springme2day_configsave_success'){
@@ -842,7 +870,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        			else{
 	        				msg = '네트워크 장애가 발생했습니다.';
 	        			}
-	    				m31.notification.msg({target:this.body,text:msg});
+	    				m31.util.notification({title:'봄미투데이',text:msg});
 					}
 					
 					console.log(result.userInfo);
@@ -854,7 +882,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		this.me2DayModule.postStore.proxy.setUrl(
 	        			this.me2DayModule.get_posts(
 	            			Ext.apply({userId:this.userInfo.id}, this.userConfig)));
-	            	this.me2DayModule.postStore.load()
+	            	this.me2DayModule.postStore.load();
     				this.dialogue.destroy();
     			}, this);
     		// 폼 전송 중 오류가 발생했을때...        	
@@ -892,6 +920,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                 	waitMsgTarget: true,
                     items:[{
 	            		xtype: 'textarea',
+	            		id: 'springme2day-comment-dlg-form-body',
 	            		name: 'body',
 	            		emptyText: '댓글을 150자로 내로 남겨주세요!',
 	            		allowBlank: false,
@@ -930,7 +959,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     				var result = Ext.decode(action.response.responseText);
     				var msg = '';
     				if(result.msg == 'springme2day_not_login'){
-    					m31.notification.msg({target:this.body,text:'로그인이 되어있지 않습니다.'});
+    					m31.util.notification({title:'봄미투데이',text:'로그인이 되어있지 않습니다.'});
         			}
     				else{
     					if(result.msg == 'springme2day_commentsend_success'){
@@ -945,7 +974,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
             			else{
             				msg = '네트워크 장애가 발생했습니다.';
             			}
-        				m31.notification.msg({target:this.body,text:'댓글을 전송했습니다.'});
+        				m31.util.notification({title:'봄미투데이',text:'댓글을 전송했습니다.'});
     				}
     				this.destroy();
     			},
@@ -1109,22 +1138,3 @@ Ext.override(Ext.layout.BorderLayout, {
 		}
 	}
 });
-
-/*
- * 
- */
-/*Ext.MessageBox.getDialog = Ext.override.createInterceptor(function(){
-	return getDialog(arguments);
-});*/
-
-/*Ext.override(, function(){
-	return {
-		test: function(titleText){
-			console.log(titleText);
-		}
-	};
-});*/
-
-//Ext.apply(Ext.MessageBox.getDialog, function(test){console.log(test);});
-
-//Ext.override(Ext.MessageBox.getDialog, function(test){console.log(test);});

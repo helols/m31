@@ -24,6 +24,7 @@ public class Post {
 	private String me2dayPage;
 	private Date pubDate;
 	private String pubDateText;
+	private boolean commentView;
 	private int commentsCount;
 	private int metooCount;
 	private boolean commentClosed;
@@ -105,6 +106,13 @@ public class Post {
 	}
 	public String getPubDateText() {
 		return pubDateText;
+	}
+	
+	public boolean isCommentView() {
+		return commentView;
+	}
+	public void setCommentView(boolean commentView) {
+		this.commentView = commentView;
 	}
 	
 	public int getCommentsCount() {
