@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import springsprout.m31.domain.Member;
 import springsprout.m31.domain.Role;
 import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
+import springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO;
+import twitter4j.Twitter;
 
 @SuppressWarnings("serial")
 public class SpringSproutUserDetail implements UserDetails {
@@ -17,6 +19,8 @@ public class SpringSproutUserDetail implements UserDetails {
 	private Member member;
 	private Me2DayUserInfo me2DayUserInfo;
 	private List<GrantedAuthority> authorities;
+	private TwitterAuthorizationDTO twitterToken;
+	private Twitter twitter;
 
 	public SpringSproutUserDetail(Member member) {
 		this.member = member;
@@ -68,6 +72,22 @@ public class SpringSproutUserDetail implements UserDetails {
 	}
 	public void setMe2DayUserInfo(Me2DayUserInfo me2DayUserInfo) {
 		this.me2DayUserInfo = me2DayUserInfo;
+	}
+	
+	public TwitterAuthorizationDTO getTwitterToken() {
+		return twitterToken;
+	}
+
+	public void setTwitterToken(TwitterAuthorizationDTO twitterToken) {
+		this.twitterToken = twitterToken;
+	}
+	
+	public Twitter getTwitter() {
+		return twitter;
+	}
+
+	public void setTwitter(Twitter twitter) {
+		this.twitter = twitter;
 	}
 
 }

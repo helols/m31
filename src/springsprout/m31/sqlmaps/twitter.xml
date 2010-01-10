@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="twitter">
+
+    <resultMap id="twitterAuthInfo" class="springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO">
+	    <result property="member_id" column="MEMBER_ID" />
+    	<result property="token" column="TOKEN" />
+        <result property="secret_token" column="SECRET_TOKEN" />
+    </resultMap>
+
+    <select id="getTwitterUserAuthTokenByMemberId" resultMap="twitterAuthInfo" parameterClass="int">
+        SELECT MEMBER_ID
+              ,TOKEN
+              ,SECRET_TOKEN
+          FROM MEMBER_TWITTER
+         WHERE MEMBER_ID = #member_id#
+    </select>
+    
+    <update id="insertTwitterUserAuthToken" parameterClass="springsprout.m31.module.app.me2day.support.TwitterAuthorizationDTO">
+    	INSERT INTO MEMBER_TWITTER
+		  (MEMBER_ID, TOKEN, SECRET_TOKEN)
+		  VALUES
+		  (#member_id#, #token#, #secret_token#)
+    </update>    
+    
+</sqlMap>

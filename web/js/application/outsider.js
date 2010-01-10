@@ -597,7 +597,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             activeItem: 0,
             items:[
                    this.startForm,
-                   this.twitterFrame,
+                   this.authGuide,
                    this.loginForm
             ],
             listeners: {
@@ -633,7 +633,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         	text: 'Twitter 시작하기',
         	handler: function(b, e){
         		M31.ApplicationRegistry.getInstance().getApp('springtwitter').startForm.getForm().submit({
-	    			url:'/app/twitter/requestAuthToTwitter', 
+	    			url:'/app/twitter/requestAuthorization', 
 	    			waitMsg:'Loading...'
 	    		});
 	        }
@@ -644,14 +644,15 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     			
     			var result = Ext.decode(action.response.responseText);
     			
-    			if(result.success){
+    			if(!result.auth && result.success){
     				var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    				$("#springtwitter-authguideurl").attr("href", result.authURL);
+//    				Ext.getCmp('springtwitter-authGuide').dolayout();
     				self.cardNavigation(1);
-    				console.log(Ext.getCmp('springtwitter-iframepanel'));
-    				self.win.resizeHandles = "all";
-    				self.win.setSize(600, 400);
+//    				console.log(Ext.getCmp('springtwitter-iframepanel'));
+//    				self.win.resizeHandles = "all";
+//    				self.win.setSize(600, 400);
 //    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
-    				window.open(result.authURL);
     			}
     			else{
     				console.log("fail getting AuthURL");
@@ -680,6 +681,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         		}
         	}
         }]
+    }),
+    
+    authGuide: new Ext.Panel({
+    	id: 'springtwitter-authGuide',
+    	layout:'fit',
+    	html: '봄트위터를 사용하려면 트위터에서 인증이 필요합니다. 1인증을 받으시려면 아래의 버튼을 클릭하세요.<a href="" id="springtwitter-authguideurl" target="_blank">인증하기</a>',
+    	hideBorders: true
     }),
     
     loginForm: new Ext.form.FormPanel({

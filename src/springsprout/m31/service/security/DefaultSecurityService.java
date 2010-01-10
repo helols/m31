@@ -11,7 +11,9 @@ import springsprout.m31.domain.Member;
 import springsprout.m31.domain.Role;
 import springsprout.m31.module.app.me2day.SpringMe2DayRepository;
 import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
+import springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO;
 import springsprout.m31.module.member.MemberRepository;
+import twitter4j.Twitter;
 
 @Service
 @Transactional
@@ -105,6 +107,44 @@ public class DefaultSecurityService implements SecurityService {
 					me2DayRepository.getMe2DayUserInfoByMemberId(getCurrentMemberId())
 			);
 			return ((SpringSproutUserDetail) princial).getMe2DayUserInfo();
+		}
+		return null;
+	}
+	
+	public TwitterAuthorizationDTO getTwitterAuthorizationToken() {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			return ((SpringSproutUserDetail) princial).getTwitterToken();
+		}
+		return null;
+	}
+	
+	public TwitterAuthorizationDTO setTwitterAuthorizationToken(TwitterAuthorizationDTO twitterAuthDTO) {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			((SpringSproutUserDetail) princial).setTwitterToken(twitterAuthDTO);
+			return ((SpringSproutUserDetail) princial).getTwitterToken();
+		}
+		return null;
+	}
+	
+	public Twitter getTwitterObject() {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			return ((SpringSproutUserDetail) princial).getTwitter();
+		}
+		return null;
+	}
+	
+	public Twitter setTwitterObject(Twitter twitter) {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			((SpringSproutUserDetail) princial).setTwitter(twitter);
+			return ((SpringSproutUserDetail) princial).getTwitter();
 		}
 		return null;
 	}
