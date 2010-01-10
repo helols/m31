@@ -175,18 +175,42 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
             items : [ this.serchePanel,
                 {
-                    id : 'springPlayer-player',
-                    tbar : ["Title"],
-                    html : '<h1>This is Player Panel</h1>'
+                    id : 'springplayer-player',
+                    xtype: 'iframepanel',
+                    header: false,
+                    tbar : [
+                        "Title", ' ',
+                        {
+                            id : 'springplayer-player-title',
+                            xtype : 'tbtext',
+                            text : 'title'
+                        }, '->',
+                        {
+                            text : "Close",
+                            handler : function() {
+                                 Ext.getCmp("springplayer-player").setSrc("about:blank");
+                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
+                            }
+                        }
+
+                    ]
                 }]
         };
         return config;
     },
-    // 내가 추가한 함수.
-    play : function(title, url) {
+    /* 내가 추가한 함수들 */
+    /**
+     * 플레이어를 호출 한다.
+     * @param title
+     * @param url
+     */
+    play : function(title, url) {        
+        this.win.getLayout().setActiveItem(1);
+        // url을 iframe에 넣기.
+        Ext.getCmp("springplayer-player").setSrc(url);
+        // 타이틀 변경
+        Ext.getCmp("springplayer-player-title").setText(title);       
 
-        console.log("title : " + title);
-        console.log("url : " + url);
     }
 });
 
