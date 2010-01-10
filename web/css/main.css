@@ -67,23 +67,26 @@ div.name_text {
     position: absolute;
     bottom: 0px;
     text-align: left;
+    z-index: 9999;
 }
 
 .addition {
     background-color: #FFF;
-    display: none;
+    visibility: hidden;
     left: 0px;
-    bottom: 0px;
     width: 256px;
     position: absolute;
-    height: 30px;
-    border-top: 10px solid #f5f5f5;
+    height: 0px;
     text-align: left;
-    z-index: 9999;
+    bottom:0;
+    border-top: 10px solid #f5f5f5;
+    z-index: 9998;
 }
-
-.change-addition {
-    height: 60px;
+div.addition_border{
+    border-top: 10px solid #f5f5f5;
+}
+.new-addition{
+    background-color:#000;
 }
 
 .addition input.j_password {
@@ -110,9 +113,26 @@ div.addition .email {
     background: url("../images/main/email-bk.png") no-repeat;
 }
 
-div.addition img.new_nextbtn {
+div.addition img.new_nextbtn{
+    display:block;
+}
+div.addition img.new_nextbtn, div.addition img.new_cancle,div.addition img.new_signupbtn{
+    border:none;
     cursor: pointer;
     background-color: #000;
+}
+div.addition img.new_cancle,div.addition img.new_signupbtn{
+    width:85px;
+}
+
+div.addition img.new_blank{
+    width:78px;
+    border:none;
+    background-color: #000;
+}
+
+div.addition img.display{
+    display:none;
 }
 
 div.addition img.changeImg {
@@ -147,7 +167,7 @@ div.signup input {
     border: 1px solid #CCC;
     padding: 2px 1px 1px 1px;
     margin-left: 10px;
-    width: 234px;
+    width: 232px;
     font-size: 14pt;
 }
 
@@ -168,6 +188,9 @@ div.signup dd {
     padding:5px 0;
 }
 
+.signupvalidate{
+     border: 2px solid #F00 !important;
+}
 /* ie .... */
 .addition input.j_email_ie {
     margin-top: -1px !important;

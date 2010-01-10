@@ -35,17 +35,11 @@
 <script type="text/javascript">
     //    m31.util.loading();
     Ext.onReady(function() {
-        var user = Ext.util.Cookies.get("springsprout");
-        var users = [];
-        if (user !== null) {
-            users = user.split(":")
-        }
-        //        console.log(users)
-
-        //        Ext.util.Cookies.set("springsprout", "helolsjava@gmail.com:helols@naver.com", new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+        var users = Ext.util.Cookies.get("springsprout");
+        console.log(users);
         //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
         //http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256
-        movingbox.init();
+        movingbox.init(users);
         /**
          * 서글 IE가 참으로 고맙게도 동작해주는 관계로.. 예외처리함.
          */
@@ -61,15 +55,14 @@
     <div class="panel" id="panel_demo">
         <div class="inside">
             <img src="<c:url value="/images/main/demo-logo.png"/>"
-                 alt="demo"/>
-
+                 alt="demo user"/>
             <div class="name_text">Demo User</div>
         </div>
-        <div class="addition">
+        <div class="addition demo-addition">
             <input type="hidden" name="j_username" class="j_username" value="springsprout@springsprout.org">
             <input type="hidden" name="j_title" class="j_title" value="Demo User">
-            <input type="password" name="j_password" class="j_password">
-            <img id="loginNextBtn" class="nextbtn" src="<c:url value="/images/main/login.png"/>" title="Login!"/>
+            <input type="password" name="j_password" class="j_password" readonly="true">
+            <img class="nextbtn" src="<c:url value="/images/main/login.png"/>" title="Login!"/>
         </div>
     </div>
     <div class="panel" id="panel_change">
@@ -92,7 +85,7 @@
     <div class="panel" id="panel_newuser">
         <div class="inside quickFlip">
             <div class="newuser">
-                <img src="http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256"
+                <img src="<c:url value="/images/main/newuser-logo.png"/>"
                      alt="new user"/>
 
                 <div class="name_text" style="">New User</div>
@@ -103,28 +96,34 @@
                         <label>E-mail address</label>
                     </dt>
                     <dd>
-                        <input type="text" name="j_username" class="j_username" value="">
+                        <input type="text" id= "j_username" name="j_username" class="j_username" value="">
                     </dd>
                     <dt>
                         <label>Password</label>
                     </dt>
                     <dd>
-                        <input type="password" name="j_password" class="j_password" value="">
+                        <input type="password" id="j_password" name="j_password" class="j_password" value="">
                     </dd>
                     <dt>
                         <label>Nickname</label>
                     </dt>
                     <dd>
-                        <input type="password" name="j_password" class="j_password" value="">
+                        <input type="text" id= "j_nickname" name="j_nickname" class="j_nickname" value="">
                     </dd>
                 </dl>
             </div>
         </div>
-        <div class="addition">
+        <div id ="new-addition" class="addition new-addition">
             <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
             <input type="hidden" name="j_title" class="j_title" value="New User">
-            <img id="newNextBtnImg" class="new_nextbtn quickFlipCta"
-                 src="<c:url value="/images/main/newuser-next-btn.gif"/>" title="SignUp"/>
+            <img id="newNextBtnImg" class="new_nextbtn"
+                 src="<c:url value="/images/main/newuser-next-btn.png"/>" title="Yes"/>
+            <img id="cancleBtnImg" class="new_cancle display"
+                 src="<c:url value="/images/main/cancle.png"/>" title="Cancle"/>
+            <img id="blankImg" class="new_blank display"
+                 src="<c:url value="/images/main/blank.png"/>" />
+            <img id="signupBtnImg" class="new_signupbtn display"
+                 src="<c:url value="/images/main/signup.png"/>" title="SignUp"/>
         </div>
     </div>
 

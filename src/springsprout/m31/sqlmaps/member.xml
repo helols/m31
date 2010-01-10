@@ -30,20 +30,58 @@
 
     <select id="getMemberRoles" resultMap="role" parameterClass="int">
         SELECT
-            R.id ,
-            R.name,
-            R.descr
+        R.id ,
+        R.name,
+        R.descr
         FROM MEMBER_ROLES MR
-            INNER JOIN ROLE R ON R.ID = MR.ROLE_ID
+        INNER JOIN ROLE R ON R.ID = MR.ROLE_ID
         WHERE MR.MEMBER_ID = #id#
     </select>
-    <!--
-    <selectkey>
-        SELECT ID FROM MEMBER WHERE EMAIL = 'helolsjava@gmail.com'
-    </selectkey>
-    INSERT INTO MEMBER_APPS
-    SELECT member_id, ID , APP_DEFULT_YN from application_info
-    ÇÒ¿¹Á¤.
-    -->
 
+    <insert id="signup" parameterClass="springsprout.m31.dto.SignupDTO">
+        <selectKey keyProperty="j_memberId" resultClass="int">
+            SELECT MEMBER_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO MEMBER (ID,EMAIL,PASSWD,NAME,LOCATION)
+        VALUES (
+        #j_memberId#,
+        #j_username#,
+        #j_password#,
+        #j_nickname#,
+        'seoul'
+        )
+    </insert>
+
+    <insert id="installApp" parameterClass="int">
+        INSERT INTO MEMBER_APPS
+        SELECT
+        MEMBER.ID AS MEMBER_ID
+        , APP.ID
+        , APP.APP_DEFULT_YN
+        , APP.APP_DEFULT_ORDER
+        FROM MEMBER MEMBER,
+        APPLICATION_INFO APP
+        WHERE MEMBER.ID = #id#
+        ORDER BY APP.APP_DEFULT_ORDER
+    </insert>
+
+    <insert id="initDesktopAdditon" parameterClass="springsprout.m31.domain.DeskTopAdditionInfo">
+        INSERT INTO DESKTOP_ADDITION_INFO
+        (
+        ID
+        , MEMBER_ID
+        , THEME_TYPE
+        , BK_COLOR
+        , BK_IMG_SRC
+        , BK_IMG_POSITION
+        , BK_IMG_REPEAT )
+        VALUES
+        ( DESKTOP_SEQ.NEXTVAL
+        , #memberId#
+        , #deskTopThemeId#
+        , #deskTopBKcolor#
+        , #deskTopBKImgSrc#
+        , #deskTopBKImgPosition#
+        , #deskTopBKImgRepeat# )
+    </insert>
 </sqlMap>

@@ -8,12 +8,35 @@
 package springsprout.m31.domain;
 
 public class DeskTopAdditionInfo {
-    private String me2DayUserkey;
-    private String twitterUserkey;
+
+    private Integer id;
+    private Integer memberId;
+    /**
+     * 3종류의 ID로 구분.
+     */
     private String deskTopThemeId;
+
+    /**
+     * RGB 코드
+     */
     private String deskTopBKcolor;
+    /**
+     * img src...
+     */
     private String deskTopBKImgSrc;
+
+    /**
+     * 이미지 포지션.. 총 9가지 경우의 수.  세로/가로
+     * 세로 :  top, center, bottom
+     * 가로 : left, center, right
+     * 조합. tl,tc,tr,cl,cc,cr,bl,bc,br
+     */
     private String deskTopBKImgPosition;
+    /**
+     * 이미지 반복여부 . 총 4가지.
+     * r(자동반복 xy), rx , ry , nr(반복하지 않음)
+     */
+    private String deskTopBKImgRepeat;
 
     public String getDeskTopBKcolor() {
         return deskTopBKcolor;
@@ -47,20 +70,27 @@ public class DeskTopAdditionInfo {
         this.deskTopThemeId = deskTopThemeId;
     }
 
-    public String getMe2DayUserkey() {
-        return me2DayUserkey;
+    public String getDeskTopBKImgRepeat() {
+        return deskTopBKImgRepeat;
     }
 
-    public void setMe2DayUserkey(String me2DayUserkey) {
-        this.me2DayUserkey = me2DayUserkey;
+    public void setDeskTopBKImgRepeat(String deskTopBKImgRepeat) {
+        this.deskTopBKImgRepeat = deskTopBKImgRepeat;
     }
 
-    public String getTwitterUserkey() {
-        return twitterUserkey;
+    public Integer getMemberId() {
+        return memberId;
     }
 
-    public void setTwitterUserkey(String twitterUserkey) {
-        this.twitterUserkey = twitterUserkey;
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

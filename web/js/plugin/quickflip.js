@@ -67,12 +67,12 @@
                 var $this = $(this);
                 
                 // attach standard click handler
-                if ( options.ctaSelector ) {
-                    $this.find(options.ctaSelector).click(function(ev) {
-                        ev.preventDefault();
-                        $.quickFlip.flip(i);
-                    });
-                }
+//                if ( options.ctaSelector ) {
+//                    $this.find(options.ctaSelector).click(function(ev) {
+//                        ev.preventDefault();
+//                        $.quickFlip.flip(i);
+//                    });
+//                }
 
                 if ( j ) $this.hide();
             });

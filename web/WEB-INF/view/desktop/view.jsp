@@ -71,7 +71,7 @@
                 M31.ApplicationRegistry.getInstance().loadApplicationStore();
             }
         });
-    })
+    });
 </script>
 <div id="m31-desktop">
     <div id="m31-springdock">

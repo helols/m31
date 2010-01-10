@@ -15,6 +15,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.member.MemberRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,5 +28,16 @@ public class DbTest {
     @Rollback(true)
     @Test public void dbConnectTest(){
         Assert.assertNotNull(memberRepository.getMemberByEmail("helolsjava@gmail.com"));
+    }
+
+    @Rollback(true)
+    @Test public void signupTest(){
+        SignupDTO s = new SignupDTO();
+        s.setJ_password("abc");
+        s.setJ_username("h@nam");
+        s.setJ_nickname("야호");
+        Integer id = memberRepository.signup(s);
+        System.out.println("id>>"+ id);
+        Assert.assertNotNull(id);
     }
 }

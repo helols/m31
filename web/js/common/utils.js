@@ -99,13 +99,13 @@ m31.util = {
                             , '             <img class="loader-img" src="../../../images/ajax-loader.gif" align="absmiddle"/>'
                             , '         </div>'
                             , '</div>' ].join('');
-        var el = Ext.DomHelper.append(Ext.fly('loading-mask'), loadingHtml, true);
+        Ext.DomHelper.insertAfter(Ext.fly('loading-mask'), loadingHtml,true);
         if(anime){
-                el.parent('#loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .6, from: .11}})
-                  .down('#loading').setVisible(true,true);
+                Ext.fly('loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .8, from: .1}});
+                Ext.fly('loading').setVisible(true,true);
         }else{
-            el.parent('#loading-mask').setVisible(true)
-               .down('#loading').setVisible(true,true);
+           Ext.fly('loading-mask').setVisible(true);
+           Ext.fly('loading').setVisible(true,true);
         }
     },
 
@@ -115,8 +115,8 @@ m31.util = {
      */
     loading_remove: function(anime_time){
         setTimeout(function(){
-            Ext.get('loading').remove();
-            Ext.get('loading-mask').fadeOut({remove:false});
+            Ext.fly('loading').remove();
+            Ext.fly('loading-mask').fadeOut({remove:false});
         }, anime_time||250);
     },
 
@@ -129,7 +129,7 @@ m31.util = {
         opt.title = opt.title||'Notification...';
         opt.text = opt.text||'';
         opt.image = '../../../../../images/plugin/notication-logo.png';
-        opt.time = 5000;
+        opt.time = opt.time || 4000;
         if(opt.remove && noti_unique_id !== null){
             $.gritter.remove(noti_unique_id, {
         	    fade: false,
@@ -138,6 +138,27 @@ m31.util = {
         }
         noti_unique_id =  $.gritter.add(opt);
         return noti_unique_id;
+    },
+    notificationRemove : function( uniqueArray){
+        if(Ext.isArray(uniqueArray)){
+            Ext.each(uniqueArray, function(uniqueId){
+                $.gritter.remove(uniqueId, {
+        	        fade: false,
+	                speed: 'fast'
+                });
+            });
+        }else{
+            $.gritter.removeAll();
+        }
+    },
+
+    getUserCookie : function(){
+        var user = Ext.util.Cookies.get("springsprout");
+        var users = [];
+        if (user !== null) {
+            users = user.split(":")
+        }
+        return users;
     }
 };
 

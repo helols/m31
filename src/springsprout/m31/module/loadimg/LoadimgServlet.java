@@ -19,8 +19,19 @@ import java.io.IOException;
 
 import static springsprout.m31.utils.OpenApiRequestHelper.loadApi;
 
+/**
+ * 해당 서블릿은 다음에서 주는 이미지 url은 바로 보기가 안되서..
+ * 서버를 한번 통해서 Refer를 없앤후에... 이미지 스트림을 얻기 위해서 만들어진
+ * 서블릿.
+ */
 public class LoadimgServlet extends HttpServlet {
 
+    /**
+     * service ..
+     * @param req
+     * @param res
+     * @throws IOException
+     */
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("image/*");

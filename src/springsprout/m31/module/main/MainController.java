@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import springsprout.m31.dto.SignupDTO;
+import springsprout.m31.module.main.support.SignupValidator;
 import springsprout.m31.module.member.MemberService;
 import springsprout.m31.service.security.SecurityService;
 
@@ -32,6 +36,8 @@ public class MainController {
     MemberService memberService;
     @Autowired
     SecurityService securityService;
+    @Autowired
+    SignupValidator signupValidator;
 
     @RequestMapping("/main/index")
     public String index(){
@@ -49,6 +55,22 @@ public class MainController {
         log.debug("loginFailProcess");
         clearAJAXHeader(res);
         return new ModelAndView(JSON_VIEW).addObject("loginResult", "fail");
+    }
+
+    @RequestMapping(value="/main/signup",method= RequestMethod.POST)
+    public ModelAndView signup(SignupDTO signupDTO, BindingResult result){
+        signupValidator.validate(signupDTO, result);
+        if (result.hasErrors()) {
+			return new ModelAndView(JSON_VIEW).addObject("signstat","validate")
+                    .addObject("errInfo",result.getFieldErrors());
+		}
+        Boolean signupStat =  memberService.signup(signupDTO);
+        return new ModelAndView(JSON_VIEW).addObject("signstat", signupStat?"success":"fail");
+    }
+
+    @RequestMapping(value="/main/emailconfirm")
+    public ModelAndView emailconfirm(String email){
+        return new ModelAndView(JSON_VIEW).addObject("emailconfirm",memberService.isDuplicated(email));    
     }
 
     private boolean isAjaxLogin(HttpServletRequest req) {
