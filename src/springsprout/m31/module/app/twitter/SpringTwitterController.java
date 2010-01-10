@@ -57,10 +57,4 @@ public class SpringTwitterController {
         return "/springtwitter/getToken";
     }
 
-    @RequestMapping
-    public ModelAndView test() {
-        return new ModelAndView(JSON_VIEW).addObject("success", true);
-    }
-
-
 }

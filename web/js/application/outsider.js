@@ -598,7 +598,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             items:[
                    this.startForm,
                    this.authGuide,
-                   this.loginForm
+                   this.twitterView
             ],
             listeners: {
 	    		resize: function(){
@@ -643,9 +643,9 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     			console.log('actioncomplete');
     			
     			var result = Ext.decode(action.response.responseText);
+    			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
     			
     			if(!result.auth && result.success){
-    				var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
     				$("#springtwitter-authguideurl").attr("href", result.authURL);
 //    				Ext.getCmp('springtwitter-authGuide').dolayout();
     				self.cardNavigation(1);
@@ -653,8 +653,9 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 //    				self.win.resizeHandles = "all";
 //    				self.win.setSize(600, 400);
 //    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
-    			}
-    			else{
+    			} else if (result.auth && result.success) {
+    				self.cardNavigation(2);
+    			} else{
     				console.log("fail getting AuthURL");
     			}
     		}.createDelegate(this),
@@ -686,9 +687,16 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     authGuide: new Ext.Panel({
     	id: 'springtwitter-authGuide',
     	layout:'fit',
-    	html: '봄트위터를 사용하려면 트위터에서 인증이 필요합니다. 1인증을 받으시려면 아래의 버튼을 클릭하세요.<a href="" id="springtwitter-authguideurl" target="_blank">인증하기</a>',
+    	html: '봄트위터를 사용하려면 트위터에서 인증이 필요합니다. 인증을 받으시려면 아래의 버튼을 클릭하세요.<a href="" id="springtwitter-authguideurl" target="_blank">인증하기</a>',
     	hideBorders: true
     }),
+    
+    twitterView: new Ext.Panel({
+    	id: 'springtwitter-view',
+    	layout:'fit',
+    	html: '트위터가 실행된 페이지임.',
+    	hideBorders: true
+    }), 
     
     loginForm: new Ext.form.FormPanel({
         layout: 'form',

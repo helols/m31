@@ -16,7 +16,7 @@
          WHERE MEMBER_ID = #member_id#
     </select>
     
-    <update id="insertTwitterUserAuthToken" parameterClass="springsprout.m31.module.app.me2day.support.TwitterAuthorizationDTO">
+    <update id="insertTwitterUserAuthToken" parameterClass="springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO">
     	INSERT INTO MEMBER_TWITTER
 		  (MEMBER_ID, TOKEN, SECRET_TOKEN)
 		  VALUES

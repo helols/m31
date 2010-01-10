@@ -26,6 +26,7 @@
 <c:choose>
     <c:when test="${result == true}">
         <div>인증완료 페이지 입니다.</div>
+        <input type="button" onclick="self.close();">닫기</input>
     </c:when>
     <c:when test="${result == false}">
         <div>인증 실패</div>

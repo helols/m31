@@ -28,17 +28,11 @@ public class SpringTwitterAuthorization {
     private final String CONSUMER_SECRET = "4cYniE2TlosIqplbQGcmkcMtjLG2bFKCcrifemoIu2Q";
 
     public Boolean checkAuthorization() {
-        String userToken;
-        String userSecretToken;
-
         TwitterAuthorizationDTO twitterAuthDTO = twitterRepository.getUserAuthTokenByMemberId(securityService.getCurrentMemberId());
-        userToken = twitterAuthDTO.getToken();
-        userSecretToken = twitterAuthDTO.getSecret_token();
-
-        if (userToken.trim().equals("") || userToken == null || userSecretToken.trim().equals("") || userSecretToken == null) {
-            return false;
+        if (twitterAuthDTO == null) {
+        	return false;
         } else {
-            return true;
+        	return true;
         }
     }
 
@@ -52,8 +46,6 @@ public class SpringTwitterAuthorization {
             throw new OpenApiReadException(e);
         }
 
-//		String userRequestToken = "mNFFhBcIvYSxvHg82QNImEsrihexfriXbUiUd3gM";
-//		String userSecretToken = "P0sILcVd5ERJpeiIeJQrXAEmIQ7mqggC5134ATIM";
         TwitterAuthorizationDTO authDTO = new TwitterAuthorizationDTO();
         authDTO.setToken(requestToken.getToken());
         authDTO.setSecret_token(requestToken.getTokenSecret());
@@ -68,15 +60,9 @@ public class SpringTwitterAuthorization {
     }
 
     public void getAuthorization() {
-//		String userToken;
-//		String userSecretToken;
 
         TwitterAuthorizationDTO twitterAuthDTO = new TwitterAuthorizationDTO();
         twitterAuthDTO = twitterRepository.getUserAuthTokenByMemberId(securityService.getCurrentMemberId());
-        //테스트용 Token, Outsider계정
-//		userToken = "7932892-t1WhGYBoUbuufGXqMP7F1H4xIvYDQFilSGZeZcJTbn";
-//		userSecretToken = "ukpHS7Kw9DKDQxTvF76vehXxZNUenZ8rixxUyw7ANw";
-//		userSecretToken = "Gut23fNxEsh60lpQNx46XiYg5iQH9h5zFEOecq5Oqc";
 
         Twitter twitter = new Twitter();
         twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
@@ -90,18 +76,6 @@ public class SpringTwitterAuthorization {
         log.debug("token after Auth>>>" + accessToken.getToken());
         log.debug("secrettoken after Auth>>>" + accessToken.getTokenSecret());
 
-//		int id = accessToken.getUserId();
-//		User user = twitter.showUser(id+"");
-//		String screenName = user.getScreenName();
-//
-//		log.debug("screenname>> " + screenName);
-//		
-//		List<Status> statuses = twitter.getFriendsTimeline();
-//	    System.out.println("Showing friends timeline.");
-//	    for (Status status : statuses) {
-//	        System.out.println(status.getUser().getName() + ":" +
-//	                           status.getText());
-//	    }
     }
 
     public Boolean storeAuthToken(String oauthToken) {
@@ -112,7 +86,6 @@ public class SpringTwitterAuthorization {
         securityService.getTwitterAuthorizationToken();
 
         twitterAuthDTO = securityService.getTwitterAuthorizationToken();
-        ;
 
         AccessToken accessToken = null;
 
