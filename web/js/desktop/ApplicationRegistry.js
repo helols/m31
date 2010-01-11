@@ -6,7 +6,8 @@ M31.ApplicationRegistry = function() {
         springme2day :{app : 'new M31Desktop.SpringMe2Day()'},
         springplayer :{app : 'new M31Desktop.SpringPlayer()'},
         springtwitter :{app : 'new M31Desktop.SpringTwitter()'},
-        signout :{app : 'new M31Desktop.Signout()'}
+        signout :{app : 'new M31Desktop.Signout()'},
+        springfinder :{app : 'new M31Desktop.Springfinder()'}
     };
     var loaded = false;
     var appOrderSort = function(a,b){

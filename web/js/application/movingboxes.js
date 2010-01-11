@@ -201,9 +201,6 @@ movingbox = function() {
                 .setHeight(40, true)
                 .down('input.j_password')
                 .addClass('password');
-//        el.down('#user-delete')
-//                .removeClass('display');
-
     };
 
     /**
@@ -429,7 +426,7 @@ movingbox = function() {
                 var result = Ext.decode(response.responseText);
                 if (result.loginResult === 'success') {
                     makeuserCookie(isCookie, username);
-//                    moveViewPage('yes');
+                    moveViewPage('yes');
                 } else {
                     loading_remove();
                     m31.util.notification({
@@ -497,33 +494,24 @@ movingbox = function() {
      */
     var makeuserCookie = function(isMake, email) {
         if (isMake) {
-            var usersstr = null;
             var users = m31.util.getUserCookie();
-            if (users.length === 0) {
-                usersstr = email;
-            } else {
-                if (users.join(';').indexOf(email) === -1) {
-                    users.push(email);
-                }
+            if (users.length === 0 || users.join(';').indexOf(email) === -1) {
+                users.push(email);
             }
-            usersstr = users.join(';');
-            Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+            m31.util.setUserCokie(users.join(';'));
         }
     };
-
     /**
      * 가입과 change 유저에서 로그인시에.. 쿠키를 굽는다.
      */
     var removeuserCookie = function() {
-        var usersstr = null;
         var users = m31.util.getUserCookie();
         Ext.each(users,function(user,idx){
             if(user === removeEmail.split(';')[1]){
-                Array.remove(users,idx);
+                users.remove(user);
             }
         });
-        usersstr = users.join(';');
-        Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+        m31.util.setUserCokie(users.join(';'));
     };
     /**
      * 경고를 딜레이 시키기 위해서....
@@ -626,17 +614,25 @@ movingbox = function() {
     };
 
     /**
-     * 메세지 삭제 확인 펑션.
+     * 메세지 삭제 확인 펑션. yes 시 ... 아이콘 삭제후 .. 아이콘들 재정렬
      */
     var showResult = function(result){
         if(result === 'yes'){
             var elId  = removeEmail.split(';')[0];
             removeuserCookie();
             Ext.fly(elId).remove();
+            actItem = undefined;
+            r_actItem = 1;
+            totalCnt = 0;
+            actIdx = -1;
             relayer(false);
         }
         removeEmail = null;
     };
+
+    /**
+     * 최초 초기화.
+     */
     var initMovingBox = function() {
         relayer('init');
         Ext.select('div.name_text').setOpacity(.7);

@@ -14,11 +14,7 @@ if (Ext.isIE) {
         }}
     }();
 }
-Array.remove = function(array, from, to) {
-  var rest = array.slice((to || from) + 1 || array.length);
-  array.length = from < 0 ? array.length + from : from;
-  return array.push.apply(array, rest);
-};
+    
 // namespace
 var m31 = {};
 var noti_unique_id = null;
@@ -163,6 +159,9 @@ m31.util = {
             users = user.split(";");
         }
         return users;
+    },
+    setUserCokie : function(user){
+        Ext.util.Cookies.set("springsprout", user, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
     }
 };
 

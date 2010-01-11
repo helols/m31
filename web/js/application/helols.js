@@ -91,3 +91,27 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
         return opt;
     }
 });
+
+
+/**
+ * springfinder ...
+ */
+
+M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
+    createCallback :function(win){
+         if(!this.win){
+            this.win = win;
+        }
+    },
+    createWindow : function() {
+          var opt = {
+            width:640,
+            height:480,
+            html : '<p>Something useful would be in here.</p>',
+            shim:false,
+            animCollapse:false,
+            constrainHeader:true
+        };
+        return opt;
+    }
+});

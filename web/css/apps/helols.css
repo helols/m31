@@ -4,6 +4,11 @@
 .signout-win-icon{
     background-image: url(../../images/apps/win-icon/signout_win_icon.png) !important;
 }
+.springfinder-win-icon{
+    background-image: url(../../images/apps/win-icon/springfinder_win_icon.png) !important;
+}
+
+
 .signout-fit{
     text-align:center;
 }
