@@ -162,6 +162,10 @@ m31.util = {
     }
 };
 
+getApp = function(appName){
+    return M31.ApplicationRegistry.getInstance().getApp(appName);
+}
+
 /** 
  * 알림 함수
  * m31.notification.msg({
