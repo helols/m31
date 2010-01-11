@@ -71,7 +71,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
             '<tpl if="playerURL !== null"><a href="{playerURL}" class="player-play" title="{title}"><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span></a></tpl>',
             '<tpl if="playerURL === null"><span><img class="player-icon" src="../../images/apps/springplayer/play-disable.png"/>Play</span></tpl>',
             '<a href="{htmlLink}" class="player-link"><span><img class="player-icon" style="padding-right:2px;" src="../../images/apps/springplayer/link.png"/>{source}</span></a>',
-            '<span>Me2Day</span></td></tr>',
+            '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a>',
+            '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springtwitter_win_icon.png"/><span>Twitter</span></a></td></tr>',
             '</table></div></tpl>'
         );
 
@@ -169,14 +170,17 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
             height: 480,
             minWidth: 640,
             minHeight: 480,
-
+            constrain : true,
+            hideMode : 'offsets',
+            
             layout : 'card',
             activeItem : 0,
 
             items : [ this.serchePanel,
                 {
-                    id : 'springplayer-player',
-                    xtype: 'iframepanel',
+                    xtype : 'panel',
+                    plugins: new Ext.ux.FlashPlugin(), 
+                    id : 'springplayer-player',                    
                     header: false,
                     tbar : [
                         "Title", ' ',
@@ -188,7 +192,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         {
                             text : "Close",
                             handler : function() {
-                                 Ext.getCmp("springplayer-player").setSrc("about:blank");
+                                 Ext.getCmp("springplayer-player").loadFlash({swf : ''});
                                  Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
                             }
                         }
@@ -204,13 +208,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param title
      * @param url
      */
-    play : function(title, url) {        
+    play : function(title, url) {
         this.win.getLayout().setActiveItem(1);
-        // url을 iframe에 넣기.
-        Ext.getCmp("springplayer-player").setSrc(url);
-        // 타이틀 변경
-        Ext.getCmp("springplayer-player-title").setText(title);       
-
+        Ext.getCmp("springplayer-player").loadFlash({swf : url});
+        Ext.getCmp("springplayer-player-title").setText(title);
     }
 });
 
@@ -272,3 +273,51 @@ Ext.app.CustomLoadMask = Ext.extend(Ext.LoadMask, {
         }, 500);
     }
 });
+
+Ext.ux.FlashPlugin = function() {
+    this.init = function(ct) {
+        ct.flashTemplate = new Ext.XTemplate(
+            //'<div>',
+            '<object id="flash-{id}" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="{swfWidth}" height="{swfHeight}">',
+            '<param name="movie" value="{swf}" />',
+            '<param name="quality" value="high" />',
+            '<param name="wmode" value="transparent" />',
+            '<param name="flashvars" value="{computedflashvars}" />',
+            '<param name="allowScriptAccess" value="domain" />',
+            '<param name="align" value="t" />',
+            '<param name="salign" value="TL" />',
+            '<param name="swliveconnect" value="true" />',
+            '<param name="scale" value="showall" />',
+            '<embed name="flash-{id}" src="{swf}" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="{computedflashvars}" type="application/x-shockwave-flash" width="{swfWidth}" height="{swfHeight}" wmode="transparent" allowScriptAccess="always" swliveconnect="true" align="t" salign="TL" scale="showall"></embed>',
+            '</object>'
+            //'</div>'
+        );
+        ct.flashTemplate.compile();
+        ct.renderFlash = function() {
+            console.log("render Flash");
+            if (this.flashvars && (typeof this.flashvars == 'object')) {
+                var tempflashvars = Ext.apply({}, this.flashvars);
+                for (var key in tempflashvars) {
+                    if (typeof tempflashvars[key] == 'function') {
+                        tempflashvars[key] = tempflashvars[key].call(this, true);
+                    }
+                };
+                this.computedflashvars = Ext.urlEncode(tempflashvars);
+            }
+            //this.swfHeight = this.body.getSize().height -2;
+            //this.swfWidth = this.body.getSize().width -2;
+            this.swfHeight = "100%";
+            this.swfWidth = "100%";
+            if (this.body.first()) {
+                this.flashTemplate.overwrite(this.body.first(),this);
+            } else {
+                this.flashTemplate.insertFirst(this.body,this);
+            }
+        };
+        ct.loadFlash = function(config) {
+            Ext.apply(this,config);
+            this.renderFlash();
+        };
+        //ct.on('afterlayout',ct.renderFlash, ct);
+    };
+};
