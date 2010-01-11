@@ -1,6 +1,5 @@
 M31Desktop.Setting = Ext.extend(M31.app.Module, {
     init : function() {
-        console.log('setting init');
     },
 
     createWindow : function() {
@@ -18,7 +17,7 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
 
 /**
  * signout ...
- */
+ */ 
 M31Desktop.Signout = Ext.extend(M31.app.Module, {
     createCallback :function(win){
          if(!this.win){
