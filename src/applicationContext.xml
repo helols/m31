@@ -51,7 +51,9 @@
           p:username="${jdbc.username}"
           p:password="${jdbc.password}"
           p:maxIdle="${jdbc.maxIdle}"
-          p:maxActive="${jdbc.maxActive}"/>
+          p:maxActive="${jdbc.maxActive}"
+          p:testWhileIdle="true"
+          p:validationQuery="select 1 from dual"/>
 
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
