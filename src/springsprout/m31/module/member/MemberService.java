@@ -59,7 +59,7 @@ public class MemberService {
 	}
 
     public List<HashMap<String, String>> makeMemberInfo(String users) {
-        List<HashMap<String,String>> userList = memberRepository.makeMemberInfo(Arrays.asList(users.split(",")));
+        List<HashMap<String,String>> userList = memberRepository.makeMemberInfo(Arrays.asList(users.split(";")));
         for(HashMap<String,String> userInfo : userList){
             userInfo.put("IMGSRC", AVATAR_URL+MD5Util.md5Hex(userInfo.get("EMAIL"))+ "?r=x&s=256");
         }

@@ -429,7 +429,7 @@ movingbox = function() {
                 var result = Ext.decode(response.responseText);
                 if (result.loginResult === 'success') {
                     makeuserCookie(isCookie, username);
-                    moveViewPage('yes');
+//                    moveViewPage('yes');
                 } else {
                     loading_remove();
                     m31.util.notification({
@@ -502,11 +502,11 @@ movingbox = function() {
             if (users.length === 0) {
                 usersstr = email;
             } else {
-                if (users.join(',').indexOf(email) === -1) {
+                if (users.join(';').indexOf(email) === -1) {
                     users.push(email);
                 }
-                usersstr = users.join(',');
             }
+            usersstr = users.join(';');
             Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
         }
     };
@@ -515,14 +515,14 @@ movingbox = function() {
      * 가입과 change 유저에서 로그인시에.. 쿠키를 굽는다.
      */
     var removeuserCookie = function() {
-        var usersstr = null
+        var usersstr = null;
         var users = m31.util.getUserCookie();
         Ext.each(users,function(user,idx){
-            if(user === removeEmail){
+            if(user === removeEmail.split(';')[1]){
                 Array.remove(users,idx);
             }
         });
-        usersstr = users.join(',');
+        usersstr = users.join(';');
         Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
     };
     /**
@@ -630,7 +630,10 @@ movingbox = function() {
      */
     var showResult = function(result){
         if(result === 'yes'){
+            var elId  = removeEmail.split(';')[0];
             removeuserCookie();
+            Ext.fly(elId).remove();
+            relayer(false);
         }
         removeEmail = null;
     };
@@ -697,7 +700,8 @@ movingbox = function() {
         Ext.EventManager.onWindowResize(relayer, this);
 
         Ext.select('div.user-delete').on('click', function(){
-            removeEmail =  Ext.fly(this).parent().child('input.j_username').getValue();
+            var el = Ext.fly(this).parent();
+            removeEmail =  el.id+';'+el.child('input.j_username').getValue();
             Ext.MessageBox.confirm('Confirm', 'PC에 기억된 Email을 삭제 하시겠습니까?', showResult);
         });
         setTimeout(function() {

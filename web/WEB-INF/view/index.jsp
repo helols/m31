@@ -33,12 +33,8 @@
 <div id="start-mask"></div>
 <div id="loading-mask"></div>
 <script type="text/javascript">
-    //    m31.util.loading();
     Ext.onReady(function() {
         var users = Ext.util.Cookies.get("springsprout");
-//        console.log(users);
-        //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
-        //http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256
         movingbox.init(users);
         /**
          * 서글 IE가 참으로 고맙게도 동작해주는 관계로.. 예외처리함.

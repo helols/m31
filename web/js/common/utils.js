@@ -160,7 +160,7 @@ m31.util = {
         var user = Ext.util.Cookies.get("springsprout");
         var users = [];
         if (user !== null) {
-            users = user.split(",");
+            users = user.split(";");
         }
         return users;
     }
