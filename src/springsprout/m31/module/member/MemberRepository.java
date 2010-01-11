@@ -16,6 +16,7 @@ import springsprout.m31.domain.Member;
 import springsprout.m31.dto.SignupDTO;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Repository
 public class MemberRepository extends SqlMapClientDaoSupport{
@@ -84,5 +85,10 @@ public class MemberRepository extends SqlMapClientDaoSupport{
 
     public void initDesktopAdditon(DeskTopAdditionInfo deskTopAdditionInfo) {
         getSqlMapClientTemplate().update("member.initDesktopAdditon", deskTopAdditionInfo);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List makeMemberInfo(List userList) {
+        return getSqlMapClientTemplate().queryForList("member.makeMemberInfo",userList);
     }
 }

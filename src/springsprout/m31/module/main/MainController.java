@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,6 +72,14 @@ public class MainController {
     @RequestMapping(value="/main/emailconfirm")
     public ModelAndView emailconfirm(String email){
         return new ModelAndView(JSON_VIEW).addObject("emailconfirm",memberService.isDuplicated(email));    
+    }
+
+    @RequestMapping(value="/main/makememberinfo")
+    public ModelAndView makememberinfo(String users){
+        if(users == null || !StringUtils.hasText(users)){
+            return new ModelAndView(JSON_VIEW).addObject("status","fail");
+        }
+        return new ModelAndView(JSON_VIEW).addObject("status","success").addObject("userInfo",memberService.makeMemberInfo(users));
     }
 
     private boolean isAjaxLogin(HttpServletRequest req) {

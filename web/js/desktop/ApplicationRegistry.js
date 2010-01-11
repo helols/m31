@@ -55,6 +55,9 @@ M31.ApplicationRegistry = function() {
             if (_instance === null) {             
                 _instance = {
                     getApp : function(appId) {
+                        if(appId === undefined){
+                            return {};
+                        }
                         var app = appInfos[appId].app;
                         if (typeof(app) === 'string') {
                             app = eval(app);

@@ -12,7 +12,7 @@
 		<form-login login-page="/app/main/index"
 			authentication-success-handler-ref="authenticationSuccessSuppotAJAXHandler"
 			authentication-failure-handler-ref="simpleUrlAuthenticationFailureHandler"/>
-		<logout logout-success-url="/app/main/index" />
+		<logout logout-success-url="/main/index" />
 		<remember-me />
 		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
 	</http>

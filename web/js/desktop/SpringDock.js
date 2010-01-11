@@ -3,7 +3,7 @@ SpringDock = function() {
     var springdock,springdockcontainer;
     var addDockBtn = function(appInfo) {
         return new M31.dt.DockButton({
-              appId     : appInfo.appId
+            appId     : appInfo.appId
             , appName   : appInfo.appName
         }, springdockcontainer.el);
     };
@@ -40,7 +40,7 @@ SpringDock = function() {
                     },
                     initDockButton : function(appInfos) {
                         for (var x in appInfos) {
-                            if(appInfos[x].appInstallYn === "Y"){
+                            if (appInfos[x].appInstallYn === "Y") {
                                 springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
                             }
                         }
@@ -119,7 +119,7 @@ M31.dt.SpringDockContainer = Ext.extend(Ext.BoxComponent, {
                     extraWidth = _self.itemMaxWidth * distance / _self.proximity;
                     item.el.setStyle({
                         width: _self.itemWidth + extraWidth + 'px',
-                        left:  (_self.itemWidthEdge * idx)+10+ + toAdd + 'px'
+                        left:  (_self.itemWidthEdge * idx) + 10 + + toAdd + 'px'
                     });
                     toAdd += extraWidth;
                 });
@@ -131,7 +131,7 @@ M31.dt.SpringDockContainer = Ext.extend(Ext.BoxComponent, {
                 function(item, idx) {
                     item.el.setStyle({
                         width: _self.itemWidth + 'px',
-                        left:_self.itemWidthEdge * idx +10+ 'px'
+                        left:_self.itemWidthEdge * idx + 10 + 'px'
                     });
                 });
     }
@@ -162,12 +162,12 @@ M31.dt.DockButton = function(appInfo, el) {
     M31.dt.DockButton.superclass.constructor.call(this, {
         id : 'btn-' + appInfo.appId,
         imgId : appInfo.appId,
-        actImgId : appInfo.appId+'_act',
+        actImgId : appInfo.appId + '_act',
         itemText : appInfo.appName,
         renderTo: el,
         iconCls:'m31-springdock-item-img',
         buttonSelector : 'img',
-        handler : function(t,e) {
+        handler : function(t, e) {
             var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
             if (!win) {
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
@@ -177,8 +177,7 @@ M31.dt.DockButton = function(appInfo, el) {
                             id:appInfo.appId + '-win',
                             title:appInfo.appName,
                             iconCls:appInfo.appId + '-win-icon'
-                        })
-                        );
+                        }));
                 app.createCallback(win);
                 win.show();
             }
@@ -210,16 +209,16 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
         Ext.fly(this.id).hover(this.onMouseEnter, this.onMouseLeave, this);
     },
     onMouseLeave : function() {
-        this.toggleBtn(this.id,'L');
+        this.toggleBtn(this.id, 'L');
     },
 
     onMouseEnter : function() {
-        this.toggleBtn(this.id,'E');
+        this.toggleBtn(this.id, 'E');
     },
 
-    toggleBtn : function(cmp_id,type){
-        Ext.fly(cmp_id).select('.m31-springdock-item-text').setStyle('display', type === 'E'?'block':'none');
-        Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E'?1:.7);    
+    toggleBtn : function(cmp_id, type) {
+        Ext.fly(cmp_id).select('.m31-springdock-item-text').setStyle('display', type === 'E' ? 'block' : 'none');
+        Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);
 
     }
 
@@ -233,6 +232,6 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
  */
 Ext.override(M31.dt.DockButton, {
     getTemplateArgs : function() {
-        return [this.id,'../../images/desktop/springdock/'+this.imgId+'.png', this.itemText,this.iconCls];
+        return [this.id,'../../images/desktop/springdock/' + this.imgId + '.png', this.itemText,this.iconCls];
     }
 });

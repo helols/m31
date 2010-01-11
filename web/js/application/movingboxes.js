@@ -12,6 +12,8 @@ movingbox = function() {
     var notiUniqeId = [];
     var focusFieldName = null;
     var lastEmailAddress = null;
+    var isEmailSave = null;
+    var reIsEmailSave = 1;
     /**
      * 아이템들의 사이즈가 slider 보다 작을때.. 가운데 정렬을 위한 edge 를 구하는 곳.
      */
@@ -69,7 +71,7 @@ movingbox = function() {
      * @param e
      * @param t
      */
-    var onItemMouseDown = function(e, t) {
+    var onItemMouseDown = function() {
         var el = Ext.get(this);
         if (actItem === this || totalCnt != 0) {
             //            e.preventDefault();
@@ -169,14 +171,15 @@ movingbox = function() {
      * @param el
      */
     var actChangeItemFn = function(el) {
+        jQuery('#' + el.id + ' input.j_password').val('');
+        jQuery('#' + el.id + ' input.j_email').val('');
         el.down('div.addition')
                 .setVisible(true)
                 .setHeight(70, true)
                 .down('input.j_password')
                 .addClass('password')
                 .prev('input.j_email')
-                .addClass('email')
-                .up('div.addition')
+                .addClass('email');
     };
 
     /**
@@ -193,10 +196,11 @@ movingbox = function() {
      * @param el
      */
     var actUserItemFn = function(el) {
+        jQuery('#' + el.id + ' input.j_password').val('');
         el.down('div.addition')
-                .setVisible(true, true)
-                .down('img.nextbtn').on('click', signin)
-                .prev('input.j_password')
+                .setVisible(true)
+                .setHeight(40, true)
+                .down('input.j_password')
                 .addClass('password');
     };
 
@@ -207,6 +211,15 @@ movingbox = function() {
     var dieUserItemFn = function(el, inside) {
         el.down('div.addition')
                 .setHeight(-10, true);
+    };
+
+    /**
+     * User 메인 페널의 에니메이션이 끝나고 callback.. .
+     * @param el
+     */
+    var cbUserItemFn = function(el) {
+        focusFieldName = el.id + ' input.j_password';
+        setFocus();
     };
     /**
      * 아이템의 이동 에니메이션 정의
@@ -263,7 +276,7 @@ movingbox = function() {
                 case NEW: break;
                 case DEMO:  break;
                 case CHANGE: break;
-                default:  break;
+                default: break;
             }
         } else if (r_actItem && r_actItem.id === el.id) {
             el.down('div.inside')
@@ -296,12 +309,23 @@ movingbox = function() {
      */
 
     var emailSaveNoti = function() {
+
+        var message = "E-mail 기억 모드 On.";
+        isEmailSave = true;
+        if(Ext.get('email_btn').dom.src.indexOf("add") != -1){
+            message = "E-mail 기억 모드 Off.";
+            isEmailSave = false;
+        }
+        if(reIsEmailSave === isEmailSave){
+            return false;
+        }
         m31.util.notification({
             title:'Login Info'
-            , text:Ext.get('email_btn').dom.src.indexOf("add") != -1 ? 'E-mail 기억 모드 Off.' : 'E-mail 기억 모드 On.'
+            , text:message
             , remove : true
             , time:2500
         });
+        reIsEmailSave = isEmailSave;
     };
     /**
      * passwordField에서 focus가 떠났을때... bk css 추가.(값이 있을경우.)
@@ -363,8 +387,8 @@ movingbox = function() {
         m31.util.loading_remove(time || 500);
     };
 
-    var moveViewPage = function() {
-        window.location.href = "/desktop/view";
+    var moveViewPage = function(type) {
+        setTimeout('window.location.href="/desktop/view?login='+type+'"', 250);
     };
 
     /**
@@ -373,22 +397,46 @@ movingbox = function() {
      * @param t
      */
     var signin = function(e, t) {
-        var tEl = Ext.get(this);
+        var username = actItem.id === CHANGE ? jQuery('#j_email').val() : jQuery('#' + actItem.id + ' input.j_username').val();
+        var password = jQuery('#' + actItem.id + ' input.j_password').val();
+        if (username.length === 0) {
+            m31.util.notification({title:'login...',text:'email를 입력해주세요.',remove:true});
+            focusFieldName = actItem.id === CHANGE ? 'j_email' : actItem.id + ' input.j_username';
+            setFocus();
+            return false;
+        }
+        if (password.length === 0) {
+            m31.util.notification({title:'login...',text:'password를 입력해주세요.',remove:true});
+            focusFieldName = actItem.id + ' input.j_password';
+            setFocus();
+            return false;
+        }
+        var isCookie = actItem.id === CHANGE?isEmailSave:false;
+        
         m31.util.loading(true);
         Ext.Ajax.request({
             method:'POST',
             url: '/j_spring_security_check',
             params: {
-                j_username: tEl.parent().down("input.j_username").getValue(),
-                j_password: tEl.prev('input.j_password').getValue()
+                j_username: username,
+                j_password: password
             },
             success: function(response, opts) {
-                //                loading_remove();
-                //                console.log(response.responseText);
-                //                window.location.href="/desktop/view";
-                m31.util.notification({title:'signin...',text:'Test'});
+                var result = Ext.decode(response.responseText);
+                if (result.loginResult === 'success') {
+                    makeuserCookie(isCookie,username);
+                    moveViewPage('yes');
+                } else {
+                    loading_remove();
+                    m31.util.notification({
+                        title:'login...'
+                        ,text:'login 정보가 올바르지 않습니다. 확인하세요.'
+                    });
+                }
+
             },
             failure: function(response, opts) {
+                m31.util.notification({title:'login...',text:'login에 실패했습니다. ㅠㅠ',remove:true});
                 loading_remove();
             }
         });
@@ -410,10 +458,10 @@ movingbox = function() {
             success: function(response, opts) {
                 notiUniqeId = [];
                 jQuery('div.signup input').removeClass('signupvalidate');
-                loading_remove();
                 var result = Ext.decode(response.responseText);
                 switch (result.signstat) {
                     case 'validate':
+                        loading_remove();
                         Ext.each(result.errInfo, function(error, idx) {
                             if (idx === 0) {
                                 focusFieldName = error.field;
@@ -424,29 +472,39 @@ movingbox = function() {
                         setTimeout(setFocus, 500);
                         break;
                     case 'success':
-                        var usersstr = null
-                        var users = m31.util.getUserCookie();
-                        if (users.length === 0) {
-                            usersstr = email;
-                        } else {
-                            if (users.join(',').indexOf(email) === -1) {
-                                users.push(email);
-                            }
-                            usersstr = users.join(',');
-                        }
-                        Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+                        makeuserCookie(true,email);
+                        moveViewPage('no');
                         break;
                     case 'fail':
+                        loading_remove();
                         m31.util.notification({title:'signup...',text:'signup 도중 오류가 발생했습니다. ㅠㅠ'});
                         break;
                 }
-                //                window.location.href="/desktop/view";
             },
             failure: function(response, opts) {
                 loading_remove();
                 m31.util.notification({title:'signup...',text:'signup 도중 오류가 발생했습니다. ㅠㅠ'});
             }
         });
+    };
+
+    /**
+     * 가입과 change 유저에서 로그인시에.. 쿠키를 굽는다.
+     */
+    var makeuserCookie = function(isMake,email) {
+        if (isMake) {
+            var usersstr = null
+            var users = m31.util.getUserCookie();
+            if (users.length === 0) {
+                usersstr = email;
+            } else {
+                if (users.join(',').indexOf(email) === -1) {
+                    users.push(email);
+                }
+                usersstr = users.join(',');
+            }
+            Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+        }
     };
     /**
      * 경고를 딜레이 시키기 위해서....
@@ -525,77 +583,101 @@ movingbox = function() {
                 , '    </div> ');
         userIconTemplate.compile();
 
+        Ext.Ajax.request({
+            method:'POST',
+            url: '/main/makememberinfo',
+            params: {
+                users: users
+            },
+            success: function(response, opts) {
+                var result = Ext.decode(response.responseText);
+                if (result.status === 'success') {
+                    var position = Ext.get('panel_demo');
+                    Ext.each(result.userInfo, function(user, idx) {
+                        userIconTemplate.insertBefore(position, [idx,user.IMGSRC,user.NAME,user.EMAIL], true);
+                    });
+                }
+                initMovingBox();
+            },
+            failure: function(response, opts) {
+                initMovingBox();
+            }
+        });
+    };
+    var initMovingBox = function() {
+        relayer('init');
+        Ext.select('div.name_text').setOpacity(.7);
+        Ext.fly('noBtnImg').on('click', function() {
+            relayer(false);
+        });
+        Ext.fly('yesBtnImg').on('click', function() {
+            if (activeSpot) {
+                return false;
+            }
+            spot.show(NEW, spotcallback);
+            $.quickFlip.flip(0);
+            Ext.fly('new-addition')
+                    .down('#noBtnImg').addClass('display')
+                    .next('#cancleBtnImg').removeClass('display')
+                    .next('#blankImg')
+                    .next('#yesBtnImg').addClass('display')
+                    .next('#signupBtnImg').removeClass('display');
+            focusFieldName = 'j_username';
+            setTimeout(setFocus, 500);
+        });
+
+        Ext.fly('cancleBtnImg').on('click', function() {
+            if (!activeSpot) {
+                return false;
+            }
+            lastEmailAddress = 'not';
+            m31.util.notificationRemove();
+            spot.hide(spotcallback);
+            $.quickFlip.flip(0);
+            Ext.fly('new-addition')
+                    .down('#noBtnImg').removeClass('display')
+                    .next('#cancleBtnImg').addClass('display')
+                    .next('#blankImg')
+                    .next('#yesBtnImg').removeClass('display')
+                    .next('#signupBtnImg').addClass('display');
+            jQuery('#j_username').val('');
+            jQuery('#j_password').val('');
+            jQuery('#j_nickname').val('');
+            jQuery('div.signup input').removeClass('signupvalidate');
+        });
+        Ext.get('email_btn').on('click', function(e, t) {
+            var src = "../../images/main/email-";
+            if (this.dom.src.indexOf("add") != -1) {
+                src += "del.png";
+
+            } else {
+                src += "add.png";
+            }
+            this.dom.src = src;
+            emailSaveNoti();
+        });
+
+        Ext.select('input.j_password').on('focus', focusField).on('blur', blurField);
+        Ext.select('input.j_password').addKeyListener([10,13],signin);
+        Ext.select('input.j_email').on('focus', focusField).on('blur', blurField);
+        Ext.select('div.panel').on('click', onItemMouseDown);
+        Ext.select('img.nextbtn').on('click', signin);
+        Ext.fly('signupBtnImg').on('click', signup);
+        Ext.fly('j_username').on('blur', emailconfirmEventDefer);
+        Ext.EventManager.onWindowResize(relayer, this);
+
+        setTimeout(function() {
+            Ext.fly('start-mask').fadeOut({
+                endOpacity: 0,
+                easing: 'easeIn',
+                duration: .5,
+                remove: true
+            });
+        }, 300);
     };
     return {
         init: function(users) {
-            relayer('init');
-            Ext.select('div.name_text').setOpacity(.7);
-            Ext.fly('noBtnImg').on('click', function() {
-                relayer();
-            });
-            Ext.fly('yesBtnImg').on('click', function() {
-                if (activeSpot) {
-                    return false;
-                }
-                spot.show(NEW, spotcallback);
-                $.quickFlip.flip(0);
-                Ext.fly('new-addition')
-                        .down('#noBtnImg').addClass('display')
-                        .next('#cancleBtnImg').removeClass('display')
-                        .next('#blankImg')
-                        .next('#yesBtnImg').addClass('display')
-                        .next('#signupBtnImg').removeClass('display');
-                focusFieldName = 'j_username';
-                setTimeout(setFocus, 500);
-            });
-
-            Ext.fly('cancleBtnImg').on('click', function() {
-                if (!activeSpot) {
-                    return false;
-                }
-                lastEmailAddress = 'not';
-                m31.util.notificationRemove();
-                spot.hide(spotcallback);
-                $.quickFlip.flip(0);
-                Ext.fly('new-addition')
-                        .down('#noBtnImg').removeClass('display')
-                        .next('#cancleBtnImg').addClass('display')
-                        .next('#blankImg')
-                        .next('#yesBtnImg').removeClass('display')
-                        .next('#signupBtnImg').addClass('display');
-                jQuery('#j_username').val('');
-                jQuery('#j_password').val('');
-                jQuery('#j_nickname').val('');
-                jQuery('div.signup input').removeClass('signupvalidate');
-            });
-            Ext.get('email_btn').on('click', function(e, t) {
-                var src = "../../images/main/email-";
-                if (this.dom.src.indexOf("add") != -1) {
-                    src += "del.png";
-
-                } else {
-                    src += "add.png";
-                }
-                this.dom.src = src;
-                emailSaveNoti();
-            });
-
-            Ext.select('input.j_password').on('focus', focusField).on('blur', blurField);
-            Ext.select('input.j_email').on('focus', focusField).on('blur', blurField);
-            Ext.select('div.panel').on('click', onItemMouseDown);
-            Ext.select('img.nextbtn').on('click', signin);
-            Ext.fly('signupBtnImg').on('click', signup);
-            Ext.fly('j_username').on('blur', emailconfirmEventDefer);
-            Ext.EventManager.onWindowResize(relayer, this);
-
-            setTimeout(function() {
-                Ext.fly('start-mask').fadeOut({
-                    endOpacity: 0,
-                    easing: 'easeIn',
-                    duration: .5,
-                    remove: true
-                });
-            }, 300);
+            makeUserIcon(users);
         }
     }
 }();

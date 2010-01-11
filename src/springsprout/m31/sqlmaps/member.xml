@@ -84,4 +84,13 @@
         , #deskTopBKImgPosition#
         , #deskTopBKImgRepeat# )
     </insert>
+
+    <select id="makeMemberInfo" parameterClass="java.util.List" resultClass="java.util.HashMap">
+        SELECT EMAIL, NAME FROM MEMBER
+            WHERE EMAIL IN (
+                <iterate conjunction="," >
+                    #[]#
+                </iterate>
+            )
+    </select>
 </sqlMap>

@@ -13,6 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springsprout.m31.domain.DeskTopAdditionInfo;
 import springsprout.m31.dto.SignupDTO;
+import springsprout.m31.utils.MD5Util;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import static springsprout.m31.common.M31System.AVATAR_URL;
 
 @Service
 @Transactional
@@ -50,4 +57,12 @@ public class MemberService {
     public Boolean isDuplicated(String email) {
 		return memberRepository.getMemberByEmail(email) != null? true:false ;
 	}
+
+    public List<HashMap<String, String>> makeMemberInfo(String users) {
+        List<HashMap<String,String>> userList = memberRepository.makeMemberInfo(Arrays.asList(users.split(",")));
+        for(HashMap<String,String> userInfo : userList){
+            userInfo.put("IMGSRC", AVATAR_URL+MD5Util.md5Hex(userInfo.get("EMAIL"))+ "?r=x&s=256");
+        }
+        return userList;
+    }
 }

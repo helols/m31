@@ -119,3 +119,7 @@ html, body {
     filter: alpha(opacity = 50);
     border: 1px solid #3b5a82;
 }
+
+.ext-el-mask{
+    background-color:#444 !important;
+}

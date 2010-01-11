@@ -75,7 +75,7 @@
         <div class="addition change-addition">
             <input type="hidden" name="j_username" class="j_username" value="User 정보를 입력해주세요.">
             <input type="hidden" name="j_title" class="j_title" value="Change User">
-            <input type="input" name="j_email" class="j_email" value="">
+            <input type="input" id = "j_email" name="j_email" class="j_email" value="">
             <img id="email_btn" class="email_btn" src="<c:url value="/images/main/email-add.png"/>"
                  title="Email 기억 여부"/>
             <input type="password" name="j_password" class="j_password" value="">
