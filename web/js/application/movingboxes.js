@@ -10,10 +10,9 @@ movingbox = function() {
     var activeSpot = false;
     var DEMO = "panel_demo", CHANGE = "panel_change" ,  NEW = "panel_newuser";
     var notiUniqeId = [];
-    var focusFieldName = null;
-    var lastEmailAddress = null;
-    var isEmailSave = null;
+    var focusFieldName,lastEmailAddress,isEmailSave,removeEmail = null;
     var reIsEmailSave = 1;
+    
     /**
      * 아이템들의 사이즈가 slider 보다 작을때.. 가운데 정렬을 위한 edge 를 구하는 곳.
      */
@@ -214,7 +213,7 @@ movingbox = function() {
     var dieUserItemFn = function(el, inside) {
         el.down('div.addition')
                 .setHeight(-10, true)
-                .prev('#user-delete')
+                .prev('div.user-delete')
                 .addClass('display');
     };
 
@@ -223,7 +222,7 @@ movingbox = function() {
      * @param el
      */
     var cbUserItemFn = function(el) {
-        el.down('#user-delete')
+        el.down('div.user-delete')
             .removeClass('display');
     };
     /**
@@ -498,7 +497,7 @@ movingbox = function() {
      */
     var makeuserCookie = function(isMake, email) {
         if (isMake) {
-            var usersstr = null
+            var usersstr = null;
             var users = m31.util.getUserCookie();
             if (users.length === 0) {
                 usersstr = email;
@@ -510,6 +509,21 @@ movingbox = function() {
             }
             Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
         }
+    };
+
+    /**
+     * 가입과 change 유저에서 로그인시에.. 쿠키를 굽는다.
+     */
+    var removeuserCookie = function() {
+        var usersstr = null
+        var users = m31.util.getUserCookie();
+        Ext.each(users,function(user,idx){
+            if(user === removeEmail){
+                Array.remove(users,idx);
+            }
+        });
+        usersstr = users.join(',');
+        Ext.util.Cookies.set("springsprout", usersstr, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
     };
     /**
      * 경고를 딜레이 시키기 위해서....
@@ -610,6 +624,16 @@ movingbox = function() {
             }
         });
     };
+
+    /**
+     * 메세지 삭제 확인 펑션.
+     */
+    var showResult = function(result){
+        if(result === 'yes'){
+            removeuserCookie();
+        }
+        removeEmail = null;
+    };
     var initMovingBox = function() {
         relayer('init');
         Ext.select('div.name_text').setOpacity(.7);
@@ -672,6 +696,10 @@ movingbox = function() {
         Ext.fly('j_username').on('blur', emailconfirmEventDefer);
         Ext.EventManager.onWindowResize(relayer, this);
 
+        Ext.select('div.user-delete').on('click', function(){
+            removeEmail =  Ext.fly(this).parent().child('input.j_username').getValue();
+            Ext.MessageBox.confirm('Confirm', 'PC에 기억된 Email을 삭제 하시겠습니까?', showResult);
+        });
         setTimeout(function() {
             Ext.fly('start-mask').fadeOut({
                 endOpacity: 0,
@@ -681,6 +709,7 @@ movingbox = function() {
             });
         }, 300);
     };
+
     return {
         init: function(users) {
             makeUserIcon(users);
