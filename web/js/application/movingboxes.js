@@ -202,6 +202,9 @@ movingbox = function() {
                 .setHeight(40, true)
                 .down('input.j_password')
                 .addClass('password');
+//        el.down('#user-delete')
+//                .removeClass('display');
+
     };
 
     /**
@@ -210,7 +213,9 @@ movingbox = function() {
      */
     var dieUserItemFn = function(el, inside) {
         el.down('div.addition')
-                .setHeight(-10, true);
+                .setHeight(-10, true)
+                .prev('#user-delete')
+                .addClass('display');
     };
 
     /**
@@ -218,8 +223,8 @@ movingbox = function() {
      * @param el
      */
     var cbUserItemFn = function(el) {
-        focusFieldName = el.id + ' input.j_password';
-        setFocus();
+        el.down('#user-delete')
+            .removeClass('display');
     };
     /**
      * 아이템의 이동 에니메이션 정의
@@ -276,7 +281,7 @@ movingbox = function() {
                 case NEW: break;
                 case DEMO:  break;
                 case CHANGE: break;
-                default: break;
+                default:cbUserItemFn(el); break;
             }
         } else if (r_actItem && r_actItem.id === el.id) {
             el.down('div.inside')
@@ -312,11 +317,11 @@ movingbox = function() {
 
         var message = "E-mail 기억 모드 On.";
         isEmailSave = true;
-        if(Ext.get('email_btn').dom.src.indexOf("add") != -1){
+        if (Ext.get('email_btn').dom.src.indexOf("add") != -1) {
             message = "E-mail 기억 모드 Off.";
             isEmailSave = false;
         }
-        if(reIsEmailSave === isEmailSave){
+        if (reIsEmailSave === isEmailSave) {
             return false;
         }
         m31.util.notification({
@@ -388,7 +393,7 @@ movingbox = function() {
     };
 
     var moveViewPage = function(type) {
-        setTimeout('window.location.href="/desktop/view?login='+type+'"', 250);
+        setTimeout('window.location.href="/desktop/view?login=' + type + '"', 250);
     };
 
     /**
@@ -411,8 +416,8 @@ movingbox = function() {
             setFocus();
             return false;
         }
-        var isCookie = actItem.id === CHANGE?isEmailSave:false;
-        
+        var isCookie = actItem.id === CHANGE ? isEmailSave : false;
+
         m31.util.loading(true);
         Ext.Ajax.request({
             method:'POST',
@@ -424,7 +429,7 @@ movingbox = function() {
             success: function(response, opts) {
                 var result = Ext.decode(response.responseText);
                 if (result.loginResult === 'success') {
-                    makeuserCookie(isCookie,username);
+                    makeuserCookie(isCookie, username);
                     moveViewPage('yes');
                 } else {
                     loading_remove();
@@ -472,7 +477,7 @@ movingbox = function() {
                         setTimeout(setFocus, 500);
                         break;
                     case 'success':
-                        makeuserCookie(true,email);
+                        makeuserCookie(true, email);
                         moveViewPage('no');
                         break;
                     case 'fail':
@@ -491,7 +496,7 @@ movingbox = function() {
     /**
      * 가입과 change 유저에서 로그인시에.. 쿠키를 굽는다.
      */
-    var makeuserCookie = function(isMake,email) {
+    var makeuserCookie = function(isMake, email) {
         if (isMake) {
             var usersstr = null
             var users = m31.util.getUserCookie();
@@ -569,6 +574,7 @@ movingbox = function() {
      */
     var makeUserIcon = function(users) {
         var userIconTemplate = new Ext.Template(' <div class="panel" id="panel_user_{0}"> '
+                , '        <div id="user-delete" class="user-delete display"></div>  '
                 , '        <div class="inside"> '
                 , '            <img src="{1}" '
                 , '                 alt="{2} - gravatar"/> '
@@ -658,7 +664,7 @@ movingbox = function() {
         });
 
         Ext.select('input.j_password').on('focus', focusField).on('blur', blurField);
-        Ext.select('input.j_password').addKeyListener([10,13],signin);
+        Ext.select('input.j_password').addKeyListener([10,13], signin);
         Ext.select('input.j_email').on('focus', focusField).on('blur', blurField);
         Ext.select('div.panel').on('click', onItemMouseDown);
         Ext.select('img.nextbtn').on('click', signin);

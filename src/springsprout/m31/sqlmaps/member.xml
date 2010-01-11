@@ -48,7 +48,7 @@
         #j_username#,
         #j_password#,
         #j_nickname#,
-        'seoul'
+        ''
         )
     </insert>
 
