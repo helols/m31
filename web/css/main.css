@@ -113,15 +113,10 @@ div.addition .email {
     background: url("../images/main/email-bk.png") no-repeat;
 }
 
-div.addition img.new_nextbtn{
-    display:block;
-}
-div.addition img.new_nextbtn, div.addition img.new_cancle,div.addition img.new_signupbtn{
+div.addition img.newbtn{
     border:none;
     cursor: pointer;
     background-color: #000;
-}
-div.addition img.new_cancle,div.addition img.new_signupbtn{
     width:85px;
 }
 

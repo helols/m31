@@ -36,7 +36,7 @@
     //    m31.util.loading();
     Ext.onReady(function() {
         var users = Ext.util.Cookies.get("springsprout");
-        console.log(users);
+//        console.log(users);
         //http://www.gravatar.com/avatar.php?gravatar_id=18ccbf5e7f8f161362e0af4cdb8142cf&rating=x&size=256
         //http://www.gravatar.com/avatar.php?gravatar_id=4800e76eba2e4e3e07807658e0c00960&rating=PG&size=256
         movingbox.init(users);
@@ -116,13 +116,15 @@
         <div id ="new-addition" class="addition new-addition">
             <input type="hidden" name="j_username" class="j_username" value="사용자 추가를 하시겠습니까?">
             <input type="hidden" name="j_title" class="j_title" value="New User">
-            <img id="newNextBtnImg" class="new_nextbtn"
-                 src="<c:url value="/images/main/newuser-next-btn.png"/>" title="Yes"/>
-            <img id="cancleBtnImg" class="new_cancle display"
+            <img id="noBtnImg" class="new_nobtn newbtn"
+                 src="<c:url value="/images/main/no.png"/>" title="No"/>
+            <img id="cancleBtnImg" class="new_cancle display newbtn"
                  src="<c:url value="/images/main/cancle.png"/>" title="Cancle"/>
-            <img id="blankImg" class="new_blank display"
+            <img id="blankImg" class="new_blank"
                  src="<c:url value="/images/main/blank.png"/>" />
-            <img id="signupBtnImg" class="new_signupbtn display"
+            <img id="yesBtnImg" class="new_yesbtn newbtn"
+                 src="<c:url value="/images/main/yes.png"/>" title="Yes"/>
+            <img id="signupBtnImg" class="new_signupbtn display newbtn"
                  src="<c:url value="/images/main/signup.png"/>" title="SignUp"/>
         </div>
     </div>

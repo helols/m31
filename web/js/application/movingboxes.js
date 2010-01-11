@@ -39,20 +39,28 @@ movingbox = function() {
     /**
      * 아이템들의 위치를 정해주는 곳.
      */
-    var positionItem = function() {
+    var positionItem = function(isEvent) {
+        var actel = null;
+        if (actItem) {
+            actel = Ext.get(actItem);
+            actItem = undefined;
+            r_actItem = actel;
+            totalCnt = 1;
+            itemMoveAnime(actel, edge + (itemWidth + itemEdge) * actIdx, "N");
+            actIdx = -1;
+        }
         Ext.each(Ext.select('div.panel').elements,
                 function(item, idx) {
                     var el = Ext.get(item);
-                    if (el.getWidth() != itemWidth) {
-                        actItem = undefined;
-                        r_actItem = el;
-                        totalCnt = 1;
-                        actIdx = -1;
-                        itemMoveAnime(el, edge + (itemWidth + itemEdge) * idx, "N");
-                    } else {
-                        el.setLeft(edge + (itemWidth + itemEdge) * idx)
-                                .setOpacity(.7)
-                                .hover(onItemMouseEnter, onItemMouseLeave, this);
+                    if (!actel || actel.id !== el.id) {
+                        el.animate({
+                            opacity: {to: .7},
+                            left: {to:edge + (itemWidth + itemEdge) * idx}
+                        });
+                        if (isEvent) {
+                            el.hover(onItemMouseEnter, onItemMouseLeave, this);
+                        }
+
                     }
                 });
     };
@@ -262,7 +270,8 @@ movingbox = function() {
                     .child('div.name_text')
                     .setOpacity(.7, true);
             el.down('div.addition')
-                    .setVisible(false)
+                    .setVisible(false);
+            r_actItem = undefined;
         }
         totalCnt--;
     };
@@ -350,8 +359,8 @@ movingbox = function() {
         Ext.fly(this).update('&nbsp;');
     };
 
-    var loading_remove = function() {
-        m31.util.loading_remove(500);
+    var loading_remove = function(time) {
+        m31.util.loading_remove(time || 500);
     };
 
     var moveViewPage = function() {
@@ -375,7 +384,7 @@ movingbox = function() {
             },
             success: function(response, opts) {
                 //                loading_remove();
-                console.log(response.responseText);
+                //                console.log(response.responseText);
                 //                window.location.href="/desktop/view";
                 m31.util.notification({title:'signin...',text:'Test'});
             },
@@ -386,9 +395,10 @@ movingbox = function() {
     };
 
     var signup = function() {
+        lastEmailAddress = 'not';
         var email = jQuery('#j_username').val();
         m31.util.notificationRemove(notiUniqeId);
-        m31.util.loading();
+        m31.util.loading(true);
         Ext.Ajax.request({
             method:'POST',
             url: '/main/signup',
@@ -450,6 +460,7 @@ movingbox = function() {
     var emailconfirm = function() {
         var email = jQuery('#j_username').val();
         if (email === lastEmailAddress || email.length === 0 || lastEmailAddress === 'not') {
+            lastEmailAddress = email;
             return false;
         }
         lastEmailAddress = email;
@@ -485,13 +496,13 @@ movingbox = function() {
     };
 
     //layer out render!
-    var relayer = function() {
+    var relayer = function(isEvent) {
         if (!spot.active) {
             var top = Ext.lib.Dom.getViewHeight() / 2 - (Ext.fly('slider').getHeight() / 2);
             Ext.fly('slider').setTop(top);
-            Ext.select('.arrow').setTop(top);
+            //            Ext.select('.arrow').setTop(top);
             calcEdge();
-            positionItem();
+            positionItem(isEvent);
         }
     };
     /**
@@ -517,19 +528,23 @@ movingbox = function() {
     };
     return {
         init: function(users) {
+            relayer('init');
             Ext.select('div.name_text').setOpacity(.7);
-            relayer();
-            Ext.fly('newNextBtnImg').on('click', function() {
+            Ext.fly('noBtnImg').on('click', function() {
+                relayer();
+            });
+            Ext.fly('yesBtnImg').on('click', function() {
                 if (activeSpot) {
                     return false;
                 }
                 spot.show(NEW, spotcallback);
                 $.quickFlip.flip(0);
                 Ext.fly('new-addition')
-                        .down('#newNextBtnImg').setStyle({display:'none'})
-                        .next('img').removeClass('display')
-                        .next('img').removeClass('display')
-                        .next('img').removeClass('display');
+                        .down('#noBtnImg').addClass('display')
+                        .next('#cancleBtnImg').removeClass('display')
+                        .next('#blankImg')
+                        .next('#yesBtnImg').addClass('display')
+                        .next('#signupBtnImg').removeClass('display');
                 focusFieldName = 'j_username';
                 setTimeout(setFocus, 500);
             });
@@ -543,10 +558,11 @@ movingbox = function() {
                 spot.hide(spotcallback);
                 $.quickFlip.flip(0);
                 Ext.fly('new-addition')
-                        .down('#newNextBtnImg').setStyle({display:'block'})
-                        .next('img').addClass('display')
-                        .next('img').addClass('display')
-                        .next('img').addClass('display');
+                        .down('#noBtnImg').removeClass('display')
+                        .next('#cancleBtnImg').addClass('display')
+                        .next('#blankImg')
+                        .next('#yesBtnImg').removeClass('display')
+                        .next('#signupBtnImg').addClass('display');
                 jQuery('#j_username').val('');
                 jQuery('#j_password').val('');
                 jQuery('#j_nickname').val('');
