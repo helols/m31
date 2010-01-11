@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.member.MemberRepository;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/testContext.xml")
 @Transactional
@@ -39,5 +42,11 @@ public class DbTest {
         Integer id = memberRepository.signup(s);
         System.out.println("id>>"+ id);
         Assert.assertNotNull(id);
+    }
+
+    @Rollback(true)
+    @Test public void makeMemberInfoTest(){
+        List user = Arrays.asList(new String[]{"helolsjava@gmail.com","adovoba@naver.com"});
+        Assert.assertNotNull(memberRepository.makeMemberInfo(user).get(0));
     }
 }
