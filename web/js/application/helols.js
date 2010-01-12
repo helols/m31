@@ -17,10 +17,10 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
 
 /**
  * signout ...
- */ 
+ */
 M31Desktop.Signout = Ext.extend(M31.app.Module, {
-    createCallback :function(win){
-         if(!this.win){
+    createCallback :function(win) {
+        if (!this.win) {
             this.win = win;
         }
     },
@@ -38,7 +38,8 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
             constrainHeader:true,
             layout: 'border',
             bodyBorder: false,
-            items: [{
+            items: [
+                {
                     region: 'north',
                     height: 35,
                     layout : 'fit',
@@ -52,10 +53,13 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                     region: 'center',
                     layout: 'column',
                     border:false,
-                    items: [{
+                    items: [
+                        {
                             xtype: 'spacer'
-                          , columnWidth:.25
-                          , height:20
+                            ,
+                            columnWidth:.25
+                            ,
+                            height:20
                         },
                         {
                             xtype: 'button',
@@ -63,13 +67,15 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                             columnWidth:.22,
                             handler: function(t, e) {
                                 m31.util.loading();
-                                setTimeout('window.location.href="/j_spring_security_logout"',500);
+                                setTimeout('window.location.href="/j_spring_security_logout"', 500);
                             }
                         },
                         {
                             xtype: 'spacer'
-                          , columnWidth:.06
-                          , height:20
+                            ,
+                            columnWidth:.06
+                            ,
+                            height:20
                         },
                         {
                             xtype: 'button',
@@ -81,11 +87,14 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                         },
                         {
                             xtype: 'spacer'
-                          , columnWidth:.25
-                          , height:20
+                            ,
+                            columnWidth:.25
+                            ,
+                            height:20
                         }
                     ]
-                }]
+                }
+            ]
         };
         return opt;
     }
@@ -97,20 +106,82 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
  */
 
 M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
-    createCallback :function(win){
-         if(!this.win){
+    createCallback :function(win) {
+        if (!this.win) {
             this.win = win;
         }
     },
+    getTreePanel : function() {
+        var url = '/app/springfinder/getTree';
+        var tree = new Ext.tree.TreePanel({
+            // tree
+            animate:true,
+            enableDD:true,
+            expandable:false,
+            containerScroll: true,
+            //            ddGroup: 'organizerDD',
+            rootVisible:true,
+            region:'west',
+            width:200,
+            split: true,
+            title : 'springfinder',
+            collapsible: true,
+            height : 600,
+            autoScroll:true,
+            loader : new Ext.tree.TreeLoader({
+				 url:url				
+			}),
+            root: {
+                    nodeType: 'async',
+                    text: '/',
+                    draggable: false,
+                    allowDrag:false,
+                    allowDrop:false,
+                    id: 1
+            },
+            margins: '0'
+        });
+        return tree;
+    },
     createWindow : function() {
-          var opt = {
-            width:640,
-            height:480,
-            html : '<p>Something useful would be in here.</p>',
+        var _self = this;
+        var opt = {
+            layout: 'border',
+            width:800,
+            height:600,
             shim:false,
             animCollapse:false,
-            constrainHeader:true
+            constrainHeader:true,
+            items :[_self.getTreePanel(),
+                {
+                    region:'center' ,
+                    layout:'fit',
+                    html:'야호.' ,
+                    width : 200 ,
+                    heigth :600
+                }
+            ]
         };
         return opt;
     }
 });
+
+Ext.override(Ext.tree.TreeLoader,{
+    processResponse : function(response, node, callback, scope){
+        var json = response.responseText;
+        try {
+            var o = response.responseData || Ext.decode(json).treeList;
+            node.beginUpdate();
+            for(var i = 0, len = o.length; i < len; i++){
+                var n = this.createNode(o[i]);
+                if(n){
+                    node.appendChild(n);
+                }
+            }
+            node.endUpdate();
+            this.runCallback(callback, scope || node, [node]);
+        }catch(e){
+            this.handleFailure(response);
+        }
+    }
+})

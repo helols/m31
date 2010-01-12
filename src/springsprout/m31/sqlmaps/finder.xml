@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="finder">
+    <resultMap id="tree" class="springsprout.m31.domain.FinderTree">
+        <result property="id" column="ID"/>
+        <result property="text" column="FILE_NAME"/>
+        <result property="defaultYn" column="DEFAULT_YN"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="viewOrder" column="VIEW_ORDER"/>
+        <result property="iconCls" column="ICONCLS"/>
+        <result property="linkAppId" column="LINK_APP_ID"/>
+        <result property="fileType" column="FILE_TYPE"/>
+    </resultMap>
+
+    <select id="getTree" resultMap="tree" parameterClass="hashMap">
+        SELECT
+            ID,
+            FILE_NAME,
+            PARENT_ID,
+            DEFAULT_YN,
+            VIEW_ORDER,
+            ICONCLS,
+            LINK_APP_ID ,
+            FILE_TYPE
+        FROM SPRING_FINDER
+            WHERE MEMBER_ID = #memberId#
+            AND PARENT_ID = #parentId#
+    </select>
+</sqlMap>

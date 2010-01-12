@@ -1,3 +1,4 @@
+Ext.BLANK_IMAGE_URL = '../../../../../extJS/resources/images/default/s.gif';
 Ext.ns("M31", "M31.dt", "M31.app");
 Ext.Ajax.defaultHeaders = {'AJAX': 'true'};
 

@@ -1,14 +1,19 @@
-.setting-win-icon{
+.setting-win-icon {
     background-image: url(../../images/apps/win-icon/setting_win_icon.png) !important;
 }
-.signout-win-icon{
+
+.signout-win-icon {
     background-image: url(../../images/apps/win-icon/signout_win_icon.png) !important;
 }
-.springfinder-win-icon{
+
+.springfinder-win-icon {
     background-image: url(../../images/apps/win-icon/springfinder_win_icon.png) !important;
 }
 
+.signout-fit {
+    text-align: center;
+}
 
-.signout-fit{
-    text-align:center;
+.x-tree-node-leaf .x-tree-node-icon {
+    background: transparent url(../../extJS/resources/images/default/tree/folder.gif) !important;
 }
