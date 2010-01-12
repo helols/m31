@@ -1,5 +1,7 @@
 package springsprout.m31.module.app.twitter;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,9 @@ public class SpringTwitterController {
     Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     SpringTwitterAuthorization springTwitterAuthorization;
-
+    @Autowired
+    SpringTwitterService springTwitterService;
+    
     @RequestMapping
     public ModelAndView requestAuthorization() {
 
@@ -48,13 +52,31 @@ public class SpringTwitterController {
             return new ModelAndView(JSON_VIEW).addObject("auth", false).addObject("success", true).addObject("authURL", authURL);
         }
     }
-
-    @RequestMapping(method = RequestMethod.GET)
+    
+    @RequestMapping
     public String getAccessToken(@RequestParam String oauth_token, Model model) {
         Boolean result = false;
         result = springTwitterAuthorization.storeAuthToken(oauth_token);
         model.addAttribute("result", result);
         return "/springtwitter/getToken";
     }
-
+    
+    @RequestMapping
+    public ModelAndView timeline() {
+    	HashMap<String,Object> twitterTimeline = springTwitterService.getTimeline();
+        return new ModelAndView(JSON_VIEW).addObject("timeline", twitterTimeline.get("timeline"));
+    }
+    
+    @RequestMapping
+    public ModelAndView mentions() {
+    	HashMap<String,Object> twitterMentions = springTwitterService.getMentions();
+    	return new ModelAndView(JSON_VIEW).addObject("mentions", twitterMentions.get("mentions"));
+    }
+    
+    @RequestMapping
+    public ModelAndView directMessages() {
+    	HashMap<String,Object> twitterDirectMessage = springTwitterService.getDirectMessages();
+    	return new ModelAndView(JSON_VIEW).addObject("directMessages", twitterDirectMessage.get("directMessages"));
+    }
+    
 }

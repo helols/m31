@@ -230,23 +230,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 '</tpl>'
                 );
         this.thumbTemplate.compile();
-
-        this.detailsTemplate = new Ext.XTemplate(
-                '<div class="details">',
-                '<tpl for=".">',
-                '<a href="{img}" class="pirobox_gall" title="{title}">',
-                '<img src="{thumbnail}"><div class="details-info">',
-                '</a>',
-                '<b>Image Name:</b>',
-                '<span>{title}</span>',
-                '<b>Size:</b>',
-                '<span>{sizeString}</span>',
-                '<b>Last Modified:</b>',
-                '<span>{dateString}</span></div>',
-                '</tpl>',
-                '</div>'
-                );
-        this.detailsTemplate.compile();
     },
 
     onLoadException : function(v, o) {
@@ -549,7 +532,6 @@ Ext.DataView.DragSelector = function(cfg){
 */
 M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     init : function() {
-		
     },
     
     createView : function() {
@@ -598,7 +580,115 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             items:[
                    this.startForm,
                    this.authGuide,
-                   this.twitterView
+                   new Ext.TabPanel({
+                   	id: 'springtwitter-view',
+                   	activeTab: 0,
+                   	defaults:{autoScroll: true},
+                   	items:[{
+               	            title: 'All Friends',
+               	            xtype: 'panel',
+               	            id: 'springtwitter-view-friends',
+               	            items: {
+                   				xtype : 'dataview',
+               	                tpl: this.timelineTemplate,
+               	                singleSelect: true,
+               	                overClass:'x-view-over',
+               	                itemSelector: 'div.springtwitter-tweet',
+               	                emptyText : '',
+               	                store: this.loadTimeline,
+               	                listeners: {
+               	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+               	                    'beforeselect'   : {fn:function(view) {
+               	                        //return view.timeline.getRange().length > 0;
+               	                    }},
+               	                    'beforeshow'   : {fn:function(view) {
+               	                    	//return view.timeline.getRange().length > 0;
+               	                    }}
+               	                },
+               	            	prepareData: function(data) {
+               	                	data.createAt = new Date(data.createAt).toLocaleString();
+               	                	data.text = m31.util.replaceURLtoLink(data.text);
+               	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+               	                	return data;
+               	                }
+               	            },
+               	            listeners: {
+                   				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+               	        		},
+               	        		beforeshow: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+               	        		}
+               	        	}
+               	        },{
+               	            title: 'Mentions',
+               	            xtype: 'panel',
+            	            id: 'springtwitter-view-mentions',
+            	            items: {
+                				xtype : 'dataview',
+            	                tpl: this.timelineTemplate,
+            	                singleSelect: true,
+            	                overClass:'x-view-over',
+            	                itemSelector: 'div.springtwitter-tweet',
+            	                emptyText : '',
+            	                store: this.loadMentions,
+            	                listeners: {
+            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+            	                    'beforeselect'   : {fn:function(view) {
+            	                        //return view.timeline.getRange().length > 0;
+            	                    }},
+            	                    'beforeshow'   : {fn:function(view) {
+            	                    	//return view.timeline.getRange().length > 0;
+            	                    }}
+            	                },
+            	            	prepareData: function(data) {
+            	                	data.createAt = new Date(data.createAt).toLocaleString();
+            	                	data.text = m31.util.replaceURLtoLink(data.text);
+            	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+            	                	return data;
+            	                }
+            	            },
+            	            listeners: {
+                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+            	        		},
+            	        		beforeshow: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+            	        		}
+            	        	}
+               	        },{
+               	            title: 'Direct Message',
+               	            xtype: 'panel',
+            	            id: 'springtwitter-view-dm',
+            	            items: {
+                				xtype : 'dataview',
+            	                tpl: this.timelineTemplate,
+            	                singleSelect: true,
+            	                overClass:'x-view-over',
+            	                itemSelector: 'div.springtwitter-tweet',
+            	                emptyText : '',
+            	                store: this.loadDM,
+            	                listeners: {
+            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+            	                    'beforeselect'   : {fn:function(view) {
+            	                        //return view.timeline.getRange().length > 0;
+            	                    }},
+            	                    'beforeshow'   : {fn:function(view) {
+            	                    	//return view.timeline.getRange().length > 0;
+            	                    }}
+            	                },
+            	            	prepareData: function(data) {
+            	                	data.createAt = new Date(data.createAt).toLocaleString();
+            	                	data.text = m31.util.replaceURLtoLink(data.text);
+            	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+            	                	return data;
+            	                }
+            	            },
+            	            listeners: {
+                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+            	        		},
+            	        		beforeshow: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+            	        		}
+            	        	}
+               	        }
+                       ]
+                   })
             ],
             listeners: {
 	    		resize: function(){
@@ -644,7 +734,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     			
     			var result = Ext.decode(action.response.responseText);
     			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
-    			
+//    			self.initTemplates();
     			if(!result.auth && result.success){
     				$("#springtwitter-authguideurl").attr("href", result.authURL);
 //    				Ext.getCmp('springtwitter-authGuide').dolayout();
@@ -654,6 +744,11 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 //    				self.win.setSize(600, 400);
 //    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
     			} else if (result.auth && result.success) {
+    				self.win.setSize(400, 500);
+    				
+    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadTimeline.reload();
+    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadMentions.reload();
+    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadDM.reload();
     				self.cardNavigation(2);
     			} else{
     				console.log("fail getting AuthURL");
@@ -665,25 +760,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     	}
     }),
     
-    twitterFrame: new Ext.Panel({
-    	id: 'springtwitter-twitterpanel',
-    	layout:'fit',
-    	html: 'ttt',
-    	hideBorders: true,
-        items:[{
-        	id: 'springtwitter-iframepanel',
-            xtype: 'iframepanel',
-            header: false,
-            loadMask : {hideOnReady:true, msg:'loading....'},
-            frameConfig: {autoCreate:{id: 'frameSpringMe2DayLogin'}},
-            listeners: {
-        		resize: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-        			// console.log('springme2day-login-iframepanel.resize(' + adjWidth + ', ' + adjHeight + ', ' + rawWidth + ', ' + rawHeight + ')');
-        		}
-        	}
-        }]
-    }),
-    
     authGuide: new Ext.Panel({
     	id: 'springtwitter-authGuide',
     	layout:'fit',
@@ -691,75 +767,85 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     	hideBorders: true
     }),
     
-    twitterView: new Ext.Panel({
-    	id: 'springtwitter-view',
-    	layout:'fit',
-    	html: '트위터가 실행된 페이지임.',
-    	hideBorders: true
-    }), 
+    // XTemplate
+    timelineTemplate: new Ext.XTemplate(
+	    '<tpl for=".">',
+	    '<div class="springtwitter-tweet" id="{name}">',
+	    '<div class="springtwitter-contents" id="{name}">',
+	    '<a href="{url}"><img src="{profileImageUrl}" title="{screenName}" alt="{screenName}"/></a>',
+	    '<h4>{screenName}</h4>{text}</div>',
+	    '<div class="springtwitter-info">{createAt} via {source}</div>',
+	    '<div class="springtwitter-btn"><span>reply</span><span>retweet</span></div>',
+	    '</div>',
+	    '</tpl>'
+    ),
     
-    loginForm: new Ext.form.FormPanel({
-        layout: 'form',
-        border: false,
-        header: false,
-        padding: 10,
-        id: 'springtwitter-login',
-        region: 'center',
-        labelWidth: 60,
-        align: 'bottom',
-        labelAlign: 'right',
-        waitMsgTarget: true,
-        buttons:[{
-            text: 'Login',
-        	handler: function(){
-        		M31.ApplicationRegistry.getInstance().getApp('springtwitter').loginForm.getForm().submit({
-        			url:'/app/twitter/authentication', 
-        			waitMsg:'Login...'
-        		});
-            }
-        }],
-
-        // configs apply to child items
-        defaults: {
-    		anchor: 'border',
-    		layout: 'form',
-    		boxMinWidth : 100
-        }, // provide some room on right for validation errors
-        defaultType: 'textfield',
-        items: [{
-            fieldLabel: 'Username',
-            name: 'userName',
-            allowBlank:false
-        },{
-            fieldLabel: 'Password',
-            name: 'userPw',
-            inputType: 'password',
-            allowBlank:false
-        },{
-        	xtype: 'checkbox',
-        	boxLabel:'Username 기억하기'
-        }],
+    // JsonStore
+    loadTimeline: new Ext.data.JsonStore({
+    	url: '/app/twitter/timeline',
+    	method: 'GET',
+        root: 'timeline',
+        autoload: true,
+        fields: [
+            'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+        ],
         listeners: {
-    		actioncomplete: function(form, action){
-    			console.log('actioncomplete');
-    			var result = Ext.decode(action.response.responseText);
-    			
-    			if(result.msg){
-    				alert(result.authURL);
-    			}
-    			else{
-    				console.log("fail getting AuthURL")
-    			}
-    		},
-    		actionfailed: function(form, action){
-    			console.log('action failed');
-    		}
-    	}
+            beforeload : function(store, options) {
+//                store.loadMask.show();
+            },
+            'load': { fn:function() {
+                console.log("loadTimeline loaded");
+            }, scope:this, single:false
+            }
+        }
     }),
     
+    loadMentions: new Ext.data.JsonStore({
+    	url: '/app/twitter/mentions',
+    	method: 'GET',
+        root: 'mentions',
+        fields: [
+            'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+        ],
+        listeners: {
+            beforeload : function(store, options) {
+//                store.loadMask.show();
+            },
+            'load': { fn:function() {
+                console.log("loadMentions loaded");
+            }, scope:this, single:false
+            }
+        }
+    }),
+    
+    loadDM: new Ext.data.JsonStore({
+    	url: '/app/twitter/directMessages',
+    	method: 'GET',
+        root: 'directMessages',
+        fields: [
+            'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+        ],
+        listeners: {
+            beforeload : function(store, options) {
+//                store.loadMask.show();
+            },
+            'load': { fn:function() {
+                console.log("loadDM loaded");
+            }, scope:this, single:false
+            }
+        }
+    }),
+    
+    // utility
     cardNavigation: function(idx){
     	console.log("called cardNavigation");
     	var l = M31.ApplicationRegistry.getInstance().getApp('springtwitter').win.getLayout();
     	l.setActiveItem(idx);
+    },
+    
+    addLinktoText: function(str) {
+    	var regExpName = /(@)([A-Za-z0-9_]+)/g;
+    	return str.replace(regExpName, '$1<a href="http://twitter.com/$2">$2</a>');
     }
+    
 });

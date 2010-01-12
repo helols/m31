@@ -163,6 +163,11 @@ m31.util = {
     },
     setUserCokie : function(user){
         Ext.util.Cookies.set("springsprout", user, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
+    },
+    
+    replaceURLtoLink: function(str) {
+    	var regExp = /(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.\?\&=-])*\/?/g;
+    	return str.replace(regExp, '<a href="$1$2$3$4">$1$2$3$4</a>');
     }
 };
 
