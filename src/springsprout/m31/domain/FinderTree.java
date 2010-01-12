@@ -16,11 +16,9 @@ public class FinderTree {
     private Boolean leaf = false;
     private String iconCls;
     private Integer parentId;
-    private Integer viewOrder;
-    private String linkAppId;
-    private String fileType;
     private String defaultYn;
     private Boolean singleClickExpand = true;
+    private Boolean allowDrag = true;
 
     public String getDefaultYn() {
         return defaultYn;
@@ -29,17 +27,7 @@ public class FinderTree {
     public void setDefaultYn(String defaultYn) {
         this.defaultYn = defaultYn;
         if("Y".equals(defaultYn)){
-        }
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-        if(!"F".equals(fileType)){
-            leaf= true;
+            allowDrag = false;
         }
     }
 
@@ -67,14 +55,6 @@ public class FinderTree {
         this.leaf = leaf;
     }
 
-    public String getLinkAppId() {
-        return linkAppId;
-    }
-
-    public void setLinkAppId(String linkAppId) {
-        this.linkAppId = linkAppId;
-    }
-
     public Integer getParentId() {
         return parentId;
     }
@@ -91,15 +71,11 @@ public class FinderTree {
         this.text = text;
     }
 
-    public Integer getViewOrder() {
-        return viewOrder;
-    }
-
-    public void setViewOrder(Integer viewOrder) {
-        this.viewOrder = viewOrder;
-    }
-
     public Boolean isSingleClickExpand() {
         return singleClickExpand;
+    }
+
+    public Boolean isAllowDrag() {
+        return allowDrag;
     }
 }

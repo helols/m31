@@ -106,6 +106,9 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
  */
 
 M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
+    init : function(){
+//        m31.util.requiredJS("springfindertree");
+    },
     createCallback :function(win) {
         if (!this.win) {
             this.win = win;
@@ -129,7 +132,13 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             height : 600,
             autoScroll:true,
             loader : new Ext.tree.TreeLoader({
-				 url:url				
+				 url:url
+				,listeners:{
+					beforeload:{scope:this, fn:function(loader, node) {
+						console.log(node)
+						console.log(node.getDepth())
+					}}
+				}
 			}),
             root: {
                     nodeType: 'async',
@@ -152,7 +161,7 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             shim:false,
             animCollapse:false,
             constrainHeader:true,
-            items :[_self.getTreePanel(),
+            items :[new M31.app.SpringFinderTree(),
                 {
                     region:'center' ,
                     layout:'fit',

@@ -51,6 +51,8 @@
     <!-- Outsider -->
     <script type="text/javascript" src="<c:url value="/js/application/outsider.js"/>"></script>
     <!-- helols -->
+
+    <script type="text/javascript" src="<c:url value="/js/application/springfindertree.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/application/helols.js"/>"></script>
     <!-- arawn -->
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>

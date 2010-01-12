@@ -6,10 +6,7 @@
         <result property="text" column="FILE_NAME"/>
         <result property="defaultYn" column="DEFAULT_YN"/>
         <result property="parentId" column="PARENT_ID"/>
-        <result property="viewOrder" column="VIEW_ORDER"/>
         <result property="iconCls" column="ICONCLS"/>
-        <result property="linkAppId" column="LINK_APP_ID"/>
-        <result property="fileType" column="FILE_TYPE"/>
     </resultMap>
 
     <select id="getTree" resultMap="tree" parameterClass="hashMap">
@@ -18,12 +15,10 @@
             FILE_NAME,
             PARENT_ID,
             DEFAULT_YN,
-            VIEW_ORDER,
-            ICONCLS,
-            LINK_APP_ID ,
-            FILE_TYPE
+            ICONCLS
         FROM SPRING_FINDER
             WHERE MEMBER_ID = #memberId#
             AND PARENT_ID = #parentId#
+            AND FILE_TYPE = 'F'
     </select>
 </sqlMap>
