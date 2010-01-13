@@ -13,6 +13,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
         // Load Mask
         this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
+        // 검색창에 포커스 줌.. (바로 주면 포커스 못 받는 경우가 있어서 500ms후에 focus주도록 함.
+        window.setTimeout(function() {
+            Ext.getCmp('springplayer-serach-textfield').focus();
+        }, 500);
+
     },
     beforeCreate : function(){
         console.log("beforeCreate");
@@ -95,11 +100,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     itemSelector: 'div.thumb-wrap',
                     singleSelect : true,
                     plugins: new Ext.DataView.DragSelector({dragSafe:true}),
-                    emptyText: 'No images to display',                    
+                    emptyText: 'No Video to display',
 
                     listeners : {
                         click : function(dataview, index, node, e) {
-                            var springPlayer = this;
+                             var springPlayer = this;
                             var target = null;
                             // Player로 전환.
                             if((target = e.getTarget("a .player-play")) !== null) {
