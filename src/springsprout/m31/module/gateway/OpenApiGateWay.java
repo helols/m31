@@ -7,26 +7,28 @@
  */
 package springsprout.m31.module.gateway;
 
+import static springsprout.m31.common.M31System.JSON_VIEW;
+import static springsprout.m31.utils.M31Utils.convert;
+
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import springsprout.m31.domain.enums.OpenApi;
+import springsprout.m31.dto.SpringBookDTO;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
+import springsprout.m31.module.gateway.support.SpringBookSearchParam;
 import springsprout.m31.utils.OpenAPIEditor;
-
-import java.util.HashMap;
-
-import static springsprout.m31.common.M31System.JSON_VIEW;
-import static springsprout.m31.utils.M31Utils.convert;
 
 @Controller
 public class OpenApiGateWay {
@@ -69,5 +71,15 @@ public class OpenApiGateWay {
         
         return null;
     }
+    
+    @RequestMapping("/gateway/springbook/search")
+    public ModelAndView springlibrary(SpringBookSearchParam param){
+    	log.debug(param.toString());	// 개발 확인용!
+    	
+    	OpenApi openApi = convert(param.getSearchType().toUpperCase());
+        SpringBookDTO library = applicationService.springbook(openApi, param);
+        
+        return new ModelAndView(JSON_VIEW).addObject(library);
+    }    
 
 }

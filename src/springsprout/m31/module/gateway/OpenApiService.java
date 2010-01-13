@@ -7,13 +7,27 @@
  */
 package springsprout.m31.module.gateway;
 
+import static springsprout.m31.domain.enums.OpenApi.DAUM;
+import static springsprout.m31.domain.enums.OpenApi.FLICKR;
+import static springsprout.m31.domain.enums.OpenApi.GOOGLE;
+import static springsprout.m31.domain.enums.OpenApi.NAVER;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import springsprout.m31.common.OpenApiReadException;
 import springsprout.m31.domain.MovieVO;
 import springsprout.m31.domain.enums.OpenApi;
+import springsprout.m31.dto.SpringBookDTO;
 import springsprout.m31.dto.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
@@ -21,14 +35,7 @@ import springsprout.m31.module.gateway.support.DaumAPIHelper;
 import springsprout.m31.module.gateway.support.FlickrAPIHelper;
 import springsprout.m31.module.gateway.support.GoogleAPIHelper;
 import springsprout.m31.module.gateway.support.NaverAPIHelper;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static springsprout.m31.domain.enums.OpenApi.*;
+import springsprout.m31.module.gateway.support.SpringBookSearchParam;
 
 @Service
 public class OpenApiService {
@@ -106,5 +113,28 @@ public class OpenApiService {
         }
         log.debug("Lise Size : {}", dto.getList().size());
         return dto;
+    }
+    
+    /**
+     * 북 검색 서비스
+     * @param openApi
+     * @param param
+     * @return
+     */
+    public SpringBookDTO springbook(OpenApi openApi, SpringBookSearchParam param){
+    	SpringBookDTO bookDTO = null;
+    	switch (openApi) {
+	        case ALL:
+	        	break;
+	        case DAUM:
+	            break;
+	        case NAVER:
+	        	param.setApiUrl(getAPIInfo(NAVER.toString(),"BOOK")[0]);
+	        	bookDTO = NaverAPIHelper.book(param);
+	        	break;
+	        default :
+	            break;
+    	}
+    	return bookDTO;
     }
 }
