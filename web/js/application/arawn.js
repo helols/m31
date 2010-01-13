@@ -1,3 +1,68 @@
+//봄북
+M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
+	loadMask : null, 
+	state: null,
+    init: function() {
+        console.log("init");
+    },
+    createCallback: function(win){
+    	console.log("createCallback");
+
+    	if(!this.win){ this.win = win; }
+    	this.win.app = this;
+    	
+    	this.loadMask = new Ext.LoadMask(this.win.body, {msg:"봄북을 초기화 중 입니다."});
+    	this.loadMask.show();
+    	
+    	var runner = new Ext.util.TaskRunner();
+    	var redyTask = {
+    	    run: function(app, runner){
+	    		if(app.state != null) return;
+	        	console.log('state : ' + app.state);
+	        	
+	        	// 봄북이 준비가 되었는가?
+	        	if(app.win == null) return;
+	        	if(!app.win.isVisible()) return;
+	        	
+	        	app.state = 'ready';
+	        	console.log('state : ' + app.state);
+	        	
+	        	app.loadMask.hide();
+	        	
+	        	runner.stopAll();
+    		},
+    	    interval: 1000,
+    	    args: [this, runner]
+    	};
+    	runner.start(redyTask);
+    },
+    beforeCreate: function(){
+    	console.log("beforeCreate");
+    },
+    removeWin: function(){
+    	console.log("removeWin");
+    	
+    	this.state = null;
+    	this.loadMask = null;
+    	
+    	this.win.app = null;
+    	this.win = null;
+    },
+    createWindow: function(){
+    	return {
+    		id: 'springbook-win',
+    		width:500,
+	        height:300,
+	        minWidth: 400,
+            minHeight: 300,
+	        layout:'fit',
+	        constrainHeader:true,
+	        closeAction: 'close',
+	        border: false
+    	};
+    }
+});
+
 // 봄미투데이
 M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	springme2dayappkey: 'eb4d74485df2773948ccd8eefdd53ef3',

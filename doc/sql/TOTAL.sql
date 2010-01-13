@@ -70,6 +70,7 @@ insert into API_TARGET_INFO values ('IMAGE','FLICKR','image',21, 'JSON');
 insert into API_TARGET_INFO values ('IMAGE','GOOGLE','images',22, 'JSON');
 insert into API_TARGET_INFO values ('VIDEO','DAUM','vclip',5);
 insert into API_TARGET_INFO values ('VIDEO','NAVER','video',6);
+INSERT INTO API_TARGET_INFO VALUES('BOOK', 'NAVER', 'book', 6, 'RSS');
 
 select
       ati.api_OP

@@ -6,6 +6,8 @@ insert into application_info values (application_seq.nextval, 'springplayer', '�
 insert into application_info values (application_seq.nextval, 'springtwitter', '봄트위터', 'Twitter 웹클라이언트입니다.', 'Y', 5);
 insert into application_info values (application_seq.nextval, 'springfinder', '봄탐색기', '봄 웹데스크탑의 파일을 관리합니다', 'Y',1);
 insert into application_info values (application_seq.nextval, 'signout', 'SignOut', '봄 데스크탑에서 나갑니다.', 'Y',9999);
+insert into application_info values (application_seq.nextval, 'springbook', '봄북', '네이버, 다음 책 API 를 통해서 책정보를 조회하고 봅니다.','Y',6);
+
 delete member_apps;
 
 INSERT INTO MEMBER_APPS
