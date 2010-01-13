@@ -27,6 +27,8 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	        	app.state = 'ready';
 	        	console.log('state : ' + app.state);
 	        	
+	        	app.createBookView();
+	        	
 	        	app.loadMask.hide();
 	        	
 	        	runner.stopAll();
@@ -60,6 +62,110 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	        closeAction: 'close',
 	        border: false
     	};
+    },
+    createBookView: function(){
+    	this.bookStore = new Ext.data.JsonStore({
+        	url: '/gateway/springbook/search',
+        	baseParams: {searchType:'naver',query:'자바스크립트'},
+        	autoLoad: false,
+        	autoDestroy: true,
+            root: 'springBookDTO.books',
+            fields: [
+                'title',
+                'image',
+                'description'
+            ]
+        });	
+        
+    	this.bookPanel = new Ext.grid.GridPanel({
+        	id: 'springbook-view',
+        	store: this.bookStore,
+            cm: new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: false,
+                    menuDisabled:true
+                },
+                columns: [
+                    {header: '책 정보 조회 결과입니다.', dataIndex: 'title', align:'center', renderer: function(value, p, record){
+                    	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
+                    	body += '<tr>';
+                    	body += '<td width="50"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
+                    	body += '<td align="left"><p>'+record.data.description+'</p></td>';
+                    	body += '</tr>';
+                    	body += '</table>';
+                    	return body;
+                    }}
+                ]
+            }),
+            viewConfig: {
+                autoFill:false, 
+				forceFit:true,
+				deferEmptyText:'', 
+				emptyText: '검색된 책이 없습니다.'
+            },
+            header: false,
+            enableColumnResize: false,
+            columnLines: true,
+            loadMask: {msg:'책을 찾는 중 입니다.'},
+			tbar: [{
+					xtype: 'tbtext',
+					text: '',
+					width: 5
+				},{
+					id: 'springbook-api-provider',
+                    xtype: 'combo',
+                    store: new Ext.data.ArrayStore({
+                        fields: ['id', 'name'],
+                        data : [
+							['naver', 'Naver']
+                        ]
+                    }),
+                    width: 100,
+                    mode: 'local',
+                    editable: false,
+                    valueField: 'id',
+                    displayField: 'name',
+                    forceSelection: true,
+                    lazyInit: false,
+                    triggerAction: 'all',
+                    typeAhead: true,
+                    value: 'naver'
+				},'-',{
+					xtype: 'tbtext',
+					text: '책 제목 : '
+				},{
+					xtype: 'textfield',
+                    id: 'springsee-search',
+                    selectOnFocus: true,
+                    width: 100,
+                    enableKeyEvents: true,
+                    listeners: {
+                		'keypress'  : {fn:function(cmp, evt){
+                        	if (evt.keyCode == Ext.EventObject.ENTER) {
+                        		console.log('검색하자!');
+				    		}
+    				    }, scope:this}
+                	}
+				},{
+					xtype: 'button',
+					text: '검색',
+					handler: function(sender, event){
+							console.log('검색버튼 누지름!');
+						}.createDelegate(this)
+				}
+			],
+			listeners: {
+            	render: function(grid){
+            		console.log('render');
+            	}
+            }
+        });
+        
+    	// 윈도우에 패널을 추가하고 창을 다시 그린다.
+    	this.win.add(this.bookPanel);
+    	this.win.doLayout();
+    	
+    	this.bookStore.load();
     }
 });
 
