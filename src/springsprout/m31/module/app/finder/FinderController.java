@@ -26,12 +26,23 @@ public class FinderController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/app/springfinder/getTree")
-    public ModelAndView getTree(Integer node){
-        if(node == null ||node == 0){
+    public ModelAndView getTree(Integer node) {
+        if (node == null || node == 0) {
             List emptyList = new ArrayList();
             emptyList.add(new HashMap());
             return new ModelAndView(JSON_VIEW).addObject("treeList", emptyList);
         }
-        return new ModelAndView(JSON_VIEW).addObject("treeList",finderService.getTree(node));
+        return new ModelAndView(JSON_VIEW).addObject("treeList", finderService.getTree(node));
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/app/springfinder/getFiles")
+    public ModelAndView getFiles(Integer parentNode) {
+        if (parentNode == null || parentNode == 0) {
+            List emptyList = new ArrayList();
+            emptyList.add(new HashMap());
+            return new ModelAndView(JSON_VIEW).addObject("fileList", emptyList);
+        }
+        return new ModelAndView(JSON_VIEW).addObject("fileList", finderService.getFiles(parentNode));
     }
 }

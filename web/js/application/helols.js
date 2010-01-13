@@ -114,44 +114,6 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             this.win = win;
         }
     },
-    getTreePanel : function() {
-        var url = '/app/springfinder/getTree';
-        var tree = new Ext.tree.TreePanel({
-            // tree
-            animate:true,
-            enableDD:true,
-            expandable:false,
-            containerScroll: true,
-            //            ddGroup: 'organizerDD',
-            rootVisible:true,
-            region:'west',
-            width:200,
-            split: true,
-            title : 'springfinder',
-            collapsible: true,
-            height : 600,
-            autoScroll:true,
-            loader : new Ext.tree.TreeLoader({
-				 url:url
-				,listeners:{
-					beforeload:{scope:this, fn:function(loader, node) {
-						console.log(node)
-						console.log(node.getDepth())
-					}}
-				}
-			}),
-            root: {
-                    nodeType: 'async',
-                    text: '/',
-                    draggable: false,
-                    allowDrag:false,
-                    allowDrop:false,
-                    id: 1
-            },
-            margins: '0'
-        });
-        return tree;
-    },
     createWindow : function() {
         var _self = this;
         var opt = {
@@ -161,36 +123,16 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             shim:false,
             animCollapse:false,
             constrainHeader:true,
-            items :[new M31.app.SpringFinderTree(),
+            items :[
+                new M31.app.SpringFinderTree(),
+                new M31.app.SpringFinderPanel(
                 {
-                    region:'center' ,
-                    layout:'fit',
-                    html:'야호.' ,
-                    width : 200 ,
-                    heigth :600
-                }
+                    height : 600,
+                    region:'center',
+                    border : false
+                })
             ]
         };
         return opt;
     }
 });
-
-Ext.override(Ext.tree.TreeLoader,{
-    processResponse : function(response, node, callback, scope){
-        var json = response.responseText;
-        try {
-            var o = response.responseData || Ext.decode(json).treeList;
-            node.beginUpdate();
-            for(var i = 0, len = o.length; i < len; i++){
-                var n = this.createNode(o[i]);
-                if(n){
-                    node.appendChild(n);
-                }
-            }
-            node.endUpdate();
-            this.runCallback(callback, scope || node, [node]);
-        }catch(e){
-            this.handleFailure(response);
-        }
-    }
-})

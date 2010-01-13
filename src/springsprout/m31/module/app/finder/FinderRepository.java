@@ -11,6 +11,7 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 import org.springframework.stereotype.Repository;
+import springsprout.m31.domain.FinderFile;
 import springsprout.m31.domain.FinderTree;
 
 import javax.annotation.PostConstruct;
@@ -31,5 +32,9 @@ public class FinderRepository  extends SqlMapClientDaoSupport {
     @SuppressWarnings("unchecked")
     public List<FinderTree> getTree(HashMap<String, Integer> conditionMap) {
         return getSqlMapClientTemplate().queryForList("finder.getTree",conditionMap);
+    }
+
+    public List<FinderFile> getFiles(HashMap<String, Integer> conditionMap) {
+        return getSqlMapClientTemplate().queryForList("finder.getFiles",conditionMap);
     }
 }

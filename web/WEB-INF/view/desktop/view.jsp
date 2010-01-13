@@ -30,6 +30,7 @@
 
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/DataView-more.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
@@ -53,6 +54,7 @@
     <!-- helols -->
 
     <script type="text/javascript" src="<c:url value="/js/application/springfindertree.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/springfinderpanel.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/application/helols.js"/>"></script>
     <!-- arawn -->
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>

@@ -1,4 +1,57 @@
 /**
+ * 해당 부분은 treeLoader 에서 array 객체만 받아들이기때문에 treeList라는 객체안의 array 를
+ * 꺼내서 tree를 구성하도록 오버라이드 함. 스프링 jsonview용 lib가 단순 배열은 안남겨줘서;;
+ */
+Ext.override(Ext.tree.TreeLoader,{
+    processResponse : function(response, node, callback, scope){
+        var json = response.responseText;
+        try {
+            var o = response.responseData || Ext.decode(json).treeList;
+            node.beginUpdate();
+            for(var i = 0, len = o.length; i < len; i++){
+                var n = this.createNode(o[i]);
+                if(n){
+                    node.appendChild(n);
+                }
+            }
+            node.endUpdate();
+            this.runCallback(callback, scope || node, [node]);
+        }catch(e){
+            this.handleFailure(response);
+        }
+    }
+});
+
+/**
+ * Tree에 keyup 이벤트 추가.
+ */
+Ext.override(Ext.tree.DefaultSelectionModel,{
+     init : function(tree){
+        this.tree = tree;
+        tree.mon(tree.getTreeEl(), 'keydown', this.onKeyDown, this);
+        tree.mon(tree.getTreeEl(), 'keyup', this.onKeyup, this);
+        tree.on('click', this.onNodeClick, this);
+    },
+    onKeyup : function(e){
+        var s = this.selNode || this.lastSelNode;
+        var sm = this;
+        if(!s){
+            return;
+        }
+        var k = e.getKey();
+        switch(k){
+            case e.DOWN:
+            case e.UP:
+            case e.RIGHT:
+            case e.LEFT:
+                e.stopEvent();
+                e.preventDefault();
+                Ext.fly('springfinder-panel').update(s.id);
+                break;
+        };
+    }
+});
+/**
  * Ext.ux.FileTreePanel
  *
  * @author  Ing. Jozef Sakáloš
@@ -15,7 +68,8 @@
  */
 
 M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
-     containerScroll:true
+      id:'springfinder-tree'
+    , containerScroll:true
     ,enableDD:true
     ,existsText:'File <b>{0}</b> already exists'
     ,newdirText:'봄 폴더'
@@ -35,6 +89,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     ,autoScroll:true
     ,margins: '0'
     
+
     ,initComponent:function() {
         Ext.apply(this, {
             root: {
@@ -107,7 +162,6 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
                             node = node.isLeaf() ? node.parentNode : node;
                             sm.select(node);
                             node.reload();
-//                            this.getRootNode().reload();
                         }
                     }
                 },
@@ -162,7 +216,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
                     }
                 }
             ]
-        }); // eo apply
+        })  ; // eo apply
 
         if (!this.loader) {
             this.loader = new Ext.tree.TreeLoader({
@@ -207,9 +261,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
              beforenodedrop:{scope:this, fn:this.onBeforeNodeDrop}
             ,nodedrop:{scope:this, fn:this.onNodeDrop}
             ,nodedragover:{scope:this, fn:this.onNodeDragOver}
-            ,render : {scope:this,fn:this.selectionchange}
         });
-
     } // eo function initComponent
 
     ,onRender:function() {
@@ -223,11 +275,6 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
             },stopEvent:true}
         });
     } // eo function onRender
-
-    ,selectionchange : function(treepanel){
-        treepanel.getSelectionModel().on('selectionchange',function(tree,node){});
-    }
-    // }}}
 
 //    // new methods
 //    // {{{
@@ -288,7 +335,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 //                        }
 //                        // handle simple rename error
 //                        else {
-//                            options.node.setText(options.oldName);
+//                            options.node.setFileName(options.oldName);
 //                        }
 //                        // signal failure to onNodeDrop
 //                        if (options.e) {
@@ -1104,7 +1151,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 //        menu.node = node;
 //
 //        // set node name
-//        menu.getItemByCmd('nodename').setText(Ext.util.Format.ellipsis(node.text, 22));
+//        menu.getItemByCmd('nodename').setFileName(Ext.util.Format.ellipsis(node.text, 22));
 //
 //        // enable/disable items depending on node clicked
 //        menu.setItemDisabled('open', !node.isLeaf());

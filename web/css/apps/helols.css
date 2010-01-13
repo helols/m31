@@ -17,3 +17,42 @@
 .x-tree-node-leaf .x-tree-node-icon {
     background: transparent url(../../extJS/resources/images/default/tree/folder.gif) !important;
 }
+
+/* springfinderpanel*/
+
+#springfinder-panel{
+    background: #FFF;
+    padding: 5px;
+}
+
+#springfinder-panel .file-wrap  {
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin: 5px;
+    margin-right: 0;
+    padding: 5px;
+}
+
+#springfinder-panel .file  {
+    width: 100px;
+    height: 80px;
+    background: #dddddd;
+}
+
+#springfinder-panel .file-wrap span{
+    overflow: hidden;
+    vertical-align: middle;
+}
+#springfinder-panel .x-view-over{
+    background: #efefef url(../../images/apps/springsee/row-over.gif) repeat-x left top;
+}
+#springfinder-panel .x-view-selected{
+    background: #DFEDFF;
+}
+#springfinder-panel .x-view-selected .file-wrap{
+    background:transparent;
+}
+#springfinder-panel .x-view-selected span{
+    color:#1A4D8F;
+}

@@ -9,16 +9,52 @@
         <result property="iconCls" column="ICONCLS"/>
     </resultMap>
 
+      <resultMap id="file" class="springsprout.m31.domain.FinderFile">
+        <result property="fileId" column="ID"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="defaultYn" column="DEFAULT_YN"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="iconCls" column="ICONCLS"/>
+        <result property="linkAppId" column="LINK_APP_ID"/>
+        <result property="fileAddition" column="FILE_ADDITION_INFO"/>
+    </resultMap>
+
     <select id="getTree" resultMap="tree" parameterClass="hashMap">
+        SELECT
+        ID,
+        FILE_NAME,
+        PARENT_ID,
+        DEFAULT_YN,
+        ICONCLS
+        FROM SPRING_FINDER
+        WHERE MEMBER_ID = #memberId#
+        AND PARENT_ID = #parentId#
+        AND FILE_TYPE = 'F'
+    </select>
+
+    <select id="getFiles" resultMap="file" parameterClass="hashMap">
+        <isNotEqual property="parentId" compareValue="1">
+        SELECT
+            #parentId# as ID,
+            '..' as FILE_NAME,
+            (select parent_id from spring_finder where id = #parentId#) as PARENT_ID,
+            'Y' as DEFAULT_YN,
+            'up-folder' as ICONCLS,
+            'springfinder' as LINK_APP_ID,
+            FILE_ADDITION_INFO
+        FROM dual
+        union all
+        </isNotEqual>
         SELECT
             ID,
             FILE_NAME,
             PARENT_ID,
             DEFAULT_YN,
-            ICONCLS
+            ICONCLS||'-'||LINK_APP_ID as ICONCLS,
+            LINK_APP_ID,
+            FILE_ADDITION_INFO
         FROM SPRING_FINDER
-            WHERE MEMBER_ID = #memberId#
-            AND PARENT_ID = #parentId#
-            AND FILE_TYPE = 'F'
+        WHERE MEMBER_ID = #memberId#
+        AND PARENT_ID = #parentId#
     </select>
 </sqlMap>

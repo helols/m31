@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springsprout.m31.domain.FinderFile;
 import springsprout.m31.domain.FinderTree;
 import springsprout.m31.service.security.SecurityService;
 
@@ -29,10 +30,19 @@ public class FinderService {
 
     @Transactional(readOnly = true)
     public List<FinderTree> getTree(Integer parentId){
+        return finderRepository.getTree(makeConditionMap(parentId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<FinderFile> getFiles(Integer parentId) {
+        return finderRepository.getFiles(makeConditionMap(parentId));
+    }
+
+    private HashMap<String,Integer> makeConditionMap(Integer parentId) {
         HashMap<String,Integer> conditionMap = new HashMap<String,Integer>();
         conditionMap.put("parentId",parentId);
         conditionMap.put("memberId",securityService.getCurrentMemberId());
-        log.debug("conditionMap >> "+conditionMap);
-        return finderRepository.getTree(conditionMap);
+
+        return conditionMap;
     }
 }
