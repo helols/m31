@@ -78,6 +78,9 @@ public class OpenApiGateWay {
     	
     	OpenApi openApi = convert(param.getSearchType().toUpperCase());
         SpringBookDTO library = applicationService.springbook(openApi, param);
+        if(library == null){
+        	library = new SpringBookDTO();
+        }
         
         return new ModelAndView(JSON_VIEW).addObject(library);
     }    

@@ -66,7 +66,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     createBookView: function(){
     	this.bookStore = new Ext.data.JsonStore({
         	url: '/gateway/springbook/search',
-        	baseParams: {searchType:'naver',query:'자바스크립트'},
+        	baseParams: {searchType:'naver',query:''},
         	autoLoad: false,
         	autoDestroy: true,
             root: 'springBookDTO.books',
@@ -173,7 +173,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 			],
 			listeners: {
             	render: function(grid){
-            		console.log('render');
+            		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
             	}
             }
         });
