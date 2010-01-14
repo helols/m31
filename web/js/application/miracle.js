@@ -220,7 +220,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     }
 });
 
-/*검색 필드*/
 /**
  * The custom search field
  */
@@ -282,7 +281,6 @@ Ext.app.CustomLoadMask = Ext.extend(Ext.LoadMask, {
 Ext.ux.FlashPlugin = function() {
     this.init = function(ct) {
         ct.flashTemplate = new Ext.XTemplate(
-            //'<div>',
             '<object id="flash-{id}" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="{swfWidth}" height="{swfHeight}">',
             '<param name="movie" value="{swf}" />',
             '<param name="quality" value="high" />',
@@ -295,7 +293,6 @@ Ext.ux.FlashPlugin = function() {
             '<param name="scale" value="showall" />',
             '<embed name="flash-{id}" src="{swf}" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="{computedflashvars}" type="application/x-shockwave-flash" width="{swfWidth}" height="{swfHeight}" wmode="transparent" allowScriptAccess="always" swliveconnect="true" align="t" salign="TL" scale="showall"></embed>',
             '</object>'
-            //'</div>'
         );
         ct.flashTemplate.compile();
         ct.renderFlash = function() {
@@ -326,3 +323,22 @@ Ext.ux.FlashPlugin = function() {
         //ct.on('afterlayout',ct.renderFlash, ct);
     };
 };
+
+//타임로그
+M31Desktop.TimeLog = Ext.extend(M31.app.Module, {
+    init : function() {
+    },
+
+    createWindow : function() {
+        var opt = {
+            id : 'timelog',
+            width:640,
+            height:480,
+            html : '<p>Something useful would be in here.</p>',
+            shim:false,
+            animCollapse:false,
+            constrainHeader:true
+        };
+        return opt;
+    }
+});
