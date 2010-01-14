@@ -72,7 +72,16 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             root: 'springBookDTO.books',
             fields: [
                 'title',
+                'link',
                 'image',
+                'author',
+                'price',
+                'discount',
+                'publisher',
+                {name: 'pubdate', convert: function(v, record){
+                	return String.format('{0}/{1}/{2}', v.substring(0, 4), v.substring(4, 2), v.substring(6));
+                }},
+                'isbn',
                 'description'
             ]
         });	
@@ -89,8 +98,12 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     {header: '책 정보 조회 결과입니다.', dataIndex: 'title', align:'center', renderer: function(value, p, record){
                     	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
                     	body += '<tr>';
-                    	body += '<td width="50"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
-                    	body += '<td align="left"><p>'+record.data.description+'</p></td>';
+                    	body += '<td width="64"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
+                    	body += '<td align="left">';
+                    	body += '<a href="' + record.data.link + '" target="blank"><b>' + record.data.title + '</b></a><br />';
+                    	body += record.data.author + ' 저 | ' + record.data.publisher + ' | ' + record.data.pubdate + '<br />';
+                    	body += '<p>'+record.data.description+'</p>';
+                    	body += '</td>';
                     	body += '</tr>';
                     	body += '</table>';
                     	return body;
@@ -135,14 +148,16 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 					text: '책 제목 : '
 				},{
 					xtype: 'textfield',
-                    id: 'springsee-search',
+                    id: 'springbook-search-text',
                     selectOnFocus: true,
                     width: 100,
                     enableKeyEvents: true,
                     listeners: {
                 		'keypress'  : {fn:function(cmp, evt){
                         	if (evt.keyCode == Ext.EventObject.ENTER) {
-                        		console.log('검색하자!');
+                        		this.bookStore.load({params:{
+    								searchType:Ext.getCmp('springbook-api-provider').getValue(),
+    								query:Ext.getCmp('springbook-search-text').getValue()}});
 				    		}
     				    }, scope:this}
                 	}
@@ -150,7 +165,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 					xtype: 'button',
 					text: '검색',
 					handler: function(sender, event){
-							console.log('검색버튼 누지름!');
+							this.bookStore.load({params:{
+								searchType:Ext.getCmp('springbook-api-provider').getValue(),
+								query:Ext.getCmp('springbook-search-text').getValue()}});
 						}.createDelegate(this)
 				}
 			],
@@ -160,7 +177,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             	}
             }
         });
-        
+
     	// 윈도우에 패널을 추가하고 창을 다시 그린다.
     	this.win.add(this.bookPanel);
     	this.win.doLayout();
