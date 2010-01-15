@@ -10,7 +10,7 @@
  * 
  */
 Ext.DataView.LabelEditor = Ext.extend(Ext.Editor, {
-    alignment: "tl-tl",
+    alignment: "bl-bl",
     hideEl : false,
     cls: "x-small-editor",
     shim: false,
@@ -44,7 +44,14 @@ Ext.DataView.LabelEditor = Ext.extend(Ext.Editor, {
         });
         this.view.getEl().on('mousedown', this.onMouseDown, this, {delegate: this.labelSelector});
     },
-    
+
+    realign : function(autoSize){
+        if(autoSize === true){
+            this.doAutoSize();
+        }
+        this.el.alignTo(this.boundEl.parent('div.x-editable-wrap'), this.alignment, this.offsets);
+    },
+
     doBlur: function(){
         if(this.editing){
             this.field.blur();

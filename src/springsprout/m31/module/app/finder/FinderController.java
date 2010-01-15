@@ -7,9 +7,12 @@
  */
 package springsprout.m31.module.app.finder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,8 +22,9 @@ import java.util.List;
 import static springsprout.m31.common.M31System.JSON_VIEW;
 
 @Controller
-@RequestMapping("/app/springfinder/*")
+@RequestMapping("/app/springfinder/**")
 public class FinderController {
+    Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     FinderService finderService;
 
@@ -36,7 +40,7 @@ public class FinderController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping("/app/springfinder/getFiles")
+    @RequestMapping(value = "/app/springfinder/getFiles", method= RequestMethod.POST)
     public ModelAndView getFiles(Integer parentNode) {
         if (parentNode == null || parentNode == 0) {
             List emptyList = new ArrayList();
@@ -44,5 +48,22 @@ public class FinderController {
             return new ModelAndView(JSON_VIEW).addObject("fileList", emptyList);
         }
         return new ModelAndView(JSON_VIEW).addObject("fileList", finderService.getFiles(parentNode));
+    }
+
+    @RequestMapping(value = "/app/springfinder/insertFile", method= RequestMethod.POST)
+    public ModelAndView insertFile(String fileList){
+        return new ModelAndView(JSON_VIEW).addObject("fileList", "");
+    }
+
+    @RequestMapping(value = "/app/springfinder/updateFile", method= RequestMethod.POST)
+    public ModelAndView updateFile(String fileList){
+        log.debug("fileList"+fileList);
+        return new ModelAndView(JSON_VIEW).addObject("fileList", "").addObject("success",true);
+    }
+
+
+    @RequestMapping(value = "/app/springfinder/deleteFile", method= RequestMethod.POST)
+    public ModelAndView deleteFile(String fileList){
+        return new ModelAndView(JSON_VIEW).addObject("fileList", "");
     }
 }

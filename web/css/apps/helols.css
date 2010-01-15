@@ -33,11 +33,29 @@
     margin-right: 0;
     padding: 5px;
 }
+#springfinder-panel .x-editable-wrap{
+    text-align:center;
+}
 
 #springfinder-panel .file  {
     width: 100px;
     height: 80px;
-    background: #dddddd;
+}
+
+#springfinder-panel .folder-springdoc{
+    background: url('../../images/apps/springfinder/folder-springdoc.png') no-repeat;
+}
+
+#springfinder-panel .folder-springsee{
+    background: url('../../images/apps/springfinder/folder-springsee.png') no-repeat;
+}
+
+#springfinder-panel .folder-springplayer{
+    background: url('../../images/apps/springfinder/folder-springplayer.png') no-repeat;
+}
+
+#springfinder-panel .folder-springbook{
+    background: url('../../images/apps/springfinder/folder-springbook.png') no-repeat;
 }
 
 #springfinder-panel .file-wrap span{

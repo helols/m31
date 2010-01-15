@@ -78,7 +78,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     ,enableDD:true
     ,expandable:false
     ,containerScroll: true
-    ,ddGroup: 'springfinderDD'
+    ,ddGroup: 'springfindertreeDD'
     ,rootVisible:true
     ,region:'west'
     ,width:200
@@ -97,7 +97,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
                     text: '/',
                     draggable: false,
                     allowDrag:false,
-                    allowDrop:false,
+                    allowDrop:true,
                     id: 1
             },
             treeEditor:!this.readOnly ? new Ext.tree.TreeEditor(this, {
@@ -116,9 +116,11 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
             }
 
             // create treeSorter
-            ,treeSorter:new Ext.tree.TreeSorter(this, {folderSort:true})
-
-            // {{{
+            ,treeSorter:new Ext.tree.TreeSorter(this, {folderSort:true,dir: "desc",
+                sortType: function(node) {
+                        return parseInt(node.id, 10);
+                    }
+            })
             ,keys:[
                 {
                     // F2 = edit
@@ -240,26 +242,11 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 //                ,beforecomplete:{scope:this, fn:this.onBeforeEditComplete}
 //            });
         }
-        // }}}
-        // {{{
         // install event handlers
-//        listeners: {
-//                       'render': function(tp){
-//                           tp.getSelectionModel().on('selectionchange', function(tree, node){
-//                               var el = Ext.getCmp('details-panel').body;
-//                               if(node && node.leaf){
-//                                   tpl.overwrite(el, node.attributes);
-//                               }else{
-//                                   el.update(detailsText);
-//                               }
-//                           })
-//                       }
-//                   }
-
         this.on({
 //            contextmenu:{scope:this, fn:this.onContextMenu, stopEvent:true}
-             beforenodedrop:{scope:this, fn:this.onBeforeNodeDrop}
-            ,nodedrop:{scope:this, fn:this.onNodeDrop}
+//             beforenodedrop:{scope:this, fn:this.onBeforeNodeDrop}
+             nodedrop:{scope:this, fn:this.onNodeDrop}
             ,nodedragover:{scope:this, fn:this.onNodeDragOver}
         });
     } // eo function initComponent
@@ -275,6 +262,45 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
             },stopEvent:true}
         });
     } // eo function onRender
+    ,onNodeDrop:function(e) {
+        console.dir(e)
+        return false;
+        // failure can be signalled by cmdCallback
+        // put drop node to the original parent in that case
+//        if (true === e.failure) {
+//            e.oldParent.appendChild(e.dropNode);
+//            return;
+//        }
+
+        // if we already have node with the same text, remove the duplicate
+//        console.dir(e);
+//
+//        var sameNode = e.dropNode.parentNode.findChild('text', e.dropNode.text);
+//        if (sameNode && sameNode !== e.dropNode) {
+//            sameNode.parentNode.removeChild(sameNode);
+//        }
+
+    }
+    ,onNodeDragOver:function(e) {
+        var cancel = false;
+        if(e.data.isPanel){
+            if(e.data.isMulti){
+            for(var i = 0 ; i < e.data.nodes.length;i++){
+              if(e.data.nodes[i].id == e.target.id){
+                  cancel = true;
+                  break;
+              }
+            }
+            }else{
+                if(e.data.ddel.id == e.target.id){
+                    cancel = true;
+                }
+            }
+        }        
+        e.cancel = cancel;
+
+//            e.cancel = e.target.id || e.dropNode.parentNode === e.target.parentNode && e.target.isLeaf();
+    } // eo function onNodeDragOver
 
 //    // new methods
 //    // {{{
@@ -930,14 +956,6 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 //    }
 //    // }}}
 //    // {{{
-//    /**
-//     * called while dragging over, decides if drop is allowed
-//     * @private
-//     * @param {Object} dd event
-//     */
-//    ,onNodeDragOver:function(e) {
-//        e.cancel = e.target.disabled || e.dropNode.parentNode === e.target.parentNode && e.target.isLeaf();
-//    } // eo function onNodeDragOver
 //    // }}}
 //    // {{{
 //    /**
@@ -945,21 +963,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 //     * @private
 //     * @param {Object} dd event
 //     */
-//    ,onNodeDrop:function(e) {
-//
-//        // failure can be signalled by cmdCallback
-//        // put drop node to the original parent in that case
-//        if (true === e.failure) {
-//            e.oldParent.appendChild(e.dropNode);
-//            return;
-//        }
-//
-//        // if we already have node with the same text, remove the duplicate
-//        var sameNode = e.dropNode.parentNode.findChild('text', e.dropNode.text);
-//        if (sameNode && sameNode !== e.dropNode) {
-//            sameNode.parentNode.removeChild(sameNode);
-//        }
-//    }
+
 //    // }}}
 //    // {{{
 //    /**
