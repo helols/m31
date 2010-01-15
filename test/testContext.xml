@@ -21,7 +21,7 @@
 	<!-- ============================================================= -->
 	<!--  Component Scan                                               -->
 	<!-- ============================================================= -->
-    <context:component-scan base-package="springsprout.m31"/>
+    <context:component-scan base-package="springsprout.m31.module.member"/>
 	
 	<bean id="m31DataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource"
     	p:driverClassName="${jdbc.driverClassName}"
