@@ -1,5 +1,7 @@
 package springsprout.m31.module.app.twitter;
 
+import static springsprout.m31.common.M31System.JSON_VIEW;
+
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -8,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static springsprout.m31.common.M31System.JSON_VIEW;
+import springsprout.m31.module.app.twitter.support.TwitterRequestParam;
 
 /*
  * 
@@ -62,20 +63,20 @@ public class SpringTwitterController {
     }
     
     @RequestMapping
-    public ModelAndView timeline() {
-    	HashMap<String,Object> twitterTimeline = springTwitterService.getTimeline();
+    public ModelAndView timeline(TwitterRequestParam twitterParam) {
+    	HashMap<String,Object> twitterTimeline = springTwitterService.getTimeline(twitterParam);
         return new ModelAndView(JSON_VIEW).addObject("timeline", twitterTimeline.get("timeline"));
     }
     
     @RequestMapping
-    public ModelAndView mentions() {
-    	HashMap<String,Object> twitterMentions = springTwitterService.getMentions();
+    public ModelAndView mentions(TwitterRequestParam twitterParam) {
+    	HashMap<String,Object> twitterMentions = springTwitterService.getMentions(twitterParam);
     	return new ModelAndView(JSON_VIEW).addObject("mentions", twitterMentions.get("mentions"));
     }
     
     @RequestMapping
-    public ModelAndView directMessages() {
-    	HashMap<String,Object> twitterDirectMessage = springTwitterService.getDirectMessages();
+    public ModelAndView directMessages(TwitterRequestParam twitterParam) {
+    	HashMap<String,Object> twitterDirectMessage = springTwitterService.getDirectMessages(twitterParam);
     	return new ModelAndView(JSON_VIEW).addObject("directMessages", twitterDirectMessage.get("directMessages"));
     }
     

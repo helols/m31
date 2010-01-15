@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.module.app.twitter.support.TwitterRequestParam;
 import springsprout.m31.module.app.twitter.support.TwitterTweetDTO;
 import springsprout.m31.service.security.SecurityService;
 import twitter4j.DirectMessage;
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -27,11 +29,16 @@ public class SpringTwitterService {
 	@Autowired
     SecurityService securityService;
 	
-	public HashMap<String,Object> getTimeline() {
+	public HashMap<String,Object> getTimeline(TwitterRequestParam twitterParam) {
 		Twitter twitter = 	securityService.getTwitterObject();
 		List<Status> statuses;
+		
+		Paging page = new Paging();
+		page.count(twitterParam.getCount());
+		page.setPage(twitterParam.getPageno());
+		
 		try {
-			statuses = twitter.getFriendsTimeline();
+			statuses = twitter.getHomeTimeline(page);
 		} catch (TwitterException e) {
 			throw new OpenApiReadException(e);
 		}
@@ -57,11 +64,16 @@ public class SpringTwitterService {
 		return timelineMap;
 	}
 	
-	public HashMap<String,Object> getMentions() {
+	public HashMap<String,Object> getMentions(TwitterRequestParam twitterParam) {
 		Twitter twitter = 	securityService.getTwitterObject();
 		List<Status> statuses;
+		
+		Paging page = new Paging();
+		page.count(twitterParam.getCount());
+		page.setPage(twitterParam.getPageno());
+		
 		try {
-			statuses = twitter.getMentions();
+			statuses = twitter.getMentions(page);
 		} catch (TwitterException e) {
 			throw new OpenApiReadException(e);
 		}
@@ -87,11 +99,16 @@ public class SpringTwitterService {
 		return mentionsMap;
 	}
 	
-	public HashMap<String,Object> getDirectMessages() {
+	public HashMap<String,Object> getDirectMessages(TwitterRequestParam twitterParam) {
 		Twitter twitter = 	securityService.getTwitterObject();
 		List<DirectMessage> directMessages;
+		
+		Paging page = new Paging();
+		page.count(twitterParam.getCount());
+		page.setPage(twitterParam.getPageno());
+		
 		try {
-			directMessages = twitter.getDirectMessages();
+			directMessages = twitter.getDirectMessages(page);
 		} catch (TwitterException e) {
 			throw new OpenApiReadException(e);
 		}
