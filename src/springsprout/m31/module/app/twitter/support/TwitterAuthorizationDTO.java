@@ -4,6 +4,7 @@ public class TwitterAuthorizationDTO {
 	private int member_id;
 	private String token;
 	private String secret_token;
+	private String screen_name;
 	
 	public int getMember_id() {
 		return member_id;
@@ -22,5 +23,11 @@ public class TwitterAuthorizationDTO {
 	}
 	public void setSecret_token(String secretToken) {
 		secret_token = secretToken;
+	}
+	public String getScreen_name() {
+		return screen_name;
+	}
+	public void setScreen_name(String screenName) {
+		screen_name = screenName;
 	}
 }

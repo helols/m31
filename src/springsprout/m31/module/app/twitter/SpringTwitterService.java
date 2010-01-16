@@ -48,7 +48,6 @@ public class SpringTwitterService {
 		
 		for (Status status : statuses) {
 			log.debug("Timeline>>> " + status.getId() + "/" + status.getUser().getName() + "/" + status.getUser().getScreenName() + "/" + status.getUser().getURL() + "/" + status.getText() + "/" + status.getCreatedAt() + "/" + status.getSource() + "/" + status.getInReplyToStatusId());
-			log.debug("Timeline>>> " + twitter.getUserId());
 			timelineList.add(
 					new TwitterTweetDTO(
 							status.getId()

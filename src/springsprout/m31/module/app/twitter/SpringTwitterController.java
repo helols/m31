@@ -44,10 +44,11 @@ public class SpringTwitterController {
     public ModelAndView requestAuthorization() {
 
         String authURL = "";
+        String userScreenName = "";
 
         if (springTwitterAuthorization.checkAuthorization()) {
-            springTwitterAuthorization.getAuthorization();
-            return new ModelAndView(JSON_VIEW).addObject("auth", true).addObject("success", true);
+        	userScreenName = springTwitterAuthorization.getAuthorization();
+            return new ModelAndView(JSON_VIEW).addObject("auth", true).addObject("success", true).addObject("userName", userScreenName);
         } else {
             authURL = springTwitterAuthorization.getAuthorizationURL();
             return new ModelAndView(JSON_VIEW).addObject("auth", false).addObject("success", true).addObject("authURL", authURL);

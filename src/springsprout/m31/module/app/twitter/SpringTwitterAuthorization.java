@@ -59,7 +59,7 @@ public class SpringTwitterAuthorization {
         return requestToken.getAuthorizationURL();
     }
 
-    public void getAuthorization() {
+    public String getAuthorization() {
 
         TwitterAuthorizationDTO twitterAuthDTO = new TwitterAuthorizationDTO();
         twitterAuthDTO = twitterRepository.getUserAuthTokenByMemberId(securityService.getCurrentMemberId());
@@ -75,7 +75,8 @@ public class SpringTwitterAuthorization {
 
         log.debug("token after Auth>>>" + accessToken.getToken());
         log.debug("secrettoken after Auth>>>" + accessToken.getTokenSecret());
-
+        
+        return twitterAuthDTO.getScreen_name();
     }
 
     public Boolean storeAuthToken(String oauthToken) {
@@ -102,12 +103,13 @@ public class SpringTwitterAuthorization {
                 throw new OpenApiReadException(e);
             }
             twitter.setOAuthAccessToken(accessToken);
-
+            
             // persist token
             TwitterAuthorizationDTO authDTO = new TwitterAuthorizationDTO();
             authDTO.setMember_id(securityService.getCurrentMemberId());
             authDTO.setToken(accessToken.getToken());
             authDTO.setSecret_token(accessToken.getTokenSecret());
+            authDTO.setScreen_name(accessToken.getScreenName());
             twitterRepository.insertUserAuthToken(authDTO);
 
             accessToken = new AccessToken(accessToken.getToken(), accessToken.getTokenSecret());

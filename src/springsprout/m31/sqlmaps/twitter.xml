@@ -6,21 +6,23 @@
 	    <result property="member_id" column="MEMBER_ID" />
     	<result property="token" column="TOKEN" />
         <result property="secret_token" column="SECRET_TOKEN" />
+        <result property="screen_name" column="SCREEN_NAME" />
     </resultMap>
 
     <select id="getTwitterUserAuthTokenByMemberId" resultMap="twitterAuthInfo" parameterClass="int">
         SELECT MEMBER_ID
               ,TOKEN
               ,SECRET_TOKEN
+			  ,SCREEN_NAME
           FROM MEMBER_TWITTER
          WHERE MEMBER_ID = #member_id#
     </select>
     
     <update id="insertTwitterUserAuthToken" parameterClass="springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO">
     	INSERT INTO MEMBER_TWITTER
-		  (MEMBER_ID, TOKEN, SECRET_TOKEN)
+		  (MEMBER_ID, TOKEN, SECRET_TOKEN, SCREEN_NAME)
 		  VALUES
-		  (#member_id#, #token#, #secret_token#)
+		  (#member_id#, #token#, #secret_token#, #screen_name#)
     </update>    
     
 </sqlMap>

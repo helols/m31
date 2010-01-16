@@ -1014,7 +1014,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 //    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
     			} else if (result.auth && result.success) {
     				self.win.setSize(400, 500);
-    				
+    				self.myScreenName = result.userName;
     				M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll();
     				self.cardNavigation(2);
     				Ext.getCmp('springtwitter-view-status').show();
@@ -1058,6 +1058,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     intervalID: null,
     tcnt: 10000, //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
     replyTag: null,
+    myScreenName: "",
     
     // JsonStore
     loadTimeline: new Ext.data.JsonStore({
