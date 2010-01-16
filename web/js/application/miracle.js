@@ -324,20 +324,58 @@ Ext.ux.FlashPlugin = function() {
     };
 };
 
-//타임로그
-M31Desktop.TimeLog = Ext.extend(M31.app.Module, {
+/***********************************************************************************************************************
+ * 타임 로그
+ ***********************************************************************************************************************/
+M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
     init : function() {
+    },
+
+    beforeCreate : function() {
+        // 스토어
+        this.store =  new Ext.data.ArrayStore({
+            fields : [
+                {name : 'thing'},
+                {name : 'time'}
+            ]
+        });
+
+        this.store.load([
+            ['공부', '9/1'],
+            ['헤헤', '9/1']
+        ]);
+        // 로그 패널
+        this.log = new Ext.grid.GridPanel({
+            store : this.store,
+            columns : [
+                {header : 'Thing'},
+                {header : 'Time'}
+            ]
+        });
     },
 
     createWindow : function() {
         var opt = {
             id : 'timelog',
-            width:640,
-            height:480,
-            html : '<p>Something useful would be in here.</p>',
-            shim:false,
-            animCollapse:false,
-            constrainHeader:true
+            width:300,
+            height:400,
+            maximizable : false,
+            constrainHeader:true,
+            resizeHandles : 'n s',
+            items : new Ext.TabPanel({
+                activeTab : 0,
+                items : [{
+                    title : 'log',
+                    itmes : this.log
+                },{
+                    title : 'history',
+                    html : 'History'
+                },{
+                    title: 'statistics',
+                    html : 'statistics'
+                }
+                ]
+            })
         };
         return opt;
     }
