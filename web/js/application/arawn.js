@@ -14,9 +14,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	this.loadMask = new Ext.LoadMask(this.win.body, {msg:"봄북을 초기화 중 입니다."});
     	this.loadMask.show();
     	
-    	var runner = new Ext.util.TaskRunner();
+    	this.runner = new Ext.util.TaskRunner();
+        console.log(this);
     	var redyTask = {
-    	    run: function(app, runner){
+    	    run: function(app){
 	    		if(app.state != null) return;
 	        	console.log('state : ' + app.state);
 	        	
@@ -31,24 +32,24 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	        	
 	        	app.loadMask.hide();
 	        	
-	        	runner.stopAll();
+	        	app.runner.stopAll();
     		},
     	    interval: 1000,
-    	    args: [this, runner]
+    	    args: [this]
     	};
-    	runner.start(redyTask);
+    	this.runner.start(redyTask);
     },
     beforeCreate: function(){
     	console.log("beforeCreate");
     },
     removeWin: function(){
     	console.log("removeWin");
-    	
     	this.state = null;
     	this.loadMask = null;
     	
     	this.win.app = null;
     	this.win = null;
+        this.runner.stopAll();
     },
     createWindow: function(){
     	return {
@@ -205,9 +206,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	this.loadMask = new Ext.LoadMask(this.win.body, {msg:"봄미투데이를 초기화 중 입니다."});
     	this.loadMask.show();
     	
-    	var runner = new Ext.util.TaskRunner();
+    	this.runner = new Ext.util.TaskRunner();
     	var redyTask = {
-    	    run: function(app, runner){
+    	    run: function(app){
 	    		if(app.state != null) return;
 	        	console.log('state : ' + app.state);
 	        	
@@ -232,12 +233,12 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		app.me2DayModule.createView(app);
 	        	}
 	        	
-	        	runner.stopAll();
+	        	app.runner.stopAll();
     		},
     	    interval: 1000,
-    	    args: [this, runner]
+    	    args: [this]
     	};
-    	runner.start(redyTask);
+    	this.runner.start(redyTask);
     },
     beforeCreate: function(){
     	console.log("beforeCreate");
@@ -254,6 +255,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	
     	this.win.app = null;
     	this.win = null;
+        this.runner.stopAll();
     },
     createWindow: function(){
     	return {
