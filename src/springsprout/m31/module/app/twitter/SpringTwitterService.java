@@ -47,10 +47,12 @@ public class SpringTwitterService {
 		HashMap<String,Object> timelineMap = new HashMap<String,Object>();
 		
 		for (Status status : statuses) {
-			log.debug("Timeline>>> " + status.getId() + "/" + status.getUser().getName() + "/" + status.getUser().getScreenName() + "/" + status.getUser().getURL() + "/" + status.getText() + "/" + status.getCreatedAt() + "/" + status.getSource());
+			log.debug("Timeline>>> " + status.getId() + "/" + status.getUser().getName() + "/" + status.getUser().getScreenName() + "/" + status.getUser().getURL() + "/" + status.getText() + "/" + status.getCreatedAt() + "/" + status.getSource() + "/" + status.getInReplyToStatusId());
+			log.debug("Timeline>>> " + twitter.getUserId());
 			timelineList.add(
 					new TwitterTweetDTO(
-							status.getUser().getScreenName()
+							status.getId()
+							,status.getUser().getScreenName()
 							,status.getUser().getURL()
 							,status.getText()
 							,status.getCreatedAt()
@@ -82,10 +84,11 @@ public class SpringTwitterService {
 		HashMap<String,Object> mentionsMap = new HashMap<String,Object>();
 		
 		for (Status status : statuses) {
-			log.debug("Mentions>>> " + status.getId() + "/" + status.getUser().getName() + "/" + status.getUser().getScreenName() + "/" + status.getUser().getURL() + "/" + status.getText() + "/" + status.getCreatedAt() + "/" + status.getSource());
+			log.debug("Mentions>>> " + status.getId() + "/" + status.getUser().getName() + "/" + status.getUser().getScreenName() + "/" + status.getUser().getURL() + "/" + status.getText() + "/" + status.getCreatedAt() + "/" + status.getSource() + "/" + status.getInReplyToStatusId());
 			mentionsList.add(
 					new TwitterTweetDTO(
-							status.getUser().getScreenName()
+							status.getId()
+							,status.getUser().getScreenName()
 							,status.getUser().getURL()
 							,status.getText()
 							,status.getCreatedAt()
@@ -120,7 +123,8 @@ public class SpringTwitterService {
 			log.debug("Mentions>>> " + directMessage.getSenderScreenName() + "/" + directMessage.getSender().getURL() + "/" + directMessage.getText() + "/" + directMessage.getCreatedAt() + "/" + directMessage.getSender().getProfileImageURL());
 			directMessagesList.add(
 					new TwitterTweetDTO(
-							directMessage.getSenderScreenName()
+							directMessage.getId()
+							,directMessage.getSenderScreenName()
 							,directMessage.getSender().getURL()
 							,directMessage.getText()
 							,directMessage.getCreatedAt()
@@ -136,13 +140,22 @@ public class SpringTwitterService {
 	
 	public Boolean updateTweet(TwitterRequestParam twitterParam) {
 		Twitter twitter = 	securityService.getTwitterObject();
+		Status status = null;
 		
 		log.debug("update>>> " + twitterParam.getStatusText());
 		
-		try {
-			Status status = twitter.updateStatus(twitterParam.getStatusText());
-		} catch (TwitterException e) {
-			throw new OpenApiReadException(e);
+		if (twitterParam.getReplyId() > 0) {
+			try {
+				status = twitter.updateStatus(twitterParam.getStatusText());
+			} catch (TwitterException e) {
+				throw new OpenApiReadException(e);
+			}
+		} else {
+			try {
+				status = twitter.updateStatus(twitterParam.getStatusText(), twitterParam.getReplyId());
+			} catch (TwitterException e) {
+				throw new OpenApiReadException(e);
+			}
 		}
 		
 		return true;

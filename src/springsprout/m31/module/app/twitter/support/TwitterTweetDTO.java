@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Date;
 
 public class TwitterTweetDTO {
+	private long id;
 	private String screenName;
 	private URL url;
 	private String text;
@@ -11,7 +12,8 @@ public class TwitterTweetDTO {
 	private URL profileImageUrl;
 	private String source;
 	
-	public TwitterTweetDTO(String screenName, URL url, String text, Date createAt, URL profileImageUrl, String source) {
+	public TwitterTweetDTO(long id, String screenName, URL url, String text, Date createAt, URL profileImageUrl, String source) {
+		this.id = id;
 		this.screenName = screenName;
 		this.url = url;
 		this.text = text;
@@ -20,6 +22,12 @@ public class TwitterTweetDTO {
 		this.source = source;
 	}
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getScreenName() {
 		return screenName;
 	}
