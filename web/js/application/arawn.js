@@ -318,8 +318,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    		}
 	    		else{
 	    			// 인증 요청 url
-	    			this.loginModule.authUrl = result.authUrl.url + "&akey=" + this.springme2dayappkey; 
-	    			this.loginModule.authToken = result.authUrl.token;    			
+	    			this.loginModule.authUrl = result.authenticationUrl.url + "&akey=" + this.springme2dayappkey; 
+	    			this.loginModule.authToken = result.authenticationUrl.token;    			
 	    		}
 	    		
 	    		// 로그인 상태
@@ -369,29 +369,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                 			// console.log('springme2day-login-iframepanel.resize(' + adjWidth + ', ' + adjHeight + ', ' + rawWidth + ', ' + rawHeight + ')');
                 		}
                 	}
-    	        }],
-	            tbar:[{
-	            	id: 'springme2day-login-txt',
-	            	xtype: 'tbtext',
-	            	text: '미투데이 인증절차가 완료된 후 우측 버튼을 눌러주세요. ☞ '
-	            },{
-	            	id: 'springme2day-login-btn',
-	            	xtype: 'button',
-	            	text: '봄미투데이 로그인 진행...',
-	            	handler: this.me2DayLoginComplete.createDelegate(app)
-	            },{
-	            	id: 'springme2day-login-yes-btn',
-	            	xtype: 'button',
-	            	text: '예',
-	            	hidden: true,
-	            	handler: this.me2DayLoginComplete.createDelegate(app)
-	            },'-',{
-	            	id: 'springme2day-login-no-btn',
-	            	xtype: 'button',
-	            	text: '아니요',
-	            	hidden: true,
-	            	handler: this.me2DayLoginComplete.createDelegate(app)
-	            }]    	        
+    	        }]
             });
     		
     		app.win.add(this.loginPanel);
@@ -399,71 +377,47 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     		
     		return this.loginPanel;
     	},
-    	/* 미투데이 인증페이지에서 인증 후 봄미투데이 로그인을 계속 진행한다. */
-    	me2DayLoginComplete: function(sender, button){
-    		console.log('loginModule.me2DayLoginComplete()');
-    		
-    		// 로그인 진행 버튼 클릭
-    		if(sender.id == 'springme2day-login-btn'){
-        		this.loadMask = new Ext.LoadMask(
-        				Ext.getCmp('springme2day-login-iframepanel').getEl(), 
-        				{msg:"봄미투데이 로그인 절차를 진행 중 입니다."});
-            	this.loadMask.show();
-            	
-            	Ext.getCmp('springme2day-login-txt').setText('미투데이 인증 절차를 마치셨습니까? ☞ ');
-        		Ext.getCmp('springme2day-login-btn').hide();
-        		Ext.getCmp('springme2day-login-yes-btn').show();
-        		Ext.getCmp('springme2day-login-no-btn').show();
-    		}
-    		else{
-    			if(sender.id == 'springme2day-login-yes-btn'){
-    				// 예
-    				// 봄미투데이에서 인증 작업을 진행합니다.
-    				Ext.Ajax.request({
-    	    			url: '/app/me2day/isAuthentication',
-    	    			params: {'authToken':this.loginModule.authToken},
-    	    			success: this.loginModule.me2DayAuthenticationSuccess.createDelegate(this),
-    	    			failure: this.loginModule.me2DayAuthenticationFailure.createDelegate(this)
-    	    		});
-    			}
-    			else{
-    				// 아니오
-    				Ext.getCmp('springme2day-login-txt').setText('미투데이 인증절차가 완료된 후 우측 버튼을 눌러주세요. ☞');
-            		Ext.getCmp('springme2day-login-btn').show();
-            		Ext.getCmp('springme2day-login-yes-btn').hide();
-            		Ext.getCmp('springme2day-login-no-btn').hide();
-            		
-    				this.loadMask.hide();
-    			}
-    		}
-    	},
-    	/* 미투데이 로그인 후 봄미투데이 인증 ajax 콜백함수 */
-    	me2DayAuthenticationSuccess: function(response, opts){
-    		console.log('me2DayAuthenticationSuccess : ' + response.responseText);
-    		
-    		try { 
-    			var result = Ext.decode(response.responseText);
-    			console.log(result.springMe2DayUserSession);
-    			console.log(result.springMe2DayUserSession.userId);
-    			this.userInfo = {
-    				id: result.springMe2DayUserSession.userId
-    			};
-	    		
-	    		// 로그인 패널이 있으면..
-	    		if(this.win.get('springme2day-login-panel')){
-	    			this.win.get('springme2day-login-panel').destroy();
-	    		}
-	    		
-	    		this.me2DayModule.createView(this);
+    	me2DayAuthenticationComplete: function(auth){
+    		try {
+    			var app = getApp('springme2day');
+    			if(auth.result){
+        			m31.util.notification({title:'봄미투데이',text:'봄미투데이에 인증을 수락하셨습니다.'});
+        			
+        			app.userInfo = {
+            			id: auth.user_id
+            		};
+        			// 사용자 환경설정
+        			app.userConfig = {
+	    				myPostView: auth.myPostView,
+	    				friendPostView: auth.friendPostView,
+	    				commentView: auth.commentView
+	    			};
+	    			console.log(app.userConfig);
+	    			
+	    			try{
+	    				app.me2DayModule.createIconStore().loadData(Ext.decode(auth.postIcons), false);
+	    			}
+	    			catch(e){
+	    				var temp = [{'iconIndex':0,'iconType':'','description':'','url':''}];
+	    				app.me2DayModule.createIconStore().loadData(temp, false);
+	    			}
+        			
+	    			// 마스크를 지워라!
+	    			app.loadMask.hide();
+	    			// 로그인 패널 파괴
+	    			app.loginModule.loginPanel.destroy();
+	    			
+    	    		// 미투데이 패널을 생성
+    	    		app.me2DayModule.createView(app);
+        		}
+        		else{
+        			m31.util.notification({title:'봄미투데이',text:'봄미투데이에 인증을 거절하셨습니다.'});
+        		}
 	    	}
-			catch(e){}
-			
-			this.loadMask.hide();
-    	},
-    	/* 미투데이 로그인 후 봄미투데이 인증 ajax 콜백함수 */
-    	me2DayAuthenticationFailure: function(response, opts){
-    		console.log('me2DayAuthenticationFailure : ' + response.responseText);    		
-    	}    	
+			catch(e){
+				console.log('미투데이 인증결과를 반영하는 중 오류가 발생했습니다. {' + e + '}');
+			}	    		
+    	}   	
     },
     me2DayModule: {
     	apiUrl: '/app/me2day/',
@@ -510,7 +464,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	},    	
     	/** 미투데이 패널 생성 : 글쓰기 and 글목록 */
     	createView: function(app){
-
+    		console.log('me2DayModule.createView()');
+    		
             var intervalID = null;
             var tcnt = 10000; //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
             /**
@@ -536,7 +491,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                     clearIntrvalFF();
                 }
             };
-    		console.log('me2DayModule.createView()');
     		
 	        // 글쓰기 패널
 	        this.postFormPanel = new Ext.form.FormPanel({

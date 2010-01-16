@@ -88,6 +88,14 @@ public class DefaultSecurityService implements SecurityService {
 			return true;
 		}
 	}
+	
+	public void setGuestMe2DayUserInfo(Me2DayUserInfo me2DayUserInfo) {
+		if(SecurityContextHolder.getContext().getAuthentication() == null) return;
+		Object princial = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (princial instanceof SpringSproutUserDetail) {
+			((SpringSproutUserDetail) princial).setMe2DayUserInfo(me2DayUserInfo);
+		}
+	}	
 
 	public Me2DayUserInfo getCurrentMemberMe2DayUserInfo() {
 		if(SecurityContextHolder.getContext().getAuthentication() == null) return null;
@@ -148,4 +156,5 @@ public class DefaultSecurityService implements SecurityService {
 		}
 		return null;
 	}
+
 }

@@ -32,8 +32,18 @@ public class SpringMe2DayRepository extends SqlMapClientDaoSupport {
         return (Me2DayUserInfo)getSqlMapClientTemplate().queryForObject("me2day.getMe2DayUserInfoByMemberId", member_id);
     }
     
-    public Me2DayUserInfo updateMe2DayUserInfo(Me2DayUserInfoDTO userInfoDTO) {
-    	getSqlMapClientTemplate().update("me2day.updateMe2DayUserInfo", userInfoDTO);
+    public Me2DayUserInfo insertAuthenticationInfo(Me2DayUserInfo userInfo) {
+    	getSqlMapClientTemplate().update("me2day.insertAuthenticationInfo", userInfo);
+    	return getMe2DayUserInfoByMemberId(userInfo.getMember_id());
+    }
+    
+    public Me2DayUserInfo updateAuthenticationInfo(Me2DayUserInfo userInfo) {
+    	getSqlMapClientTemplate().update("me2day.updateAuthenticationInfo", userInfo);
+    	return getMe2DayUserInfoByMemberId(userInfo.getMember_id());
+    }
+    
+    public Me2DayUserInfo updateFilter(Me2DayUserInfoDTO userInfoDTO) {
+    	getSqlMapClientTemplate().update("me2day.updateFilterConfig", userInfoDTO);
     	return getMe2DayUserInfoByMemberId(userInfoDTO.getMember_id());
     }
 

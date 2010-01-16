@@ -19,6 +19,8 @@ public interface SecurityService {
 
 	public boolean isCurrentUserOrAdmin(int id);
 	
+	public void setGuestMe2DayUserInfo(Me2DayUserInfo me2DayUserInfo);
+	
 	public Me2DayUserInfo getCurrentMemberMe2DayUserInfo();
 	
 	public Me2DayUserInfo getPersistentMemberMe2DayUserInfo();

@@ -71,3 +71,7 @@ div#springme2day-form-body-length.body-length{
 .springme2day-comment-delete-btn{
 	cursor: pointer;
 }
+
+.springme2day-me2day-authentication-result{
+	display: none;
+}

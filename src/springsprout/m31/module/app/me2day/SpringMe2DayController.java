@@ -7,8 +7,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,12 +28,11 @@ import springsprout.m31.module.app.me2day.support.PostDTO;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
 import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
 import springsprout.m31.service.security.SecurityService;
+import springsprout.m31.utils.MD5Util;
 
 @Controller
 @RequestMapping(value="/app/me2day/*")
 public class SpringMe2DayController {
-	
-	private final String SpringMe2DayUserSession = "springMe2DayUserSession";
 	
 	@Autowired SpringMe2DayApiService me2DayApiService;
 	@Autowired SpringMe2DayService me2DayService;
@@ -52,21 +56,13 @@ public class SpringMe2DayController {
 		Me2DayUserInfo userInfo = null;
 		Person person = null;
 		
-		// 테스트를 위해서 무조건 arawn 의 인증정보를 저장해둔다. 
-		/*if(httpSession.getAttribute(SpringMe2DayUserSession) == null){
-			Me2DayUserInfo info = new Me2DayUserInfo();
-			info.setUser_id("arawn");
-			info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
-			httpSession.setAttribute(SpringMe2DayUserSession, info);
-		}*/
-		
 		userInfo = securityService.getPersistentMemberMe2DayUserInfo();
 		if(userInfo == null){
 			authenticationUrl = me2DayApiService.getAuthenticationUrl();
 		}
 		else{
 			// 미투데이 인증 확인
-			if(me2DayApiService.noop(userInfo)){
+			if(StringUtils.hasText(userInfo.getUser_key()) && me2DayApiService.noop(userInfo)){
 				state = true;
 				person = me2DayApiService.getPerson(userInfo.getUser_id());
 			}
@@ -92,10 +88,52 @@ public class SpringMe2DayController {
 	 * @throws Me2DayApiRequestException
 	 */
 	@RequestMapping
-	public ModelAndView isAuthentication(SpringMe2DayDTO me2DayDTO, HttpSession httpSession) throws Me2DayApiRequestException {
-		httpSession.setAttribute(SpringMe2DayUserSession, me2DayApiService.getAuthenticationInfo(me2DayDTO));
-		return new ModelAndView(JSON_VIEW).addObject(httpSession.getAttribute(SpringMe2DayUserSession));
+	public ModelAndView isAuthentication(SpringMe2DayDTO me2DayDTO) throws Me2DayApiRequestException {
+		return new ModelAndView(JSON_VIEW).addObject(me2DayApiService.getAuthenticationInfo(me2DayDTO));
 	}
+	
+	/**
+	 * 미투데이 인증경과 받기
+	 * @param me2DayDTO
+	 * @param httpSession
+	 * @return
+	 * @throws Me2DayApiRequestException
+	 */
+	@RequestMapping
+	public String me2dayAuthenticationResult(Me2DayUserInfo userInfo, Model model) throws Me2DayApiRequestException {
+		if(userInfo.isResult()){
+			// 기본적으로 첫 로그인시에는 모든 필터는 보기!
+			userInfo.setMyPostView("Y");
+			userInfo.setFriendPostView("Y");
+			userInfo.setCommentView("Y");
+			
+			// 사용자키를 MD5 로 암호화시킨다
+			String md5Ukey = "1A3B5C7D" + MD5Util.md5Hex("1A3B5C7D" + userInfo.getUser_key());
+			userInfo.setUser_key(md5Ukey);
+			
+			// Guest User 가 아니면 인증정보를 저장해둔다.
+			if(!securityService.isGuest()){
+				if(securityService.getPersistentMemberMe2DayUserInfo() == null){
+					me2DayService.addAuthenticationInfo(userInfo);
+				}
+				else{
+					me2DayService.editAuthenticationInfo(userInfo);
+				}
+			}
+			
+			Person person = me2DayApiService.getPerson(userInfo.getUser_id());
+			if(person != null && !CollectionUtils.isEmpty(person.getPostIcons())){
+				model.addAttribute("postIcons", JSONArray.fromObject(person.getPostIcons()).toString());
+			}
+			
+			// 게스트 인증정보를 담아두자
+			securityService.setGuestMe2DayUserInfo(userInfo);
+		}
+		
+		model.addAttribute("userInfo", userInfo);
+		
+		return "springme2day/me2dayAuthenticationResult";
+	}	
 
 	/**
 	 * 글목록
@@ -121,7 +159,7 @@ public class SpringMe2DayController {
 	 * @throws Me2DayApiRequestException
 	 */
 	@RequestMapping
-	public ModelAndView postSend(PostDTO postDTO, HttpSession httpSession) {
+	public ModelAndView postSend(PostDTO postDTO) {
 		String msg = "";
 		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
 		if(userInfo == null){
@@ -136,7 +174,9 @@ public class SpringMe2DayController {
 				msg = e.getMessage();
 			}
 		}
-		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
+		return new ModelAndView(JSON_VIEW)
+			.addObject("success", true)
+			.addObject("msg", msg);
 	}	
 	
 	/**
@@ -146,7 +186,7 @@ public class SpringMe2DayController {
 	 * @return
 	 */
 	@RequestMapping
-	public ModelAndView commentSend(CommentDTO commentDTO, HttpSession httpSession){
+	public ModelAndView commentSend(CommentDTO commentDTO){
 		String msg = "";
 		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
 		if(userInfo == null){
@@ -161,7 +201,9 @@ public class SpringMe2DayController {
 				msg = e.getDescription();
 			}
 		}
-		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg);
+		return new ModelAndView(JSON_VIEW)
+			.addObject("success",true)
+			.addObject("msg", msg);
 	}
 	
 	/**
@@ -171,7 +213,7 @@ public class SpringMe2DayController {
 	 * @return
 	 */
 	@RequestMapping
-	public ModelAndView commentDelete(CommentDTO commentDTO, HttpSession httpSession){
+	public ModelAndView commentDelete(CommentDTO commentDTO){
 		String msg = "";
 		Me2DayUserInfo userInfo = securityService.getCurrentMemberMe2DayUserInfo();
 		if(userInfo == null){
@@ -198,11 +240,13 @@ public class SpringMe2DayController {
 		}
 		else{
 			infoDTO.setMember_id(userInfo.getMember_id());
-			userInfo = me2DayService.updateUserInfo(infoDTO);
-			
+			userInfo = me2DayService.editFilter(infoDTO);
 			msg = "springme2day_configsave_success";
 		}
-		return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg", msg).addObject("userInfo", userInfo);
+		return new ModelAndView(JSON_VIEW)
+			.addObject("success", true)
+			.addObject("msg", msg)
+			.addObject("userInfo", userInfo);
 	}
 	
 }

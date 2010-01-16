@@ -12,8 +12,14 @@ public class Me2DayUserInfo implements Serializable {
 	private int member_id;
 	/** 사용자 id */
 	private String user_id;
-	/** 사용자키 */
+	/** 사용자키 - 데스크탑 인증일 경우 */
 	private String full_auth_token;
+	/** 사용자키 - 웹 인증일 경우 */
+	private String user_key;
+	/** 인증용 토큰 - 웹 인증일 경우 */
+	private String token;
+	/** 웹인증결과 */
+	private boolean result;
 	/** 내글 볼거야? */
 	private String myPostView;
 	/** 친구글도 같이 볼것인가? */
@@ -40,6 +46,27 @@ public class Me2DayUserInfo implements Serializable {
 	}
 	public void setFull_auth_token(String fullAuthToken) {
 		full_auth_token = fullAuthToken;
+	}
+	
+	public String getUser_key() {
+		return user_key;
+	}
+	public void setUser_key(String userKey) {
+		user_key = userKey;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public boolean isResult() {
+		return result;
+	}
+	public void setResult(boolean result) {
+		this.result = result;
 	}
 	
 	public String getMyPostView() {

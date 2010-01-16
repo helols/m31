@@ -5,7 +5,7 @@
     <resultMap id="me2DayUserInfo" class="springsprout.m31.module.app.me2day.entity.Me2DayUserInfo">
 	    <result property="member_id" column="MEMBER_ID" />
     	<result property="user_id" column="USER_ID" />
-        <result property="full_auth_token" column="USER_KEY" />
+        <result property="user_key" column="USER_KEY" />
         <result property="myPostView" column="MY_POST_VIEW" />
         <result property="friendPostView" column="FRIEND_POST_VIEW" />
         <result property="commentView" column="COMMENT_VIEW" />
@@ -22,7 +22,22 @@
          WHERE MEMBER_ID = #member_id#
     </select>
     
-    <update id="updateMe2DayUserInfo" parameterClass="springsprout.m31.module.app.me2day.support.Me2DayUserInfoDTO">
+    <insert id="insertAuthenticationInfo" parameterClass="springsprout.m31.module.app.me2day.entity.Me2DayUserInfo">
+    	INSERT INTO MEMBER_ME2DAY(MEMBER_ID, USER_ID, USER_KEY, MY_POST_VIEW, FRIEND_POST_VIEW, COMMENT_VIEW)
+    	VALUES(#member_id#, #user_id#, #user_key#, 'Y', 'Y', 'Y')
+    </insert>
+    
+    <update id="updateAuthenticationInfo" parameterClass="springsprout.m31.module.app.me2day.entity.Me2DayUserInfo">
+    	UPDATE MEMBER_ME2DAY
+    	   SET USER_ID = #user_id#
+              ,USER_KEY = #user_key#
+              ,MY_POST_VIEW = 'Y'
+              ,FRIEND_POST_VIEW = 'Y'
+              ,COMMENT_VIEW = 'Y'
+         WHERE MEMBER_ID = #member_id#    
+    </update>      
+    
+    <update id="updateFilterConfig" parameterClass="springsprout.m31.module.app.me2day.support.Me2DayUserInfoDTO">
     	UPDATE MEMBER_ME2DAY
     	   SET MY_POST_VIEW = #myPostView#
               ,FRIEND_POST_VIEW = #friendPostView#

@@ -18,8 +18,16 @@ public class SpringMe2DayService {
     
 	@Autowired SpringMe2DayRepository me2DayRepository;
 	
-	public Me2DayUserInfo updateUserInfo(Me2DayUserInfoDTO userInfoDTO) {
-		return me2DayRepository.updateMe2DayUserInfo(userInfoDTO);
+	public Me2DayUserInfo addAuthenticationInfo(Me2DayUserInfo userInfo) {
+		return me2DayRepository.insertAuthenticationInfo(userInfo);
 	}
+	
+	public Me2DayUserInfo editAuthenticationInfo(Me2DayUserInfo userInfo){
+		return me2DayRepository.updateAuthenticationInfo(userInfo);
+	}
+	
+	public Me2DayUserInfo editFilter(Me2DayUserInfoDTO userInfoDTO) {
+		return me2DayRepository.updateFilter(userInfoDTO);
+	}	
 	
 }

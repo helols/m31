@@ -522,7 +522,8 @@ public class SpringMe2DayApiService {
 			url += "?akey=" + me2DayApplicationKey;
 			if(info != null){
 				url += "&uid=" + info.getUser_id();
-				url += "&ukey=full_auth_token+" + info.getFull_auth_token();
+				url += "&ukey=" + info.getUser_key();
+				// url += "&ukey=full_auth_token+" + info.getFull_auth_token();
 			}
 		}
 		return url;
@@ -536,7 +537,7 @@ public class SpringMe2DayApiService {
 	 */
 	@SuppressWarnings("unchecked")
 	private Document requestMe2Day(String requestUrl) throws Me2DayApiRequestException {
-		System.out.println(requestUrl);
+		logger.debug(requestUrl);
 		
 		Document document = OpenApiRequestHelper.loadXml(requestUrl);
 		if(document != null){
