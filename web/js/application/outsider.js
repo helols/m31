@@ -580,167 +580,182 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             items:[
                    this.startForm,
                    this.authGuide,
-                   new Ext.TabPanel({
-                   	id: 'springtwitter-view',
-                   	activeTab: 0,
-                   	padding: '5px 5px 30px 5px',
-                   	defaults:{autoScroll: true},
-                   	items:[{
-               	            title: 'All Friends',
-               	            xtype: 'panel',
-               	            id: 'springtwitter-view-friends',
-               	            items: {
-                   				xtype : 'dataview',	
-               	                tpl: this.timelineTemplate,
-               	                singleSelect: true,
-               	                overClass:'x-view-over',
-               	                itemSelector: 'div.springtwitter-tweet',
-               	                emptyText : '',
-               	                store: this.loadTimeline,
-               	                listeners: {
-               	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-               	                    'beforeselect'   : {fn:function(view) {
-               	                        //return view.timeline.getRange().length > 0;
-               	                    }},
-               	                    'beforeshow'   : {fn:function(view) {
-               	                    	//return view.timeline.getRange().length > 0;
-               	                    }}
-               	                },
-               	            	prepareData: function(data) {
-               	                	data.createAt = new Date(data.createAt).toLocaleString();
-               	                	data.text = m31.util.replaceURLtoLink(data.text);
-               	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
-               	                	return data;
-               	                }
-               	            },
-               	            listeners: {
-                   				beforerender: function(){
-               	        		},
-               	        		beforeshow: function(){
-               	        		},
-               	        		'afterrender': {fn:function(){
-               	        			
-            	        			Ext.select("#springtwitter-view-friends").on('click', function(e, t) {
-            	        				if (t.tagName.toLowerCase() === "a" || $(t).parent()[0].tagName.toLowerCase() === "a") {
-            	        					if (t.href) {
-            	        						window.open(t.href);
-            	        					} else {
-            	        						window.open($(t).parent().attr("href"));
-            	        					}
-            	        				} else if (t.className === "twitter-morebtn") {
-            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
-            	        					Ext.getCmp("springtwitter-statusReload").show();
-	            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadTimeline.load({
-	            	            				add:true, 
-	            	            				params:{
-	            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
-	            	            					count: 20
-	            	            				} 
-	            	            			});
-            	        				}
-            	            		});
-            	        		}, scope:this, single:true}
-               	        	}
-               	        },{
-               	            title: 'Mentions',
-               	            xtype: 'panel',
-            	            id: 'springtwitter-view-mentions',
-            	            items: {
-                				xtype : 'dataview',
-            	                tpl: this.timelineTemplate,
-            	                singleSelect: true,
-            	                overClass:'x-view-over',
-            	                itemSelector: 'div.springtwitter-tweet',
-            	                emptyText : '',
-            	                store: this.loadMentions,
-            	                listeners: {
-            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-            	                    'beforeselect'   : {fn:function(view) {
-            	                        //return view.timeline.getRange().length > 0;
-            	                    }},
-            	                    'beforeshow'   : {fn:function(view) {
-            	                    	//return view.timeline.getRange().length > 0;
-            	                    }}
-            	                },
-            	            	prepareData: function(data) {
-            	                	data.createAt = new Date(data.createAt).toLocaleString();
-            	                	data.text = m31.util.replaceURLtoLink(data.text);
-            	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
-            	                	return data;
-            	                }
-            	            },
-            	            listeners: {
-                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        		},
-            	        		beforeshow: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        		},
-            	        		'afterrender': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        			Ext.select("#springtwitter-view-mentions").on('click', function(e, t) {
-            	        				if (t.className === "twitter-morebtn") {
-            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
-            	        					Ext.getCmp("springtwitter-statusReload").show();
-	            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadMentions.load({
-	            	            				add:true, 
-	            	            				params:{
-	            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
-	            	            					count: 20
-	            	            				} 
-	            	            			});
-            	        				}
-            	            		});
-            	        		}, scope:this, single:true}
-            	        	},
-        	            	prepareData: function(data) {
-        	                	data.createAt = new Date(data.createAt).toLocaleString();
-        	                	data.text = m31.util.replaceURLtoLink(data.text);
-        	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
-        	                	return data;
-        	                }
-               	        },{
-               	            title: 'Direct Message',
-               	            xtype: 'panel',
-            	            id: 'springtwitter-view-dm',
-            	            items: {
-                				xtype : 'dataview',
-                				tpl: this.timelineTemplate,
-            	                singleSelect: true,
-            	                overClass:'x-view-over',
-            	                itemSelector: 'div.springtwitter-tweet',
-            	                emptyText : '',
-            	                store: this.loadDM,
-            	                listeners: {
-            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-            	                    'beforeselect'   : {fn:function(view) {
-            	                        //return view.timeline.getRange().length > 0;
-            	                    }},
-            	                    'beforeshow'   : {fn:function(view) {
-            	                    	//return view.timeline.getRange().length > 0;
-            	                    }}
-            	                }
-            	            },
-            	            listeners: {
-                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        		},
-            	        		'beforeshow': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        		}, scope:this, single:true},
-            	        		'afterrender': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-            	        			Ext.select("#springtwitter-view-dm").on('click', function(e, t) {
-            	        				if (t.className === "twitter-morebtn") {
-            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
-            	        					Ext.getCmp("springtwitter-statusReload").show();
-	            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadDM.load({
-	            	            				add:true, 
-	            	            				params:{
-	            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
-	            	            					count: 20
-	            	            				} 
-	            	            			});
-            	        				}
-            	            		});
-            	        		}, scope:this, single:true}
-            	            }
-               	        }
-                       ]
+                   new Ext.Panel({
+                	   layout: 'border',
+                	   items: [
+                	           this.writeForm,
+		                   new Ext.TabPanel({
+		                   	id: 'springtwitter-view',
+		                   	activeTab: 0,
+		                   	region: 'center',
+		                   	padding: '5px 5px 30px 5px',
+		                   	defaults:{autoScroll: true},
+		                   	items:[{
+		               	            title: 'All Friends',
+		               	            xtype: 'panel',
+		               	            id: 'springtwitter-view-friends',
+		               	            
+		               	            items: [
+		               	                {
+			                   				xtype : 'dataview',	
+			               	                tpl: this.timelineTemplate,
+			               	                singleSelect: true,
+			               	                overClass:'x-view-over',
+			               	                region: 'center',
+			               	                itemSelector: 'div.springtwitter-tweet',
+			               	                emptyText : '',
+			               	                store: this.loadTimeline,
+			               	                listeners: {
+			               	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+			               	                    'beforeselect'   : {fn:function(view) {
+			               	                        //return view.timeline.getRange().length > 0;
+			               	                    }},
+			               	                    'beforeshow'   : {fn:function(view) {
+			               	                    	//return view.timeline.getRange().length > 0;
+			               	                    }}
+			               	                },
+			               	            	prepareData: function(data) {
+			               	                	data.createAt = new Date(data.createAt).toLocaleString();
+			               	                	data.text = m31.util.replaceURLtoLink(data.text);
+			               	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+			               	                	return data;
+			               	                }
+		               	                }
+		               	            ],
+		               	            listeners: {
+		                   				beforerender: function(){
+		               	        		},
+		               	        		beforeshow: function(){
+		               	        		},
+		               	        		'afterrender': {fn:function(){
+		               	        			
+		            	        			Ext.select("#springtwitter-view-friends").on('click', function(e, t) {
+		            	        				if (t.tagName.toLowerCase() === "a" || $(t).parent()[0].tagName.toLowerCase() === "a") {
+		            	        					if (t.href) {
+		            	        						window.open(t.href);
+		            	        					} else {
+		            	        						window.open($(t).parent().attr("href"));
+		            	        					}
+		            	        				} else if (t.className === "twitter-morebtn") {
+		            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
+		            	        					Ext.getCmp("springtwitter-statusReload").show();
+			            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadTimeline.load({
+			            	            				add:true, 
+			            	            				params:{
+			            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
+			            	            					count: 20
+			            	            				} 
+			            	            			});
+		            	        				}
+		            	            		});
+		            	        		}, scope:this, single:true}
+		               	        	}
+		               	        },{
+		               	            title: 'Mentions',
+		               	            xtype: 'panel',
+		            	            id: 'springtwitter-view-mentions',
+		            	            items: [
+		                   	            {
+			                				xtype : 'dataview',
+			            	                tpl: this.timelineTemplate,
+			            	                singleSelect: true,
+			            	                overClass:'x-view-over',
+			            	                itemSelector: 'div.springtwitter-tweet',
+			            	                emptyText : '',
+			            	                store: this.loadMentions,
+			            	                listeners: {
+			            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+			            	                    'beforeselect'   : {fn:function(view) {
+			            	                        //return view.timeline.getRange().length > 0;
+			            	                    }},
+			            	                    'beforeshow'   : {fn:function(view) {
+			            	                    	//return view.timeline.getRange().length > 0;
+			            	                    }}
+			            	                },
+			            	            	prepareData: function(data) {
+			            	                	data.createAt = new Date(data.createAt).toLocaleString();
+			            	                	data.text = m31.util.replaceURLtoLink(data.text);
+			            	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+			            	                	return data;
+			            	                }
+		                   	            }
+		                   	        ],
+		            	            listeners: {
+		                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        		},
+		            	        		beforeshow: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        		},
+		            	        		'afterrender': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        			Ext.select("#springtwitter-view-mentions").on('click', function(e, t) {
+		            	        				if (t.className === "twitter-morebtn") {
+		            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
+		            	        					Ext.getCmp("springtwitter-statusReload").show();
+			            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadMentions.load({
+			            	            				add:true, 
+			            	            				params:{
+			            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
+			            	            					count: 20
+			            	            				} 
+			            	            			});
+		            	        				}
+		            	            		});
+		            	        		}, scope:this, single:true}
+		            	        	},
+		        	            	prepareData: function(data) {
+		        	                	data.createAt = new Date(data.createAt).toLocaleString();
+		        	                	data.text = m31.util.replaceURLtoLink(data.text);
+		        	                	data.text = M31.ApplicationRegistry.getInstance().getApp('springtwitter').addLinktoText(data.text);
+		        	                	return data;
+		        	                }
+		               	        },{
+		               	            title: 'Direct Message',
+		               	            xtype: 'panel',
+		            	            id: 'springtwitter-view-dm',
+		            	            items: [
+		                   	            {
+			                				xtype : 'dataview',
+			                				tpl: this.timelineTemplate,
+			            	                singleSelect: true,
+			            	                overClass:'x-view-over',
+			            	                itemSelector: 'div.springtwitter-tweet',
+			            	                emptyText : '',
+			            	                store: this.loadDM,
+			            	                listeners: {
+			            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
+			            	                    'beforeselect'   : {fn:function(view) {
+			            	                        //return view.timeline.getRange().length > 0;
+			            	                    }},
+			            	                    'beforeshow'   : {fn:function(view) {
+			            	                    	//return view.timeline.getRange().length > 0;
+			            	                    }}
+			            	                }
+		                   	            }
+		                   	        ],
+		            	            listeners: {
+		                				beforerender: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        		},
+		            	        		'beforeshow': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        		}, scope:this, single:true},
+		            	        		'afterrender': {fn:function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
+		            	        			Ext.select("#springtwitter-view-dm").on('click', function(e, t) {
+		            	        				if (t.className === "twitter-morebtn") {
+		            	        					M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
+		            	        					Ext.getCmp("springtwitter-statusReload").show();
+			            	            			M31.ApplicationRegistry.getInstance().getApp("springtwitter").loadDM.load({
+			            	            				add:true, 
+			            	            				params:{
+			            	            					pageno: ++M31.ApplicationRegistry.getInstance().getApp("springtwitter").diretMessageCurrentPage,
+			            	            					count: 20
+			            	            				} 
+			            	            			});
+		            	        				}
+		            	            		});
+		            	        		}, scope:this, single:true}
+		            	            }
+		               	        }
+		                       ]
+		                   })
+                	   ]
                    })
             ],
             bbar: new Ext.Toolbar({
@@ -774,13 +789,108 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     },
     
     // Layout 정의
+    writeForm: new Ext.form.FormPanel({
+       title: 'What’s happening?',
+       collapsedTitle: 'What’s happening?',
+       id: 'springtwitter-writeTweet',
+       xtype: 'form',
+       region: 'north',
+       collapsible: true,
+       collapsed:true,
+       margins: '0 0 0 0',
+       padding: '0 0 0 0',
+       height: 150,
+       buttons:[{
+     	   id:'springtwitter-charcount',
+		   xtype: 'displayfield',
+		   value: 140
+       }, {
+     	   id:'springtwitter-postLoading',
+		   xtype: 'displayfield',
+		   hidden: true,
+		   html: '<img src="/images/apps/springsee/loading.gif" />'
+       }, {
+    	   text: 'Update',
+    	   handler: function() {
+    	       M31.ApplicationRegistry.getInstance().getApp('springtwitter').writeForm.getForm().submit({
+    	    	   url: '/app/twitter/update'
+    	       });
+    	   }
+       }],
+       defaults: {
+    		anchor: 'border',
+    		layout: 'form',
+    		padding: '0 0 0 0',
+    		width: 382,
+    		height: 90,
+    		hideLabel: true
+       },
+       defaultType: 'textarea',
+       items: [{
+    	   		id: 'springtwitter-tweetPost',
+    	   		name: 'statusText',
+    	   		maxLength: 140,
+    	   		maxLengthText: '140자 이상은 작성할 수 없습니다.',
+    	   		enableKeyEvents: true,
+        		disableKeyFilter: true,
+    	   		allowBlank: false,
+    	   		blankText: '내용을 입력하세요.',
+    	   		validationEvent : 'keydown',
+    	   		listeners: {
+		    	   	keyup : function(sender,event){
+    	   				M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
+    	   				M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate();
+		         	},
+		         	keydown: function(sender,event){
+		         		if(event.getKey() == 229 & Ext.isGecko){
+		         			if(M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID == null){
+		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID = setInterval(M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate,300);
+		         			}else{
+		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
+		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID = setInterval(M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate,300);
+		         			}
+		         			event.stopEvent();
+		         		}
+		         	},
+		         	blur : function(sender,event){
+		         		M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
+		         	}
+            	}
+       		}
+       ],
+       listeners: {
+    		actioncomplete: function(form, action) {
+    	   		console.log("actioncomplete");
+    	   		var result = Ext.decode(action.response.responseText);
+    			if(result.success) {
+    				$("#springtwitter-tweetPost").val("");
+    				$("#springtwitter-charcount").text("140");
+    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
+    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadTimeline.reload();
+    				Ext.getCmp("springtwitter-postLoading").hide();
+    			} else {
+    				
+    			}
+    		},
+    		actionfailed: function(form, action) {
+    			console.log("actionfailed");
+    		},
+    		beforeaction: function(form, action){ 
+    			if(!form.isValid()) { 
+    				return false;
+    			} else {
+    				Ext.getCmp("springtwitter-postLoading").show();
+    			}
+    		}
+        }
+    }),
+    
     startForm: new Ext.form.FormPanel({
         layout: 'form',
         border: false,
         header: false,
         padding: 10,
         id: 'springtwitter-start',
-        region: 'center',
         labelWidth: 60,
         align: 'bottom',
         labelAlign: 'right',
@@ -823,6 +933,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     				M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll();
     				self.cardNavigation(2);
     				Ext.getCmp('springtwitter-view-status').show();
+    				Ext.getCmp('springtwitter-writeTweet').show();
     			} else{
     				console.log("fail getting AuthURL");
     			}
@@ -859,6 +970,8 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     diretMessageCurrentPage: 1,
     reloadStatus: 0,
     timer: null,
+    intervalID: null,
+    tcnt: 10000, //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
     
     // JsonStore
     loadTimeline: new Ext.data.JsonStore({
@@ -946,6 +1059,30 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     	clearTimeout(M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer);
     	M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer = setTimeout("M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll()",180000); // 3분
     	
+    },
+    
+    /**
+     * f/f 229  한글 글자 수 관련 setInterval시에 생성된 ID 제거.
+     */
+    clearIntrvalFF: function(){
+        if(this.intervalID !== null) {
+            clearInterval(this.intervalID);
+            this.tcnt = 10000;
+        }
+    },
+
+    /**
+     * 카운트 해주는 곳. 기존 text와 현제 length 가 같다면 update 안하고 skip.. 이것도 f/f 를 대비해서 넣은 코드.
+     */
+    bodyTextLengthUpdate: function(){
+    	this.tcnt--;
+        if(parseInt(jQuery('#springtwitter-charcount').text()) !== (140-Ext.fly('springtwitter-tweetPost').getValue().length)){
+             Ext.get('springtwitter-charcount')
+                .update(140-Ext.fly('springtwitter-tweetPost').getValue().length);
+        }
+        if(this.tcnt < 0){
+            clearIntrvalFF();
+        }
     },
     
     // utility

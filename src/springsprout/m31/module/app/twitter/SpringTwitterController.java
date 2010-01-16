@@ -80,4 +80,10 @@ public class SpringTwitterController {
     	return new ModelAndView(JSON_VIEW).addObject("directMessages", twitterDirectMessage.get("directMessages"));
     }
     
+    @RequestMapping
+    public ModelAndView update(TwitterRequestParam twitterParam) {
+    	Boolean result = springTwitterService.updateTweet(twitterParam);
+    	return new ModelAndView(JSON_VIEW).addObject("success", result);
+    }
+    
 }

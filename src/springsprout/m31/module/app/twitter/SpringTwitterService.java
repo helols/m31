@@ -133,4 +133,18 @@ public class SpringTwitterService {
 		
 		return directMessagesMap;
 	}
+	
+	public Boolean updateTweet(TwitterRequestParam twitterParam) {
+		Twitter twitter = 	securityService.getTwitterObject();
+		
+		log.debug("update>>> " + twitterParam.getStatusText());
+		
+		try {
+			Status status = twitter.updateStatus(twitterParam.getStatusText());
+		} catch (TwitterException e) {
+			throw new OpenApiReadException(e);
+		}
+		
+		return true;
+	}
 }
