@@ -1,4 +1,4 @@
-package springsprout.m31.dto;
+package springsprout.m31.module.gateway.support;
 
 import springsprout.m31.domain.enums.OpenApi;
 

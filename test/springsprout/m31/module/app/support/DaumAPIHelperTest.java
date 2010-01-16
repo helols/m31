@@ -9,7 +9,7 @@ package springsprout.m31.module.app.support;
 
 import org.junit.Test;
 import springsprout.m31.domain.enums.OpenApi;
-import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.module.gateway.support.DaumAPIHelper;

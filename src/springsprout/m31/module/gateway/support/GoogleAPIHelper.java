@@ -16,7 +16,7 @@ import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.util.ServiceException;
 import springsprout.m31.common.OpenApiReadException;
 import springsprout.m31.domain.MovieVO;
-import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
 import springsprout.m31.utils.JSONHelper;

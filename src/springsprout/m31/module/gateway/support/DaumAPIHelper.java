@@ -16,16 +16,11 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springsprout.m31.domain.MovieVO;
-import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.dto.SpringseeDTO;
-import springsprout.m31.utils.JSONHelper;
 import springsprout.m31.utils.OpenApiRequestHelper;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.*;
 
 public class DaumAPIHelper {

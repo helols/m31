@@ -25,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringBookDTO;
-import springsprout.m31.dto.SpringPlayerCri;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.module.gateway.support.SpringBookSearchParam;
 import springsprout.m31.utils.OpenAPIEditor;
