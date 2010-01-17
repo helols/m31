@@ -166,7 +166,7 @@ m31.util = {
     },
     
     replaceURLtoLink: function(str) {
-    	var regExp = /(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.\?\&=-])*\/?/g;
+    	var regExp = /(https?:\/\/)([\da-z\.-]+\.)([a-z\.]{2,6})([\/\w\.\?\&=-]*)\/?/g;
     	return str.replace(regExp, '<a href="$1$2$3$4">$1$2$3$4</a>');
     }
 };
