@@ -84,7 +84,7 @@
     padding: 5px;
 }
 
-#springfinder-panel-springbook .file-wrap,#springfinder-panel-springsee .file-wrap,#springfinder-panel-springplyer .file-wrap  {
+#springfinder-panel-springbook .file-wrap,#springfinder-panel-springsee .file-wrap,#springfinder-panel-springplayer .file-wrap  {
     width: 55px;
     height: 50px;
     float: left;
@@ -92,11 +92,11 @@
     padding: 5px;
     text-align:center;
 }
-#springfinder-panel-springbook .x-editable-wrap,#springfinder-panel-springsee .x-editable-wrap,#springfinder-panel-springplyer .x-editable-wrap{
+#springfinder-panel-springbook .x-editable-wrap,#springfinder-panel-springsee .x-editable-wrap,#springfinder-panel-springplayer .x-editable-wrap{
     text-align:center;
 }
 
-#springfinder-panel-springbook .file,#springfinder-panel-springsee .file,#springfinder-panel-springplyer .file  {
+#springfinder-panel-springbook .file,#springfinder-panel-springsee .file,#springfinder-panel-springplayer .file  {
     width: 40px;
     height: 40px;
 }

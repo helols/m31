@@ -201,17 +201,17 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     ]
                 },
                 {
-                    region: 'south',
-                    title: '탐색기',
+                   region: 'south',
+                    title: '봄씨 앨범',
                     xtype: 'panel',
-                    collapsedTitle: '탐색기',
+                    collapsedTitle: '봄씨 앨범',
                     id: 'springsee-explorer-panel',
                     collapsible: true,
                     collapsed:false,
                     split: true,
                     margins: '0 0 0 0',
                     cmargins: '2 2 2 2',
-                    height: 140,
+                    height: 110,
                     items: new M31.app.SpringFinderPanel( {
                         height : 140,
                         region:'center',
