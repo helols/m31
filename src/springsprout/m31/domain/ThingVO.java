@@ -9,7 +9,25 @@ package springsprout.m31.domain;
  */
 public class ThingVO {
     int id;
+    int viewOrder;
     String thing;
+    int memberID;
+
+    public int getMemberID() {
+        return memberID;
+    }
+
+    public void setMemberID(int memberID) {
+        this.memberID = memberID;
+    }
+
+    public int getViewOrder() {
+        return viewOrder;
+    }
+
+    public void setViewOrder(int viewOrder) {
+        this.viewOrder = viewOrder;
+    }
 
     public int getId() {
         return id;

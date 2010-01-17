@@ -20,6 +20,7 @@
     <sqlMap resource="springsprout/m31/sqlmaps/me2day.xml"/>
     <sqlMap resource="springsprout/m31/sqlmaps/twitter.xml"/>
     <sqlMap resource="springsprout/m31/sqlmaps/finder.xml"/>
+    <sqlMap resource="springsprout/m31/sqlmaps/timelog.xml" />
 
 </sqlMapConfig>
 

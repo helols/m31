@@ -367,9 +367,12 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 listful : true
             }),
 
-            idProperty : 'thing',
+            idProperty : 'id',
 
             fields : [
+                {
+                    name : 'id'
+                },
                 {
                     name : 'thing'
                 },
@@ -387,9 +390,24 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
         });
 
         this.thingStore = new Ext.data.JsonStore({
-            url : 'app/timelog/thing',
-
             root : 'items',
+            idProperty : 'id',
+
+            proxy : new Ext.data.HttpProxy({
+                api: {
+                    read    : 'app/timelog/thing/list',
+                    create  : 'app/timelog/thing/add',
+                    update  : 'app/timelog/thing/update',
+                    destroy : 'app/timelog/thing/delete'
+                }
+            }),
+
+            writer : new Ext.data.JsonWriter({
+                encode: true,
+                writeAllFields: true,
+                listful : true
+            }),
+            
             fields : [
                 {
                     name : 'id'
@@ -403,6 +421,11 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             ],
 
             listeners : {
+                write : function (store, action, result, res, rs) {
+                    if(action === 'create') {
+                        store.load();
+                    }
+                },
                 load : function(store, records, options) {
                     var tbar = Ext.getCmp("timelog-LogGrid").getTopToolbar();
                     if (tbar !== null) {
@@ -414,18 +437,30 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                             text : '추가',
                             xtype : 'button',
                             handler : function(b, e) {
-                                console.log("추가 클릭!");
-                            }
-                        }, '-');
+                                Ext.MessageBox.prompt('Thing', '새로운 할일:', function(btn, text) {
+                                    if (btn === 'ok') {
+                                        if(text !== '') {
+                                            var record = new store.recordType({
+                                                thing : text
+                                            });
 
+                                            store.add(record);
+                                        } else {
+                                            Ext.MessageBox.alert("Alert", "새로운 할일을 잘 못 입력하셨습니다.");
+                                        }
+                                    }
+                                });
+                        }}, '-');
+
+                        // Thing 버튼 생성
                         var i;
                         for (i = 0; i < records.length; i++) {
                             tbar.add({
                                 text : records[i].get('thing'),
                                 xtype : 'button',
                                 handler : function(b, e, thingID) {
-                                    console.log("Thing 클릭.. : " + thingID);
-                                    console.log(b.getText());
+//                                    console.log("Thing 클릭.. : " + thingID);
+//                                    console.log(b.getText());
                                     var store = Ext.getCmp("timelog-LogGrid").getStore();
 
                                     var record = new store.recordType({
@@ -435,7 +470,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                         memberID : 0
                                     });
 
-                                    console.log(store);
+//                                    console.log(store);
 
                                     store.add(record);
                                     Ext.getCmp("timelog-LogGrid").doLayout();
@@ -459,12 +494,13 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             border : false,
             loadMask : true,
             disableSelection : true,
-            
+
             store : this.store,
             colModel : new Ext.grid.ColumnModel({
                 columns : [
                     {
-                        header : 'Thing'
+                        header : 'Thing',
+                        dataIndex : 'thing'
                     },
                     {
                         header : 'Time',

@@ -56,3 +56,11 @@ html, body {
     position: absolute;
     top: 30%;
 }
+
+.ext-el-mask {
+    z-index: 90000 !important; 
+}
+
+.x-window-dlg {
+    z-index: 90003 !important;
+}

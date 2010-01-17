@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="timelog">
+
+    <resultMap id="Things" class="springsprout.m31.domain.ThingVO">
+	    <result property="id" column="ID" />
+    	<result property="thing" column="THING" />
+        <result property="viewOrder" column="view_order" />
+    </resultMap>
+
+    <select id="getThingByMember" resultMap="Things" parameterClass="int">
+        SELECT id, thing, view_order
+        FROM SPRING_TIMELOG_THING
+        WHERE member_id = #memberId#
+    </select>
+
+    <resultMap id="Timelog" class="springsprout.m31.domain.TimeLogVO">
+        <result property="id" column="ID" />
+        <result property="thing" column="THING" />
+        <result property="regDate" column="REG_DATE" />
+        <result property="memberID" column="MEMBER_ID" />
+        <result property="thingID" column="THING_ID" />
+    </resultMap>
+
+    <select id="getTimeLog" resultMap="Timelog" parameterClass="springsprout.m31.module.app.timelog.support.TimeLogCri">
+        SELECT stmt.id as id,
+               stt.thing AS thing,
+               TO_CHAR(reg_date, 'yyyy-mm-dd HH24:MI:SS') AS reg_date,
+               stmt.member_id AS member_id,
+               stmt.thing_id AS thing_id
+          FROM SPRING_TIMELOG_THING stt,
+               SPRING_TIMELOG_MEMBER_THING stmt
+         WHERE STT.ID = STMT.THING_ID
+               AND stmt.member_id = #memberID#
+               AND TO_CHAR(STMT.REG_DATE,'yyyy-mm-dd') = #regDate#
+        ORDER BY STMT.REG_DATE asc
+    </select>
+
+    <insert id="addTiemLog" parameterClass="springsprout.m31.domain.TimeLogVO">
+        <selectKey keyProperty="id" resultClass="int">
+            SELECT TIMELOG_MEMBER_THING_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO SPRING_TIMELOG_MEMBER_THING VALUES
+           (
+               #id#,
+               #thingID#,
+               #memberID#,
+               sysdate
+           )
+    </insert>
+    
+    <insert id="timelog.addThing" parameterClass="springsprout.m31.domain.ThingVO">
+       <selectKey keyProperty="id" resultClass="int">
+           SELECT TIMELOG_THING_SEQ.NEXTVAL FROM DUAL
+       </selectKey>
+       INSERT into SPRING_TIMELOG_THING values
+        (
+            #id#,
+            #thing#,
+            #viewOrder#,
+            #memberID#
+        )
+    </insert>
+</sqlMap>
