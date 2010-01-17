@@ -173,73 +173,10 @@ m31.util = {
 
 getApp = function(appName){
     return M31.ApplicationRegistry.getInstance().getApp(appName);
-}
+};
 
-/** 
- * 알림 함수
- * m31.notification.msg({
- *   id: dom id, 기본 'm31-notification-msg-div-' + target.id
- *   target: el or id, 필수
- *   title: 제목
- *   text: 내용
- *   width: 길이(자동길이는 아직 미완성)
- *   top: top 마진, 기본 0
- *   time: 알림창 유지시간, 기본 1초
- *   align: Ext.Element.alignTo(position) 의 값, 기본 상단-중앙
- * });  
- */
-m31.notification = function(){
-	var createBox = function(title, text){
-		return ['<div class="notification">',
-                '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
-                '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', title, '</h3>', text, '</div></div></div>',
-                '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
-                '</div>'].join('');
-	};
-	
-	var defaultConfig = {
-		align: 't-t',
-		title: '',
-		text: '',
-		time: 1
-	};
-	
-	return {
-		getBox: function(config){
-			var msgCt = Ext.get(config.id);
-			if(!msgCt){
-				msgCt = Ext.DomHelper.insertFirst(config.target, {id:config.id}, true);
-				msgCt.addClass('m31-notification-div');
-			}
-			if(!config.width){
-				//msgCt.setWidth('auto');
-				config.width = Ext.util.TextMetrics.measure(msgCt.dom, config.text).width;
-			}
-			else{
-				msgCt.applyStyles('width:' + config.width + 'px;');
-			}
-			msgCt.alignTo(config.target, config.align);
-			if(config.top){
-				msgCt.applyStyles('top:' + config.top + 'px;');
-			}
-			return msgCt;
-		},
-		init: function(config){
-			config = Ext.apply({}, config, defaultConfig);
-			if(!config.target){
-				config.target = document.body;
-			}
-			else if(Ext.isString(config.target)){
-				config.target = Ext.get(config.target);
-			}
-			if(!config.id){ config.id = 'm31-notification-msg-div-' + Ext.id(config.target); }
-			return config;
-		},
-		msg: function(config){
-			Ext.apply(config, this.init(config));
-			// var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
-            var m = Ext.DomHelper.append(this.getBox(config), {html:createBox(config.title, config.text)}, true);
-            m.slideIn('t').pause(config.time).ghost("t", {remove:true});
-		}
-	};
-}();
+reqexception = function(){
+    m31.util.notification({title:'죄송합니다..',text:'Ajax 요청중 에러가 발생했습니다..',remove:true});
+};
+
+Ext.Ajax.on('requestexception',reqexception,this);

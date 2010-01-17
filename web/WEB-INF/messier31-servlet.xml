@@ -44,10 +44,19 @@
 	<bean id="mappingJacksonJsonView"
         class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
 
+    <!-- exceptionView-->
+    <bean id="m31ExceptionView" class="springsprout.m31.common.web.support.M31ExceptionView"/>
+
     <!-- ============================================================= -->
     <!--  MultipartResolver                                            -->
     <!-- ============================================================= -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <!-- ExceptionResolver -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionAttribute" value="exception"/>
+        <property name="defaultErrorView" value="m31ExceptionView"/>
+    </bean>
 
 	<!-- ============================================================= -->
 	<!--  Handler Adapter                                              -->
