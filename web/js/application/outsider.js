@@ -106,7 +106,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             this.win = win;
         }
 
-        this.store.loadMask = new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."}); 
+        this.store.loadMask = new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."});
+        setTimeout(function() {$("#springsee-search").focus();}, 800);
     },
 
     createWindow : function () {
