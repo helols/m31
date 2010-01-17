@@ -280,6 +280,7 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
     //      드랍가능 구역에 마우스 오버시에 보여질.. 거시기..
     onNodeOver : function(target, dd, e, data) {
         if (this.isNodeDropble(target, data)) {
+            console.dir(data);
             return this.dropAllowed;
         } else {
             return this.dropNotAllowed;
@@ -296,11 +297,9 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
         if (data.isTree && data.isPanel) {
             false;
         } else if (data.isApp) {
-            console.dir(data);
             return true;
         }
         else {
-            console.dir(data);
             return false;
         }
     },
