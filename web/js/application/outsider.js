@@ -32,7 +32,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     store.loadMask.show();
                 },
                 'load': { fn:function() {
-                    console.log("store loaded");
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
                     Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
                     Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
@@ -295,13 +294,13 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     text:'미투포토로 전송하기',
                     scope:this,
                     handler: function(){
-                        console.log("미투데이 포토로 전송합니다.");
+//                        console.log("미투데이 포토로 전송합니다.");
                     }
                 },{
                     text:'배경화면 지정하기',
                     scope:this,
                     handler: function(){
-                        console.log("배경화면 지정하기.");
+//                        console.log("배경화면 지정하기.");
                     }
                 }]
             });
@@ -346,10 +345,10 @@ ImageDragZone = function(view, config){
     this.viewClone = view;
     this.explorerDDTarget = new Ext.dd.DropTarget('springsee-explorer-panel', {ddGroup: 'explorerDD'});//DropZone
     this.explorerDDTarget.notifyDrop= function(dd, e, data){
-    	console.log("notifyDrop");
-    	console.log(dd);
-    	console.log(e);
-    	console.log(data);
+//    	console.log("notifyDrop");
+//    	console.log(dd);
+//    	console.log(e);
+//    	console.log(data);
         return true;
     };
     
@@ -397,7 +396,6 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // this method is called by the TreeDropZone after a node drop
     // to get the new tree node (there are also other way, but this is easiest)
     getTreeNode : function(){
-    	console.log("getTreeNode");
         var treeNodes = [];
         var nodeData = this.viewviewClone.getRecords(this.dragData.nodes);
         for(var i = 0, len = nodeData.length; i < len; i++){
@@ -537,26 +535,20 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     createView : function() {
     },
     
-    /**
-     *  해당 app의 window가 제거 될때 호출되는 콜백.
-     */
+     //  해당 app의 window가 제거 될때 호출되는 콜백.
     removeWin: function(){
         this.view = undefined;
         this.win = undefined;
     },
 
-    /**
-     *  윈도우를 생성하기 직전에 호출되는 펑션.
-     */
+	//  윈도우를 생성하기 직전에 호출되는 펑션.
     beforeCreate : function() {
         if(!this.view){
             this.view = this.createView();
         }
     },
 
-    /**
-     *  윈도우를 생성된후에 호출되는 펑션.
-     */
+     // 윈도우를 생성된후에 호출되는 펑션.
     createCallback : function(win) {
         if(!this.win){
             this.win = win;
@@ -571,8 +563,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             head: false,
             maximizable: false,
             resizeHandles: 'n s',
-            //autoHeight: true,
-            //resizable: false,
             closeAction: 'close',
             constrainHeader:true,
             border: false,
@@ -606,15 +596,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 			               	                itemSelector: 'div.springtwitter-tweet',
 			               	                emptyText : '',
 			               	                store: this.loadTimeline,
-			               	                listeners: {
-			               	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-			               	                    'beforeselect'   : {fn:function(view) {
-			               	                        //return view.timeline.getRange().length > 0;
-			               	                    }},
-			               	                    'beforeshow'   : {fn:function(view) {
-			               	                    	//return view.timeline.getRange().length > 0;
-			               	                    }}
-			               	                },
 			               	            	prepareData: function(data) {
 			               	                	data.createAt = new Date(data.createAt).toLocaleString();
 			               	                	data.category = "timeline";
@@ -706,15 +687,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 			            	                itemSelector: 'div.springtwitter-tweet',
 			            	                emptyText : '',
 			            	                store: this.loadMentions,
-			            	                listeners: {
-			            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-			            	                    'beforeselect'   : {fn:function(view) {
-			            	                        //return view.timeline.getRange().length > 0;
-			            	                    }},
-			            	                    'beforeshow'   : {fn:function(view) {
-			            	                    	//return view.timeline.getRange().length > 0;
-			            	                    }}
-			            	                },
 			            	            	prepareData: function(data) {
 			            	                	data.createAt = new Date(data.createAt).toLocaleString();
 			            	                	data.category = "mentions";
@@ -804,15 +776,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 			            	                itemSelector: 'div.springtwitter-tweet',
 			            	                emptyText : '',
 			            	                store: this.loadDM,
-			            	                listeners: {
-			            	                    'loadexception'  : {fn:this.onLoadException, scope:this},
-			            	                    'beforeselect'   : {fn:function(view) {
-			            	                        //return view.timeline.getRange().length > 0;
-			            	                    }},
-			            	                    'beforeshow'   : {fn:function(view) {
-			            	                    	//return view.timeline.getRange().length > 0;
-			            	                    }}
-			            	                },
 			            	                prepareData: function(data) {
 			            	                	data.createAt = new Date(data.createAt).toLocaleString();
 			            	                	data.category = "directmessage";
@@ -955,16 +918,15 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 		    	   	keyup : function(sender,event){
     	   				M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
     	   				M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate();
-//    	   				Ext.getCmp("springtwitter-replyToId").setValue(0);
-//    					Ext.getCmp("springtwitter-postSend").setText("Update");
 		         	},
 		         	keydown: function(sender,event){
 		         		if(event.getKey() == 229 & Ext.isGecko){
-		         			if(M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID == null){
-		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID = setInterval(M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate,300);
+		         			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+		         			if(self.intervalID == null){
+		         				self.intervalID = setInterval(self.bodyTextLengthUpdate,300);
 		         			}else{
-		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
-		         				M31.ApplicationRegistry.getInstance().getApp('springtwitter').intervalID = setInterval(M31.ApplicationRegistry.getInstance().getApp('springtwitter').bodyTextLengthUpdate,300);
+		         				self.clearIntrvalFF();
+		         				self.intervalID = setInterval(self.bodyTextLengthUpdate,300);
 		         			}
 		         			event.stopEvent();
 		         		}
@@ -990,13 +952,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
        ],
        listeners: {
     		actioncomplete: function(form, action) {
-    	   		console.log("actioncomplete");
     	   		var result = Ext.decode(action.response.responseText);
     			if(result.success) {
+    				var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
     				$("#springtwitter-tweetPost").val("");
     				$("#springtwitter-charcount").text("140");
-    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 2;
-    				M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadTimeline.reload();
+    				self.reloadStatus = 2;
+    				self.loadTimeline.reload();
     				Ext.getCmp("springtwitter-postLoading").hide();
     				Ext.getCmp("springtwitter-postStatus").show();
     				Ext.getCmp("springtwitter-postStatus").setValue("전송되었습니다.");
@@ -1005,7 +967,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     			}
     		},
     		actionfailed: function(form, action) {
-    			console.log("actionfailed");
     			Ext.getCmp("springtwitter-postStatus").show();
     			Ext.getCmp("springtwitter-postStatus").setValue("전송에 실패했습니다.");
     			setTimeout(function() {Ext.getCmp("springtwitter-postStatus").hide();}, 10000);
@@ -1049,19 +1010,11 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         }],
         listeners: {
     		actioncomplete: function(form, action){
-    			console.log('actioncomplete');
-    			
     			var result = Ext.decode(action.response.responseText);
     			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
-//    			self.initTemplates();
     			if(!result.auth && result.success){
     				$("#springtwitter-authguideurl").attr("href", result.authURL);
-//    				Ext.getCmp('springtwitter-authGuide').dolayout();
     				self.cardNavigation(1);
-//    				console.log(Ext.getCmp('springtwitter-iframepanel'));
-//    				self.win.resizeHandles = "all";
-//    				self.win.setSize(600, 400);
-//    				Ext.getCmp('springtwitter-iframepanel').setSrc(result.authURL);
     			} else if (result.auth && result.success) {
     				self.win.setSize(400, 500);
     				self.myScreenName = result.userName;
@@ -1070,11 +1023,10 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     				Ext.getCmp('springtwitter-view-status').show();
     				Ext.getCmp('springtwitter-writeTweet').show();
     			} else{
-    				console.log("fail getting AuthURL");
+//    				console.log("fail getting AuthURL");
     			}
     		}.createDelegate(this),
     		actionfailed: function(form, action){
-    			console.log('action failed');
     		}
     	}
     }),
@@ -1147,15 +1099,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             direction: 'DESC'
         },
         listeners: {
-            beforeload : function(store, options) {
-//                store.loadMask.show();
-            },
             'load': { fn:function() {
-            	M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus++;
-            	if(M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus >= 3) {
+        		var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+        		self.reloadStatus++;
+            	if(self.reloadStatus >= 3) {
             		Ext.getCmp("springtwitter-statusReload").hide();
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 0;
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').setTimer();
+            		self.reloadStatus = 0;
+            		self.setTimer();
             	}
             	}, scope:this, single:false
             }
@@ -1170,15 +1120,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
         ],
         listeners: {
-            beforeload : function(store, options) {
-//                store.loadMask.show();
-            },
             'load': { fn:function() {
-            	M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus++;
-            	if(M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus >= 3) {
+    			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    			self.reloadStatus++;
+            	if(self.reloadStatus >= 3) {
             		Ext.getCmp("springtwitter-statusReload").hide();
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 0;
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').setTimer();
+            		self.reloadStatus = 0;
+            		self.setTimer();
             	}
             }, scope:this, single:false
             }
@@ -1193,15 +1141,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
         ],
         listeners: {
-            beforeload : function(store, options) {
-//                store.loadMask.show();
-            },
             'load': { fn:function() {
-            	M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus++;
-            	if(M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus >= 3) {
+    			var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    			self.reloadStatus++;
+            	if(self.reloadStatus >= 3) {
             		Ext.getCmp("springtwitter-statusReload").hide();
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadStatus = 0;
-            		M31.ApplicationRegistry.getInstance().getApp('springtwitter').setTimer();
+            		self.reloadStatus = 0;
+            		self.setTimer();
             	}
             	}, scope:this, single:false
             }
@@ -1210,9 +1156,10 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     
     reloadAll: function() {
     	Ext.getCmp("springtwitter-statusReload").show();
-    	M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadTimeline.reload();
-		M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadMentions.reload();
-		M31.ApplicationRegistry.getInstance().getApp('springtwitter').loadDM.reload();
+    	var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    	self.loadTimeline.reload();
+    	self.loadMentions.reload();
+    	self.loadDM.reload();
     },
     
     setTimer: function() {
@@ -1252,7 +1199,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     
     // utility
     cardNavigation: function(idx){
-    	console.log("called cardNavigation");
     	var l = M31.ApplicationRegistry.getInstance().getApp('springtwitter').win.getLayout();
     	l.setActiveItem(idx);
     },
