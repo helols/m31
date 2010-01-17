@@ -70,7 +70,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 autoSave : false
             });
         }
-        this.lastChangeNodeId = this.rootNodeId || 1;
+        this.lastChangeNodeId = this.rootNodeId || 0;
         this.store.load({params:{parentNode: this.rootNodeId || 1 , parentNodeName:this.rootNodeName || null}});
         M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
         this.on({
