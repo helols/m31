@@ -497,6 +497,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     },
     me2DayModule: {
     	apiUrl: '/app/me2day/',
+    	linkLength: 0,
         destroy: function(){
     		if(this.iconStore){ this.iconStore.destroy(); } 
     		if(this.postFormPanel){ this.postFormPanel.destroy(); }
@@ -559,7 +560,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
              */
             var bodyTextLengthUpdate = function(){
                 tcnt--;
-                if(parseInt(jQuery('#springme2day-form-body-length').text()) !== (150-Ext.fly('springme2day-form-body').getValue().length)){
+                if((parseInt(jQuery('#springme2day-form-body-length').text()) - this.linkLength) !== (150-Ext.fly('springme2day-form-body').getValue().length)){
                      Ext.get('springme2day-form-body-length')
                         .update(150-Ext.fly('springme2day-form-body').getValue().length);
                 }
@@ -593,8 +594,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		emptyText: '현재 기분을 150자로 내로 남겨주세요!',
 	            		allowBlank: false,
 	            		blankText: '최소 한자 이상의 글을 남기셔야합니다.',
-	            		maxLength: 150,
-	            		maxLengthText: '글이 너무 깁니다!',
 	            		enableKeyEvents: true,
 	            		disableKeyFilter: true,
                         validationEvent : 'keydown',
@@ -712,7 +711,16 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		beforeaction: function(form, action){ 
 	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
-	        		}
+	        			var currentValueLength = form.findField('springme2day-form-body').getValue().length;
+	        			if((currentValueLength - this.linkLength) <= 0){
+	        				m31.util.notification({title:'봄미투데이',text:'본문이 비어있습니다.'});
+	        				return false;
+	        			}
+	        			else if((currentValueLength - this.linkLength) > 150){
+	        				m31.util.notification({title:'봄미투데이',text:'본문이 150자를 넘습니다.'});
+	        				return false;
+	        			}
+	        		}.createDelegate(this)
 	        	}
 	        });
         
@@ -1230,7 +1238,15 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	this.dialogue.show();
         },
         gateway: function(data){
-        	console.log(data);
+        	if(Ext.getCmp('springme2day-form-body')){
+        		M31.WindowsManager.getInstance().getWindow("springme2day").show();
+            	M31.WindowsManager.getInstance().getWindow("springme2day").toFront();
+            	if(data.appId === 'springsee'){
+        			var value = Ext.getCmp('springme2day-form-body').getValue();
+        			Ext.getCmp('springme2day-form-body').setValue('"":' + data.url.trim() + ' ' + value);
+        			this.linkLength = data.url.trim().length;
+        		}
+        	}
         }
     }
 });
