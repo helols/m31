@@ -85,7 +85,7 @@
 }
 
 #springfinder-panel-springbook .file-wrap,#springfinder-panel-springsee .file-wrap,#springfinder-panel-springplyer .file-wrap  {
-    width: 50px;
+    width: 55px;
     height: 50px;
     float: left;
     margin: 0 5px 0 0;
@@ -93,7 +93,6 @@
     text-align:center;
 }
 #springfinder-panel-springbook .x-editable-wrap,#springfinder-panel-springsee .x-editable-wrap,#springfinder-panel-springplyer .x-editable-wrap{
-    margin-top:5px;
     text-align:center;
 }
 

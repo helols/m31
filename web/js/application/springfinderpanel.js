@@ -36,7 +36,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     },
 
     initComponent:function() {
-        this.id = id+this.rootNodeName?'-'+this.rootNodeName:'';
+        this.id += this.rootNodeName?'-'+this.rootNodeName:'';
         var proxy = new Ext.data.HttpProxy({
             api: {
                 read : '/app/springfinder/getFiles',
