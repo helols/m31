@@ -14,13 +14,22 @@ import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 public class M31ExceptionView  extends AbstractView{
     Logger log = LoggerFactory.getLogger(getClass());
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        log.debug("{}",model.get("exception"));    
+        Exception exception = (Exception) model.get("exception");
+
+        StringWriter writer = new StringWriter();
+		exception.printStackTrace(new PrintWriter(writer));
+		writer.close();
+
+		log.error(writer.toString());
+        
         response.setStatus(500);
         response.setContentType(MappingJacksonJsonView.DEFAULT_CONTENT_TYPE);
         response.getWriter().print("{success:'fail',message:'error'}");
