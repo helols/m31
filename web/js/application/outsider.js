@@ -151,7 +151,13 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 		        	$("#springsee-view-body div.x-panel-body div:first").height(0);
         		}, scope:this},
         		'afterlayout'  : {fn:function(win, width, height) {
-        			$("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+        			console.log($("#springsee-view-body").height());
+        			console.log($("#springsee-view").height());
+        			var toHeight = $("#springsee-view").height();
+        			if ($("#springsee-view-body").height() < toHeight) {
+        				toHeight -= 32;
+        			}
+        			$("#springsee-view-body div.x-panel-body div:first").height(toHeight);
         		}, scope:this, single:false}
             },
             items:[
@@ -330,7 +336,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 			m31.util.notification({
                 				title: '봄씨',
                 				text: '봄미투데이를 실행해 주세요.'
-                			})
+                			});
                 		} else {
                 			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
                 				appId: 'springsee',
@@ -346,7 +352,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 			m31.util.notification({
                 				title: '봄씨',
                 				text: '봄트위터를 실행해 주세요.'
-                			})
+                			});
                 		} else {
                 			M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
                 		}
