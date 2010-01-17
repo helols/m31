@@ -3,7 +3,8 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	loadMask : null, 
 	state: null,
     init: function() {
-        console.log("init");
+	    console.log("init");
+	  //필요한 JS
     },
     createCallback: function(win){
     	console.log("createCallback");
@@ -186,13 +187,12 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 			listeners: {
             	render: function(grid){
             		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
+            		// 드래그시 보내줄 데이터 생성 처리
             		grid.getView().dragZone = new Ext.grid.GridDragZone(this, {
             			ddGroup: 'springfinderpenelDD',
             			onBeforeDrag: function(data, e) {
             				var items = new Array();
             				Ext.each(data.selections, function(item){
-            					console.log(Ext.encode(item.data));
-            					
             					items.push({
             						'fileName': item.data.title,
             						'fileAddition': Ext.encode(item.data)	            						
@@ -202,8 +202,6 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             				data.linkAppId = 'springbook';
             				data.isApp = true;
             				data.items = items;
-            				
-            				console.dir(data);
             			},
             			getDragData: function(e){
 	            			var t = Ext.lib.Event.getTarget(e);
@@ -267,6 +265,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	userConfig: null,
     init: function() {
         console.log("init");
+        m31.util.requiredJS("pirobox");
     },
     createCallback: function(win){
     	console.log("createCallback");
@@ -760,11 +759,29 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		        		// 앵커 태그에 클릭시 새창 띄우기!
 		        		els = this.me2DayModule.postGrid.getEl().select('a', true);
 		        		Ext.each(els.elements, function(el){
-		        			el.addListener('click', function(event, sender){
-		        				window.open(sender.href);
-		        				event.preventDefault();
-		        			});
+		        			if(el.dom.href){
+		        				var file = el.dom.href.substring(el.dom.href.lastIndexOf('.'));
+		        				if(file === '.jpg' || file === 'gif'){
+		        					$(el.dom).addClass("pirobox");
+		        					$(el.dom).attr('title',$(el.dom).text());
+		        				}
+		        				else{
+		        					el.addListener('click', function(event, sender){
+		        						window.open(sender.href);
+		        						event.preventDefault();
+				        			});
+		        				}
+		        			}
 		        		}, this);
+		        		
+		        		$(".piro_overlay").remove();
+		        		$(".pirobox_content").remove();
+		        		$().piroBox({
+		        			my_speed: 600, //animation speed
+		        			bg_alpha: 0.5, //background opacity
+		        			radius: 4, //caption rounded corner
+		        			scrollImage : false // true == image follows the page, false == image remains in the same open position
+		        		});
 		        		
 		        		// 댓글 쓰기에 이벤트 걸기
 		        		els = this.me2DayModule.postGrid.getEl().select('td[class="springme2day-comment-write-text]', true);
@@ -1211,6 +1228,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	
         	this.dialogue.render(win.body);
         	this.dialogue.show();
+        },
+        gateway: function(data){
+        	console.log(data);
         }
     }
 });
