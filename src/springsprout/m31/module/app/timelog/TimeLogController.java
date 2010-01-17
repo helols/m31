@@ -1,7 +1,5 @@
 package springsprout.m31.module.app.timelog;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +13,11 @@ import springsprout.m31.module.app.timelog.support.TimeLogCri;
 import springsprout.m31.service.security.SecurityService;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
+import static springsprout.m31.utils.JSONHelper.getJsonTOList;
 
 @Controller
 @RequestMapping("/app/timelog/**")
@@ -68,19 +65,5 @@ public class TimeLogController {
         service.addTiemLog(list);
         
         return new ModelAndView(JSON_VIEW).addObject("success", true).addObject("items", list);
-    }
-
-    private List getJsonTOList(String json, Class clz) {
-
-        JSONArray jsonArray = JSONArray.fromObject(json);
-        Iterator iterator = jsonArray.listIterator();
-        List list = new ArrayList();
-
-        while(iterator.hasNext()) {
-            Object vo =  JSONObject.toBean((JSONObject) iterator.next(), clz);
-            list.add(vo);
-        }
-
-        return list;
     }
 }

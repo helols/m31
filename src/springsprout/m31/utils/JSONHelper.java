@@ -126,4 +126,18 @@ public class JSONHelper {
         rMap.put("STATUS", status);
         return rMap;
     }
+
+     public static List getJsonTOList(String json, Class clz) {
+
+        JSONArray jsonArray = JSONArray.fromObject(json);
+        Iterator iterator = jsonArray.listIterator();
+        List list = new ArrayList();
+
+        while(iterator.hasNext()) {
+            Object vo =  JSONObject.toBean((JSONObject) iterator.next(), clz);
+            list.add(vo);
+        }
+
+        return list;
+    }
 }
