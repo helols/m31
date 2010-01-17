@@ -285,7 +285,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 id:'springsee-ctx',
                 items: [{
                     iconCls: 'new-win',
-                    text: 'View in new window',
+                    text: '새창으로 이미지 보기',
                     scope:this,
                     handler: function(){
                         window.open(this.linkUrl);
@@ -293,15 +293,40 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 },{
                     iconCls: 'new-win',
                     id: 'springsee-copymenu',
-                    text: 'Copy this Image URL',
+                    text: '이미지주소 복사하기',
                     scope:this
                 },'-',{
-                    text:'미투포토로 전송하기',
+                    text:'봄미투데이로 전송하기',
                     scope:this,
                     handler: function(){
 //                        console.log("미투데이 포토로 전송합니다.");
+                		if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
+                			m31.util.notification({
+                				title: '봄씨',
+                				text: '봄미투데이를 실행해 주세요.'
+                			})
+                		} else {
+                			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2dayModule.gateway({
+                				appId: 'springsee',
+                				url: this.linkUrl
+                			});
+                		}
                     }
                 },{
+                    text:'봄트위터로 전송하기',
+                    scope:this,
+                    handler: function(){
+//                        console.log("미투데이 포토로 전송합니다.");
+                		if (!M31.WindowsManager.getInstance().getWindow("springtwitter")) {
+                			m31.util.notification({
+                				title: '봄씨',
+                				text: '봄트위터를 실행해 주세요.'
+                			})
+                		} else {
+                			M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
+                		}
+                    }
+                }, {
                     text:'배경화면 지정하기',
                     scope:this,
                     handler: function(){
@@ -1209,6 +1234,16 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         if(this.tcnt < 0){
             clearIntrvalFF();
         }
+    },
+    
+    receiveURL: function(url) {
+    	M31.WindowsManager.getInstance().getWindow("springtwitter").show();
+    	M31.WindowsManager.getInstance().getWindow("springtwitter").toFront();
+    	var target = Ext.getCmp("springtwitter-writeTweet");
+		if(target.collapsed) {
+			target.toggleCollapse(true);
+		}
+    	$("#springtwitter-tweetPost").val($("#springtwitter-tweetPost").val() + " " + url);
     },
     
     // utility
