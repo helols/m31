@@ -58,16 +58,18 @@ public class GoogleAPIHelper {
 
 //        ArrayList<HashMap<String, Object>> tmpList = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData.results");
         HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(OpenApiRequestHelper.loadString(api_url),"responseData");
-        for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("results")){
-            r_list.add(
-                    new SpringseeDTO(
-                    		tmpMap.get("tbUrl").toString()
-                           ,tmpMap.get("width").toString()
-                           ,tmpMap.get("height").toString()
-                           ,tmpMap.get("titleNoFormatting").toString()
-                           ,tmpMap.get("url").toString()
-                           ,tmpMap.get("url").toString())
-            );
+        if (jsonMap.get("STATUS").equals("S")) {
+	        for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("results")){
+	            r_list.add(
+	                    new SpringseeDTO(
+	                    		tmpMap.get("tbUrl").toString()
+	                           ,tmpMap.get("width").toString()
+	                           ,tmpMap.get("height").toString()
+	                           ,tmpMap.get("titleNoFormatting").toString()
+	                           ,tmpMap.get("url").toString()
+	                           ,tmpMap.get("url").toString())
+	            );
+	        }
         }
         return 0;
     }

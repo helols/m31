@@ -151,8 +151,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 		        	$("#springsee-view-body div.x-panel-body div:first").height(0);
         		}, scope:this},
         		'afterlayout'  : {fn:function(win, width, height) {
-        			console.log($("#springsee-view-body").height());
-        			console.log($("#springsee-view").height());
         			var toHeight = $("#springsee-view").height();
         			if ($("#springsee-view-body").height() < toHeight) {
         				toHeight -= 32;

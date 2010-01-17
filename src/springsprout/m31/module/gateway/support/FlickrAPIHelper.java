@@ -31,19 +31,21 @@ public class FlickrAPIHelper {
         resultFlickr = resultFlickr.replace("jsonFlickrApi(", "").replace(")", "");
 
         HashMap<String, Object> jsonMap = JSONHelper.jsonArrayConverToArrayList(resultFlickr,"photos");
-        for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("photo")){
-        	String photoUrl  = "http://farm" + tmpMap.get("farm") + ".static.flickr.com/" + tmpMap.get("server") + "/" + tmpMap.get("id") + "_" + tmpMap.get("secret") + "_s.jpg";
-        	String photoUrlOrign  = "http://farm" + tmpMap.get("farm") + ".static.flickr.com/" + tmpMap.get("server") + "/" + tmpMap.get("id") + "_" + tmpMap.get("secret") + ".jpg";
-        	String photoLink = "http://www.flickr.com/photos/" + tmpMap.get("owner") + "/" + tmpMap.get("id");
-            r_list.add(
-                    new SpringseeDTO(
-                    		photoUrl
-                           ,""
-                           ,""
-                           ,tmpMap.get("title").toString()
-                           ,photoLink
-                           ,photoUrlOrign)
-            );
+        if (jsonMap.get("STATUS").equals("S")) {
+	        for(HashMap<String, Object> tmpMap : (ArrayList<HashMap<String, Object>>)jsonMap.get("photo")){
+	        	String photoUrl  = "http://farm" + tmpMap.get("farm") + ".static.flickr.com/" + tmpMap.get("server") + "/" + tmpMap.get("id") + "_" + tmpMap.get("secret") + "_s.jpg";
+	        	String photoUrlOrign  = "http://farm" + tmpMap.get("farm") + ".static.flickr.com/" + tmpMap.get("server") + "/" + tmpMap.get("id") + "_" + tmpMap.get("secret") + ".jpg";
+	        	String photoLink = "http://www.flickr.com/photos/" + tmpMap.get("owner") + "/" + tmpMap.get("id");
+	            r_list.add(
+	                    new SpringseeDTO(
+	                    		photoUrl
+	                           ,""
+	                           ,""
+	                           ,tmpMap.get("title").toString()
+	                           ,photoLink
+	                           ,photoUrlOrign)
+	            );
+	        }
         }
         return 0;
     }

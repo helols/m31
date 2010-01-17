@@ -12,6 +12,8 @@ import net.sf.json.JSONObject;
 
 import java.util.*;
 
+import org.eclipse.jetty.util.log.Log;
+
 /**
  * json string 관련 util.
  *
@@ -104,7 +106,7 @@ public class JSONHelper {
         HashMap<String, Object> rMap = new HashMap<String, Object>();
         if (jsonString != null) {
             JSONObject rootJson = JSONObject.fromObject(jsonString).getJSONObject(rootPath);
-            if(rootJson != null){
+            if(rootJson != null && !rootJson.toString().equals("null")){
                 Iterator jsonIter = rootJson.keys();
                 while (jsonIter.hasNext()) {
                     String keyName = jsonIter.next().toString();
