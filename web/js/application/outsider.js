@@ -971,7 +971,14 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 		         	},
 		         	blur : function(sender,event){
 		         		M31.ApplicationRegistry.getInstance().getApp('springtwitter').clearIntrvalFF();
-		         	}
+		         	},
+		         	'keypress'  : {fn:function(cmp, evt){
+                    	if (evt.keyCode == Ext.EventObject.ENTER) {
+                    		M31.ApplicationRegistry.getInstance().getApp('springtwitter').writeForm.getForm().submit({
+                 	    	   url: '/app/twitter/update'
+                 	       });
+			    		}
+				    }, scope:this}
             	}
        		}, {
     	   		id: 'springtwitter-replyToId',
