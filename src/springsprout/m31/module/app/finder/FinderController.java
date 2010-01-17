@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import springsprout.m31.domain.FinderFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,5 +70,14 @@ public class FinderController {
     @RequestMapping(value = "/app/springfinder/deleteFile", method= RequestMethod.POST)
     public ModelAndView deleteFile(String fileList){
         return new ModelAndView(JSON_VIEW).addObject("fileList", "");
+    }
+
+    @RequestMapping(value = "/app/springfinder/renameFile", method = RequestMethod.POST)
+    public ModelAndView renameFile(FinderFile finderFile){
+        if(finderFile.getFileName() == null || !StringUtils.hasText(finderFile.getFileName())){
+            return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg","폴더명이 없습니다.");
+        }
+        finderService.renameFile(finderFile);
+        return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg","폴더명이 변경되었습니다.");
     }
 }

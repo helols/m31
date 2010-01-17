@@ -90,7 +90,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     onRender:function() {
         console.log('onRender');
         M31.app.SpringFinderPanel.superclass.onRender.apply(this, arguments);
-        this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:true,
+        this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:false,
             ddGroup: 'springfinderpenelDD'});
         this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD'});
     },

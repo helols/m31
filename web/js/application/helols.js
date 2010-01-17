@@ -129,9 +129,6 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             layout: 'border',
             width:800,
             height:600,
-            shim:false,
-            animCollapse:false,
-            constrainHeader:true,
             items :[
                 springfinderTree,
                 springfinderPanel

@@ -53,4 +53,8 @@ public class FinderService {
 
         return finderRepository.getParentNodeId(conditionMap);
     }
+
+    public void renameFile(FinderFile finderFile) {
+        finderRepository.renameFile(finderFile);
+    }
 }

@@ -77,24 +77,41 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     id:'springfinder-tree'
     ,containerScroll:true
     ,enableDD:true
-    ,existsText:'File <b>{0}</b> already exists'
-    ,newdirText:'봄 폴더'
+    //    ,existsText:'File <b>{0}</b> already exists'
+    //    ,newdirText:'봄 폴더'
     ,url:'/app/springfinder/getTree'
-    ,animate:true
+    ,animate:false
     ,enableDD:true
     ,expandable:false
-    ,containerScroll: true
+    ,containerScroll: false
     ,ddGroup: 'springfinderpenelDD'
     ,rootVisible:true
     ,region:'west'
     ,width:200
+    ,minSize: 150
     ,split: true
     ,title : 'springfinder'
-    ,collapsible: true
+    ,collapsible: false
     ,height : 600
     ,autoScroll:true
     ,margins: '0'
-
+    ,collapseFirst:false
+    ,titleCollapse : false
+    ,tools:[      
+        {
+            id:'refresh',
+            qtip: '새로고침',
+            // hidden:true,
+            handler: function(event, toolEl, panel) {
+                var sm = panel.getSelectionModel();
+                var node = sm.getSelectedNode();
+                if (node) {
+                    sm.select(node);
+                    node.reload();
+                }
+            }
+        }
+    ]
 
     ,initComponent:function() {
         Ext.apply(this, {
@@ -132,103 +149,6 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
                     return parseInt(node.id, 10);
                 }
             })
-            ,keys:[
-                {
-                    // F2 = edit
-                    key:113,
-                    scope:this
-                    ,
-                    fn:function(key, e) {
-                        var sm = this.getSelectionModel();
-                        var node = sm.getSelectedNode();
-                        if (node && 0 !== node.getDepth() && node.attributes.defaultYn !== 'Y') {
-                            this.treeEditor.triggerEdit(node);
-                        }
-                    }
-                },
-                {
-                    // Delete Key = Delete
-                    key:46,
-                    stopEvent:true,
-                    scope:this
-                    ,
-                    fn:function(key, e) {
-                        var sm = this.getSelectionModel();
-                        var node = sm.getSelectedNode();
-                        if (node && 0 !== node.getDepth() && node.attributes.defaultYn !== 'Y') {
-                            //                            this.deleteNode(node);
-                            console.log('delete node');
-                        }
-                    }
-                },
-                {
-                    // Ctrl + E = reload
-                    key:69,
-                    ctrl:true,
-                    stopEvent:true,
-                    scope:this
-                    ,
-                    fn:function(key, e) {
-                        var sm = this.getSelectionModel();
-                        var node = sm.getSelectedNode();
-                        if (node) {
-                            node = node.isLeaf() ? node.parentNode : node;
-                            sm.select(node);
-                            node.reload();
-                        }
-                    }
-                },
-                {
-                    // Ctrl + -> = expand deep
-                    key:39,
-                    ctrl:true,
-                    stopEvent:true,
-                    scope:this
-                    ,
-                    fn:function(key, e) {
-                        var sm = this.getSelectionModel();
-                        var node = sm.getSelectedNode();
-                        if (node && !node.isLeaf()) {
-                            sm.select(node);
-                            node.expand.defer(1, node, [true]);
-                        }
-                    }
-                },
-                {
-                    // Ctrl + <- = collapse deep
-                    key:37,
-                    ctrl:true,
-                    scope:this,
-                    stopEvent:true
-                    ,
-                    fn:function(key, e) {
-                        var sm = this.getSelectionModel();
-                        var node = sm.getSelectedNode();
-                        if (node && !node.isLeaf()) {
-                            sm.select(node);
-                            node.collapse.defer(1, node, [true]);
-                        }
-                    }
-                },
-                {
-                    // Ctrl + N = New Directory
-                    key:78,
-                    ctrl:true,
-                    scope:this,
-                    stopEvent:true
-                    ,
-                    fn:function(key, e) {
-                        var sm, node;
-                        sm = this.getSelectionModel();
-                        node = sm.getSelectedNode();
-                        if (node) {
-                            node = node.isLeaf() ? node.parentNode : node;
-                            //                            this.createNewDir(node);
-                            console.log('createNew dir node');
-                        }
-                    }
-                }
-            ]
         }); // eo apply
 
         if (!this.loader) {
@@ -249,7 +169,8 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         if (this.treeEditor) {
             // tree 에디트가 끝나고와 성공 완료 직전 이벤트
             this.treeEditor.on({
-                complete:{scope:this, fn:this.onEditComplete}
+                beforecomplete:{scope:this, fn:this.onEditb4Complete}
+                ,complete:{scope:this, fn:this.onEditComplete}
             });
         }
         // install event handlers
@@ -319,27 +240,43 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
 
         }
         e.cancel = cancel;
-
     } // eo function onNodeDragOver
+
+    ,onEditb4Complete : function(editor, newName, oldName) {
+        if (editor.cancellingEdit) {
+            editor.cancellingEdit = false;
+            return;
+        }
+        if (newName === oldName) {
+            editor.cancellingEdit = true;
+            editor.cancelEdit();
+            return false;
+        }
+    }
     ,onEditComplete:function(editor, newName, oldName) {
+        if (newName === oldName) {
+            return false;
+        }
         var node = this.getNodeById(editor.editNode.id);
         var parentId = node.attributes.parentId;
         var options = {
-             url : '/app/springfinder/renameFile'
+            url : '/app/springfinder/renameFile'
             ,scope:this
-            ,callback:this.cmdCallback
+            ,callback:this.renameCallback
             ,node:node
             ,oldName:oldName
             ,params:{
-                 filename : newName
-                ,parentId : parentId
-                ,fileId : node.attributes.id
+                fileName : Ext.util.Format.trim(newName)
+                ,fileId : parseInt(node.attributes.id, 10)
             }
         };
         Ext.Ajax.request(options);
     }
-    , cmdCallback : function(options, success, response){
-        console.log(response);
+    , renameCallback : function(options, success, response) {
+        if (success === true) {
+            var result = Ext.decode(response.responseText);
+            m31.util.notification({title:'봄탐색기',text:result.msg,remove:true});
+        }
     }
 
     //    // new methods

@@ -41,4 +41,8 @@ public class FinderRepository  extends SqlMapClientDaoSupport {
     public Integer getParentNodeId(HashMap<String, Object> conditionMap) {
         return (Integer) getSqlMapClientTemplate().queryForObject("finder.getParentNodeId",conditionMap);
     }
+
+    public void renameFile(FinderFile finderFile) {
+        getSqlMapClientTemplate().update("finder.renameFile",finderFile);
+    }
 }
