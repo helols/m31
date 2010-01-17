@@ -45,4 +45,12 @@ public class FinderService {
 
         return conditionMap;
     }
+
+    public Integer getParentNodeId(String parentNodeName) {
+        HashMap<String,Object> conditionMap = new HashMap<String,Object>();
+        conditionMap.put("link_app_id",parentNodeName.toLowerCase());
+        conditionMap.put("memberId",securityService.getCurrentMemberId());
+
+        return finderRepository.getParentNodeId(conditionMap);
+    }
 }

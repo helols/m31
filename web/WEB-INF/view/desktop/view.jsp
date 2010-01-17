@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/outsider.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/helols.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/arawn.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/xtheme-vistaglass/css/xtheme-vistaglass.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/xtheme-vistablack/css/xtheme-vistablack.css"/>"/>
     <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
     <![endif]-->

@@ -7,11 +7,6 @@
  */
 package springsprout.m31.module.gateway;
 
-import static springsprout.m31.common.M31System.JSON_VIEW;
-import static springsprout.m31.utils.M31Utils.convert;
-
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +17,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import springsprout.m31.domain.enums.OpenApi;
 import springsprout.m31.dto.SpringBookDTO;
-import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
 import springsprout.m31.module.gateway.support.SpringBookSearchParam;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.utils.OpenAPIEditor;
+
+import java.util.HashMap;
+
+import static springsprout.m31.common.M31System.JSON_VIEW;
+import static springsprout.m31.utils.M31Utils.convert;
 
 @Controller
 public class OpenApiGateWay {
@@ -57,7 +56,7 @@ public class OpenApiGateWay {
 
     @RequestMapping("/gateway/springplayer/search")
     public ModelAndView springplayer(@ModelAttribute("cri") SpringPlayerCri cri){
-        log.debug("Criteria : {}",cri);        
+        log.debug("Criteria : {}",cri);
         SpringPlayerDTO dto = applicationService.springPlayer(cri);
 
         log.debug("Response : {}", dto);

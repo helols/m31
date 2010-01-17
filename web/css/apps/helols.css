@@ -26,19 +26,21 @@
 }
 
 #springfinder-panel .file-wrap  {
-    width: 100px;
+    width: 90px;
     height: 100px;
     float: left;
     margin: 5px;
     margin-right: 0;
     padding: 5px;
+    text-align:center;
 }
 #springfinder-panel .x-editable-wrap{
+    margin-top:5px;
     text-align:center;
 }
 
 #springfinder-panel .file  {
-    width: 100px;
+    width: 80px;
     height: 80px;
 }
 

@@ -2,10 +2,15 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     tpl : new Ext.XTemplate(
             '<tpl for=".">',
             '<div class="file-wrap" id="{fileId}">',
-            '<a href="{fileAddition}"><img class="file" src="../../images/apps/springfinder/{iconCls}.png"></a>',
-            '<div class="x-editable-wrap"><span class="x-editable">{shortFileName}</span></div>',
-            '<input type="hidden" class="{fileId}-parentId" value="{parentId}">',
-            '<input type="hidden" class="{fileId}-linkInfo" value="{linkAppId}"> </div>',
+            '<a hidefocus="on" href="{fileAddition}"><img class="file" src="../../images/apps/springfinder/{iconCls}.png"></a>',
+            '<div class="x-editable-wrap">' ,
+            '<tpl if="defaultYn === \'Y\'">' ,
+            '   <span>{shortFileName}</span>' ,
+            '</tpl>',
+            '<tpl if="defaultYn === \'N\'">' ,
+            '   <span class="x-editable">{shortFileName}</span>' ,
+            '</tpl>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
             ),
@@ -16,9 +21,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     emptyText: '',
     layout:'fit',
     autoScroll:true,
+    addDbAction : Ext.emptyFn,
     id:'springfinder-panel' ,
-
-
     plugins: [
         new Ext.DataView.DragSelector({dragSafe:true}),
         new Ext.DataView.LabelEditor({dataIndex: 'fileName'})
@@ -26,18 +30,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
 
     prepareData: function(data) {
         data.shortFileName = Ext.util.Format.ellipsis(data.fileName, 15);
-        data.fileAddition = data.fileAddition === null?'#':data.fileAddition;
+        data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
         return data;
-    },
-
-    listeners: {
-        //        selectionchange: {
-        //            fn: function(dv,nodes){
-        //                var l = nodes.length;
-        //                var s = l != 1 ? 's' : '';
-        //                panel.setTitle('Simple DataView ('+l+' item'+s+' selected)');
-        //            }
-        //        }
     },
 
     initComponent:function() {
@@ -54,91 +48,135 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 proxy: proxy,
                 root: 'fileList',
                 idProperty : 'fileId',
-//                storestat : 'view',
+                //                storestat : 'view',
                 fields: [
                     'fileId', 'fileName',
                     'linkAppId','parentId',
-                    'iconCls','fileAddition'
+                    'iconCls','fileAddition',
+                    'defaultYn'
                 ],
                 listeners: {
-                    'load': {fn:function() {
-                        this.select(0);
-//                        this.storestat = 'view';
-                    }, scope:this, single:true}
-//                    ,'update': {fn:function(store) {
-//                        if(this.storestat === 'move'){
-//                            store.reload();
-//                        }
-//                    }, scope:this, single:true}
+                    'load': {fn:function(store) {
+                        if (store.getCount() > 0) {
+                            this.select(0);
+                        }
+                    }, scope:this}
                 },
                 writer: new Ext.data.JsonWriter({
-                            encode: true,
-                            writeAllFields: true
-                        }),
+                    encode: true,
+                    writeAllFields: true
+                }),
                 batch : true,
                 autoSave : false
             });
         }
-        this.store.load({params:{parentNode:1}});
-        console.log('init');
-        this.addEvents(
-			 'filemove'
-			,'filerename'
-			,'filedelete'
-			,'filecreate'
-		); // eo addEvents
+        this.lastChangeNodeId = this.rootNodeId || 1;
+        this.store.load({params:{parentNode: this.rootNodeId || 1 , parentNodeName:this.rootNodeName || null}});
         M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
+        this.on({
+            filemove:{scope:this, fn:this.onFileMove}
+            ,filerename:{scope:this, fn:this.onFileRename}
+            ,filedelete:{scope:this, fn:this.onFileDelete}
+            ,filecreate:{scope:this, fn:this.onFileCreate}
+            ,dirchange:{scope:this, fn:this.onDirChange}
+            ,dblclick : {fn:this.onDblclick, scope:this}
+
+        });
+        console.log('init');
     },
+
     onRender:function() {
         console.log('onRender');
         M31.app.SpringFinderPanel.superclass.onRender.apply(this, arguments);
         this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:true,
-        ddGroup: 'springfindertreeDD'});
+            ddGroup: 'springfinderpenelDD'});
+        this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD'});
+        //        this.store.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.store, msg:"Loading data..."});
     },
-    onFilemove : function(){
-        console.log(this);
-        console.log('onFilemove');
+    onFileMove : function() {
+        //        this.store.save();
     },
 
-    onFilerename : function(){
+    onFileRename : function() {
 
     },
-    onFiledelete : function(){
+    onFileDelete : function() {
 
     },
-    onFilecreate : function(){
+    onFileCreate : function() {
+
+    },
+    onDirChange : function(nodeId) {
+        if (this.lastChangeNodeId !== nodeId) {
+            this.lastChangeNodeId = nodeId;
+            this.store.load({params:{parentNode:nodeId}});
+        }
+    },
+    onDblClick : function(node, scope, e) {
+        var selNode = this.getSelectedNodes()[0];
+        var data = this.getRecord(selNode).data;
+
+        if (data.iconCls.indexOf('folder') !== -1) {
+            var fildId = data.fileId;
+            if (data.iconCls === 'up-folder') {
+                fildId = data.parentId;
+            }
+            this.onDirChange(fildId);
+            if (this.springfinderTree) {
+                var node = this.springfinderTree.getNodeById(fildId);
+                node.expand();
+                this.springfinderTree.getSelectionModel().select(node);
+            }
+        }
 
     }
 });
 
 /**
- * Create a DragZone instance for our JsonView
+ * springfinder pael drag zone.....
  */
-SpringfinderPanelDragZone = function(view, config){
+SpringfinderPanelDragZone = function(view, config) {
     this.view = view;
     SpringfinderPanelDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
 Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
-    getDragData : function(e){
+
+    // drag가 시작 될수 있는지 체크 할 수 있는 곳..
+    onBeforeDrag : function(data, e) {
+        var nodeData = this.view.getRecords(data.nodes);
+        var defalutYn = [];
+        var fileIds = [];
+        for (var i = 0, len = nodeData.length; i < len; i++) {
+            defalutYn.push(nodeData[i].data.defaultYn);
+            fileIds.push(nodeData[i].data.fileId);
+        }
+        data.isDragble = defalutYn.indexOf('Y') !== -1 ? false : true;
+        data.parentId = nodeData[0].data.parentId;
+        data.fileIds = fileIds;
+        data.isPanel = true;
+    },
+
+    getDragData : function(e) {
         var target = e.getTarget('.file-wrap');
-        if(target){
+        if (target) {
             var view = this.view;
-            if(!view.isSelected(target)){
+            if (!view.isSelected(target)) {
                 view.onClick(e);
             }
             var selNodes = view.getSelectedNodes();
             var dragData = {
                 nodes: selNodes
             };
-            if(selNodes.length == 1){
+            if (selNodes.length == 1) {
                 dragData.ddel = target;
                 dragData.isMulti = false;
-            }else{
+                dragData.orgXy = Ext.fly(dragData.ddel).getXY();
+            } else {
                 var div = document.createElement('div'); // create the multi element drag "ghost"
                 div.className = 'multi-proxy';
-                for(var i = 0, len = selNodes.length; i < len; i++){
+                for (var i = 0, len = selNodes.length; i < len; i++) {
                     div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
-                    if((i+1) % 3 == 0){
+                    if ((i + 1) % 3 == 0) {
                         div.appendChild(document.createElement('br'));
                     }
                 }
@@ -149,7 +187,6 @@ Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
                 dragData.ddel = div;
                 dragData.isMulti = true;
             }
-            dragData.isPanel = true;
             return dragData;
         }
         return false;
@@ -157,13 +194,13 @@ Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
 
     // this method is called by the TreeDropZone after a node drop
     // to get the new tree node (there are also other way, but this is easiest)
-    getTreeNode : function(dd , ddtarget){
-        console.log(dd)
-        console.log(ddtarget)
+    getTreeNode : function(dd, ddtarget) {
+        //        console.log(dd)
+        //        console.log(ddtarget)
         var store = this.view.getStore();
         var treeNodes = [];
         var nodeData = this.view.getRecords(this.dragData.nodes);
-        for(var i = 0, len = nodeData.length; i < len; i++){
+        for (var i = 0, len = nodeData.length; i < len; i++) {
             var data = nodeData[i].data;
             treeNodes.push(new Ext.tree.TreeNode({
                 text: data.fileName,
@@ -174,7 +211,7 @@ Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
                 singleClickExpand : 'true'
             }));
             var rec = store.getAt(i);
-            rec.set('parentId',ddtarget.id);
+            rec.set('parentId', ddtarget.id);
         }
         return treeNodes;
 
@@ -182,20 +219,97 @@ Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
 
     // the default action is to "highlight" after a bad drop
     // but since an image can't be highlighted, let's frame it
-    afterRepair:function(){
-        for(var i = 0, len = this.dragData.nodes.length; i < len; i++){
+    afterRepair:function() {
+        for (var i = 0, len = this.dragData.nodes.length; i < len; i++) {
             Ext.fly(this.dragData.nodes[i]).frame('#8db2e3', 1);
         }
         this.dragging = false;
     },
 
     // override the default repairXY with one offset for the margins and padding
-    getRepairXY : function(e){
-        if(!this.dragData.isMulti){
-            var xy = Ext.Element.fly(this.dragData.ddel).getXY();
-            xy[0]+=3;xy[1]+=3;
+    getRepairXY : function(e) {
+        if (!this.dragData.isMulti) {
+            var xy = this.dragData.orgXy;
+            xy[0] += 3;
+            xy[1] += 3;
             return xy;
         }
         return false;
+    }
+});
+
+/**
+ * springfinder pael drop zone.....
+ */
+SpringfinderPanelDropZone = function(view, config) {
+    this.view = view;
+    SpringfinderPanelDropZone.superclass.constructor.call(this, view.getEl(), config);
+};
+Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
+
+    //        panel에 바로 드랍을 했을 경우 판단하여  this.dropNotAllowed / this.dropAllowed 을 보여줌.
+    onContainerOver : function(dd, e, data) {
+        if (this.isContainerDropble(data)) {
+            return this.dropAllowed;
+        } else {
+            return this.dropNotAllowed;
+        }
+    },
+    //      드랍이 가능한지 체크를 해서 true 와 false를 리던해줌.
+    onContainerDrop : function(dd, e, data) {
+        return this.isContainerDropble(data);
+    },
+    //      drop 될 target을 넘겨준다.. 대상을 돌려주는것... 배경으로 옮길시에는... onContainerDrop 이걸로..
+    getTargetFromEvent: function(e) {
+        return e.getTarget('div.file-wrap');
+    },
+
+    //      드랍이 가능한곳에 올라왓을때 보여주는 ... 별필요는 없어보임..ㅋ
+    onNodeEnter : function(target, dd, e, data) {
+        console.log('onNodeEnter')
+    },
+
+    //      On exit from a target node, unhighlight that node.
+    onNodeOut : function(target, dd, e, data) {
+    },
+
+    //      드랍가능 구역에 마우스 오버시에 보여질.. 거시기..
+    onNodeOver : function(target, dd, e, data) {
+        if (this.isNodeDropble(target, data)) {
+            return this.dropAllowed;
+        } else {
+            return this.dropNotAllowed;
+        }
+    },
+
+    //      최종적으로 드랍이 완료된 후 ... 해주는곳...
+    onNodeDrop : function(target, dd, e, data) {
+
+        return true;
+    },
+    //data.isDragble ||
+    isContainerDropble : function(data) {
+        if (data.isTree && data.isPanel) {
+            false;
+        }
+        else {
+            console.dir(data);
+            return true;
+        }
+    },
+
+    isNodeDropble : function(target, data) {
+        if (data.isTree) {
+            false;
+        }
+        else {
+            if (data.isPanel && data.isDragble && data.fileIds.indexOf(parseInt(target.id, 10)) === -1) {
+                return true;
+            } else if (data.isApp) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 });

@@ -115,7 +115,16 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
         }
     },
     createWindow : function() {
-        var _self = this;
+        var springfinderPanel =  new M31.app.SpringFinderPanel( {
+            height : 600,
+            region:'center',
+            border : false,
+            rootNodeId : 1
+        });
+
+        var springfinderTree =  new M31.app.SpringFinderTree({finderpanel:springfinderPanel});
+        springfinderPanel.springfinderTree = springfinderTree;
+        
         var opt = {
             layout: 'border',
             width:800,
@@ -124,13 +133,8 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             animCollapse:false,
             constrainHeader:true,
             items :[
-                new M31.app.SpringFinderTree(),
-                new M31.app.SpringFinderPanel(
-                {
-                    height : 600,
-                    region:'center',
-                    border : false
-                })
+                springfinderTree,
+                springfinderPanel
             ]
         };
         return opt;

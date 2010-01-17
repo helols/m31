@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,12 +42,15 @@ public class FinderController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/app/springfinder/getFiles", method= RequestMethod.POST)
-    public ModelAndView getFiles(Integer parentNode) {
-        if (parentNode == null || parentNode == 0) {
+    public ModelAndView getFiles(Integer parentNode, String parentNodeName) {
+        if (parentNode == null || parentNode == 0 && parentNodeName == null) {
             List emptyList = new ArrayList();
             emptyList.add(new HashMap());
             return new ModelAndView(JSON_VIEW).addObject("fileList", emptyList);
+        }else if(parentNodeName != null && StringUtils.hasText(parentNodeName)){
+            parentNode = finderService.getParentNodeId(parentNodeName);
         }
+
         return new ModelAndView(JSON_VIEW).addObject("fileList", finderService.getFiles(parentNode));
     }
 

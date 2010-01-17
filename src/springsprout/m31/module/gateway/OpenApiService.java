@@ -7,31 +7,27 @@
  */
 package springsprout.m31.module.gateway;
 
-import static springsprout.m31.domain.enums.OpenApi.DAUM;
-import static springsprout.m31.domain.enums.OpenApi.FLICKR;
-import static springsprout.m31.domain.enums.OpenApi.GOOGLE;
-import static springsprout.m31.domain.enums.OpenApi.NAVER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.domain.MovieVO;
+import springsprout.m31.domain.enums.OpenApi;
+import springsprout.m31.dto.SpringBookDTO;
+import springsprout.m31.dto.SpringPlayerDTO;
+import springsprout.m31.dto.SpringseeDTO;
+import springsprout.m31.module.gateway.support.*;
 
+import javax.annotation.PostConstruct;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import springsprout.m31.common.OpenApiReadException;
-import springsprout.m31.domain.MovieVO;
-import springsprout.m31.domain.enums.OpenApi;
-import springsprout.m31.dto.SpringBookDTO;
-import springsprout.m31.module.gateway.support.SpringPlayerCri;
-import springsprout.m31.dto.SpringPlayerDTO;
-import springsprout.m31.dto.SpringseeDTO;
-import springsprout.m31.module.gateway.support.*;
+import static springsprout.m31.domain.enums.OpenApi.*;
 
 @Service
 public class OpenApiService {
@@ -59,6 +55,11 @@ public class OpenApiService {
     }
 
     public HashMap<String,Object> springsee(OpenApi s_type, String query, Integer pageNo) {
+        try {
+            query = URLEncoder.encode(query, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            new OpenApiReadException();
+        }
         ArrayList<SpringseeDTO> r_list = new ArrayList<SpringseeDTO>();
         Integer totalCount = 0;
         Integer perPage = 60;

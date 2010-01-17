@@ -41,7 +41,7 @@
             'Y' as DEFAULT_YN,
             'up-folder' as ICONCLS,
             'springfinder' as LINK_APP_ID,
-            FILE_ADDITION_INFO
+            '' as FILE_ADDITION_INFO
         FROM dual
         union all
         </isNotEqual>
@@ -57,4 +57,15 @@
         WHERE MEMBER_ID = #memberId#
         AND PARENT_ID = #parentId#
     </select>
+
+    <select id="getParentNodeId" resultClass="int" parameterClass="hashMap">
+        SELECT
+            id
+        FROM SPRING_FINDER sf
+        WHERE
+             SF.MEMBER_ID = #memberId#
+        AND SF.DEFAULT_YN = 'Y'
+        AND link_app_id = #link_app_id#
+    </select>
+
 </sqlMap>
