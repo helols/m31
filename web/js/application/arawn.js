@@ -33,6 +33,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	        	app.loadMask.hide();
 	        	
 	        	app.runner.stopAll();
+	        	
+	        	// 검색필드에 포커스
+	        	Ext.getCmp('springbook-search-text').focus();
     		},
     	    interval: 1000,
     	    args: [this]
@@ -54,9 +57,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     createWindow: function(){
     	return {
     		id: 'springbook-win',
-    		width:500,
+    		width:450,
 	        height:300,
-	        minWidth: 400,
+	        minWidth: 450,
             minHeight: 300,
 	        layout:'fit',
 	        constrainHeader:true,
@@ -99,11 +102,15 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     {header: '책 정보 조회 결과입니다.', dataIndex: 'title', align:'center', renderer: function(value, p, record){
                     	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
                     	body += '<tr>';
-                    	body += '<td width="64"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
+                    	body += '<td width="64" rowspan="2"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
                     	body += '<td align="left">';
                     	body += '<a href="' + record.data.link + '" target="blank"><b>' + record.data.title + '</b></a><br />';
-                    	body += record.data.author + ' 저 | ' + record.data.publisher + ' | ' + record.data.pubdate + '<br />';
-                    	body += '<p>'+record.data.description+'</p>';
+                    	body += record.data.author + ' 저 | ' + record.data.publisher + ' | ' + record.data.pubdate;
+                    	body += '</td>';
+                    	body += '</tr>';
+                    	body += '<tr>';
+                    	body += '<td align="left" style="padding: 2 2 2 10;">';
+                    	body += record.data.description;
                     	body += '</td>';
                     	body += '</tr>';
                     	body += '</table>';
@@ -121,6 +128,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             enableColumnResize: false,
             columnLines: true,
             loadMask: {msg:'책을 찾는 중 입니다.'},
+            ddGroup: 'firstGridDDGroup',
+            enableDragDrop: true,
+            stripeRows: true,
 			tbar: [{
 					xtype: 'tbtext',
 					text: '',
@@ -291,58 +301,56 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	initializing: function(app){
 	    	Ext.Ajax.request({
 				url: '/app/me2day/initializing',
-				success: this.initializingSuccess.createDelegate(app),
-				failure: this.initializingFailure.createDelegate(app)
+				success: function(response, opts){
+			    	try { 
+			    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
+			    		
+			    		var result = Ext.decode(response.responseText);
+			    		if(result.state){
+			    			// 사용자 정보
+			    			this.userInfo = {
+			    				id: result.userInfo.user_id
+			    			};
+			    			console.log(result.userInfo);
+			    			// 사용자 환경설정
+			    			this.userConfig = {
+			    				myPostView: result.userInfo.myPostView,
+			    				friendPostView: result.userInfo.friendPostView,
+			    				commentView: result.userInfo.commentView
+			    			};
+			    			console.log(this.userConfig);
+			    			
+			    	        this.me2DayModule.createIconStore().loadData(result.person.postIcons, false);
+			    		}
+			    		else{
+			    			// 인증 요청 url
+			    			this.loginModule.authUrl = result.authenticationUrl.url + "&akey=" + this.springme2dayappkey; 
+			    			this.loginModule.authToken = result.authenticationUrl.token;    			
+			    		}
+			    		
+			    		// 로그인 상태
+			    		this.loginModule.loginState = result.state;
+			    	}
+					catch(e){
+						console.log('초기화 중 오류가 발생했습니다. (' + e + ')');
+						
+						this.loadMask.hide();
+						this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
+				    	this.loadMask.show();
+					}
+					
+					console.log('loginModule.loginState : ' + this.loginModule.loginState);
+		    		console.log('loginModule.authUrl : ' + this.loginModule.authUrl);
+		    		console.log('loginModule.authToken : ' + this.loginModule.authToken);
+		    	}.createDelegate(app),
+				failure: function(response, opts){
+		    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
+		    		this.loginModule.loginState = false;
+		    		this.loadMask.hide();
+					this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
+			    	this.loadMask.show();
+		    	}.createDelegate(app)
 			});
-    	},
-    	/* loginCheck 함수에서 사용하는 콜백 : ajax 성공 */
-    	initializingSuccess: function(response, opts){
-	    	try { 
-	    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
-	    		
-	    		var result = Ext.decode(response.responseText);
-	
-	    		if(result.state){
-	    			// 사용자 정보
-	    			this.userInfo = {
-	    				id: result.userInfo.user_id
-	    			};
-	    			console.log(result.userInfo);
-	    			// 사용자 환경설정
-	    			this.userConfig = {
-	    				myPostView: result.userInfo.myPostView,
-	    				friendPostView: result.userInfo.friendPostView,
-	    				commentView: result.userInfo.commentView
-	    			};
-	    			console.log(this.userConfig);
-	    			
-	    	        this.me2DayModule.createIconStore().loadData(result.person.postIcons, false);
-	    		}
-	    		else{
-	    			// 인증 요청 url
-	    			this.loginModule.authUrl = result.authenticationUrl.url + "&akey=" + this.springme2dayappkey; 
-	    			this.loginModule.authToken = result.authenticationUrl.token;    			
-	    		}
-	    		
-	    		// 로그인 상태
-	    		this.loginModule.loginState = result.state;
-	    	}
-			catch(e){
-				console.log('초기화 중 오류가 발생했습니다. (' + e + ')');
-				
-				this.loadMask.hide();
-				this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다.\n봄미투데이를 다시 시작해주세요."});
-		    	this.loadMask.show();
-			}
-			
-			console.log('loginModule.loginState : ' + this.loginModule.loginState);
-    		console.log('loginModule.authUrl : ' + this.loginModule.authUrl);
-    		console.log('loginModule.authToken : ' + this.loginModule.authToken);
-    	},
-    	/* initializing 함수에서 사용하는 콜백 : ajax 실패 */
-    	initializingFailure: function(response, opts){
-    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
-    		this.loginModule.loginState = false;
     	},
     	destroy: function(){
     		this.loginState = null;
@@ -374,14 +382,16 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	        }]
             });
     		
+    		app.win.maximize();
     		app.win.add(this.loginPanel);
     		app.win.doLayout();
     		
     		return this.loginPanel;
     	},
     	me2DayAuthenticationComplete: function(auth){
+    		var app = getApp('springme2day');
+    		app.win.toggleMaximize();
     		try {
-    			var app = getApp('springme2day');
     			if(auth.result){
         			m31.util.notification({title:'봄미투데이',text:'봄미투데이에 인증을 수락하셨습니다.'});
         			
@@ -418,7 +428,11 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    	}
 			catch(e){
 				console.log('미투데이 인증결과를 반영하는 중 오류가 발생했습니다. {' + e + '}');
-			}	    		
+				
+				app.loadMask.hide();
+				app.loadMask = new Ext.LoadMask(this.win.body, {msg:"로그인 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
+				app.loadMask.show();
+			}  		
     	}   	
     },
     me2DayModule: {
@@ -682,11 +696,11 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		        			}
 		        		});
 		        		
-		        		// 앵커 태그에 처리 함수달기!
+		        		// 앵커 태그에 클릭시 새창 띄우기!
 		        		els = this.me2DayModule.postGrid.getEl().select('a', true);
 		        		Ext.each(els.elements, function(el){
 		        			el.addListener('click', function(event, sender){
-		        				// TODO 구현하자!
+		        				window.open(sender.href);
 		        				event.preventDefault();
 		        			});
 		        		}, this);
