@@ -93,7 +93,6 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:true,
             ddGroup: 'springfinderpenelDD'});
         this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD'});
-        //        this.store.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.store, msg:"Loading data..."});
     },
     onFileMove : function() {
         //        this.store.save();
@@ -296,10 +295,13 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
     isContainerDropble : function(data) {
         if (data.isTree && data.isPanel) {
             false;
+        } else if (data.isApp) {
+            console.dir(data);
+            return true;
         }
         else {
             console.dir(data);
-            return true;
+            return false;
         }
     },
 
