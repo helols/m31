@@ -58,9 +58,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	return {
     		id: 'springbook-win',
     		width:450,
-	        height:300,
+	        height:500,
 	        minWidth: 450,
-            minHeight: 300,
+            minHeight: 500,
 	        layout:'fit',
 	        constrainHeader:true,
 	        closeAction: 'close',
@@ -188,6 +188,23 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
             		grid.getView().dragZone = new Ext.grid.GridDragZone(this, {
             			ddGroup: 'springfinderpenelDD',
+            			onBeforeDrag: function(data, e) {
+            				var items = new Array();
+            				Ext.each(data.selections, function(item){
+            					console.log(Ext.encode(item.data));
+            					
+            					items.push({
+            						'fileName': item.data.title,
+            						'fileAddition': Ext.encode(item.data)	            						
+            					});
+            				});
+            				
+            				data.linkAppId = 'springbook';
+            				data.isApp = true;
+            				data.items = items;
+            				
+            				console.dir(data);
+            			},
             			getDragData: function(e){
 	            			var t = Ext.lib.Event.getTarget(e);
 	            			if(t.tagName == 'IMG'){
@@ -197,22 +214,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	            			if (rowIndex !== false) {
 	            				var sm = this.grid.selModel;
 	            				if (!sm.isSelected(rowIndex) || e.hasModifier()) {
-	            					sm.handleMouseDown(this.grid, rowIndex, e);
-	            				}
+            					    sm.handleMouseDown(this.grid, rowIndex, e);
+            					}
 	            				
-	            				var datas = new Array();
-	            				Ext.each(sm.getSelections(), function(item){
-	            					datas.push({
-	            						'fileName':item.data.title,
-	            						'linkAppId':'springbook',
-	            						'fileAddition':'test',
-	            						'isApp': true
-	            					});
-	            				});
-	            				
-	            				// return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
-	            				
-	            				return datas;
+	            				return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
 	            			}
 	            			return false;
 	            		}
@@ -223,7 +228,8 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	
     	this.bookFinderPanel = new Ext.Panel({
     		region : 'south',
-            height : 140,
+    		title: '책 보관소',
+            height : 110,
             collapsible: true,
             split: true,
             border: false,
