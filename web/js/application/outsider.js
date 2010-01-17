@@ -64,6 +64,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         
         return new Ext.DataView({
             tpl: this.thumbTemplate,
+            id: 'springsee-dataview',
             singleSelect: true,
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
@@ -349,10 +350,10 @@ ImageDragZone = function(view, config){
     this.viewClone = view;
     this.explorerDDTarget = new Ext.dd.DropTarget('springsee-explorer-panel', {ddGroup: 'explorerDD'});//DropZone
     this.explorerDDTarget.notifyDrop= function(dd, e, data){
-    	console.log("notifyDrop");
-    	console.log(dd);
-    	console.log(e);
-    	console.log(data);
+//    	console.log("notifyDrop");
+//    	console.log(dd);
+//    	console.log(e);
+//    	console.log(data);
         return true;
     };
     
@@ -362,6 +363,22 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // We don't want to register our image elements, so let's 
     // override the default registry lookup to fetch the image 
     // from the event instead
+	onBeforeDrag : function(data, e) {
+		var nodeData = this.viewClone.getRecords(data.nodes);
+		var items = new Array();
+		Ext.each(nodeData, function(item){
+			items.push({
+				'fileName': item.data.title,
+				'fileAddition': item.data.image	            						
+			});
+		});
+		
+		data.isApp = true;
+		data.linkAppId = 'springsee';
+		data.items = items;
+		console.log("onBeforeDrag");
+		console.dir(data);
+	},
     getDragData : function(e){
         var target = e.getTarget('.thumb-wrap');
         if(target){
@@ -373,10 +390,11 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
             var dragData = {
                 nodes: selNodes
             };
+            
             if(selNodes.length == 1){
                 dragData.ddel = target;
                 dragData.single = true;
-            }else{
+            } else {
                 var div = document.createElement('div'); // create the multi element drag "ghost"
                 div.className = 'multi-proxy';
                 for(var i = 0, len = selNodes.length; i < len; i++){
@@ -392,6 +410,7 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
                 dragData.ddel = div;
                 dragData.multi = true;
             }
+            
             return dragData;
         }
         return false;
@@ -401,7 +420,7 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
     // to get the new tree node (there are also other way, but this is easiest)
     getTreeNode : function(){
         var treeNodes = [];
-        var nodeData = this.viewviewClone.getRecords(this.dragData.nodes);
+        var nodeData = this.viewClone.getRecords(this.dragData.nodes);
         for(var i = 0, len = nodeData.length; i < len; i++){
             var data = nodeData[i].data;
             treeNodes.push(new Ext.tree.TreeNode({
