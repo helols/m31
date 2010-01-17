@@ -549,6 +549,9 @@ movingbox = function() {
                             , time:2500
                         });
                     }
+                },
+                failure: function(respones,opts){
+                    console.log(respones);
                 }
             });
         }
