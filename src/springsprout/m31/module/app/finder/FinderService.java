@@ -55,6 +55,12 @@ public class FinderService {
     }
 
     public void renameFile(FinderFile finderFile) {
-        finderRepository.renameFile(finderFile);
+        finderRepository.updateFile(finderFile);
+    }
+
+    public void updateFile(List<FinderFile> finderFileList) {
+        for(FinderFile finderFile : finderFileList){
+            finderRepository.updateFile(finderFile);
+        }
     }
 }

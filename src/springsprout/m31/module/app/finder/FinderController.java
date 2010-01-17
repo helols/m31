@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
+import static springsprout.m31.utils.JSONHelper.getJsonTOList;
 
 @Controller
 @RequestMapping("/app/springfinder/**")
@@ -63,6 +64,8 @@ public class FinderController {
     @RequestMapping(value = "/app/springfinder/updateFile", method= RequestMethod.POST)
     public ModelAndView updateFile(String fileList){
         log.debug("fileList"+fileList);
+        List<FinderFile> finderFileList = getJsonTOList(fileList,FinderFile.class);
+        finderService.updateFile(finderFileList);
         return new ModelAndView(JSON_VIEW).addObject("fileList", "").addObject("success",true);
     }
 

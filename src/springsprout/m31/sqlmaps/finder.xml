@@ -68,8 +68,7 @@
         AND link_app_id = #link_app_id#
     </select>
 
-    <update id="renameFile" parameterClass="springsprout.m31.domain.FinderFile">
-        UPDATE SPRING_FINDER SET file_name =#fileName# WHERE id =#fileId#
+    <update id="updateFile"  parameterClass="springsprout.m31.domain.FinderFile">
+        UPDATE SPRING_FINDER SET file_name =#fileName# , PARENT_ID = #parentId# WHERE id =#fileId#
     </update>
-
 </sqlMap>

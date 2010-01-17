@@ -266,7 +266,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         }
     }
     ,onEditComplete:function(editor, newName, oldName) {
-        if (newName === oldName) {
+        if (newName === oldName ||  Ext.util.Format.trim(newName).length === 0) {
             return false;     
         }
         var node = this.getNodeById(editor.editNode.id);
@@ -278,8 +278,9 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
             ,node:node
             ,oldName:oldName
             ,params:{
-                fileName : Ext.util.Format.trim(newName)
+                 fileName : Ext.util.Format.trim(newName)
                 ,fileId : parseInt(node.attributes.id, 10)
+                ,parentId : parseInt(parentId, 10)
             }
         };
         Ext.Ajax.request(options);
@@ -288,6 +289,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         if (success === true) {
             var result = Ext.decode(response.responseText);
             m31.util.notification({title:'봄탐색기',text:result.msg,remove:true});
+            this.finderpanel.changePath();
         }
     }
 

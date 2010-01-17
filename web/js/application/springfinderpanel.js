@@ -3,12 +3,12 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '<tpl for=".">',
             '<div class="file-wrap" id="{fileId}">',
             '<a hidefocus="on" href="{fileAddition}"><img class="file" src="../../images/apps/springfinder/{iconCls}.png"></a>',
-            '<div class="x-editable-wrap">' ,
-            '<tpl if="defaultYn === \'Y\'">' ,
-            '   <div>{shortFileName}</div>' ,
+            '<div class="x-editable-wrap">',
+            '<tpl if="defaultYn === \'Y\'">',
+            '   <div>{shortFileName}</div>',
             '</tpl>',
-            '<tpl if="defaultYn === \'N\'">' ,
-            '   <span class="x-editable" ext:qwidth="50" ext:qtip="{fileName}">{shortFileName}</span>' ,
+            '<tpl if="defaultYn === \'N\'">',
+            '   <span class="x-editable" ext:qwidth="50" ext:qtip="{fileName}">{shortFileName}</span>',
             '</tpl>',
             '</div>',
             '</div>',
@@ -23,20 +23,23 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     layout:'fit',
     autoScroll:true,
     addDbAction : Ext.emptyFn,
-    id:'springfinder-panel' , 
+    id:'springfinder-panel' ,
+    storeAction : 'get',
+
     plugins: [
         new Ext.DataView.DragSelector({dragSafe:true}),
         new Ext.DataView.LabelEditor({dataIndex: 'fileName'})
     ],
 
     prepareData: function(data) {
-        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel'?15:5);
+        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel' ? 8 : 5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
         return data;
     },
 
     initComponent:function() {
-        this.id += this.rootNodeName?'-'+this.rootNodeName:'';
+        this.id += this.rootNodeName ? '-' + this.rootNodeName : '';
+        this.growSize = this.id === 'springfinder-panel' ? 90 : 55;
         var proxy = new Ext.data.HttpProxy({
             api: {
                 read : '/app/springfinder/getFiles',
@@ -60,16 +63,17 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'load': {fn:function(store) {
                         if (store.getCount() > 0) {
                             this.select(0);
-                            if(this.springfinderTree){
-                                var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
-                                this.ownerCt.setTitle(this.springfinderTree.getPath(node));
+                            if (this.springfinderTree) {
+                                this.changePath();
                             }
                         }
                     }, scope:this}
+                    ,'write':{fn:this.onWrite,scope:this}
                 },
                 writer: new Ext.data.JsonWriter({
                     encode: true,
-                    writeAllFields: true
+                    writeAllFields: true,
+                    listful : true
                 }),
                 batch : true,
                 autoSave : false
@@ -102,7 +106,9 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     },
 
     onFileRename : function() {
-        
+        this.storeAction = 'rename';
+        this.store.save();
+
     },
     onFileDelete : function() {
 
@@ -121,21 +127,34 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         var data = this.getRecord(selNode).data;
 
         if (data.iconCls.indexOf('folder') !== -1) {
-            var fildId = data.fileId;
+            var fileId = data.fileId;
             if (data.iconCls === 'up-folder') {
-                fildId = data.parentId;
+                fileId = data.parentId;
             }
 
             if (this.springfinderTree) {
-                var node = this.springfinderTree.getNodeById(fildId);
+                var node = this.springfinderTree.getNodeById(fileId);
                 node.expand();
                 this.springfinderTree.getSelectionModel().select(node);
-                this.onDirChange(fildId);
-            }else{
-                this.onDirChange(fildId);
+                this.onDirChange(fileId);
+            } else {
+                this.onDirChange(fileId);
             }
         }
 
+    },
+    changePath : function() {
+        var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
+        this.ownerCt.setTitle(this.springfinderTree.getPath(node));
+    },
+    onWrite :function(store, action, result, res, rec) {
+        if (this.springfinderTree && this.storeAction === 'rename') {
+            var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
+            if (node) {
+                node.reload();
+            }
+        }
+        store.commitChanges();
     }
 });
 

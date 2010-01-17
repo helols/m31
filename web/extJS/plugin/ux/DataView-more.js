@@ -7,7 +7,7 @@
 /**
  * @class Ext.DataView.LabelEditor
  * @extends Ext.Editor
- * 
+ *
  */
 Ext.DataView.LabelEditor = Ext.extend(Ext.Editor, {
     alignment: "bl-bl",
@@ -17,26 +17,25 @@ Ext.DataView.LabelEditor = Ext.extend(Ext.Editor, {
     completeOnEnter: true,
     cancelOnEsc: true,
     labelSelector: 'span.x-editable',
-    
-    constructor: function(cfg, field){
+
+    constructor: function(cfg, field) {
         Ext.DataView.LabelEditor.superclass.constructor.call(this,
-            field || new Ext.form.TextField({
-                allowBlank: false,
-                growMin:90,
-                growMax:240,
-                grow:true,
-                selectOnFocus:true
-            }), cfg
-        );
+                field || new Ext.form.TextField({
+                    allowBlank: false,
+                    grow:false,
+                    selectOnFocus:true
+                }), cfg
+                );
     },
-    
-    init : function(view){
+
+    init : function(view) {
         this.view = view;
         view.on('render', this.initEditor, this);
         this.on('complete', this.onSave, this);
+        this.field.setWidth(view.growSize);
     },
 
-    initEditor : function(){
+    initEditor : function() {
         this.view.on({
             scope: this,
             containerclick: this.doBlur,
@@ -45,70 +44,76 @@ Ext.DataView.LabelEditor = Ext.extend(Ext.Editor, {
         this.view.getEl().on('mousedown', this.onMouseDown, this, {delegate: this.labelSelector});
     },
 
-    realign : function(autoSize){
-        if(autoSize === true){
+    realign : function(autoSize) {
+        if (autoSize === true) {
             this.doAutoSize();
         }
         this.el.alignTo(this.boundEl.parent('div.x-editable-wrap'), this.alignment, this.offsets);
     },
 
-    doBlur: function(){
-        if(this.editing){
+    doBlur: function() {
+        if (this.editing) {
             this.field.blur();
         }
     },
 
-    onMouseDown : function(e, target){
-        if(!e.ctrlKey && !e.shiftKey){
+    onMouseDown : function(e, target) {
+        if (!e.ctrlKey && !e.shiftKey) {
             var item = this.view.findItemFromChild(target);
             e.stopEvent();
             var record = this.view.store.getAt(this.view.indexOf(item));
             this.startEdit(target, record.data[this.dataIndex]);
             this.activeRecord = record;
-        }else{
+        } else {
             e.preventDefault();
         }
     },
 
-    onSave : function(ed, value){
-        this.activeRecord.set(this.dataIndex, value);
+    onSave : function(ed, newName, oldName) {
+        if (newName === oldName) {
+            return false;
+        }else if(Ext.util.Format.trim(newName).length === 0){
+            return false;
+        }
+        this.activeRecord.set(this.dataIndex, newName);
+        this.view.onFileRename();
     }
 });
 
 
-Ext.DataView.DragSelector = function(cfg){
+Ext.DataView.DragSelector = function(cfg) {
     cfg = cfg || {};
     var view, proxy, tracker;
-    var rs, bodyRegion, dragRegion = new Ext.lib.Region(0,0,0,0);
+    var rs, bodyRegion, dragRegion = new Ext.lib.Region(0, 0, 0, 0);
     var dragSafe = cfg.dragSafe === true;
 
-    this.init = function(dataView){
+    this.init = function(dataView) {
         view = dataView;
         view.on('render', onRender);
     };
 
-    function fillRegions(){
+    function fillRegions() {
         rs = [];
-        view.all.each(function(el){
+        view.all.each(function(el) {
             rs[rs.length] = el.getRegion();
         });
         bodyRegion = view.el.getRegion();
     }
 
-    function cancelClick(){
+    function cancelClick() {
         return false;
     }
 
-    function onBeforeStart(e){
+    function onBeforeStart(e) {
         return !dragSafe || e.target == view.el.dom;
     }
 
-    function onStart(e){
+    function onStart(e) {
         view.on('containerclick', cancelClick, view, {single:true});
-        if(!proxy){
+        if (!proxy) {
             proxy = view.el.createChild({cls:'x-view-selector'});
-        }else{
-            if(proxy.dom.parentNode !== view.el.dom){
+        } else {
+            if (proxy.dom.parentNode !== view.el.dom) {
                 view.el.dom.appendChild(proxy.dom);
             }
             proxy.setDisplayed('block');
@@ -117,7 +122,7 @@ Ext.DataView.DragSelector = function(cfg){
         view.clearSelections();
     }
 
-    function onDrag(e){
+    function onDrag(e) {
         var startXY = tracker.startXY;
         var xy = tracker.getXY();
 
@@ -128,34 +133,34 @@ Ext.DataView.DragSelector = function(cfg){
 
         dragRegion.left = x;
         dragRegion.top = y;
-        dragRegion.right = x+w;
-        dragRegion.bottom = y+h;
+        dragRegion.right = x + w;
+        dragRegion.bottom = y + h;
 
         dragRegion.constrainTo(bodyRegion);
         proxy.setRegion(dragRegion);
 
-        for(var i = 0, len = rs.length; i < len; i++){
+        for (var i = 0, len = rs.length; i < len; i++) {
             var r = rs[i], sel = dragRegion.intersect(r);
-            if(sel && !r.selected){
+            if (sel && !r.selected) {
                 r.selected = true;
                 view.select(i, true);
-            }else if(!sel && r.selected){
+            } else if (!sel && r.selected) {
                 r.selected = false;
                 view.deselect(i);
             }
         }
     }
 
-    function onEnd(e){
+    function onEnd(e) {
         if (!Ext.isIE) {
-            view.un('containerclick', cancelClick, view);    
-        }        
-        if(proxy){
+            view.un('containerclick', cancelClick, view);
+        }
+        if (proxy) {
             proxy.setDisplayed(false);
         }
     }
 
-    function onRender(view){
+    function onRender(view) {
         tracker = new Ext.dd.DragTracker({
             onBeforeStart: onBeforeStart,
             onStart: onStart,
