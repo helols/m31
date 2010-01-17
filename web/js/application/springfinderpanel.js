@@ -11,6 +11,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '   <span class="x-editable">{shortFileName}</span>' ,
             '</tpl>',
             '</div>',
+            '</div>',
             '</tpl>',
             '<div class="x-clear"></div>'
             ),
@@ -70,7 +71,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 autoSave : false
             });
         }
-        this.lastChangeNodeId = this.rootNodeId || 0;
+        this.lastChangeNodeId = this.rootNodeId || 1;
         this.store.load({params:{parentNode: this.rootNodeId || 1 , parentNodeName:this.rootNodeName || null}});
         M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
         this.on({
