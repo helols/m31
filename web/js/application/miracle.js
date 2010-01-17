@@ -181,7 +181,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
         var config;
         config = {
-            id : 'springplayer',
+            //id : 'springplayer',
             title : 'Spring Player',
             width: 640,
             height: 480,
