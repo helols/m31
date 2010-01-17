@@ -113,6 +113,7 @@ public class SpringMe2DayController {
 			
 			// Guest User 가 아니면 인증정보를 저장해둔다.
 			if(!securityService.isGuest()){
+				userInfo.setMember_id(securityService.getCurrentMemberId());
 				if(securityService.getPersistentMemberMe2DayUserInfo() == null){
 					me2DayService.addAuthenticationInfo(userInfo);
 				}
