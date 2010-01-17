@@ -111,7 +111,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     createWindow : function () {
         var otp = {
             layout: 'border',
-            width: 640,
+            width: 660,
             height: 480,
             minWidth: 640,
             minHeight: 480,
@@ -205,14 +205,18 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     xtype: 'panel',
                     collapsedTitle: '탐색기',
                     id: 'springsee-explorer-panel',
-                    autoScroll: true,
                     collapsible: true,
-                    collapsed:true,
+                    collapsed:false,
                     split: true,
                     margins: '0 0 0 0',
                     cmargins: '2 2 2 2',
-                    height: 100,
-                    html: "Drag Images to here..."
+                    height: 140,
+                    items: new M31.app.SpringFinderPanel( {
+                        height : 140,
+                        region:'center',
+                        border : false,
+                        rootNodeName: 'springsee'
+                    })
                 }
             ]
         };
@@ -345,10 +349,10 @@ ImageDragZone = function(view, config){
     this.viewClone = view;
     this.explorerDDTarget = new Ext.dd.DropTarget('springsee-explorer-panel', {ddGroup: 'explorerDD'});//DropZone
     this.explorerDDTarget.notifyDrop= function(dd, e, data){
-//    	console.log("notifyDrop");
-//    	console.log(dd);
-//    	console.log(e);
-//    	console.log(data);
+    	console.log("notifyDrop");
+    	console.log(dd);
+    	console.log(e);
+    	console.log(data);
         return true;
     };
     
