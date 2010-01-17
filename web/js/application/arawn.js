@@ -90,8 +90,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             ]
         });	
         
-    	this.bookPanel = new Ext.grid.GridPanel({
+    	this.bookListPanel = new Ext.grid.GridPanel({
         	id: 'springbook-view',
+        	region: 'center',
         	store: this.bookStore,
             cm: new Ext.grid.ColumnModel({
                 defaults: {
@@ -185,8 +186,62 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 			listeners: {
             	render: function(grid){
             		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
+            		grid.getView().dragZone = new Ext.grid.GridDragZone(this, {
+            			ddGroup: 'springfinderpenelDD',
+            			getDragData: function(e){
+	            			var t = Ext.lib.Event.getTarget(e);
+	            			if(t.tagName == 'IMG'){
+	            				t = t.parentNode;
+	            			}
+	            			var rowIndex = this.view.findRowIndex(t);
+	            			if (rowIndex !== false) {
+	            				var sm = this.grid.selModel;
+	            				if (!sm.isSelected(rowIndex) || e.hasModifier()) {
+	            					sm.handleMouseDown(this.grid, rowIndex, e);
+	            				}
+	            				
+	            				var datas = new Array();
+	            				Ext.each(sm.getSelections(), function(item){
+	            					datas.push({
+	            						'fileName':item.data.title,
+	            						'linkAppId':'springbook',
+	            						'fileAddition':'test',
+	            						'isApp': true
+	            					});
+	            				});
+	            				
+	            				// return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
+	            				
+	            				return datas;
+	            			}
+	            			return false;
+	            		}
+            		}); /// end griddragzone//
             	}
             }
+        });
+    	
+    	this.bookFinderPanel = new Ext.Panel({
+    		region : 'south',
+            height : 140,
+            collapsible: true,
+            split: true,
+            border: false,
+            layout:'fit',
+            items:[new M31.app.SpringFinderPanel({
+        		rootNodeName: 'springbook'
+        	})]
+    	});
+    	
+    	// 봄북 패널
+    	this.bookPanel = new Ext.Container({
+        	id: 'springbook-bookPanel',
+        	layout: 'border',
+	        border: false,
+	        items:[
+                this.bookListPanel,
+                this.bookFinderPanel
+            ]
         });
 
     	// 윈도우에 패널을 추가하고 창을 다시 그린다.
