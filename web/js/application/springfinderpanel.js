@@ -311,6 +311,7 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
             if (data.isPanel && data.isDragble && data.fileIds.indexOf(parseInt(target.id, 10)) === -1) {
                 return true;
             } else if (data.isApp) {
+                console.dir(data);
                 return true;
             } else {
                 return false;
