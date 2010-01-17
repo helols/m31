@@ -354,10 +354,10 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
             proxy : new Ext.data.HttpProxy({
                 api: {
-                    read    : 'app/timelog/list',
-                    create  : 'app/timelog/add',
-                    update  : 'app/timelog/update',
-                    destroy : 'app/timelog/delete'
+                    read    : '/app/timelog/list',
+                    create  : '/app/timelog/add',
+                    update  : '/app/timelog/update',
+                    destroy : '/app/timelog/delete'
                 }
             }),
 
@@ -395,10 +395,10 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
             proxy : new Ext.data.HttpProxy({
                 api: {
-                    read    : 'app/timelog/thing/list',
-                    create  : 'app/timelog/thing/add',
-                    update  : 'app/timelog/thing/update',
-                    destroy : 'app/timelog/thing/delete'
+                    read    : '/app/timelog/thing/list',
+                    create  : '/app/timelog/thing/add',
+                    update  : '/app/timelog/thing/update',
+                    destroy : '/app/timelog/thing/delete'
                 }
             }),
 
