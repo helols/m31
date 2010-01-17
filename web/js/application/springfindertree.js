@@ -325,17 +325,23 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         var node = this.getNodeById(editor.editNode.id);
         var parentId = node.attributes.parentId;
         var options = {
-             url : '/app/springfinder/updateFile'
+             url : '/app/springfinder/renameFile'
             ,scope:this
             ,callback:this.cmdCallback
             ,node:node
             ,oldName:oldName
             ,params:{
                  filename : newName
+                ,parentId : parentId
+                ,fileId : node.attributes.id
             }
         };
         Ext.Ajax.request(options);
     }
+    , cmdCallback : function(options, success, response){
+        console.log(response);
+    }
+
     //    // new methods
     //    // {{{
     //    /**

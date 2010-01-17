@@ -121,11 +121,14 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             if (data.iconCls === 'up-folder') {
                 fildId = data.parentId;
             }
-            this.onDirChange(fildId);
+
             if (this.springfinderTree) {
                 var node = this.springfinderTree.getNodeById(fildId);
                 node.expand();
                 this.springfinderTree.getSelectionModel().select(node);
+                this.onDirChange(fildId);
+            }else{
+                this.onDirChange(fildId);
             }
         }
 
