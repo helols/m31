@@ -306,7 +306,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 				text: '봄미투데이를 실행해 주세요.'
                 			})
                 		} else {
-                			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2dayModule.gateway({
+                			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
                 				appId: 'springsee',
                 				url: this.linkUrl
                 			});
