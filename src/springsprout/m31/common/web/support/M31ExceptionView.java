@@ -20,7 +20,7 @@ public class M31ExceptionView  extends AbstractView{
     Logger log = LoggerFactory.getLogger(getClass());
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        log.debug((String) model.get("exception"));    
+        log.debug("{}",model.get("exception"));    
         response.setStatus(500);
         response.setContentType(MappingJacksonJsonView.DEFAULT_CONTENT_TYPE);
         response.getWriter().print("{success:'fail',message:'error'}");
