@@ -16,36 +16,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     init : function() {
         //필요한 JS
         m31.util.requiredJS("pirobox");
-        
-        this.initTemplates();
-
-        this.store = new Ext.data.JsonStore({
-        	url: '/gateway/springsee/search',
-        	method: 'GET',
-            root: 'imgInfo',
-            autoload: true,
-            fields: [
-                'title', 'thumbnail', 'image'
-            ],
-            listeners: {
-                beforeload : function(store, options) {
-                    store.loadMask.show();
-                },
-                'load': { fn:function() {
-                    Ext.getCmp("springsee-view").body.scrollTo('top', 0);
-                    Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
-                    Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
-                    this.view.select(0);
-                    m31.showImage();
-                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
-                    this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD'});
-                }, scope:this, single:false
-                }
-            }
-        });
-
-        this.view = this.createView();
-        this.view.on("contextmenu", this.onContextClick, this);
     },
     
     createView : function() {
@@ -77,7 +47,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     return view.store.getRange().length > 0;
                 }}
             },
-            prepareData: formatData.createDelegate(this)
+            prepareData: function(data) {
+                this.lookup[data.title] = data;
+                return data;
+            }.createDelegate(this)
         });
     },
     
@@ -87,6 +60,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     removeWin: function(){
         this.view = undefined;
         this.win = undefined;
+        this.dragZone = undefined;
+        this.store = undefined;
     },
 
     /**
@@ -96,6 +71,57 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         if(!this.view){
             this.view = this.createView();
         }
+        
+        this.initTemplates();
+
+        this.store = new Ext.data.JsonStore({
+        	url: '/gateway/springsee/search',
+        	method: 'GET',
+            root: 'imgInfo',
+            autoload: true,
+            fields: [
+                'title', 'thumbnail', 'image'
+            ],
+            listeners: {
+                beforeload : function(store, options) {
+                    store.loadMask.show();
+                },
+                'load': { fn:function() {
+                    Ext.getCmp("springsee-view").body.scrollTo('top', 0);
+                    Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
+                    Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
+                    this.view.select(0);
+                    m31.showImage();
+                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+                    if(!this.dragZone) {
+                    	this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD'});
+                    }
+                }, scope:this, single:false
+                }
+            }
+        });
+
+        this.view = new Ext.DataView({
+            tpl: this.thumbTemplate,
+            id: 'springsee-dataview',
+            singleSelect: true,
+            overClass:'x-view-over',
+            itemSelector: 'div.thumb-wrap',
+            emptyText : '<div style="padding:10px;">No images match the specified search</div>',
+            plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+            store: this.store,
+            listeners: {
+                'loadexception'  : {fn:this.onLoadException, scope:this},
+                'beforeselect'   : {fn:function(view) {
+                    return view.store.getRange().length > 0;
+                }}
+            },
+            prepareData: function(data) {
+            	M31.ApplicationRegistry.getInstance().getApp('springsee').lookup[data.title] = data;
+                return data;
+            }
+        });
+        this.view.on("contextmenu", this.onContextClick, this);
     },
 
     /**
@@ -300,7 +326,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     text:'봄미투데이로 전송하기',
                     scope:this,
                     handler: function(){
-//                        console.log("미투데이 포토로 전송합니다.");
                 		if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
                 			m31.util.notification({
                 				title: '봄씨',
@@ -317,7 +342,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     text:'봄트위터로 전송하기',
                     scope:this,
                     handler: function(){
-//                        console.log("미투데이 포토로 전송합니다.");
                 		if (!M31.WindowsManager.getInstance().getWindow("springtwitter")) {
                 			m31.util.notification({
                 				title: '봄씨',
@@ -393,8 +417,6 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
 		data.isApp = true;
 		data.linkAppId = 'springsee';
 		data.items = items;
-		console.log("onBeforeDrag");
-		console.dir(data);
 	},
     getDragData : function(e){
         var target = e.getTarget('.thumb-wrap');
