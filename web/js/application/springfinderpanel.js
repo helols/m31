@@ -89,7 +89,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             ,filecreate:{scope:this, fn:this.onFileCreate}
             ,dirchange:{scope:this, fn:this.onDirChange}
             ,dblclick : {fn:this.onDblclick, scope:this}
-
+            ,contextmenu : {fn:this.onContextClick,scope:this}
+            ,containercontextmenu : {fn:this.onContainerContextClick,scope:this}
         });
         console.log('init');
     },
@@ -155,6 +156,93 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             }
         }
         store.commitChanges();
+    },
+    onContainerContextClick : function (view, e){
+        if(!this.containerContextMenu){ // create context menu on first right click
+    		this.containerContextMenu = new Ext.menu.Menu({
+                id:'springfinderpanel-menu',
+                items: [{
+                    iconCls: 'new-folder',
+                    text: '새폴더',
+                    scope:this,
+                    handler: function(){
+//                        window.open(this.linkUrl);
+                        
+                    }
+                },{
+                    iconCls: 'panel-refresh',
+                    text: '새로고침',
+                    scope:this,
+                    handler : function(){
+                        this.getStore().reload();
+                    }
+                }]
+            });
+        }
+    	e.stopEvent();
+        this.containerContextMenu.showAt(e.getXY());
+    },
+    onContextClick : function(view, index, obj, e) {
+        console.log('onContextClick');
+//    	this.linkUrl = this.store.getAt(index).data.image;
+//    	this.checkClipboard = false;
+//
+//    	if(!this.menu){ // create context menu on first right click
+//    		this.menu = new Ext.menu.Menu({
+//                id:'springsee-ctx',
+//                items: [{
+//                    iconCls: 'new-win',
+//                    text: '새창으로 이미지 보기',
+//                    scope:this,
+//                    handler: function(){
+//                        window.open(this.linkUrl);
+//                    }
+//                },{
+//                    iconCls: 'new-win',
+//                    id: 'springsee-copymenu',
+//                    text: '이미지주소 복사하기',
+//                    scope:this
+//                },'-',{
+//                    text:'봄미투데이로 전송하기',
+//                    scope:this,
+//                    handler: function(){
+//                		if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
+//                			m31.util.notification({
+//                				title: '봄씨',
+//                				text: '봄미투데이를 실행해 주세요.'
+//                			});
+//                		} else {
+//                			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
+//                				appId: 'springsee',
+//                				url: this.linkUrl
+//                			});
+//                		}
+//                    }
+//                },{
+//                    text:'봄트위터로 전송하기',
+//                    scope:this,
+//                    handler: function(){
+//                		if (!M31.WindowsManager.getInstance().getWindow("springtwitter")) {
+//                			m31.util.notification({
+//                				title: '봄씨',
+//                				text: '봄트위터를 실행해 주세요.'
+//                			});
+//                		} else {
+//                			M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
+//                		}
+//                    }
+//                }, {
+//                    text:'배경화면 지정하기',
+//                    scope:this,
+//                    handler: function(){
+////                        console.log("배경화면 지정하기.");
+//                    }
+//                }]
+//            });
+//        }
+    	e.stopEvent();
+//        this.menu.showAt(evt.getXY());
+        
     }
 });
 

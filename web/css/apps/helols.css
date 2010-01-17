@@ -133,3 +133,13 @@
 .x-view-selected span{
     color:#1A4D8F;
 }
+
+.new-folder{
+    background: transparent url(../../images/apps/springfinder/new-folder-menu-icon.png);
+    padding-left:1px !important;
+}
+.panel-refresh{
+    background: transparent url(../../images/apps/springfinder/panel-refresh-menu-icon.png);
+    padding-left:1px !important;
+}
+    

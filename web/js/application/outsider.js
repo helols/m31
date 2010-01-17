@@ -122,6 +122,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             }
         });
         this.view.on("contextmenu", this.onContextClick, this);
+        this.view.on("containercontextmenu", this.onContainerContextClick, this);
     },
 
     /**
@@ -377,7 +378,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     	this.clipboard.addEventListener('onMouseOut', function(client) {
     		$("#x-menu-el-springsee-copymenu").removeClass("x-menu-item-active");
     	});
+    },
+    onContainerContextClick : function(view,e){
+        e.stopEvent();
     }
+
 });
 
 m31.showImage = function() {
