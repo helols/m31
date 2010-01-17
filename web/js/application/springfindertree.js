@@ -97,6 +97,8 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     ,margins: '0'
     ,collapseFirst:false
     ,titleCollapse : false
+    ,rootPath:'root'
+    ,rootText:'root'
     ,tools:[      
         {
             id:'refresh',
@@ -117,14 +119,15 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         Ext.apply(this, {
             root: {
                 nodeType: 'async',
-                text: '/',
+               	text:this.rootText,
+				path:this.rootPath,
                 draggable: false,
                 allowDrag:false,
                 allowDrop:true,
                 id: 1
             },
             treeEditor:!this.readOnly ? new Ext.tree.TreeEditor(this, {
-                allowBlank:false
+                 allowBlank:false
                 ,cancelOnEsc:true
                 ,completeOnEnter:true
                 ,ignoreNoChange:true
@@ -169,7 +172,8 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         if (this.treeEditor) {
             // tree 에디트가 끝나고와 성공 완료 직전 이벤트
             this.treeEditor.on({
-                beforecomplete:{scope:this, fn:this.onEditb4Complete}
+                 beforeshow:{scope:this, fn:this.onBeforeshow}
+                ,beforecomplete:{scope:this, fn:this.onEditb4Complete}
                 ,complete:{scope:this, fn:this.onEditComplete}
             });
         }
@@ -241,7 +245,15 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         }
         e.cancel = cancel;
     } // eo function onNodeDragOver
-
+    ,onBeforeshow : function(editor){
+        var node = this.getNodeById(editor.editNode.id);
+        if(node.isRoot || node.attributes.defaultYn === 'Y'){
+            editor.cancellingEdit = true;
+            editor.cancelEdit();
+            return false;
+        }
+        return true;
+    }
     ,onEditb4Complete : function(editor, newName, oldName) {
         if (editor.cancellingEdit) {
             editor.cancellingEdit = false;
@@ -255,7 +267,7 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     }
     ,onEditComplete:function(editor, newName, oldName) {
         if (newName === oldName) {
-            return false;
+            return false;     
         }
         var node = this.getNodeById(editor.editNode.id);
         var parentId = node.attributes.parentId;
@@ -279,6 +291,32 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
         }
     }
 
+    ,getPath:function(node) {
+		var path, p, a;
+
+		// get path for non-root node
+		if(node !== this.root) {
+			p = node.parentNode;
+			a = [node.text];
+			while(p && p !== this.root) {
+				a.unshift(p.text);
+				p = p.parentNode;
+			}
+			a.unshift(this.root.attributes.path || '');
+			path = a.join(this.pathSeparator);
+		}
+
+		// path for root node is it's path attribute
+		else {
+			path = node.attributes.path || '';
+		}
+
+		// a little bit of security: strip leading / or .
+		// full path security checking has to be implemented on server
+		path = path.replace(/^[\/\.]*/, '');
+		return path;
+	}
+    // eo function getPath
     //    // new methods
     //    // {{{
     //    /**

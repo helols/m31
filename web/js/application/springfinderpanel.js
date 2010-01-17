@@ -5,10 +5,10 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '<a hidefocus="on" href="{fileAddition}"><img class="file" src="../../images/apps/springfinder/{iconCls}.png"></a>',
             '<div class="x-editable-wrap">' ,
             '<tpl if="defaultYn === \'Y\'">' ,
-            '   <span>{shortFileName}</span>' ,
+            '   <div>{shortFileName}</div>' ,
             '</tpl>',
             '<tpl if="defaultYn === \'N\'">' ,
-            '   <span class="x-editable">{shortFileName}</span>' ,
+            '   <span class="x-editable" ext:qwidth="50" ext:qtip="{fileName}">{shortFileName}</span>' ,
             '</tpl>',
             '</div>',
             '</div>',
@@ -23,14 +23,14 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     layout:'fit',
     autoScroll:true,
     addDbAction : Ext.emptyFn,
-    id:'springfinder-panel' ,
+    id:'springfinder-panel' , 
     plugins: [
         new Ext.DataView.DragSelector({dragSafe:true}),
         new Ext.DataView.LabelEditor({dataIndex: 'fileName'})
     ],
 
     prepareData: function(data) {
-        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, 15);
+        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel'?15:5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
         return data;
     },
@@ -50,7 +50,6 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 proxy: proxy,
                 root: 'fileList',
                 idProperty : 'fileId',
-                //                storestat : 'view',
                 fields: [
                     'fileId', 'fileName',
                     'linkAppId','parentId',
@@ -61,6 +60,10 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'load': {fn:function(store) {
                         if (store.getCount() > 0) {
                             this.select(0);
+                            if(this.springfinderTree){
+                                var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
+                                this.ownerCt.setTitle(this.springfinderTree.getPath(node));
+                            }
                         }
                     }, scope:this}
                 },
@@ -99,7 +102,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     },
 
     onFileRename : function() {
-
+        
     },
     onFileDelete : function() {
 

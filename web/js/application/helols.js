@@ -106,8 +106,8 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
  */
 
 M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
-    init : function(){
-//        m31.util.requiredJS("springfindertree");
+    init : function() {
+        //        m31.util.requiredJS("springfindertree");
     },
     createCallback :function(win) {
         if (!this.win) {
@@ -115,16 +115,36 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
         }
     },
     createWindow : function() {
-        var springfinderPanel =  new M31.app.SpringFinderPanel( {
+        var springfinderDataPanel = new M31.app.SpringFinderPanel({
             height : 600,
-            region:'center',
             border : false,
             rootNodeId : 1
         });
 
-        var springfinderTree =  new M31.app.SpringFinderTree({finderpanel:springfinderPanel});
-        springfinderPanel.springfinderTree = springfinderTree;
-        
+        var springfinderPanel = new Ext.Panel({
+            region : 'center',
+            height : 600,
+            collapsible: false,
+            split: true,
+            border: false,
+            layout:'fit',
+            items:[springfinderDataPanel],
+            tools:[
+                {
+                    id:'refresh',
+                    qtip: '새로고침',
+                    // hidden:true,
+                    handler: function(event, toolEl, panel) {
+                        panel.get(0).getStore().reload();
+                    }
+                }
+            ]
+        });
+
+        var springfinderTree = new M31.app.SpringFinderTree({finderpanel:springfinderDataPanel});
+        springfinderDataPanel.springfinderTree = springfinderTree;
+
+
         var opt = {
             layout: 'border',
             width:800,
