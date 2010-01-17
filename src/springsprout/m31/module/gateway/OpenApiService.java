@@ -7,19 +7,11 @@
  */
 package springsprout.m31.module.gateway;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import springsprout.m31.common.OpenApiReadException;
-import springsprout.m31.domain.MovieVO;
-import springsprout.m31.domain.enums.OpenApi;
-import springsprout.m31.dto.SpringBookDTO;
-import springsprout.m31.dto.SpringPlayerDTO;
-import springsprout.m31.dto.SpringseeDTO;
-import springsprout.m31.module.gateway.support.*;
+import static springsprout.m31.domain.enums.OpenApi.DAUM;
+import static springsprout.m31.domain.enums.OpenApi.FLICKR;
+import static springsprout.m31.domain.enums.OpenApi.GOOGLE;
+import static springsprout.m31.domain.enums.OpenApi.NAVER;
 
-import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -27,7 +19,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static springsprout.m31.domain.enums.OpenApi.*;
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.domain.MovieVO;
+import springsprout.m31.domain.enums.OpenApi;
+import springsprout.m31.dto.SpringBookDTO;
+import springsprout.m31.dto.SpringPlayerDTO;
+import springsprout.m31.dto.SpringseeDTO;
+import springsprout.m31.module.gateway.support.DaumAPIHelper;
+import springsprout.m31.module.gateway.support.FlickrAPIHelper;
+import springsprout.m31.module.gateway.support.GoogleAPIHelper;
+import springsprout.m31.module.gateway.support.NaverAPIHelper;
+import springsprout.m31.module.gateway.support.SpringBookSearchParam;
+import springsprout.m31.module.gateway.support.SpringPlayerCri;
 
 @Service
 public class OpenApiService {
@@ -119,6 +129,11 @@ public class OpenApiService {
      * @return
      */
     public SpringBookDTO springbook(OpenApi openApi, SpringBookSearchParam param){
+    	try{
+    		param.setQuery(URLEncoder.encode(param.getQuery(), "utf-8"));	
+    	}
+    	catch (Exception e) {}
+    	
     	SpringBookDTO bookDTO = null;
     	switch (openApi) {
 	        case ALL:
