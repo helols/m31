@@ -8,7 +8,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '   <div>{shortFileName}</div>',
             '</tpl>',
             '<tpl if="defaultYn === \'N\'">',
-            '   <span class="x-editable" ext:qwidth="50" ext:qtip="{fileName}">{shortFileName}</span>',
+            '   <span class="x-editable" ext:qwidth="60" ext:qtip="{fileName}">{shortFileName}</span>',
             '</tpl>',
             '</div>',
             '</div>',
@@ -25,6 +25,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     addDbAction : Ext.emptyFn,
     id:'springfinder-panel' ,
     storeAction : 'get',
+    newFolderNames : ['whiteship', 'nije', 'miracle', 'sonegy', 'srue', 'antatirs', 'mercujjang',  'anarcher','gyumee',  'princekey',  'outsider', 'is윤군'],
 
     plugins: [
         new Ext.DataView.DragSelector({dragSafe:true}),
@@ -57,7 +58,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'fileId', 'fileName',
                     'linkAppId','parentId',
                     'iconCls','fileAddition',
-                    'defaultYn'
+                    'defaultYn','fileType'
                 ],
                 listeners: {
                     'load': {fn:function(store) {
@@ -98,6 +99,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     onRender:function() {
         console.log('onRender');
         M31.app.SpringFinderPanel.superclass.onRender.apply(this, arguments);
+        this.store.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.store, msg:"Loading panel..."});
         this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:false,
             ddGroup: 'springfinderpenelDD'});
         this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD'});
@@ -112,10 +114,12 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
 
     },
     onFileDelete : function() {
-
+        this.storeAction = 'delete';
+        this.store.save();
     },
     onFileCreate : function() {
-
+        this.storeAction = 'createFolder';
+        this.store.save();
     },
     onDirChange : function(nodeId) {
         if (this.lastChangeNodeId !== nodeId) {
@@ -149,25 +153,57 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.ownerCt.setTitle(this.springfinderTree.getPath(node));
     },
     onWrite :function(store, action, result, res, rec) {
-        if (this.springfinderTree && this.storeAction === 'rename') {
-            var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
-            if (node) {
-                node.reload();
+        var noticationmsg = '';
+        switch(this.storeAction){
+                case 'rename' :
+                    noticationmsg = '파일명이 변경되었습니다.';
+                    break;
+                case 'createFolder' :
+                    noticationmsg = '폴더가 생성되었습니다.';
+                    break;
+                case 'delete':
+                    noticationmsg = '파일을 삭제하였습니다.';
+                    break;
+                case 'move':
+                    noticationmsg = '파일들이 이동되었습니다.';
+                    break;
+                break;
+        }
+        m31.util.notification({title:'봄탐색기',text:noticationmsg,remove:true});
+        if (this.springfinderTree){
+            if(this.storeAction !== move){
+                var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
+                if (node) {
+                    node.reload();
+                }
+            }else{
+
             }
         }
+        
         store.commitChanges();
     },
     onContainerContextClick : function (view, e){
         if(!this.containerContextMenu){ // create context menu on first right click
     		this.containerContextMenu = new Ext.menu.Menu({
-                id:'springfinderpanel-menu',
+                id:'springfinderpanel-containercontext-menu',
                 items: [{
                     iconCls: 'new-folder',
                     text: '새폴더',
                     scope:this,
                     handler: function(){
-//                        window.open(this.linkUrl);
-                        
+                        var store = this.getStore();
+                        var record = new store.recordType({
+                                    fileName : this.newFolderNames[Math.floor(Math.random() * 11) + 1],
+                                    linkAppId : 'springfinder',
+                                    parentId : this.lastChangeNodeId,
+                                    iconCls : 'folder' ,
+                                    fileAddition : '' ,
+                                    defaultYn : 'N',
+                                    fileType : 'F'
+                        });
+                        store.add(record);
+                        this.onFileCreate();
                     }
                 },{
                     iconCls: 'panel-refresh',
@@ -183,66 +219,73 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.containerContextMenu.showAt(e.getXY());
     },
     onContextClick : function(view, index, obj, e) {
-        console.log('onContextClick');
-//    	this.linkUrl = this.store.getAt(index).data.image;
-//    	this.checkClipboard = false;
-//
-//    	if(!this.menu){ // create context menu on first right click
-//    		this.menu = new Ext.menu.Menu({
-//                id:'springsee-ctx',
-//                items: [{
-//                    iconCls: 'new-win',
-//                    text: '새창으로 이미지 보기',
-//                    scope:this,
-//                    handler: function(){
-//                        window.open(this.linkUrl);
-//                    }
-//                },{
-//                    iconCls: 'new-win',
-//                    id: 'springsee-copymenu',
-//                    text: '이미지주소 복사하기',
-//                    scope:this
-//                },'-',{
-//                    text:'봄미투데이로 전송하기',
-//                    scope:this,
-//                    handler: function(){
-//                		if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
-//                			m31.util.notification({
-//                				title: '봄씨',
-//                				text: '봄미투데이를 실행해 주세요.'
-//                			});
-//                		} else {
-//                			M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
-//                				appId: 'springsee',
-//                				url: this.linkUrl
-//                			});
-//                		}
-//                    }
-//                },{
-//                    text:'봄트위터로 전송하기',
-//                    scope:this,
-//                    handler: function(){
-//                		if (!M31.WindowsManager.getInstance().getWindow("springtwitter")) {
-//                			m31.util.notification({
-//                				title: '봄씨',
-//                				text: '봄트위터를 실행해 주세요.'
-//                			});
-//                		} else {
-//                			M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
-//                		}
-//                    }
-//                }, {
-//                    text:'배경화면 지정하기',
-//                    scope:this,
-//                    handler: function(){
-////                        console.log("배경화면 지정하기.");
-//                    }
-//                }]
-//            });
-//        }
+        var _self = this;
+        var selectCnt = this.getSelectionCount();
+        if(!this.contextMenu){ // create context menu on first right click
+            this.contextMenu = new Ext.menu.Menu({
+                id:'springfinderpanel-context-menu',
+                items: [{
+                    itemId : 'delete-file',
+                    iconCls: 'delete-file',
+                    text: '삭제',
+                    scope:this,
+                    handler: function(){
+                        var sCnt = this.getSelectionCount();
+                        var options = {
+                              yesClick : function(){
+                                  _self.store.remove(_self.getSelectedRecords());
+                                  _self.onFileDelete();
+                                  this.ownerCt.ownerCt.close();
+                              },
+                              noClick : function(){
+                                  this.ownerCt.ownerCt.close();
+                              },
+                              msg : sCnt+'개의 파일을 삭제 하시겠습니까?'
+                        }
+                        new Ext.Window(
+                            Ext.apply(
+                                    new M31Desktop.Signout().createWindow(options),{
+                                        id : 'springfinder-popup-win',
+                                        manager: M31.WindowsManager.getInstance().getManager(),
+                                        isPopup : true ,
+                                        iconCls :'delete-file',
+                                        popCallback : function(){console.log('remove')}
+                            })).show();
+                    }
+                },{
+                    itemId : 'rename-file',
+                    iconCls: 'rename-file',
+                    text: '이름바꾸기',
+                    scope:this,
+                    handler : function(){
+                        this.plugins[1].onMouseDown(e,Ext.get(this.getSelectedNodes()[0].id).child('span.x-editable'));
+                    }
+                }]
+            });
+        }
+        Ext.each(this.contextMenu.items.items,function(item){
+            if(item.itemId === 'rename-file'){
+                if(selectCnt > 1){
+                    item.setDisabled(true);
+                }else if(_self.store.getAt(_self.getSelectedIndexes()[0]).data.defaultYn === 'Y'){
+                    item.setDisabled(true);
+                }else{
+                    item.setDisabled(false);
+                }
+            }else{
+                var idxs = _self.getSelectedIndexes();
+                for(var i = 0 ; i < idxs.length;i++){
+                    if(_self.store.getAt(idxs[i]).data.defaultYn === 'Y'){
+                        item.setDisabled(true);
+                        break;
+                    }else{
+                        item.setDisabled(false);
+                    }
+                }
+            }
+        });
     	e.stopEvent();
-//        this.menu.showAt(evt.getXY());
-        
+        this.contextMenu.showAt(e.getXY());
     }
 });
 

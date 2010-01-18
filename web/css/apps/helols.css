@@ -142,4 +142,12 @@
     background: transparent url(../../images/apps/springfinder/panel-refresh-menu-icon.png);
     padding-left:1px !important;
 }
+.delete-file{
+    background: transparent url(../../images/apps/springfinder/delete-file-menu-icon.png);
+    padding-left:1px !important;
+}
+.rename-file{
+    background: transparent url(../../images/apps/springfinder/rename-file-menu-icon.png);
+    padding-left:1px !important;
+}
     

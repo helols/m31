@@ -24,7 +24,8 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
             this.win = win;
         }
     },
-    createWindow : function() {
+    createWindow : function(options) {
+        options = options||{};
         this.win = undefined;
         var opt = {
             width:280,
@@ -46,7 +47,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                     border:false,
                     cls:'signout-fit',
                     padding: '10px 5px 5px 5px',
-                    html: '봄 Web DestTop을 종료 하시겠습니까?'
+                    html: options.msg||'봄 Web DeskTop을 종료 하시겠습니까?'
                 },
                 {
                     height: 20,
@@ -65,10 +66,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                             xtype: 'button',
                             text: '예',
                             columnWidth:.22,
-                            handler: function(t, e) {
-                                m31.util.loading();
-                                setTimeout('window.location.href="/j_spring_security_logout"', 500);
-                            }
+                            handler: options.yesClick||this.yesClick
                         },
                         {
                             xtype: 'spacer'
@@ -81,9 +79,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                             xtype: 'button',
                             text: '아니오',
                             columnWidth:.22,
-                            handler: function(t, e) {
-                                getApp('signout').win.close();
-                            }
+                            handler: options.noClick||this.noClick
                         },
                         {
                             xtype: 'spacer'
@@ -97,6 +93,13 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
             ]
         };
         return opt;
+    },
+    yesClick : function(){
+        m31.util.loading();
+        setTimeout('window.location.href="/j_spring_security_logout"', 500);
+    },
+    noClick : function(){
+         getApp('signout').win.close();
     }
 });
 

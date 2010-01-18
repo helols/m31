@@ -71,4 +71,17 @@
     <update id="updateFile"  parameterClass="springsprout.m31.domain.FinderFile">
         UPDATE SPRING_FINDER SET file_name =#fileName# , PARENT_ID = #parentId# WHERE id =#fileId#
     </update>
+
+    <insert id="insertFile" parameterClass="springsprout.m31.domain.FinderFile">
+        <selectKey keyProperty="fileId" resultClass="int">
+            SELECT FINDER_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        insert into spring_finder
+            values
+            (#fileId#,	#memberId#, #fileName#, #parentId#, #fileType# ,#defaultYn# , #iconCls#, #linkAppId#, #fileAddition#)
+    </insert>
+
+    <delete id="deleteFile" parameterClass="int">
+        delete from spring_finder where id = #fileId#
+    </delete>
 </sqlMap>

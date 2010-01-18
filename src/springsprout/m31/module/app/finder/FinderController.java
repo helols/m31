@@ -7,6 +7,7 @@
  */
 package springsprout.m31.module.app.finder;
 
+import net.sf.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,44 +44,49 @@ public class FinderController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/app/springfinder/getFiles", method= RequestMethod.POST)
+    @RequestMapping(value = "/app/springfinder/getFiles", method = RequestMethod.POST)
     public ModelAndView getFiles(Integer parentNode, String parentNodeName) {
         if (parentNode == null || parentNode == 0 && parentNodeName == null) {
             List emptyList = new ArrayList();
             emptyList.add(new HashMap());
             return new ModelAndView(JSON_VIEW).addObject("fileList", emptyList);
-        }else if(parentNodeName != null && StringUtils.hasText(parentNodeName)){
+        } else if (parentNodeName != null && StringUtils.hasText(parentNodeName)) {
             parentNode = finderService.getParentNodeId(parentNodeName);
         }
 
         return new ModelAndView(JSON_VIEW).addObject("fileList", finderService.getFiles(parentNode));
     }
 
-    @RequestMapping(value = "/app/springfinder/insertFile", method= RequestMethod.POST)
-    public ModelAndView insertFile(String fileList){
-        return new ModelAndView(JSON_VIEW).addObject("fileList", "");
+    @RequestMapping(value = "/app/springfinder/insertFile", method = RequestMethod.POST)
+    public ModelAndView insertFile(String fileList) {
+        log.debug("fileList" + fileList);
+        List<FinderFile> finderFileList = getJsonTOList(fileList, FinderFile.class);
+        finderService.insertFile(finderFileList);
+        return new ModelAndView(JSON_VIEW).addObject("fileList", finderFileList).addObject("success", true);
     }
 
-    @RequestMapping(value = "/app/springfinder/updateFile", method= RequestMethod.POST)
-    public ModelAndView updateFile(String fileList){
-        log.debug("fileList"+fileList);
-        List<FinderFile> finderFileList = getJsonTOList(fileList,FinderFile.class);
+    @RequestMapping(value = "/app/springfinder/updateFile", method = RequestMethod.POST)
+    public ModelAndView updateFile(String fileList) {
+        log.debug("fileList" + fileList);
+        List<FinderFile> finderFileList = getJsonTOList(fileList, FinderFile.class);
         finderService.updateFile(finderFileList);
-        return new ModelAndView(JSON_VIEW).addObject("fileList", "").addObject("success",true);
+        return new ModelAndView(JSON_VIEW).addObject("fileList", finderFileList).addObject("success", true);
     }
 
 
-    @RequestMapping(value = "/app/springfinder/deleteFile", method= RequestMethod.POST)
-    public ModelAndView deleteFile(String fileList){
-        return new ModelAndView(JSON_VIEW).addObject("fileList", "");
+    @RequestMapping(value = "/app/springfinder/deleteFile", method = RequestMethod.POST)
+    public ModelAndView deleteFile(String fileList) {
+        JSONArray jsonArray = JSONArray.fromObject(fileList);
+        finderService.deleteFile(jsonArray.toArray());
+        return new ModelAndView(JSON_VIEW).addObject("fileList", fileList).addObject("success", true);
     }
 
     @RequestMapping(value = "/app/springfinder/renameFile", method = RequestMethod.POST)
-    public ModelAndView renameFile(FinderFile finderFile){
-        if(finderFile.getFileName() == null || !StringUtils.hasText(finderFile.getFileName())){
-            return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg","폴더명이 없습니다.");
+    public ModelAndView renameFile(FinderFile finderFile) {
+        if (finderFile.getFileName() == null || !StringUtils.hasText(finderFile.getFileName())) {
+            return new ModelAndView(JSON_VIEW).addObject("success", true).addObject("msg", "폴더명이 없습니다.");
         }
         finderService.renameFile(finderFile);
-        return new ModelAndView(JSON_VIEW).addObject("success",true).addObject("msg","폴더명이 변경되었습니다.");
+        return new ModelAndView(JSON_VIEW).addObject("success", true).addObject("msg", "폴더명이 변경되었습니다.");
     }
 }

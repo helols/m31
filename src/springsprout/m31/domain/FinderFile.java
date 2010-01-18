@@ -15,6 +15,8 @@ public class FinderFile {
     private String defaultYn;
     private String linkAppId;
     private String fileAddition;
+    private Integer memberId;
+    private String fileType;
 
     public String getFileAddition() {
         return fileAddition;
@@ -70,5 +72,21 @@ public class FinderFile {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 }

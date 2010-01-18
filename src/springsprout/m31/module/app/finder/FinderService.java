@@ -63,4 +63,20 @@ public class FinderService {
             finderRepository.updateFile(finderFile);
         }
     }
+
+    public void insertFile(List<FinderFile> finderFileList) {
+        Integer memberId = securityService.getCurrentMemberId();
+        for(FinderFile finderFile : finderFileList){
+            finderFile.setMemberId(memberId);
+            finderFile.setFileId(finderRepository.insertFile(finderFile));
+            finderFile.setIconCls(finderFile.getIconCls()+"-"+finderFile.getLinkAppId());
+        }
+    }
+
+    public void deleteFile(Object[] fileIds) {
+        Integer memberId = securityService.getCurrentMemberId();
+        for(Object fileId : fileIds){
+            finderRepository.deleteFile(Integer.parseInt(fileId.toString()));
+        }
+    }
 }

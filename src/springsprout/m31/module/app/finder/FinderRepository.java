@@ -45,4 +45,12 @@ public class FinderRepository  extends SqlMapClientDaoSupport {
     public void updateFile(FinderFile finderFile) {
         getSqlMapClientTemplate().update("finder.updateFile",finderFile);
     }
+
+    public Integer insertFile(FinderFile finderFile) {
+        return (Integer)getSqlMapClientTemplate().insert("finder.insertFile",finderFile);
+    }
+
+    public void deleteFile(Integer finderFile) {
+        getSqlMapClientTemplate().update("finder.deleteFile",finderFile);
+    }
 }

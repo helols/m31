@@ -196,6 +196,12 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
                 return false;
             },stopEvent:true}
         });
+//        this.loader.on({
+//				 scope:this.el
+//				,beforeload:this.el.mask.createDelegate(this.el, ['tree loading...'])
+//				,load:this.el.unmask
+//				,loadexception:this.el.unmask
+//	    });
     } // eo function onRender
 
     ,onBeforeDrag : function(data, e) {
