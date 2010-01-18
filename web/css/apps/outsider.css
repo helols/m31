@@ -151,3 +151,9 @@ a:hover.stop{background:url(../../images/apps/springsee/pirobox/pause_h.png) no-
     display:block;
     clear:none;
 }
+
+/* Twitter Text */
+div.springtwitter-tweet div.springtwitter-contents>a>img { float:left; margin-right:10px; }
+div.springtwitter-tweet div.springtwitter-btn span.springtwitter-reply,
+div.springtwitter-tweet div.springtwitter-btn span.springtwitter-retweet,
+div.springtwitter-tweet div.springtwitter-btn span.springtwitter-message { cursor:pointer; }
