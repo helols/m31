@@ -158,6 +158,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                 },
                 {
                     title : '탐색기',
+                    collapsedTitle : '탐색기',
                     region : 'south',
                     height : 100,
                     items : new M31.app.SpringFinderPanel({
