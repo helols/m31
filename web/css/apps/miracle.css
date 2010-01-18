@@ -1,6 +1,8 @@
-@charset
-"utf-8"
-;
+@charset "utf-8";
+
+a, a:link, a:visited{ color: #2A5685; text-decoration: none; }
+a:hover, a:active{ color: #c61a1a; text-decoration: none;}
+
 .springplayer-win-icon {
     background-image: url(../../images/apps/win-icon/springplayer_win_icon.png) !important;
 }
