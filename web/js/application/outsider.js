@@ -626,6 +626,15 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         this.loadTimeline = undefined;
         this.loadMentions = undefined;
         this.loadDM = undefined;
+        
+        if (this.timer !== null) {
+        	clearTimeout(this.timer);
+        	this.timer = null;
+        }
+        if (this.intervalID !== null) {
+            clearInterval(this.intervalID);
+            this.intervalID
+        }
     },
 
     //  윈도우를 생성하기 직전에 호출되는 펑션.
@@ -1289,7 +1298,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 
     setTimer: function() {
         clearTimeout(M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer);
-        M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer = setTimeout("M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll()", 180000); // 3분
+        M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer = setTimeout("M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll()", 180000); // 3분 
 
     },
 
