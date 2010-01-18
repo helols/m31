@@ -620,14 +620,85 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     //  해당 app의 window가 제거 될때 호출되는 콜백.
     removeWin: function() {
         this.win = undefined;
-        Ext.getCmp('springtwitter-panel').destroy();
         if(this.startForm)this.startForm.destroy();
         if(this.authGuide)this.authGuide.destroy();
         if(this.writeForm)this.writeForm.destroy(); 
+        this.loadTimeline = undefined;
+        this.loadMentions = undefined;
+        this.loadDM = undefined;
     },
 
     //  윈도우를 생성하기 직전에 호출되는 펑션.
     beforeCreate : function() {
+    	// JsonStore
+    	this.loadTimeline = new Ext.data.JsonStore({
+            url: '/app/twitter/timeline',
+            method: 'GET',
+            root: 'timeline',
+            autoload: true,
+            fields: [
+                'id', 'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+            ],
+            sortInfo: {
+                field: 'createAt',
+                direction: 'DESC'
+            },
+            listeners: {
+                'load': { fn:function() {
+                    var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+                    self.reloadStatus++;
+                    if (self.reloadStatus >= 3) {
+                        Ext.getCmp("springtwitter-statusReload").hide();
+                        self.reloadStatus = 0;
+                        self.setTimer();
+                    }
+                }, scope:this, single:false
+                }
+            }
+        });
+
+        this.loadMentions = new Ext.data.JsonStore({
+            url: '/app/twitter/mentions',
+            method: 'GET',
+            root: 'mentions',
+            fields: [
+                'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+            ],
+            listeners: {
+                'load': { fn:function() {
+                    var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+                    self.reloadStatus++;
+                    if (self.reloadStatus >= 3) {
+                        Ext.getCmp("springtwitter-statusReload").hide();
+                        self.reloadStatus = 0;
+                        self.setTimer();
+                    }
+                }, scope:this, single:false
+                }
+            }
+        });
+
+        this.loadDM = new Ext.data.JsonStore({
+            url: '/app/twitter/directMessages',
+            method: 'GET',
+            root: 'directMessages',
+            fields: [
+                'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
+            ],
+            listeners: {
+                'load': { fn:function() {
+                    var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+                    self.reloadStatus++;
+                    if (self.reloadStatus >= 3) {
+                        Ext.getCmp("springtwitter-statusReload").hide();
+                        self.reloadStatus = 0;
+                        self.setTimer();
+                    }
+                }, scope:this, single:false
+                }
+            }
+        });
+    	
         this.startForm = this.createStartForm();
         this.authGuide = this.createAuthGuide();
         this.writeForm = this.createWriteForm();
@@ -978,7 +1049,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
             xtype: 'form',
             region: 'north',
             collapsible: true,
-            collapsed:true,
+            collapsed:false,
             margins: '0 0 0 0',
             padding: '0 0 0 0',
             height: 150,
@@ -1214,75 +1285,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     tcnt: 10000, //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
     replyTag: null,
     myScreenName: "",
-
-    // JsonStore
-    loadTimeline: new Ext.data.JsonStore({
-        url: '/app/twitter/timeline',
-        method: 'GET',
-        root: 'timeline',
-        autoload: true,
-        fields: [
-            'id', 'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
-        ],
-        sortInfo: {
-            field: 'createAt',
-            direction: 'DESC'
-        },
-        listeners: {
-            'load': { fn:function() {
-                var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
-                self.reloadStatus++;
-                if (self.reloadStatus >= 3) {
-                    Ext.getCmp("springtwitter-statusReload").hide();
-                    self.reloadStatus = 0;
-                    self.setTimer();
-                }
-            }, scope:this, single:false
-            }
-        }
-    }),
-
-    loadMentions: new Ext.data.JsonStore({
-        url: '/app/twitter/mentions',
-        method: 'GET',
-        root: 'mentions',
-        fields: [
-            'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
-        ],
-        listeners: {
-            'load': { fn:function() {
-                var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
-                self.reloadStatus++;
-                if (self.reloadStatus >= 3) {
-                    Ext.getCmp("springtwitter-statusReload").hide();
-                    self.reloadStatus = 0;
-                    self.setTimer();
-                }
-            }, scope:this, single:false
-            }
-        }
-    }),
-
-    loadDM: new Ext.data.JsonStore({
-        url: '/app/twitter/directMessages',
-        method: 'GET',
-        root: 'directMessages',
-        fields: [
-            'url', 'screenName', 'createAt', 'profileImageUrl', 'source', 'text'
-        ],
-        listeners: {
-            'load': { fn:function() {
-                var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
-                self.reloadStatus++;
-                if (self.reloadStatus >= 3) {
-                    Ext.getCmp("springtwitter-statusReload").hide();
-                    self.reloadStatus = 0;
-                    self.setTimer();
-                }
-            }, scope:this, single:false
-            }
-        }
-    }),
 
     reloadAll: function() {
         Ext.getCmp("springtwitter-statusReload").show();
