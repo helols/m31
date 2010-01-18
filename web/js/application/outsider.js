@@ -709,6 +709,11 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         if (!this.win) {
             this.win = win;
         }
+        
+        this.startForm.getForm().submit({
+            url:'/app/twitter/requestAuthorization',
+            waitMsg:'Loading...'
+        });
     },
 
     createWindow : function() {
@@ -1192,18 +1197,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                 layout: 'form',
                 boxMinWidth : 100
             }, // provide some room on right for validation errors
-            items: [
-                {
-                    xtype: 'button',
-                    text: 'Twitter 시작하기',
-                    handler: function(b, e) {
-                        M31.ApplicationRegistry.getInstance().getApp('springtwitter').startForm.getForm().submit({
-                            url:'/app/twitter/requestAuthorization',
-                            waitMsg:'Loading...'
-                        });
-                    }
-                }
-            ],
             listeners: {
                 actioncomplete: function(form, action) {
                     var result = Ext.decode(action.response.responseText);
