@@ -58,9 +58,9 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     createWindow: function(){
     	return {
     		id: 'springbook-win',
-    		width:450,
+    		width:480,
 	        height:500,
-	        minWidth: 450,
+	        minWidth: 480,
             minHeight: 500,
 	        layout:'fit',
 	        constrainHeader:true,
