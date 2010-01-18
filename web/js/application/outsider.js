@@ -140,9 +140,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     createWindow : function () {
         var otp = {
             layout: 'border',
-            width: 660,
+            width: 680,
             height: 480,
-            minWidth: 640,
+            minWidth: 680,
             minHeight: 480,
             closeAction: 'close',
             constrainHeader:true,
@@ -236,16 +236,16 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                    region: 'south',
                     title: '봄씨 앨범',
                     xtype: 'panel',
+                    layout:'fit',
                     collapsedTitle: '봄씨 앨범',
+                    autoScroll : true,
                     id: 'springsee-explorer-panel',
                     collapsible: true,
                     collapsed:false,
                     split: true,
-                    margins: '0 0 0 0',
-                    cmargins: '2 2 2 2',
                     height: 110,
                     items: new M31.app.SpringFinderPanel( {
-                        height : 140,
+                        height : 110,
                         region:'center',
                         border : false,
                         rootNodeName: 'springsee'
