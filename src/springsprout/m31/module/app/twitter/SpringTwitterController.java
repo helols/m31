@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import springsprout.m31.module.app.twitter.support.TwitterAuthorizationDTO;
 import springsprout.m31.module.app.twitter.support.TwitterRequestParam;
 
 /*
@@ -57,9 +58,16 @@ public class SpringTwitterController {
     
     @RequestMapping
     public String getAccessToken(@RequestParam String oauth_token, Model model) {
-        Boolean result = false;
-        result = springTwitterAuthorization.storeAuthToken(oauth_token);
-        model.addAttribute("result", result);
+
+    	TwitterAuthorizationDTO authDTO = springTwitterAuthorization.storeAuthToken(oauth_token);
+        
+    	if (authDTO != null) {
+        	model.addAttribute("success", true);
+        	model.addAttribute("userName", authDTO.getScreen_name());
+        } else {
+        	model.addAttribute("success", false);
+        	model.addAttribute("userName", "");
+        }
         return "/springtwitter/getToken";
     }
     

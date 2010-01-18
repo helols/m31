@@ -79,7 +79,7 @@ public class SpringTwitterAuthorization {
         return twitterAuthDTO.getScreen_name();
     }
 
-    public Boolean storeAuthToken(String oauthToken) {
+    public TwitterAuthorizationDTO storeAuthToken(String oauthToken) {
         Twitter twitter = new Twitter();
         twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 
@@ -94,6 +94,8 @@ public class SpringTwitterAuthorization {
         log.debug("token from Session>>>" + twitterAuthDTO.getToken());
         log.debug("stoken from Session>>>" + twitterAuthDTO.getSecret_token());
         log.debug("receive Token from Twitter>>>" + oauthToken);
+        
+        TwitterAuthorizationDTO authDTO = null;
 
         if (twitterAuthDTO.getToken().equals(oauthToken)) {
             log.debug("same Token");
@@ -105,7 +107,7 @@ public class SpringTwitterAuthorization {
             twitter.setOAuthAccessToken(accessToken);
             
             // persist token
-            TwitterAuthorizationDTO authDTO = new TwitterAuthorizationDTO();
+            authDTO = new TwitterAuthorizationDTO();
             authDTO.setMember_id(securityService.getCurrentMemberId());
             authDTO.setToken(accessToken.getToken());
             authDTO.setSecret_token(accessToken.getTokenSecret());
@@ -120,10 +122,10 @@ public class SpringTwitterAuthorization {
 
             securityService.setTwitterObject(twitter);
 
-            return true;
+            return authDTO;
         } else {
             log.debug("request token is not same.");
-            return false;
+            return authDTO;
         }
     }
 }

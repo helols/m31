@@ -1214,12 +1214,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                         $("#springtwitter-authguideurl").attr("href", result.authURL);
                         self.cardNavigation(1);
                     } else if (result.auth && result.success) {
-                        self.win.setSize(400, 500);
-                        self.myScreenName = result.userName;
-                        self.reloadAll();
-                        self.cardNavigation(2);
-                        Ext.getCmp('springtwitter-view-status').show();
-                        Ext.getCmp('springtwitter-writeTweet').show();
+                    	self.initTimelineView();
                     } else {
                         //    				console.log("fail getting AuthURL");
                     }
@@ -1300,6 +1295,21 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         clearTimeout(M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer);
         M31.ApplicationRegistry.getInstance().getApp('springtwitter').timer = setTimeout("M31.ApplicationRegistry.getInstance().getApp('springtwitter').reloadAll()", 180000); // 3분 
 
+    },
+    
+    initTimelineView: function(screenName) {
+    	console.log(screenName);
+    	var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
+    	self.win.setSize(400, 500);
+    	if (!screenName) {
+    		self.myScreenName = result.userName;
+    	} else {
+    		self.myScreenName = screenName;
+    	}
+        self.reloadAll();
+        self.cardNavigation(2);
+        Ext.getCmp('springtwitter-view-status').show();
+        Ext.getCmp('springtwitter-writeTweet').show();
     },
 
     /**

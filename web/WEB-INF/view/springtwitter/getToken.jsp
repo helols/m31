@@ -13,10 +13,11 @@
     <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
     <!-- ENDLIBS -->
     
-    <c:if test="${result}">
+    <c:if test="${success}">
     <script type="text/javascript">
 	    $(document).ready(function() {
-	        opener.M31.ApplicationRegistry.getInstance().getApp('springtwitter').cardNavigation(2);
+	        opener.M31.ApplicationRegistry.getInstance().getApp('springtwitter').initTimelineView("${userName}");
+	        setTimeout("self.close()", 3000);
 	    });
     </script>
     </c:if>
@@ -24,11 +25,11 @@
 </head>
 <body>
 <c:choose>
-    <c:when test="${result == true}">
-        <div>인증완료 페이지 입니다.</div>
-        <input type="button" onclick="self.close();">닫기</input>
+    <c:when test="${success}">
+        <div>인증완료 페이지 입니다. 3초후 자동으로 닫힙니다.</div>
+        <input type="button" onclick="self.close();" value="Close" />
     </c:when>
-    <c:when test="${result == false}">
+    <c:when test="${success}">
         <div>인증 실패</div>
     </c:when>
 </c:choose>
