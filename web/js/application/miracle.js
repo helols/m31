@@ -3,10 +3,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * Desktop에서 필요한 경우 호출하는 콜백 함수 정의 부.
      */
     init : function() {
-        console.log("Init Call.....");
+        //console.log("Init Call.....");
     },
     createCallback : function(win) {
-        console.log("Create Call Back.....");
+        //console.log("Create Call Back.....");
         if (undefined !== win) {
             this.win = win;
         }
@@ -20,7 +20,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
     },
     beforeCreate : function() {
-        console.log("beforeCreate");
+        //console.log("beforeCreate");
 
         // 스토어
         this.ds = new Ext.data.JsonStore({
@@ -174,11 +174,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         });
     },
     removeWin: function() {
-        console.log("removeWin");
+        //console.log("removeWin");
         // this.win = undefined;
     },
     createWindow : function() {
-        console.log("CreateWindow");
+        //console.log("CreateWindow");
 
         var config;
         config = {
@@ -309,7 +309,7 @@ Ext.ux.FlashPlugin = function() {
                 );
         ct.flashTemplate.compile();
         ct.renderFlash = function() {
-            console.log("render Flash");
+            //console.log("render Flash");
             if (this.flashvars && (typeof this.flashvars == 'object')) {
                 var tempflashvars = Ext.apply({}, this.flashvars);
                 for (var key in tempflashvars) {
