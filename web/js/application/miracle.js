@@ -172,7 +172,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     height : 110,
                     autoScroll : true,
                     items : new M31.app.SpringFinderPanel({
-                        height : 110,
+                        height : 85,
                         autoScroll : false,
                         border : false,
                         rootNodeName: 'springplayer'
@@ -220,9 +220,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         {
                             text : "Close",
                             handler : function() {
+                                Ext.getCmp("springplayer-win").doLayout();
                                 Ext.getCmp("springplayer-player").loadFlash({swf : ''});
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
-                                Ext.getCmp("springfinderpanel-springplayer").reload();
                             }
                         }
 
@@ -238,7 +238,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param url
      */
     play : function(title, url) {
-        this.win.getLayout().setActiveItem(1);
+        Ext.getCmp("springplayer-win").getLayout().setActiveItem(1);
         Ext.getCmp("springplayer-player").loadFlash({swf : url});
         Ext.getCmp("springplayer-player-title").setText(title);
     }
