@@ -20,9 +20,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
     },
     beforeCreate : function() {
-        //console.log("beforeCreate");
-        this.state = 'reday';
-        
+        console.log("spring player beforeCreate");
+
         // 스토어
         this.ds = new Ext.data.JsonStore({
             url: '/gateway/springplayer/search',
@@ -223,17 +222,12 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                             handler : function() {
                                 Ext.getCmp("springplayer-player").loadFlash({swf : ''});
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
+                                Ext.getCmp("springfinderpanel-springplayer").reload();
                             }
                         }
 
                     ]
-                }],
-
-            listeners : {
-              render : function() {
-                  this.state = 'render';
-              }.createDelegate(this)  
-            }
+                }]            
         };
         return config;
     },
@@ -244,16 +238,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param url
      */
     play : function(title, url) {
-        var state = this.state;
-
-        if(this.state === 'render') {
-            this.win.getLayout().setActiveItem(1);
-            Ext.getCmp("springplayer-player").loadFlash({swf : url});
-            Ext.getCmp("springplayer-player-title").setText(title);
-        } else {
-            //window.setTimeout(play)
-            alert("준비중");
-        }
+        this.win.getLayout().setActiveItem(1);
+        Ext.getCmp("springplayer-player").loadFlash({swf : url});
+        Ext.getCmp("springplayer-player-title").setText(title);
     }
 });
 
@@ -403,7 +390,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
             if (selNodes.length == 1) {
                 dragData.ddel = Ext.fly(target.id).child('img.thumb-img').dom;
                 dragData.single = true;
-            } 
+            }
 
             return dragData;
         }
@@ -499,7 +486,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 writeAllFields: true,
                 listful : true
             }),
-            
+
             fields : [
                 {
                     name : 'id'
@@ -514,7 +501,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
             listeners : {
                 write : function (store, action, result, res, rs) {
-                    if(action === 'create') {
+                    if (action === 'create') {
                         store.load();
                     }
                 },
@@ -531,7 +518,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                             handler : function(b, e) {
                                 Ext.MessageBox.prompt('Thing', '새로운 할일:', function(btn, text) {
                                     if (btn === 'ok') {
-                                        if(text !== '') {
+                                        if (text !== '') {
                                             var record = new store.recordType({
                                                 thing : text
                                             });
@@ -542,7 +529,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                         }
                                     }
                                 });
-                        }}, '-');
+                            }}, '-');
 
                         // Thing 버튼 생성
                         var i;
@@ -551,8 +538,8 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                 text : records[i].get('thing'),
                                 xtype : 'button',
                                 handler : function(b, e, thingID) {
-//                                    console.log("Thing 클릭.. : " + thingID);
-//                                    console.log(b.getText());
+                                    //                                    console.log("Thing 클릭.. : " + thingID);
+                                    //                                    console.log(b.getText());
                                     var store = Ext.getCmp("timelog-LogGrid").getStore();
 
                                     var record = new store.recordType({
@@ -562,7 +549,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                         memberID : 0
                                     });
 
-//                                    console.log(store);
+                                    //                                    console.log(store);
 
                                     store.add(record);
                                     Ext.getCmp("timelog-LogGrid").doLayout();
@@ -619,23 +606,26 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             title: 'statistics',
             layout : 'fit',
 
-            tbar : [{
-                xtype: 'datefield',
-                id: 'timelog-datefild',
-                editable: false,
-                format: 'Y-m-d',
-                value: new Date(),
-                width: 85
-            }, {
-                text : '불러오기',
-                handler : function() {
-                    var date = Ext.getCmp('timelog-datefild').getValue();
-                    var dateStr = date.format('Y-m-d');
+            tbar : [
+                {
+                    xtype: 'datefield',
+                    id: 'timelog-datefild',
+                    editable: false,
+                    format: 'Y-m-d',
+                    value: new Date(),
+                    width: 85
+                },
+                {
+                    text : '불러오기',
+                    handler : function() {
+                        var date = Ext.getCmp('timelog-datefild').getValue();
+                        var dateStr = date.format('Y-m-d');
 
-                    alert(dateStr);
+                        alert(dateStr);
 
+                    }
                 }
-            }],
+            ],
 
             html : 'ddd'
         })

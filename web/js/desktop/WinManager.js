@@ -34,11 +34,9 @@ M31.WindowsManager = function() {
     };
 
     function removeWin(win) {
-        console.log(win.id)
         M31.ApplicationRegistry.getInstance().getApp(win.id.replace("-win","")).removeWin();
         win.destroy();
         windows.unregister(win);
-        console.log('remove... win' );
     };
 
     function maxWin(win){

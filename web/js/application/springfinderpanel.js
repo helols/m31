@@ -18,7 +18,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 '</tpl>',
             '</tpl>',
             '<tpl if="linkAppId === \'springsee\' && fileType === \'N\'">',
-                '<a hidefocus="on" href="{fileAddition}" class="pirobox" title="{fileName}">',
+                '<a hidefocus="on" href="{fileAddition}" class="pirobox_gall" title="{fileName}">',
             '</tpl>',
             '<img class="file" src="../../images/apps/springfinder/{imgName}.png">',
             '<tpl if="linkAppId !== \'springbook\'">',
@@ -173,7 +173,12 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             my_speed: 600, //animation speed
             bg_alpha: 0.5, //background opacity
             radius: 4, //caption rounded corner
-            scrollImage : false // true == image follows the page, false == image remains in the same open position
+            scrollImage : false, // true == image follows the page, false == image remains in the same open position
+            pirobox_next : 'piro_next', // Nav buttons -> piro_next == inside piroBox , piro_next_out == outside piroBox
+            pirobox_prev : 'piro_prev',// Nav buttons -> piro_prev == inside piroBox , piro_prev_out == outside piroBox
+            close_all : '.piro_close',// add class .piro_overlay(with comma)if you want overlay click close piroBox
+            slideShow : 'slideshow', // just delete slideshow between '' if you don't want it.
+            slideSpeed : 4 //slideshow duration in seconds(3 to 6 Recommended)
         });
     },
     onFileMove : function(action) {
@@ -218,8 +223,26 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             } else {
                 this.onDirChange(fileId);
             }
+        }else if(data.linkAppId === 'springplayer' || data.linkAppId === 'springbook'){
+            var win = M31.WindowsManager.getInstance().getWindow(data.linkAppId);
+            var app = M31.ApplicationRegistry.getInstance().getApp(data.linkAppId);
+            if(!win){
+                app.beforeCreate();
+                win = M31.WindowsManager.getInstance().createWindow(this,
+                        Ext.apply(app.createWindow(), {
+                            id:     app.id+ '-win',
+                            title:  app.id==='springplayer'?'봄플레이어' :'봄북',
+                            iconCls:app.id+'-win-icon'
+                        }));
+                app.createCallback(win);
+                win.show();
+             }
+            if(data.linkAppId === 'springplayer'){
+                app.play(data.fileName, data.fileAddition);
+            }else{
+                app.gateway(data.fileAddition);
+            }
         }
-
     },
     changePath : function() {
         var node = this.springfinderTree.getNodeById(this.lastChangeNodeId);
@@ -373,6 +396,9 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         });
         e.stopEvent();
         this.contextMenu.showAt(e.getXY());
+    },
+    reload : function(){
+        this.store.reload();
     }
 });
 

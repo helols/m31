@@ -18,7 +18,8 @@
 		radius : 4,
 		close_all : '.piro_close,.piro_overlay',
 		slideShow : null,
-		slideSpeed : null //slideshow duration in seconds
+		slideSpeed : null,
+        eventName : opt.eventName || 'click'
 		}, opt);		
 		function start_pirobox() {
 			var corners = 
@@ -61,7 +62,7 @@
 			main_cont.append(corners);
 			
 			var tagId = '#' + opt.target + '_main_cont ';
-			
+			opt.close_all = '#' + opt.target +'_bg_overlay, .piro_close';
 			$(tagId + '.pirobox_up').append(piro_close);
 			$(tagId + '.pirobox_down').append(piro_nav);
 			$(tagId + '.c_c').append(piro_play);
@@ -85,10 +86,10 @@
 			var gall_settings = new Array();
 				for (var key in map) {
 					gall_settings.push(key);
-					if($(key).length === 1){//check on set of images
-					alert('For single image is recommended to use class pirobox');
-					$(key).css('border','2px dotted red');
-					}
+//					if($(key).length === 1){//check on set of images
+//					alert('For single image is recommended to use class pirobox');
+//					$(key).css('border','2px dotted red');
+//					}
 				}
 				for (var i=0; i<gall_settings.length; i++) {
 					$(gall_settings[i]).each(function(rel){this.rel = rel+1 + "&nbsp;of&nbsp;" + $(gall_settings[i]).length;});
@@ -122,12 +123,16 @@
 				c.preventDefault();
 				var image_count = parseInt($(piro_gallery).filter('.item').attr('rev'));
 				var start = $(this).is('.piro_prev_out,.piro_prev') ? $(piro_gallery).eq(image_count - 1) : $(piro_gallery).eq(image_count + 1);
-				start.click();
+				if(opt.eventName === 'click'){
+                    start.click();
+                }else{
+                    start.dblclick();
+                }
 				piro_close.add(caption).add(piro_next).add(piro_prev).css('visibility','hidden');
 			});
 			piro_single.each(function(d) {
 				var item = $(this);
-				item.bind('click',function(d) {
+				item.bind(opt.eventName,function(d) {
 					d.preventDefault();
 					piro_open(item.attr('href'));
 					var this_url = item.attr('href');
@@ -144,7 +149,7 @@
 			});
 			$(piro_gallery).each(function(array) {
 					var item = $(this);
-					item.bind('click',function(c) {
+					item.bind(opt.eventName,function(c) {
 						c.preventDefault();
 						piro_open(item.attr('href'));
 						var this_url = item.attr('href');
@@ -309,7 +314,7 @@
 						c.preventDefault();
 						piro_close.add(bg_overlay).add(main_cont).add(caption).add(piro_next).add(piro_prev).fadeOut(opt.close_speed);
 						main_cont.removeClass('loading');
-						$(piro_gallery).children().removeAttr('class');
+//						$(piro_gallery).children().removeAttr('class');
 						piro_next.add(piro_prev).css('width',my_nav_w+'px').hide();
 						$(tagId + '.stop').remove();
 						$(tagId + '.c_c').append(piro_play);
