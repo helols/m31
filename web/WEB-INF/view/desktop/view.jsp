@@ -49,6 +49,11 @@
         ZeroClipboard.setMoviePath( '/js/plugin/ZeroClipboard.swf' );
     </script>
     <!-- Miracle -->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+       // Load the Visualization API and the piechart package.
+        google.load('visualization', '1', {'packages':['piechart']});
+    </script>
     <script type="text/javascript" src="<c:url value="/js/application/miracle.js"/>"></script>
     <!-- Outsider -->
     <script type="text/javascript" src="<c:url value="/js/application/outsider.js"/>"></script>
@@ -64,7 +69,8 @@
 <body id="body" scroll="no">
 <div id="loading-mask"></div>
 <script type="text/javascript">
-    Ext.onReady(function(){
+    Ext.onReady(function() {
+
 //        M31.ApplicationRegistry.getInstance().loadApplicationStore();
         Ext.Ajax.request({
             method:'POST',

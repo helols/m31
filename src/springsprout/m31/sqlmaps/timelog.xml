@@ -12,6 +12,14 @@
         SELECT id, thing, view_order
         FROM SPRING_TIMELOG_THING
         WHERE member_id = #memberId#
+        AND view_order != -2
+    </select>
+
+    <select id="getEndThingID" resultClass="int" parameterClass="int">
+        SELECT id
+        FROM SPRING_TIMELOG_THING
+        WHERE member_id = #memberId#
+        AND view_order = -2
     </select>
 
     <resultMap id="Timelog" class="springsprout.m31.domain.TimeLogVO">
@@ -23,6 +31,21 @@
     </resultMap>
 
     <select id="getTimeLog" resultMap="Timelog" parameterClass="springsprout.m31.module.app.timelog.support.TimeLogCri">
+        SELECT stmt.id as id,
+               stt.thing AS thing,
+               TO_CHAR(reg_date, 'yyyy-mm-dd HH24:MI:SS') AS reg_date,
+               stmt.member_id AS member_id,
+               stmt.thing_id AS thing_id
+          FROM SPRING_TIMELOG_THING stt,
+               SPRING_TIMELOG_MEMBER_THING stmt
+         WHERE STT.ID = STMT.THING_ID
+               AND stmt.member_id = #memberID#
+               AND TO_CHAR(STMT.REG_DATE,'yyyy-mm-dd') = #regDate#
+               AND stt.view_order >= 0
+        ORDER BY STMT.REG_DATE asc
+    </select>
+
+    <select id="getTimeLogAll" resultMap="Timelog" parameterClass="springsprout.m31.module.app.timelog.support.TimeLogCri">
         SELECT stmt.id as id,
                stt.thing AS thing,
                TO_CHAR(reg_date, 'yyyy-mm-dd HH24:MI:SS') AS reg_date,
@@ -49,7 +72,7 @@
            )
     </insert>
     
-    <insert id="timelog.addThing" parameterClass="springsprout.m31.domain.ThingVO">
+    <insert id="addThing" parameterClass="springsprout.m31.domain.ThingVO">
        <selectKey keyProperty="id" resultClass="int">
            SELECT TIMELOG_THING_SEQ.NEXTVAL FROM DUAL
        </selectKey>
@@ -60,5 +83,6 @@
             #viewOrder#,
             #memberID#
         )
-    </insert>
+    </insert>    
+
 </sqlMap>

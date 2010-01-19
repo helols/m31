@@ -43,4 +43,12 @@ public class TimeLogRepository extends SqlMapClientDaoSupport{
     public void addThing(ThingVO vo) {
         getSqlMapClientTemplate().insert("timelog.addThing", vo);
     }
+
+    public int getEndThingID(int currentMemberId) {
+        return (Integer)getSqlMapClientTemplate().queryForObject("timelog.getEndThingID", currentMemberId);
+    }
+
+    public List<TimeLogVO> getTimeLogAll(TimeLogCri cri) {
+        return getSqlMapClientTemplate().queryForList("timelog.getTimeLogAll", cri);
+    }
 }

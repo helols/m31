@@ -467,8 +467,8 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 }
             ]
         });
-
-        this.thingStore = new Ext.data.JsonStore({
+        
+       this.thingStore = new Ext.data.JsonStore({
             root : 'items',
             idProperty : 'id',
 
@@ -501,7 +501,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
             listeners : {
                 write : function (store, action, result, res, rs) {
-                    if (action === 'create') {
+                    if(action === 'create') {
                         store.load();
                     }
                 },
@@ -538,8 +538,8 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                 text : records[i].get('thing'),
                                 xtype : 'button',
                                 handler : function(b, e, thingID) {
-                                    //                                    console.log("Thing 클릭.. : " + thingID);
-                                    //                                    console.log(b.getText());
+//                                    console.log("Thing 클릭.. : " + thingID);
+//                                    console.log(b.getText());
                                     var store = Ext.getCmp("timelog-LogGrid").getStore();
 
                                     var record = new store.recordType({
@@ -549,7 +549,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                         memberID : 0
                                     });
 
-                                    //                                    console.log(store);
+//                                    console.log(store);
 
                                     store.add(record);
                                     Ext.getCmp("timelog-LogGrid").doLayout();
@@ -566,6 +566,38 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 }
             }
         });
+
+       this.statisticsStore = new Ext.data.JsonStore({
+           root : 'items',
+           url : '/app/timelog/stat',
+
+           fields : [{
+               name : 'thing'
+            },{
+               name : 'time'
+           }],
+
+           listeners : {
+               load : function(store, records, options) {
+                   var cmp = Ext.getCmp("timelog-statistics");
+                   
+                   var data = new google.visualization.DataTable();
+                   data.addColumn('string', 'Task');
+                   data.addColumn('number', 'Second per Day');
+                                    
+                   for(var i=0; i<records.length; i++) {                       
+                       data.addRow([
+                        records[i].get('thing'), records[i].get('time')
+                       ])
+                   }
+
+                   // Instantiate and draw our chart, passing in some options.
+                   var chart = new google.visualization.PieChart(cmp.body);
+                   chart.draw(data, {width: 282, height: 311, is3D: true, legend : 'bottom', pieJoinAngle  : 10});
+               }
+           }
+
+       });
 
         // 로그 패널
         this.log = new Ext.grid.GridPanel({
@@ -606,28 +638,22 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             title: 'statistics',
             layout : 'fit',
 
-            tbar : [
-                {
-                    xtype: 'datefield',
-                    id: 'timelog-datefild',
-                    editable: false,
-                    format: 'Y-m-d',
-                    value: new Date(),
-                    width: 85
-                },
-                {
-                    text : '불러오기',
-                    handler : function() {
-                        var date = Ext.getCmp('timelog-datefild').getValue();
-                        var dateStr = date.format('Y-m-d');
-
-                        alert(dateStr);
-
-                    }
-                }
-            ],
-
-            html : 'ddd'
+            tbar : [{
+                xtype: 'datefield',
+                id: 'timelog-datefild',
+                editable: false,
+                format: 'Y-m-d',
+                value: new Date(),
+                width: 85
+            }, {
+                text : '불러오기',
+                handler : function() {
+                    var player = this;
+                    var date = Ext.getCmp('timelog-datefild').getValue();
+                    var dateStr = date.format('Y-m-d');
+                    player.statisticsStore.load({params: {regDate : dateStr}});
+                }.createDelegate(this)
+            }]
         })
 
     },

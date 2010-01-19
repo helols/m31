@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import springsprout.m31.domain.ThingVO;
+import springsprout.m31.domain.TimeLogStatisticsVO;
 import springsprout.m31.domain.TimeLogVO;
 import springsprout.m31.module.app.timelog.support.TimeLogCri;
 import springsprout.m31.service.security.SecurityService;
@@ -15,6 +16,7 @@ import springsprout.m31.service.security.SecurityService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
 import static springsprout.m31.utils.JSONHelper.getJsonTOList;
@@ -64,6 +66,28 @@ public class TimeLogController {
         List list = getJsonTOList(items, TimeLogVO.class);
         service.addTiemLog(list);
         
+        return new ModelAndView(JSON_VIEW).addObject("success", true).addObject("items", list);
+    }
+
+    @RequestMapping("/app/timelog/end")
+    public ModelAndView end() {
+        service.endLog(securityService.getCurrentMemberId()); 
+        return new ModelAndView(JSON_VIEW).addObject("success", true);
+    }
+
+    @RequestMapping("/app/timelog/stat")
+    public ModelAndView stat(@RequestParam String regDate) {
+        TimeLogCri cri = new TimeLogCri();
+        
+        if(regDate != null) {
+            cri.setRegDate(regDate);
+        } else {
+            cri.setRegDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        }
+        
+        cri.setMemberID(securityService.getCurrentMemberId());
+        List<TimeLogStatisticsVO> list = service.getstatisticalData(cri);
+
         return new ModelAndView(JSON_VIEW).addObject("success", true).addObject("items", list);
     }
 }
