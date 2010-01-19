@@ -21,7 +21,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     },
     beforeCreate : function() {
         //console.log("beforeCreate");
-
+        this.state = 'reday';
+        
         // 스토어
         this.ds = new Ext.data.JsonStore({
             url: '/gateway/springplayer/search',
@@ -226,7 +227,13 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         }
 
                     ]
-                }]
+                }],
+
+            listeners : {
+              render : function() {
+                  this.state = 'render';
+              }.createDelegate(this)  
+            }
         };
         return config;
     },
@@ -237,9 +244,16 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param url
      */
     play : function(title, url) {
-        this.win.getLayout().setActiveItem(1);
-        Ext.getCmp("springplayer-player").loadFlash({swf : url});
-        Ext.getCmp("springplayer-player-title").setText(title);
+        var state = this.state;
+
+        if(this.state === 'render') {
+            this.win.getLayout().setActiveItem(1);
+            Ext.getCmp("springplayer-player").loadFlash({swf : url});
+            Ext.getCmp("springplayer-player-title").setText(title);
+        } else {
+            //window.setTimeout(play)
+            alert("준비중");
+        }
     }
 });
 
@@ -598,6 +612,34 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             // TopToolbar는 동적으로 생성.
             tbar : []
         });
+
+        // 통계패널
+        this.statistics = new Ext.Panel({
+            id : 'timelog-statistics',
+            title: 'statistics',
+            layout : 'fit',
+
+            tbar : [{
+                xtype: 'datefield',
+                id: 'timelog-datefild',
+                editable: false,
+                format: 'Y-m-d',
+                value: new Date(),
+                width: 85
+            }, {
+                text : '불러오기',
+                handler : function() {
+                    var date = Ext.getCmp('timelog-datefild').getValue();
+                    var dateStr = date.format('Y-m-d');
+
+                    alert(dateStr);
+
+                }
+            }],
+
+            html : 'ddd'
+        })
+
     },
 
     createWindow : function() {
@@ -621,12 +663,10 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                     },
                     {
                         title : 'history',
+                        layout : 'fit',
                         html : 'History'
                     },
-                    {
-                        title: 'statistics',
-                        html : 'statistics'
-                    }
+                    this.statistics
                 ]
             }),
 
@@ -640,7 +680,14 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                     });
 
                     this.thingStore.load();
-                }.createDelegate(this)
+                }.createDelegate(this),
+
+                close : function(win) {
+                    Ext.Ajax.request({
+                        url : '/app/timelog/end'
+                    });
+
+                }
             }
         };
         return opt;
