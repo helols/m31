@@ -16,9 +16,9 @@
     * container and <object, img, iframe> bleed-thru.
     */
     var CSS = Ext.util.CSS;
-    if(CSS){
-    	CSS.getRule('.x-hide-nosize') || //already defined?
-        	CSS.createStyleSheet('.x-hide-nosize{height:0px!important;width:0px!important;border:none!important;zoom:1;}.x-hide-nosize * {height:0px!important;width:0px!important;border:none!important;zoom:1;}');
+    if(CSS){ 
+        CSS.getRule('.x-hide-nosize') || //already defined?
+            CSS.createStyleSheet('.x-hide-nosize{height:0px!important;width:0px!important;border:none!important;zoom:1;}.x-hide-nosize * {height:0px!important;width:0px!important;border:none!important;zoom:1;}');
         CSS.refreshCache();
     }
     
@@ -49,11 +49,11 @@
 	        },
             
             /**
-	         * Returns true if display is not "none"
+	         * Returns true if display is not "none" or the visibilityCls has not been applied
 	         * @return {Boolean}
 	         */
 	        isDisplayed : function() {
-	            return !(this.hasClass(this.visibilityCls) || this.dom.style[DISPLAY] == NONE);
+	            return !(this.hasClass(this.visibilityCls) || this.isStyle(DISPLAY, NONE));
 	        },
 	        // private
 	        fixDisplay : function(){
@@ -64,13 +64,38 @@
 	
 	        /**
 	         * Checks whether the element is currently visible using both visibility, display, and nosize class properties.
-	         * @return {Boolean} True if the element is currently visible, else false
+             * @param {Boolean} deep (optional) True to walk the dom and see if parent elements are hidden (defaults to false)
+             * @return {Boolean} True if the element is currently visible, else false
 	         */
 	        isVisible : function(deep) {
-	            return this.visible || 
-                   (!this.isStyle(VISIBILITY, HIDDEN) && 
-                       this.visibilityCls ? !this.hasClass(this.visibilityCls) :!this.isStyle(DISPLAY, NONE));
-	        }
+	            var vis = this.visible ||
+				    (!this.isStyle(VISIBILITY, HIDDEN) && 
+                        (this.visibilityCls ? 
+                            !this.hasClass(this.visibilityCls) : 
+                                !this.isStyle(DISPLAY, NONE))
+                      );
+				  
+				  if (deep !== true || !vis) {
+				    return vis;
+				  }
+				
+				  var p = this.dom.parentNode,
+                      bodyRE = /body/i;
+				
+				  while (p && !bodyRE.test(p.tagName)) {
+				    if (!Ext.fly(p, '_isVisible').isVisible()) {
+				      return false;
+				    }
+				    p = p.parentNode;
+				  }
+				  return true;
+
+	        },
+            //Assert isStyle method for Ext 2.x
+            isStyle: supr.isStyle || function(style, val) {
+			    return this.getStyle(style) == val;
+			}
+
 	    };
         
         //Add basic capabilities to the Ext.Element.Flyweight class
@@ -338,36 +363,25 @@
      };
 
    El.addMethods || ( El.addMethods = function(ov){ Ext.apply(El.prototype, ov||{}); });
-
+   
    Ext.removeNode =  function(n){
          var dom = n ? n.dom || n : null;
-         if(dom && dom.parentNode && dom.tagName != 'BODY'){
-            var el, elc, D = ELD.getDocument(dom), elCache = resolveCache(dom);
+         if(dom && dom.tagName != 'BODY'){
+            var el, elc, elCache = resolveCache(dom), parent;
 
             //clear out any references if found in the El.cache(s)
             if((elc = elCache[dom.id]) && (el = elc.el) ){
-
                 if(el.dom){
-                    (Ext.enableNestedListenerRemoval) ? Evm.purgeElement(el.dom, true) : Evm.removeAll(el.dom);
+                    Ext.enableNestedListenerRemoval ? Evm.purgeElement(el.dom, true) : Evm.removeAll(el.dom);
                 }
                 delete elCache[dom.id];
                 delete el.dom;
                 delete el._context;
                 el = null;
             }
-
-            if(Ext.isIE && !Ext.isIE8){
-                var d = D.createElement('div');
-                d.appendChild(dom);
-                d.removeChild(dom);
-                d = null;  
-            } else {
-                var p = dom.parentElement || dom.parentNode;
-                p && p.removeChild(dom);
-                p = null;
-            }
-          }
-          dom = null;
+            (parent = dom.parentElement || dom.parentNode) && parent.removeChild(dom);
+            dom = null;
+         }
     };
 
      var overload = function(pfn, fn ){
@@ -432,15 +446,19 @@
           return elm ? !!elm.navigator || OPString.apply(elm) == "[object Window]" : false;
         },
 
-        isIterable : function(obj){
+        isIterable : function(v){
             //check for array or arguments
-            if( obj === null || obj === undefined )return false;
-            if(Ext.isArray(obj) || !!obj.callee || Ext.isNumber(obj.length) ) return true;
-
-            return !!((/NodeList|HTMLCollection/i).test(OPString.call(obj)) || //check for node list type
-              //NodeList has an item and length property
-              //IXMLDOMNodeList has nextNode method, needs to be checked first.
-             obj.nextNode || obj.item || false);
+            if(Ext.isArray(v) || v.callee){
+                return true;
+            }
+            //check for node list type
+            if(/NodeList|HTMLCollection/.test(OPString.call(v))){
+                return true;
+            }
+            //NodeList has an item and length property
+            //IXMLDOMNodeList has nextNode method, needs to be checked first.
+            return ((typeof v.nextNode != 'undefined' || v.item) && Ext.isNumber(v.length));
+  
         },
         isElement : function(obj){
             return obj && Ext.type(obj)== 'element';
@@ -554,12 +572,7 @@
                     ex = cache[el].el;
                     ex.dom = elm;
                 }else{
-                    ex = (
-                     cache[el] = {
-                        el : new (assertClass(elm))(elm, null, doc),
-                        data : {},
-                        events: {}
-                     }).el;
+                    ex = El.addToCache(new (assertClass(elm))(elm, null, doc));
                 }
                 return ex;
              }else if(el.tagName || Ext.isWindow(el)){ // dom element
@@ -569,12 +582,8 @@
                 if(cache[id] && (ex = cache[id].el)){
                     ex.dom = el;
                 }else{
-                    ex = (
-                     cache[id] = {
-                        el : new (assertClass(el))(el, null, doc),
-                        data : {},
-                        events: {}
-                     }).el;
+                    ex = El.addToCache(new (assertClass(el))(el, null, doc), null, cache); 
+                    el.navigator && (cache[id].skipGC = true);
                 }
                 return ex;
             }else if( el instanceof El ){ 
@@ -605,12 +614,10 @@
                 docEl.id = Ext.id(el,'_doc');
                 docEl._isDoc = true;
 
-                return (
-                     cache[docEl.id] =
-                      { el   : docEl,
-                        data : {},
-                        events: {}
-                      }).el ;
+                El.addToCache( docEl, null, cache);
+                cache[docEl.id].skipGC = true;
+                return docEl;
+                        
              }else if(el.isComposite){
                 return el;
 
@@ -658,12 +665,24 @@
             return (c[key] = value);
         }
     };
+    
+    El.addToCache = function(el, id, cache ){
+	    id = id || el.id;    
+        var C = cache || resolveCache(el);
+	    C[id] = {
+	        el:  el,
+	        data: {},
+	        events: {}
+	    };
+	    return el;
+	};
 
     var propCache = {},
         camelRe = /(-[a-z])/gi,
         camelFn = function(m, a){ return a.charAt(1).toUpperCase(); },
         opacityRe = /alpha\(opacity=(.*)\)/i,
         trimRe = /^\s+|\s+$/g,
+        marginrightRe = /marginRight/,
         propFloat = Ext.isIE ? 'styleFloat' : 'cssFloat',
         view = DOC.defaultView,
         VISMODE = 'visibilityMode',
@@ -678,6 +697,7 @@
         BOTTOM = "-bottom",
         WIDTH = "-width",
         MATH = Math,
+        OPACITY = "opacity",
         VISIBILITY = "visibility",
         DISPLAY = "display",
         HIDDEN = "hidden",
@@ -855,14 +875,12 @@
             }else{
                 el = DH.insertBefore(me.dom, el);
             }
-            var C = resolveCache(me)||{};
+            var C = resolveCache(me);
             Ext.removeNode(me.dom);
             me.id = Ext.id(me.dom = el);
-            return (C[me.id]={
-              el: me,
-              events : {},
-              data : {}
-            }).el;
+
+            El.addToCache(me.isFlyweight ? new (assertClass(me.dom))(me.dom, null, C) : me);     
+            return me;
         },
 
 
@@ -896,7 +914,7 @@
          * @param {Boolean/Object} animate (optional) True for the default animation, or a standard Element animation config object
          * @return {Ext.Element} this
          */
-         setVisible : function(visible, animate){
+        setVisible : function(visible, animate){
             var me = this,
                 dom = me.dom,
                 isDisplay = getVisMode(this.dom) == ELDISPLAY;
@@ -1045,24 +1063,36 @@
                     var el = !this._isDoc ? this.dom : null,
                         v,
                         cs,
-                        out;
+                        out,
+                        display,
+                        wk = Ext.isWebKit,
+                        display;
 
-                    if(!el || el == DOC || Ext.isDocument(el)) return null;
+                    if(!el || !el.style) return null;
                     prop = chkCache(prop);
+                    // Fix bug caused by this: https://bugs.webkit.org/show_bug.cgi?id=13343
+                    if(wk && marginrightRe.test(prop)){
+                        display = this.getStyle(DISPLAY);
+                        el.style.display = 'inline-block';
+                    }
                     out =  (v = el.style[prop]) ? v :
-                           (cs = view.getComputedStyle(el, "")) ? cs[prop] : null;
+                           (cs = view.getComputedStyle(el, '')) ? cs[prop] : null;
                      // Webkit returns rgb values for transparent.
-                    if(Ext.isWebKit && out == 'rgba(0, 0, 0, 0)'){
-                        out = 'transparent';
+                    if(wk){
+                        if(out == 'rgba(0, 0, 0, 0)'){
+                            out = 'transparent';
+                        }else if(display){
+                            el.style.display = display;
+                        }
                     }
                     return out;
                 } :
-                function GS(prop){
+                function GS(prop){ //IE
                    var el = !this._isDoc ? this.dom : null,
                         m,
                         cs;
-                    if(!el || el == DOC || Ext.isDocument(el)) return null;
-                    if (prop == 'opacity') {
+                    if(!el || !el.style) return null;
+                    if (prop == OPACITY) {
                         if (el.style.filter.match) {
                             if(m = el.style.filter.match(opacityRe)){
                                 var fv = parseFloat(m[1]);
@@ -1097,7 +1127,7 @@
             }
             for (style in prop) {
                 value = prop[style];
-                style == 'opacity' ?
+                style == OPACITY ?
                     this.setOpacity(value) :
                     this.dom.style[chkCache(style)] = value;
             }
@@ -1208,8 +1238,8 @@
 
             var me = this,  doc = this.getDocument(),
                 vp = me.dom == doc.body || me.dom == doc,
-                w = s.width || vp ? Ext.lib.Dom.getViewWidth(false,doc) : me.getWidth(),
-                h = s.height || vp ? Ext.lib.Dom.getViewHeight(false,doc) : me.getHeight(),
+                w = s.width || vp ? ELD.getViewWidth(false,doc) : me.getWidth(),
+                h = s.height || vp ? ELD.getViewHeight(false,doc) : me.getHeight(),
                 xy,
                 r = Math.round,
                 o = me.getXY(),
@@ -1319,8 +1349,8 @@
                 w,
                 h,
                 r,
-                dw = Ext.lib.Dom.getViewWidth(false,doc) -10, // 10px of margin for ie
-                dh = Ext.lib.Dom.getViewHeight(false,doc)-10, // 10px of margin for ie
+                dw = ELD.getViewWidth(false,doc) -10, // 10px of margin for ie
+                dh = ELD.getViewHeight(false,doc)-10, // 10px of margin for ie
                 p1y,
                 p1x,
                 p2y,
@@ -1399,8 +1429,8 @@
 
                 var vw, vh, vx = 0, vy = 0;
                 if(el.dom == doc.body || el.dom == doc){
-                    vw = Ext.lib.Dom.getViewWidth(false,doc);
-                    vh = Ext.lib.Dom.getViewHeight(false,doc);
+                    vw = ELD.getViewWidth(false,doc);
+                    vh = ELD.getViewHeight(false,doc);
                 }else{
                     vw = el.dom.clientWidth;
                     vh = el.dom.clientHeight;
@@ -1542,7 +1572,8 @@
             return me;
         }
     });
-
+    
+    //Stop the existing collectorThread
     Ext.isDefined(El.collectorThreadId) && clearInterval(El.collectorThreadId);
     // private
 	// Garbage collection - uncache elements/purge listeners on orphaned elements
@@ -1554,10 +1585,15 @@
 	        var eid,
 	            el,
 	            d,
+                o,
                 EC = Ext.elCache;
 	
 	        for(eid in EC){
-	            el = EC[eid].el;
+                o = EC[eid];
+                if(o.skipGC){
+	                continue;
+	            }
+	            el = o.el;
 	            d = el.dom;
 	            // -------------------------------------------------------
 	            // Determining what is garbage:
@@ -1576,29 +1612,31 @@
 	            // directly, but somewhere up the line they have an orphan
 	            // parent.
 	            // -------------------------------------------------------
-	            if (Ext.isDocument(d) || Ext.isWindow(d)) {
-	                continue;
-	            }
+	            
 	            if(!d || !d.parentNode || (!d.offsetParent && !DOC.getElementById(eid))){
 	                if(Ext.enableListenerCollection){
 	                    Ext.EventManager.removeAll(d);
 	                }
 	                delete EC[eid];
 	            }
-	        }
+	        
             
-	        // Cleanup IE COM Object Hash reference leaks 
-	        if (Ext.isIE) {
-	            var t = {};
-	            for (eid in EC) {
-	                t[eid] = EC[eid];
-	            }
-	            Ext.elCache = Ext._documents[Ext.id(document)] = t;
-                t = null;
-	        }
+		        // Cleanup IE COM Object Hash reference leaks 
+		        if (Ext.isIE) {
+		            var t = {};
+		            for (eid in EC) {
+		                t[eid] = EC[eid];
+		            }
+		            Ext.elCache = Ext._documents[Ext.id(document)] = t;
+	                t = null;
+		        }
+            }
 	    }
 	}
-	El.collectorThreadId = setInterval(garbageCollect, 30000);
+    //Restart if enabled
+    if(Ext.enableGarbageCollector){
+	   El.collectorThreadId = setInterval(garbageCollect, 30000);
+    }
 
     Ext.apply(ELD , {
         /**
@@ -1697,76 +1735,19 @@
         ]),
 
         getXY : Ext.overload([
-            ELD.getXY || function(el){},
+            ELD.getXY || emptyFn,
             function(el, doc) {
 
                 el = Ext.getDom(el, doc);
-                var D= this.getDocument(el);
-                var p, pe, b, scroll;
-                var bd = D ? (D.body || D.documentElement): null;
+                var D= this.getDocument(el),
+                    bd = D ? (D.body || D.documentElement): null;
 
                 if(!el || !bd || el == bd){ return [0, 0]; }
-
-                if (el.getBoundingClientRect) {
-                    b = el.getBoundingClientRect();
-                    scroll = fly(D).getScroll();
-                    return [b.left + scroll.left, b.top + scroll.top];
-                }
-                var x = 0, y = 0;
-
-                p = el;
-
-                var hasAbsolute = fly(el).getStyle("position") == "absolute";
-
-                while (p) {
-
-                    x += p.offsetLeft;
-                    y += p.offsetTop;
-
-                    if (!hasAbsolute && fly(p).getStyle("position") == "absolute") {
-                        hasAbsolute = true;
-                    }
-
-                    if (Ext.isGecko) {
-                        pe = fly(p);
-
-                        var bt = parseInt(pe.getStyle("borderTopWidth"), 10) || 0;
-                        var bl = parseInt(pe.getStyle("borderLeftWidth"), 10) || 0;
-
-
-                        x += bl;
-                        y += bt;
-
-
-                        if (p != el && pe.getStyle('overflow') != 'visible') {
-                            x += bl;
-                            y += bt;
-                        }
-                    }
-                    p = p.offsetParent;
-                }
-
-                if (Ext.isSafari && hasAbsolute) {
-                    x -= bd.offsetLeft;
-                    y -= bd.offsetTop;
-                }
-
-                if (Ext.isGecko && !hasAbsolute) {
-                    var dbd = fly(bd);
-                    x += parseInt(dbd.getStyle("borderLeftWidth"), 10) || 0;
-                    y += parseInt(dbd.getStyle("borderTopWidth"), 10) || 0;
-                }
-
-                p = el.parentNode;
-                while (p && p != bd) {
-                    if (!Ext.isOpera || (p.tagName != 'TR' && fly(p).getStyle("display") != "inline")) {
-                        x -= p.scrollLeft;
-                        y -= p.scrollTop;
-                    }
-                    p = p.parentNode;
-                }
-                return [x, y];
-            }])
+                return this.getXY(el);
+            }
+          ])
+                
+                
     });
 
     var GETDOC = ELD.getDocument,
@@ -1798,27 +1779,8 @@
 
     El.Flyweight.prototype = new flyFn();
     El.Flyweight.prototype.isFlyweight = true;
-
     
-    //Normalize existing document and window listeners
-    (function(){
-	    var c, C = Ext.elCache; 
-        GET(document);
-	    GET(window);
-	    if(c = C['_DOC']){
-            C[document.id].events = c.events;
-            C[document.id].data = c.data;
-            delete C['_DOC'];
-	    }
-        if(c = C['_WINDOW']){
-            C[window.id].events = c.events;
-            C[window.id].data = c.data;
-            delete C['_WINDOW'];
-        }
-        
-    })();
-    
-    function addListener(el, ename, fn, wrap, scope){
+    function addListener(el, ename, fn, task, wrap, scope){
         el = Ext.getDom(el);
         if(!el){ return; }
 
@@ -1828,7 +1790,7 @@
 
         wfn = E.on(el, ename, wrap);
         es[ename] = es[ename] || [];
-        es[ename].push([fn, wrap, scope, wfn]);
+        es[ename].push([fn, wrap, scope, wfn, task]);
 
         // this is a workaround for jQuery and should somehow be removed from Ext Core in the future
         // without breaking ExtJS.
@@ -1839,7 +1801,7 @@
                 el.removeEventListener.apply(el, args);
             });
         }
-        if(ename == "mousedown" && el == DOC){ // fix stopped mousedowns on the document
+        if(ename == "mousedown" && Ext.isDocument(el)){ // fix stopped mousedowns on the document
             Ext.EventManager.stoppedMouseDownEvent.addListener(wrap);
         }
     };
@@ -1853,13 +1815,11 @@
         };
     };
 
-    function createBuffered(h, o, fn){
-        fn.task = new Ext.util.DelayedTask(h);
-        var w = function(e){
+    function createBuffered(h, o, task){
+        return function(e){
             // create new event object impl so new events don't wipe out properties
-            fn.task.delay(o.buffer, h, null, [new Ext.EventObjectImpl(e)]);
+            task.delay(o.buffer, h, null, [new Ext.EventObjectImpl(e)]);
         };
-        return w;
     };
 
     function createSingle(h, el, ename, fn, scope){
@@ -1872,17 +1832,14 @@
     function createDelayed(h, o, fn){
         return function(e){
             var task = new Ext.util.DelayedTask(h);
-            if(!fn.tasks) {
-                fn.tasks = [];
-            }
-            fn.tasks.push(task);
+            (fn.tasks || (fn.tasks = [])).push(task);
             task.delay(o.delay || 10, h, null, [new Ext.EventObjectImpl(e)]);
         };
     };
 
     function listen(element, ename, opt, fn, scope){
         var o = !Ext.isObject(opt) ? {} : opt,
-            el = Ext.getDom(element);
+            el = Ext.getDom(element), task;
 
         fn = fn || o.fn;
         scope = scope || o.scope;
@@ -1892,9 +1849,7 @@
         }
         function h(e){
             // prevent errors while unload occurring
-            if(!Ext){// !window[xname]){  ==> can't we do this?
-                return;
-            }
+            if(!window.Ext){ return; }
             e = Ext.EventObject.setEvent(e);
             var t;
             if (o.delegate) {
@@ -1929,10 +1884,11 @@
             h = createSingle(h, el, ename, fn, scope);
         }
         if(o.buffer){
-            h = createBuffered(h, o, fn);
+            task = new Ext.util.DelayedTask(h);
+            h = createBuffered(h, o, task);
         }
 
-        addListener(el, ename, fn, h, scope);
+        addListener(el, ename, fn, task, h, scope);
         return h;
     };
 
@@ -1971,14 +1927,17 @@
             el && Ext.get(el);
             var elCache = el ? resolveCache(el) : {},
                 f = el && ((elCache[el.id]||{events:{}}).events)[eventName] || [],
-                wrap, i, l, k, wf;
+                wrap, i, l, k, wf, len, fnc;
 
             for (i = 0, len = f.length; i < len; i++) {
-                if (Ext.isArray(f[i]) && f[i][0] == fn && (!scope || f[i][2] == scope)) {
-                    if(fn.task) {
-                        fn.task.cancel();
-                        delete fn.task;
-                    }
+                /* 0 = Original Function,
+                   1 = Event Manager Wrapped Function,
+                   2 = Scope,
+                   3 = Adapter Wrapped Function,
+                   4 = Buffered Task
+                */
+                if (Ext.isArray(fnc = f[i]) && fnc[0] == fn && (!scope || fnc[2] == scope)) {
+                    fnc[4] && fnc[4].cancel();
                     k = fn.tasks && fn.tasks.length;
                     if(k) {
                         while(k--) {
@@ -1986,9 +1945,9 @@
                         }
                         delete fn.tasks;
                     }
-                    wf = wrap = f[i][1];
+                    wf = wrap = fnc[1];
                     if (E.extAdapter) {
-                        wf = f[i][3];
+                        wf = fnc[3];
                     }
                     E.un(el, eventName, wf);
                     f.splice(i,1);
@@ -2019,8 +1978,7 @@
          * @param {String/HTMLElement} el The id or html element from which to remove all event handlers.
          */
         removeAll : function(el){
-            el = Ext.getDom(el);
-            if (!el) {
+            if (!(el = Ext.getDom(el))) {
                 return;
             }
             var id = el.id,
@@ -2032,19 +1990,22 @@
             for(ename in ev){
                 if(ev.hasOwnProperty(ename)){
                     f = ev[ename];
+                    /* 0 = Original Function,
+                       1 = Event Manager Wrapped Function,
+                       2 = Scope,
+                       3 = Adapter Wrapped Function,
+                       4 = Buffered Task
+                    */
                     for (i = 0, len = f.length; i < len; i++) {
-                        fn = f[i][0];
-                        if(fn.task) {
-                            fn.task.cancel();
-                            delete fn.task;
-                        }
-                        if(fn.tasks && (k = fn.tasks.length)) {
+                        fn = f[i];
+                        fn[4] && fn[4].cancel();
+                        if(fn[0].tasks && (k = fn[0].tasks.length)) {
                             while(k--) {
-                                fn.tasks[k].cancel();
+                                fn[0].tasks[k].cancel();
                             }
                             delete fn.tasks;
                         }
-                        E.un(el, ename, E.extAdapter ? f[i][3] : f[i][1]);
+                        E.un(el, ename, E.extAdapter ? fn[3] : fn[1]);
                     }
                 }
             }
@@ -2073,15 +2034,15 @@
                 if (es.hasOwnProperty(eventName)) {
                     f = es[eventName];
                     for (i = 0, len = f.length; i < len; i++) {
-                        Ext.EventManager.removeListener(el, eventName, f[i][0]);
+                        Evm.removeListener(el, eventName, f[i][0]);
                     }
                 }
             } else {
-                Ext.EventManager.removeAll(el);
+                Evm.removeAll(el);
             }
             if (recurse && el && el.childNodes) {
                 for (i = 0, len = el.childNodes.length; i < len; i++) {
-                    Ext.EventManager.purgeElement(el.childNodes[i], recurse, eventName);
+                    Evm.purgeElement(el.childNodes[i], recurse, eventName);
                 }
             }
         }
@@ -2671,8 +2632,11 @@
             reset : function(src, callback, scope) {
                 
                 this._unHook();
-                var loadMaskOff = false;
-                var s = src, win = this.getWindow();
+                var loadMaskOff = false,
+                    s = src, 
+                    win = this.getWindow(),
+                    O = this._observable;
+                    
                 if(this.loadMask){
                     loadMaskOff = this.loadMask.disabled;
                     this.loadMask.disabled = false;
@@ -2682,18 +2646,18 @@
                 if(win){
                     this.isReset= true;
                     var cb = callback;
-	                this._observable.addListener('_docload',
+	                O.addListener('_docload',
 	                  function(frame) {
 	                    if(this.loadMask){
 	                        this.loadMask.disabled = loadMaskOff;
 	                    };
 	                    Ext.isFunction(cb) &&  (cb = cb.apply(scope || this, arguments));
-                        this._observable.fireEvent("reset", this);
+                        O.fireEvent("reset", this);
 	                }, this, {single:true});
 	            
                     Ext.isFunction(s) && ( s = src());
                     s = this._targetURI = Ext.isEmpty(s, true)? this.resetUrl: s;
-                    win.location.href = s;
+                    win.location ? (win.location.href = s) : O.fireEvent('_docload', this);
                 }
                 
                 return this;
@@ -3174,7 +3138,7 @@
              */
             loadHandler : function(e, target) {
                 var rstatus = (e && typeof e.type !== 'undefined' ? e.type: this.dom.readyState);
-                //console.log('lh', rstatus, this.isReset, this._frameAction, this.domReady, this.domFired, this.eventsFollowFrameLinks);
+                
                 if (this.eventsFollowFrameLinks || this._frameAction || this.isReset ) {
                                     
 	                switch (rstatus) {
@@ -4209,16 +4173,15 @@
                        delete this.frameMarkup;
                        return;
                     }else{
-                       
-                        if(this.defaultSrc){
+                       if(this.defaultSrc){
                             F.setSrc(this.defaultSrc, false);
-                        }else{
+                       }else{
                             /* If this is a no-action frame, reset it first, then resume parent events
                              * allowing access to a fully reset frame by upstream afterrender/layout events
                              */ 
                             F.reset(null, resumeEvents);
                             return;
-                        }
+                       }
                     }
                     resumeEvents && resumeEvents();
                 }
@@ -4226,10 +4189,8 @@
             
             /** @private */
             beforeDestroy : function() {
-                this.setVisible(false);
                 var F;
                 if(F = this.getFrame()){
-                    F.hide();
                     F.remove();
                     this.frameEl = this.frameShim = null;
                 }
@@ -4872,268 +4833,4 @@
 
     /** @sourceURL=<mif.js> */
     Ext.provide && Ext.provide('mif');
-})(); /* global Ext */
-/* Messaging Driver for ux.ManagedIFrame 
- *******************************************************************************
- * This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * ***********************************************************************************
- * @version 2.0
- *
- * License: ux.ManagedIFrame, ux.ManagedIFramePanel, ux.ManagedIFrameWindow  
- * are licensed under the terms of the Open Source GPL 3.0 license:
- * http://www.gnu.org/licenses/gpl.html
- *
- * Commercial use is prohibited without a Commercial Developement License. See
- * http://licensing.theactivegroup.com.
- *
- * Donations are welcomed: http://donate.theactivegroup.com
- *
- */ 
- 
-(function(){
-      
-     /**
-     * @private, frame messaging interface (for same-domain-policy frames
-     *           only)
-     */
-     var _XFrameMessaging = function() {
-        // each tag gets a hash queue ($ = no tag ).
-        var tagStack = { '$' : [] };
-        var isEmpty = function(v, allowBlank) {
-            return v === null || v === undefined
-                    || (!allowBlank ? v === '' : false);
-        };
-        var apply = function(o, c, defaults) {
-	        if (defaults) { apply(o, defaults);}
-	        if (o && c && typeof c == 'object') {
-	            for (var p in c) {
-	                o[p] = c[p];
-	            }
-	        }
-	        return o;
-	    };
-
-        window.sendMessage = function(message, tag, origin) {
-            var MIF;
-            if (MIF = arguments.callee.manager) {
-                if (message._fromHost) {
-                    var fn, result;
-                    // only raise matching-tag handlers
-                    var compTag = message.tag || tag || null;
-                    var mstack = !isEmpty(compTag) ? tagStack[String(compTag).toLowerCase()] || [] : tagStack["$"];
-
-                    for (var i = 0, l = mstack.length; i < l; i++) {
-                        if (fn = mstack[i]) {
-                            result = fn.apply(fn.__scope, arguments) === false? false: result;
-                            if (fn.__single) {
-                                mstack[i] = null;
-                            }
-                            if (result === false) {
-                                break;
-                            }
-                        }
-                    }
-
-                    return result;
-                } else {
-
-                    message = {
-                        type : 'message',
-                        data : message,
-                        domain : origin || document.domain,
-                        uri : document.documentURI,
-                        source : window,
-                        tag : tag ? String(tag).toLowerCase() : null
-                    };
-
-                    try {
-                        return MIF.disableMessaging !== true
-                                ? MIF._observable ? MIF._observable.fireEvent.call(MIF._observable, message.type,MIF, message) : null
-                                : null;
-                    } catch (ex) {
-                    } // trap for message:tag handlers not yet defined
-
-                    return null;
-                }
-
-            }
-        };
-        window.onhostmessage = function(fn, scope, single, tag) {
-
-            if (typeof fn == 'function') {
-                if (!isEmpty(fn.__index)) {
-                    throw "onhostmessage: duplicate handler definition"
-                            + (tag ? " for tag:" + tag : '');
-                }
-
-                var k = isEmpty(tag) ? "$" : tag.toLowerCase();
-                tagStack[k] || (tagStack[k] = []);
-                apply(fn, {
-                            __tag : k,
-                            __single : single || false,
-                            __scope : scope || window,
-                            __index : tagStack[k].length
-                        });
-                tagStack[k].push(fn);
-
-            } else {
-                throw "onhostmessage: function required";
-            }
-
-        };
-        window.unhostmessage = function(fn) {
-            if (typeof fn == 'function' && typeof fn.__index != 'undefined') {
-                var k = fn.__tag || "$";
-                tagStack[k][fn.__index] = null;
-            }
-        };
-
-    }; 
-   
-    var MIFEl = Ext.ux.ManagedIFrame.Element;
-    
-    Ext.override( MIFEl ,{
-        
-        disableMessaging :  true,
-        
-        _renderHook : MIFEl.prototype._renderHook.createSequence(function(){
-            
-            if(this.disableMessaging){return;}
-            
-            //assert a default 'message' event
-            var O=this._observable;
-            O && (O.events.message || (O.addEvents('message')));
-            
-            if (this.domWritable()) {
-                this.loadFunction({
-                            name : 'XMessage',
-                            fn : _XFrameMessaging
-                        }, false, true);
-                        
-                var sm, w = this.getWindow();
-                w && (sm = w.sendMessage) && (sm.manager = this);
-                
-            }
-            
-        }),
-        
-        /**
-         * dispatch a message to the embedded frame-window context (same-origin frames only)
-         * @name sendMessage
-         * @memberOf Ext.ux.ManagedIFrame.Element
-         * @param {Mixed} message The message payload.  The payload can be any supported JS type. 
-         * @param {String} tag Optional reference tag 
-         * @param {String} origin Optional domain designation of the sender (defaults
-         * to document.domain).
-         */
-        sendMessage : function(message, tag, origin) {
-            var win;
-            if (this.domWritable() && (win = this.getWindow())) {
-                // support MIF frame-to-frame messaging relay
-                tag || (tag = message.tag || '');
-                tag = tag.toLowerCase();
-                message = Ext.applyIf(message.data ? message : {
-                            data : message
-                        }, {
-                            type : 'message',
-                            domain : origin || document.domain,
-                            origin : origin || document.domain,
-                            uri : document.documentURI,
-                            source : window,
-                            tag : tag || null,
-                            _fromHost : this
-                        });
-                return win.sendMessage ? win.sendMessage.call(null, message, tag, origin) : undefined;
-            }
-            return;
-        },
-        
-        /**
-         * Dispatch a cross-document message (per HTML5 specification) if the browser supports it natively.
-         * @name postMessage
-         * @memberOf Ext.ux.ManagedIFrame.Element
-         * @param {String} message Required message payload (String only)
-         * @param {Array} ports Optional array of ports/channels. 
-         * @param {String} origin Optional domain designation of the sender (defaults
-         * to document.domain). 
-         * <p>Notes:  on IE8, this action is synchronous.
-         */
-        postMessage : function(message /* , [ports] [,origin] */){
-            var d, w=this.getWindow();
-            if(w && !this.disableMessaging){
-	            var args =[String(message || '')].concat(
-	                Array.prototype.slice.call(arguments,1)
-	            );
-                //assert an origin (last argument)
-                var L = args.length;
-                var origin = L > 1 ? args[L-1] : undefined;
-                typeof origin === 'string' || args.push(document.domain);
-	            //Opera may implement postMessage on the document   
-	            var post = w.postMessage || (d = this.getDocument()? d.postMessage : null);
-	            post && post.apply(w, args);
-            }
-        }
-        
-    });
-    var MIF = Ext.ux.ManagedIFrame;
-    Ext.each(['Component', 'Panel', 'Window'], 
-	      function(K){
-           MIF[K] && Ext.override(MIF[K] ,{
-                /**
-                 * @memberOf Ext.ux.ManagedIFrame.ComponentAdapter
-                 * @param {Mixed} message The message payload.  The payload can be any supported JS type. 
-                 * @param {String} tag Optional reference tag 
-                 * @param {String} origin Optional domain designation of the sender (defaults
-                 * to document.domain).
-                 */
-	           sendMessage : function(){
-                  this.getFrame() && this.frameEl.sendMessage.apply(this.frameEl, arguments);
-               }
-	       });
-    });
-    
-    var MM = MIF.Manager;
-    MM && Ext.apply(MM,{
-    
-        /**
-         * @private
-         * @memberOf Ext.ux.ManagedIFrame.ComponentAdapter
-         */
-        onMessage : function(e){
-            
-            var be = e.browserEvent;
-            //Copy the relevant message members to the Ext.event
-            be && Ext.apply(e,{
-               origin      : be.origin,
-               data        : be.data,
-               lastEventId : be.lastEventId,
-               source      : be.source
-            });
-            try {
-                var $frame ;
-                if ($frame = be && be.source ? be.source.frameElement.id : null){
-                    $frame = this.getFrameById($frame);
-                    $frame && $frame._observable.fireEvent('message', $frame, e);
-                }
-            } catch (rhEx) {} 
-        },
-        /**
-         * @private
-         */
-        destroy : MM.destroy.createSequence(function(){
-             (window.postMessage || document.postMessage) &&
-                Ext.EventManager.un(window, 'message', this.onMessage, this);  
-        })
-        
-    });
-    
-     //Add support for postMessage message events if the browser supports it
-    MM && (window.postMessage || document.postMessage) &&
-        Ext.EventManager.on(window, 'message', MM.onMessage, MM);       
-      
-})();   
-
-  /** @sourceURL=<mifmsg.js> */
-Ext.provide && Ext.provide('mifmsg');
-  
+})();

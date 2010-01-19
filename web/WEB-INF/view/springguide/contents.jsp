@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,56 +9,56 @@
 	<td align="center" valign="middle">
 		<table class="springguide-contents">
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springfinder.png' /><br /><b>º½Å½»ö±â</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springfinder.png' /><br /><b>ë´„íƒìƒ‰ê¸°</b></td>
 			<td>
-				<p>º½¾¾, º½ÇÃ·¹ÀÌ¾î, º½ºÏ¿¡¼­ º¸¾Ò´ø ÀÚ·áµéÀ» ÀúÀåÇØµÎ°í Ã£¾Æº¼ ¼ö ÀÖ´Â ÀúÀå¼ÒÀÔ´Ï´Ù.</p>
+				<p>ë´„ì”¨, ë´„í”Œë ˆì´ì–´, ë´„ë¶ì—ì„œ ë³´ì•˜ë˜ ìžë£Œë“¤ì„ ì €ìž¥í•´ë‘ê³  ì°¾ì•„ë³¼ ìˆ˜ ìžˆëŠ” ì €ìž¥ì†Œìž…ë‹ˆë‹¤.</p>
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springsee.png' /><br /><b>º½¾¾</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springsee.png' /><br /><b>ë´„ì”¨</b></td>
 			<td>
-				<p>³×ÀÌ¹ö, ±¸±Û, ´ÙÀ½, ÇÃ¸®Ä¿ÀÇ ÀÌ¹ÌÁö¸¦ Á¶È¸ÇØ¼­ º¼ ¼ö ÀÖ´Â ÀÌ¹ÌÁö ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.
-				ÀÌ¹ÌÁö¸¦ ²ø¾î´Ù°¡ Å½»ö±â¿¡ ÀúÀåÇØµÑ¼öµµ ÀÖÀ¸¸ç, ¿ìÅ¬¸¯ ¸Þ´º¸¦ ÅëÇØ¼­ º½¹ÌÅõµ¥ÀÌ, º½Æ®À§ÅÍ·Î ÀÌ¹ÌÁö Á¤º¸¸¦ º¸³¾¼öµµ ÀÖ½À´Ï´Ù. 
+				<p>ë„¤ì´ë²„, êµ¬ê¸€, ë‹¤ìŒ, í”Œë¦¬ì»¤ì˜ ì´ë¯¸ì§€ë¥¼ ì¡°íšŒí•´ì„œ ë³¼ ìˆ˜ ìžˆëŠ” ì´ë¯¸ì§€ ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.
+				ì´ë¯¸ì§€ë¥¼ ëŒì–´ë‹¤ê°€ íƒìƒ‰ê¸°ì— ì €ìž¥í•´ë‘˜ìˆ˜ë„ ìžˆìœ¼ë©°, ìš°í´ë¦­ ë©”ë‰´ë¥¼ í†µí•´ì„œ ë´„ë¯¸íˆ¬ë°ì´, ë´„íŠ¸ìœ„í„°ë¡œ ì´ë¯¸ì§€ ì •ë³´ë¥¼ ë³´ë‚¼ìˆ˜ë„ ìžˆìŠµë‹ˆë‹¤. 
 				</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springplayer.png' /><br /><b>º½ÇÃ·¹ÀÌ¾î</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springplayer.png' /><br /><b>ë´„í”Œë ˆì´ì–´</b></td>
 			<td>
-				<p>À¯Æ©ºê, ´ÙÀ½ÀÇ µ¿¿µ»ó Á¶È¸, Àç»ýÀ» ÇÒ ¼ö ÀÖ´Â ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.
-				µ¿¿µ»óÀ» ²ø¾î´Ù°¡ Å½»ö±â¿¡ ÀúÀåÇØµÎ°í ¾ðÁ¦µçÁö Ã£¾Æº¼ ¼ö ÀÖ½À´Ï´Ù. 
+				<p>ìœ íŠœë¸Œ, ë‹¤ìŒì˜ ë™ì˜ìƒ ì¡°íšŒ, ìž¬ìƒì„ í•  ìˆ˜ ìžˆëŠ” ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.
+				ë™ì˜ìƒì„ ëŒì–´ë‹¤ê°€ íƒìƒ‰ê¸°ì— ì €ìž¥í•´ë‘ê³  ì–¸ì œë“ ì§€ ì°¾ì•„ë³¼ ìˆ˜ ìžˆìŠµë‹ˆë‹¤. 
 				</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springme2day.png' /><br /><b>º½¹ÌÅõµ¥ÀÌ</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springme2day.png' /><br /><b>ë´„ë¯¸íˆ¬ë°ì´</b></td>
 			<td>
-				<p>º½µ¥½ºÅ©Å¾¿¡¼­ Áñ±â´Â ¹ÌÅõµ¥ÀÌ ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.</p> 
+				<p>ë´„ë°ìŠ¤í¬íƒ‘ì—ì„œ ì¦ê¸°ëŠ” ë¯¸íˆ¬ë°ì´ ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springtwitter.png' /><br /><b>º½Æ®À§ÅÍ</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springtwitter.png' /><br /><b>ë´„íŠ¸ìœ„í„°</b></td>
 			<td>
-				<p>º½µ¥½ºÅ©Å¾¿¡¼­ Áñ±â´Â Æ®À§ÅÍ ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.</p> 
+				<p>ë´„ë°ìŠ¤í¬íƒ‘ì—ì„œ ì¦ê¸°ëŠ” íŠ¸ìœ„í„° ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springbook.png' /><br /><b>º½ºÏ</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springbook.png' /><br /><b>ë´„ë¶</b></td>
 			<td>
-				<p>³×ÀÌ¹ö Ã¥ Á¤º¸¸¦ Á¶È¸ÇØ º¼ ¼ö ÀÖ´Â ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.
-				Ã¥Á¤º¸¸¦ ²ø¾î´Ù Å½»ö±â¿¡ ÀúÀåÇØµÎ°í ¾ðÁ¦µçÁö Ã£¾Æº¼ ¼ö ÀÖ½À´Ï´Ù.</p> 
+				<p>ë„¤ì´ë²„ ì±… ì •ë³´ë¥¼ ì¡°íšŒí•´ ë³¼ ìˆ˜ ìžˆëŠ” ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.
+				ì±…ì •ë³´ë¥¼ ëŒì–´ë‹¤ íƒìƒ‰ê¸°ì— ì €ìž¥í•´ë‘ê³  ì–¸ì œë“ ì§€ ì°¾ì•„ë³¼ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/springtimelog.png' /><br /><b>º½Å¸ÀÓ·Î±×</b></td>
+			<td align="center"><img src='/images/desktop/springdock/springtimelog.png' /><br /><b>ë´„íƒ€ìž„ë¡œê·¸</b></td>
 			<td>
-				<p>ÇÏ·ç¿¡ ÀÚ½ÅÀÇ ÀÏ°ú¸¦ ±â·ÏÇØµÎ°í ¾î¶»°Ô »ç¿ëÇÏ¿´´ÂÁö Â÷Æ®¿Í ±¸±Û ½Ã°¢È­ ¼­ºñ½º¸¦ ÅëÇØ¼­ ºÐ¼® º¼ ¼ö ÀÖ´Â ¾îÇÃ¸®ÄÉÀÌ¼ÇÀÔ´Ï´Ù.</p> 
+				<p>í•˜ë£¨ì— ìžì‹ ì˜ ì¼ê³¼ë¥¼ ê¸°ë¡í•´ë‘ê³  ì–´ë–»ê²Œ ì‚¬ìš©í•˜ì˜€ëŠ”ì§€ ì°¨íŠ¸ì™€ êµ¬ê¸€ ì‹œê°í™” ì„œë¹„ìŠ¤ë¥¼ í†µí•´ì„œ ë¶„ì„ ë³¼ ìˆ˜ ìžˆëŠ” ì–´í”Œë¦¬ì¼€ì´ì…˜ìž…ë‹ˆë‹¤.</p> 
 			</td>
 		</tr>
 		<tr>
-			<td align="center"><img src='/images/desktop/springdock/setting.png' /><br /><b>Á¦¾îÆÇ</b></td>
+			<td align="center"><img src='/images/desktop/springdock/setting.png' /><br /><b>ì œì–´íŒ</b></td>
 			<td>
-				<p>º½µ¥½ºÅ©Å¾¿¡ ÇÁ·Î±×·¥À» Ãß°¡ ¼³Ä¡ÇÏ°Å³ª ¶Ç´Â »èÁ¦¸¦ ÇÒ ¼ö ÀÖÀ¸¸ç, »ç¿ëÀÚ °³ÀÎÁ¤º¸¸¦ ¼öÁ¤ ÇÒ ¼öÀÖ´Â Á¦¾îÆÇÀÔ´Ï´Ù.</p> 
+				<p>ë´„ë°ìŠ¤í¬íƒ‘ì— í”„ë¡œê·¸ëž¨ì„ ì¶”ê°€ ì„¤ì¹˜í•˜ê±°ë‚˜ ë˜ëŠ” ì‚­ì œë¥¼ í•  ìˆ˜ ìžˆìœ¼ë©°, ì‚¬ìš©ìž ê°œì¸ì •ë³´ë¥¼ ìˆ˜ì • í•  ìˆ˜ìžˆëŠ” ì œì–´íŒìž…ë‹ˆë‹¤.</p> 
 			</td>
 		</tr>
 		</table>

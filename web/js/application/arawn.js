@@ -253,7 +253,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	this.win.doLayout();
     	
     	this.bookStore.load();
-    }
+    },
+    gateway: function(bookInfoString){
+    	console.log(bookInfoString);
+    }    
 });
 
 // 봄미투데이
@@ -468,6 +471,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    			// 마스크를 지워라!
 	    			app.loadMask.hide();
 	    			// 로그인 패널 파괴
+	    			$('#frameSpringMe2DayLogin').remove();
 	    			app.loginModule.loginPanel.destroy();
 	    			
     	    		// 미투데이 패널을 생성
