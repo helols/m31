@@ -75,3 +75,25 @@ div#springme2day-form-body-length.body-length{
 .springme2day-me2day-authentication-result{
 	display: none;
 }
+
+.springguide-contents{
+	width: 80%;
+	padding: 5 5 5 5;
+}
+
+.springguide-contents tr{
+	height: 100;
+}
+
+.springguide-contents tr td b{
+	color:#888888;
+	text-decoration:none;
+	font-size:9; !important;
+	font-style: inherit oblique !important;	
+}
+
+.springguide-contents tr td p{
+	color:#888888;
+	text-decoration:none;
+	font-size:7; !important;	
+}

@@ -7,6 +7,12 @@
  */
 package springsprout.m31.module.main;
 
+import static springsprout.m31.common.M31System.JSON_VIEW;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +24,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.main.support.SignupValidator;
 import springsprout.m31.module.member.MemberService;
 import springsprout.m31.service.security.SecurityService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import static springsprout.m31.common.M31System.JSON_VIEW;
 
 @Controller
 public class MainController {
@@ -81,6 +82,11 @@ public class MainController {
         }
         return new ModelAndView(JSON_VIEW).addObject("status","success").addObject("userInfo",memberService.makeMemberInfo(users));
     }
+    
+    @RequestMapping("/app/springguide")
+    public String springguide(){
+        return "/springguide/contents";
+    }    
 
     private boolean isAjaxLogin(HttpServletRequest req) {
         return (req.getHeader("AJAX") != null && req.getHeader("AJAX").equals("true"));
