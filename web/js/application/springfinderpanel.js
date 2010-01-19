@@ -241,7 +241,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 if(Ext.getCmp("springfinder-panel-springplayer")){
                     app.play(data.fileName, data.fileAddition);
                 }else{
-                    app.play.defer(1000,[data.fileName,data.fileAddition]);
+                    app.play.defer(1000,app,[data.fileName,data.fileAddition]);
                 }
             }else{
                 app.gateway(data.fileAddition);

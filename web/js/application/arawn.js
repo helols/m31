@@ -260,7 +260,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	    		if(app.state != 'ready') return;
 	        	
 	        	app.runner.stop(app.gatewayTask);
-	        	
+	        	app.bookStore.clearData();
 	        	var data = {
             		"springBookDTO":
             			{"books":[Ext.decode(bookInfoString)]}
