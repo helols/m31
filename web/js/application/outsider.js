@@ -399,10 +399,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 });
 
 m31.showImage = function() {
-    $(".piro_overlay").remove();
-    $(".pirobox_content").remove();
-
     $().piroBox({
+    	target: 'springsee-win',
         my_speed: 600, //animation speed
         bg_alpha: 0.5, //background opacity
         radius: 4, //caption rounded corner

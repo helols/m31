@@ -23,7 +23,7 @@ var noti_unique_id = null;
 m31.util = {
 
     JsLibraryManager: {
-        'pirobox': '/js/plugin/piroBox.1_2.js'                    // 봄씨용 이미지뷰
+        'pirobox': '/js/plugin/piroBox.1_2.js' +'?a='+(+new Date)                    // 봄씨용 이미지뷰
     },
     // 동적 함수 관리
     requiredJS: function(libraryName) {

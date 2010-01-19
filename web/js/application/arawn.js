@@ -331,7 +331,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	return {
     		id: 'springme2day-win',
     		width:500,
-	        height:300,
+	        height:450,
 	        minWidth: 400,
             minHeight: 200,
 	        layout:'fit',
@@ -340,15 +340,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        border: false
     	};
     },
-    springMe2DayCanvas: new Ext.Container({
-		id: 'springme2day-win-canvas', 
-		border: false,
-		listeners: {
-    		resize: function(sender, adjWidth, adjHeight, rawWidth, rawHeight){
-    			console.log('springme2day-win-canvas.resize(' + adjWidth + ', ' + adjHeight + ', ' + rawWidth + ', ' + rawHeight + ')');
-    		}
-    	}
-	}), 
     /* 인증 관련 변수 및 함수 집합! */
     loginModule : {
     	/* 로그인 상태 */
@@ -497,7 +488,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     },
     me2DayModule: {
     	apiUrl: '/app/me2day/',
-    	linkLength: 0,
         destroy: function(){
     		if(this.iconStore){ this.iconStore.destroy(); } 
     		if(this.postFormPanel){ this.postFormPanel.destroy(); }
@@ -560,9 +550,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
              */
             var bodyTextLengthUpdate = function(){
                 tcnt--;
-                if((parseInt(jQuery('#springme2day-form-body-length').text()) - this.linkLength) !== (150-Ext.fly('springme2day-form-body').getValue().length)){
+                if(parseInt(jQuery('#springme2day-form-body-length').text()) !== (150-Ext.fly('springme2day-form-body').getValue().replace(/"(.*?)":http:\/\/(.*?) /g, "$1").length)){
                      Ext.get('springme2day-form-body-length')
-                        .update(150-Ext.fly('springme2day-form-body').getValue().length);
+                        .update(150-Ext.fly('springme2day-form-body').getValue().replace(/"(.*?)":http:\/\/(.*?) /g, "$1").length);
                 }
                 if(tcnt < 0){
                     clearIntrvalFF();
@@ -613,6 +603,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
                                     event.stopEvent();
                                 }
                             },
+                            keypress: function(sender,event){
+                            	if(event.keyCode == Ext.EventObject.ENTER){
+                            		this.postFormPanel.getForm().submit({
+        	                			url:'/app/me2day/postSend', 
+        	                			waitMsg:'미투데이에 글을 전송 중 입니다.'
+        	                		});	
+                            	}
+                            }.createDelegate(this),
                             blur : function(sender,event){
                                 clearIntrvalFF();
                             }
@@ -688,7 +686,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		actioncomplete: function(form, action){
 	        			console.log('actioncomplete');
 	        			var result = Ext.decode(action.response.responseText);
-	        			console.log(result);
 	        			var msg = '전송 중 네트워크 장애가 발생했습니다.';
 	        			if(result.msg == 'springme2day_not_login'){
 	        				msg = '미투데이 인증에 실패했습니다.';
@@ -698,6 +695,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        				
 	        				form.reset();
 		        			form.findField('springme2day-form-icon').setValue(1);
+		        			
+		        			this.postStore.reload();
 	        			}
 	        			else if(result.msg == 'springme2day_postsend_body_blank'){
 	        				msg = '본문이 비어있습니다.';
@@ -706,17 +705,17 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        				msg = '본문이 150자를 넘습니다.';
 	        			}
 	        			m31.util.notification({title:'봄미투데이',text:msg});
-	        		},
+	        		}.createDelegate(this),
 	        		actionfailed: function(form, action){ console.log('actionfailed'); },
 	        		beforeaction: function(form, action){ 
 	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
 	        			var currentValueLength = form.findField('springme2day-form-body').getValue().length;
-	        			if((currentValueLength - this.linkLength) <= 0){
+	        			if(currentValueLength <= 0){
 	        				m31.util.notification({title:'봄미투데이',text:'본문이 비어있습니다.'});
 	        				return false;
 	        			}
-	        			else if((currentValueLength - this.linkLength) > 150){
+	        			else if(currentValueLength > 150){
 	        				m31.util.notification({title:'봄미투데이',text:'본문이 150자를 넘습니다.'});
 	        				return false;
 	        			}
@@ -782,9 +781,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		        			}
 		        		}, this);
 		        		
-		        		$(".piro_overlay").remove();
-		        		$(".pirobox_content").remove();
 		        		$().piroBox({
+		        			target: 'springme2day-win',
 		        			my_speed: 600, //animation speed
 		        			bg_alpha: 0.5, //background opacity
 		        			radius: 4, //caption rounded corner
@@ -1170,7 +1168,18 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		allowBlank: false,
 	            		blankText: '최소 한자 이상의 글을 남기셔야합니다.',
 	            		maxLength: 150,
-	            		maxLengthText: '댓글이 너무 깁니다!'
+	            		maxLengthText: '댓글이 너무 깁니다!',
+	            		enableKeyEvents: true,
+	            		listeners: {
+                            keypress: function(sender,event){
+                            	if(event.keyCode == Ext.EventObject.ENTER){
+                            		this.dialogue.get('springme2day-comment-dlg-form').getForm().submit({
+                            			url:'/app/me2day/commentSend', 
+                            			waitMsg:'댓글을 전송 중 입니다.'
+                            		});
+                            	}
+                            }.createDelegate(this)
+	                    }
 	            	},{
 	            		xtype: 'hidden',
 	            		name: 'post_id',
@@ -1208,6 +1217,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     				else{
     					if(result.msg == 'springme2day_commentsend_success'){
             				msg = '댓글을 전송했습니다.';
+            				this.postStore.reload();
             			}
             			else if(result.msg == 'springme2day_commentsend_body_blank'){
             				msg = '댓글을 입력해주세요.';
@@ -1220,9 +1230,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
             			}
         				m31.util.notification({title:'봄미투데이',text:'댓글을 전송했습니다.'});
     				}
-    				this.destroy();
+    				this.dialogue.destroy();
     			},
-    			this.dialogue);
+    			this);
         	this.dialogue.get('springme2day-comment-dlg-form').getForm().on(
         		// 폼 전송 중 오류가 발생했을때...
     			'actionfailed',
@@ -1241,10 +1251,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         	if(Ext.getCmp('springme2day-form-body')){
         		M31.WindowsManager.getInstance().getWindow("springme2day").show();
             	M31.WindowsManager.getInstance().getWindow("springme2day").toFront();
-            	if(data.appId === 'springsee'){
+            	if(data.appId === 'springsee' && data.url.trim()){
         			var value = Ext.getCmp('springme2day-form-body').getValue();
-        			Ext.getCmp('springme2day-form-body').setValue('"":' + data.url.trim() + ' ' + value);
-        			this.linkLength = data.url.trim().length;
+        			Ext.getCmp('springme2day-form-body').setValue(value + ' "":' + data.url.trim() + ' ');
         		}
         	}
         }
