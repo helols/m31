@@ -627,7 +627,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                             id: 'springtwitter-view',
                             activeTab: 0,
                             region: 'center',
-                            padding: '5px 5px 30px 5px',
+                            padding: '5px 5px 5px 5px',
                             defaults:{autoScroll: true},
                             items:[
                                 {
@@ -1118,7 +1118,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     timelineTemplate: new Ext.XTemplate(
             '<tpl for=".">',
             '<div class="springtwitter-tweet" id="{name}">',
-            	'<div class="springtwitter-contents-thumb"><a href="http://twitter.com/{screenName}"><img src="{profileImageUrl}" title="{screenName}" alt="{screenName}"/></a></div>',
+            	'<div class="springtwitter-contents-thumb"><a href="http://twitter.com/{screenName}"><img src="{profileImageUrl}" title="{screenName}" alt="{screenName}" width="48" height="48" /></a></div>',
             	'<div class="springtwitter-contents" id="{name}">',
             		'<div class="springtwitter-contents-top"><h4>{screenName}</h4></div>',
             		'<div class="springtwitter-contents-middle">{text}<div class="springtwitter-info">{createAt} via {source}</div></div>',
