@@ -1092,7 +1092,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                         $("#springtwitter-authguideurl").attr("href", result.authURL);
                         self.cardNavigation(1);
                     } else if (result.auth && result.success) {
-                    	self.initTimelineView();
+                    	self.initTimelineView(result.userName);
                     } else {
                         //    				console.log("fail getting AuthURL");
                     }
@@ -1179,11 +1179,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     	console.log(screenName);
     	var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
     	self.win.setSize(400, 500);
-    	if (!screenName) {
-    		self.myScreenName = result.userName;
-    	} else {
-    		self.myScreenName = screenName;
-    	}
+		self.myScreenName = screenName;
         self.reloadAll();
         self.cardNavigation(2);
         Ext.getCmp('springtwitter-view-status').show();
