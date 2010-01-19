@@ -45,7 +45,12 @@ public class Comment {
 					this.pubDateText = (time / 1000 / 60) + "분전";
 				}
 				else{
-					this.pubDateText = hrs + "시간전";	
+					if(FastDateFormat.getInstance("HH", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH).format(pubDate).equals("00")){
+						this.pubDateText = (hrs - 12) + "시간전";		
+					}
+					else{
+						this.pubDateText = hrs + "시간전";	
+					}
 				}
 			}
 			else if(day == 1){

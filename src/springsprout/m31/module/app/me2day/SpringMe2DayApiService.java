@@ -155,7 +155,10 @@ public class SpringMe2DayApiService {
 				requestUrl = createMe2DayRequestUrl(me2dayapi_get_comments) + "&post_id=%s";
 				for(Post post : posts){
 					if(post.getCommentsCount() > 0){
-						post.setComments(getRequestComments(String.format(requestUrl, post.getPost_id()), info));
+						// 삭제가 가능한 댓글인가? ( 자기 글 이하의 모든 댓글은 삭제 가능 )
+						boolean isRemove = false;
+						if(info.getUser_id().equals(post.getAuthor().getId())){ isRemove = true; }
+						post.setComments(getRequestComments(String.format(requestUrl, post.getPost_id()), isRemove));
 						post.setCommentView(true);
 					}
 				}	
@@ -245,7 +248,7 @@ public class SpringMe2DayApiService {
 	 * @throws Me2DayApiRequestException 
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Comment> getRequestComments(String requestUrl, Me2DayUserInfo info) throws Me2DayApiRequestException {
+	public List<Comment> getRequestComments(String requestUrl, boolean isRemove) throws Me2DayApiRequestException {
 		List<Element> elements = requestMe2Day(requestUrl).detachRootElement().getChildren("comment");
 		if(!CollectionUtils.isEmpty(elements)){
 			List<Comment> comments = new ArrayList<Comment>();
@@ -256,9 +259,7 @@ public class SpringMe2DayApiService {
 					if(authorEl != null){
 						comment.setAuthor((Author) convertElementToBean(authorEl.getChildren(), Author.class));							
 					}
-					if(comment.getAuthor() != null){
-						comment.setRemove(info.getUser_id().equals(comment.getAuthor().getId()));
-					}
+					comment.setRemove(isRemove);
 					comments.add(comment);
 				}
 			}

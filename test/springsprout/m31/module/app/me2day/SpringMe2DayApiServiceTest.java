@@ -6,7 +6,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
+import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -65,29 +68,25 @@ public class SpringMe2DayApiServiceTest {
 		
 		PostSearchParam param = new PostSearchParam();
 		param.setId("arawn");
-		param.setForm("2010-01-09T24:00:00+0900");
-		param.setTo("2009-12-01T00:00:00+0900");
 		param.setMyPostView("Y");
-		param.setFriendPostView("Y");
 		// param.setCommentView("Y");
 		// param.setPost_id("p4vln3");
 		List<Post> posts = service.getPosts(param, info);
 		if(!CollectionUtils.isEmpty(posts)){
 			for(Post post : posts){
-				System.out.println(post.getPubDateText());
+				System.out.println(post);
 			}
 		}
 	}
 
+	@Test
 	public void 댓글얻어오기() throws Me2DayApiRequestException {
-		Me2DayUserInfo info = new Me2DayUserInfo();
-		info.setUser_id("arawn");
-		info.setFull_auth_token("b08b5e4b6ef0b86cb73729da267139a8");
+		FastDateFormat dateFormat = FastDateFormat.getInstance("HH", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
 		
-		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p4wlce", info);
+		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p5fzj3", false);
 		if(!CollectionUtils.isEmpty(comments)){
 			for(Comment comment : comments){
-				System.out.println(comment);
+				System.out.println(dateFormat.format(comment.getPubDate()));
 			}
 		}
 	}	
@@ -101,7 +100,6 @@ public class SpringMe2DayApiServiceTest {
 		}
 	}
 
-	@Test
 	public void 사용자정보얻어오기() throws Me2DayApiRequestException{
 		System.out.println(service.getPerson("miracle0k"));
 	}	
