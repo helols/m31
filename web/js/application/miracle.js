@@ -465,7 +465,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                     var store = Ext.getCmp("timelog-LogGrid").getStore();
 
                                     var record = new store.recordType({
-                                        thing : b.getText(),
+                                        thing : b.text,
                                         regDate : new Date().format('Y-m-d H:i:s'),
                                         thingID : thingID,
                                         memberID : 0
