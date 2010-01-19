@@ -58,18 +58,22 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     }
                 },
                 load : function(store) {
+                    var view = Ext.getCmp("springplayer-dataview-view");
                     Ext.getCmp("springplayer-dataview").body.scrollTo('top', 0);
                     // Dirty 채크를 위해서 검색어 저장.
                     var textfield = Ext.getCmp('springplayer-serach-textfield');
                     var combo = Ext.getCmp('springplayer-serach-combo');
                     textfield.originalValue = textfield.getValue();
                     combo.originalValue = combo.getValue();
+                    if (!view.dragZone) {
+                        view.dragZone = new MovieDragZone(view, {containerScroll:false, ddGroup: 'springfinderpenelDD'});
+                    }
                 }
             }
         });
 
         this.thumbnailtpl = new Ext.XTemplate(
-                '<tpl for="."><div class="thumb-wrap"><table>',
+                '<tpl for="."><div class="thumb-wrap" id={thumbWrap}><table>',
                 '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><span><img class="player-icon" src="../../images/apps/springplayer/title.png"/>{title}</span></td></tr>',
                 '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/author.png"/>{author}</span></td></tr>',
                 '<tr><td>',
@@ -115,6 +119,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                     window.open(target.href);
                                 }
                             }.createDelegate(this)
+                        },
+
+                        prepareData : function(data) {
+                            data.thumbWrap = Ext.id();
+                            return data;
                         }
                     },
 
@@ -157,13 +166,14 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     })
                 },
                 {
-                    title : '탐색기',
-                    collapsedTitle : '탐색기',
+                    title : 'FLASH SHAP',
+                    collapsedTitle : 'FLASH SHAP',
                     region : 'south',
-                    height : 100,
+                    height : 110,
+                    autoScroll : true,
                     items : new M31.app.SpringFinderPanel({
-                        height : 100,
-                        layout : 'fit',
+                        height : 110,
+                        autoScroll : false,
                         border : false,
                         rootNodeName: 'springplayer'
                     }),
@@ -338,6 +348,73 @@ Ext.ux.FlashPlugin = function() {
     };
 };
 
+/**
+ * Create a DragZone instance for our JsonView
+ */
+MovieDragZone = function(view, config) {
+    this.view = view;
+    MovieDragZone.superclass.constructor.call(this, view.getEl(), config);
+};
+Ext.extend(MovieDragZone, Ext.dd.DragZone, {
+    // We don't want to register our image elements, so let's
+    // override the default registry lookup to fetch the image
+    // from the event instead
+    onBeforeDrag : function(data, e) {
+        var nodeData = this.view.getRecords(data.nodes);
+        var items = new Array();
+        Ext.each(nodeData, function(item) {
+            items.push({
+                'fileName': item.data.title,
+                'fileAddition': item.data.playerURL
+            });
+        });
+
+        data.isApp = true;
+        data.linkAppId = 'springplayer';
+        data.items = items;
+    },
+    getDragData : function(e) {
+        var target = e.getTarget('.thumb-wrap');
+
+        if (target) {
+            var view = this.view;
+            if (!view.isSelected(target)) {
+                view.onClick(e);
+            }
+            var selNodes = view.getSelectedNodes();
+            var dragData = {
+                nodes: selNodes
+            };
+
+            if (selNodes.length == 1) {
+                dragData.ddel = Ext.fly(target.id).child('img.thumb-img').dom;
+                dragData.single = true;
+            } 
+
+            return dragData;
+        }
+        return false;
+    },
+    // the default action is to "highlight" after a bad drop
+    // but since an image can't be highlighted, let's frame it
+    afterRepair:function() {
+        for (var i = 0, len = this.dragData.nodes.length; i < len; i++) {
+            Ext.fly(this.dragData.nodes[i]).frame('#8db2e3', 1);
+        }
+        this.dragging = false;
+    },
+
+    // override the default repairXY with one offset for the margins and padding
+    getRepairXY : function(e) {
+        if (!this.dragData.multi) {
+            var xy = Ext.Element.fly(this.dragData.ddel).getXY();
+            xy[0] += 3;
+            xy[1] += 3;
+            return xy;
+        }
+        return false;
+    }
+});
 /***********************************************************************************************************************
  * 타임 로그
  ***********************************************************************************************************************/
