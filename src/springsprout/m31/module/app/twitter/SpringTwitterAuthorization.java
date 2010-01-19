@@ -112,7 +112,9 @@ public class SpringTwitterAuthorization {
             authDTO.setToken(accessToken.getToken());
             authDTO.setSecret_token(accessToken.getTokenSecret());
             authDTO.setScreen_name(accessToken.getScreenName());
-            twitterRepository.insertUserAuthToken(authDTO);
+            if(!securityService.isGuest()){
+            	twitterRepository.insertUserAuthToken(authDTO);
+            }
 
             accessToken = new AccessToken(accessToken.getToken(), accessToken.getTokenSecret());
             twitter.setOAuthAccessToken(accessToken);
