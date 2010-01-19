@@ -388,8 +388,8 @@ movingbox = function() {
         m31.util.loading_remove(time || 500);
     };
 
-    var moveViewPage = function(type) {
-        setTimeout('window.location.href="/desktop/view?login=' + type + '"', 250);
+    var moveViewPage = function() {
+        window.location.href="/desktop/view";
     };
 
     /**
@@ -414,7 +414,7 @@ movingbox = function() {
         }
         var isCookie = actItem.id === CHANGE ? isEmailSave : false;
 
-        m31.util.loading(true, 'signin... plz wait..');
+        m31.util.loading(false, 'signin... plz wait..');
         Ext.Ajax.request({
             method:'POST',
             url: '/j_spring_security_check',
@@ -426,9 +426,9 @@ movingbox = function() {
                 var result = Ext.decode(response.responseText);
                 if (result.loginResult === 'success') {
                     makeuserCookie(isCookie, username);
-                    moveViewPage('yes');
+                    moveViewPage();
                 } else {
-                    loading_remove();
+                    loading_remove(0);
                     m31.util.notification({
                         title:'login...'
                         ,text:'login 정보가 올바르지 않습니다. 확인하세요.'
@@ -447,7 +447,7 @@ movingbox = function() {
         lastEmailAddress = 'not';
         var email = jQuery('#j_username').val();
         m31.util.notificationRemove(notiUniqeId);
-        m31.util.loading(true, 'signup... plz wait..');
+        m31.util.loading(false, 'signup... plz wait..');
         Ext.Ajax.request({
             method:'POST',
             url: '/main/signup',
@@ -474,7 +474,7 @@ movingbox = function() {
                         break;
                     case 'success':
                         makeuserCookie(true, email);
-                        moveViewPage('no');
+                        moveViewPage();
                         break;
                     case 'fail':
                         loading_remove();

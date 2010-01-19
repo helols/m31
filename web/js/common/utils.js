@@ -97,7 +97,6 @@ m31.util = {
                             , '         <div class="loading-messge"> '
                             , '             <img class="loading-img" src="../../../images/loading-logo.png"/><br/>'
                             , '            '+msg+'<br/>'
-                            , '             <img class="loader-img" src="../../../images/ajax-loader.gif" align="absmiddle"/>'
                             , '         </div>'
                             , '</div>' ].join('');
         Ext.DomHelper.insertAfter(Ext.fly('loading-mask'), loadingHtml,true);
@@ -105,7 +104,7 @@ m31.util = {
                 Ext.fly('loading-mask').setOpacity(.1).setVisible(true).animate({opacity: {to: .8, from: .1}});
                 Ext.fly('loading').setVisible(true,true);
         }else{
-           Ext.fly('loading-mask').setVisible(true);
+           Ext.fly('loading-mask').setOpacity(1).setVisible(true);
            Ext.fly('loading').setVisible(true,true);
         }
     },
