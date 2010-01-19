@@ -69,7 +69,7 @@ public class FinderService {
         for(FinderFile finderFile : finderFileList){
             finderFile.setMemberId(memberId);
             finderFile.setFileId(finderRepository.insertFile(finderFile));
-            finderFile.setIconCls(finderFile.getIconCls()+"-"+finderFile.getLinkAppId());
+//            finderFile.setIconCls(finderFile.getIconCls()+"-"+finderFile.getLinkAppId());
         }
     }
 

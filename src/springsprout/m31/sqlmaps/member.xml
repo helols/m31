@@ -93,4 +93,8 @@
                 </iterate>
             )
     </select>
+
+    <insert id="insertRole" parameterClass="int">
+        INSERT into MEMBER_ROLES values (#memberID#,2)
+    </insert>
 </sqlMap>

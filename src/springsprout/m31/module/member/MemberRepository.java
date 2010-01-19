@@ -91,4 +91,8 @@ public class MemberRepository extends SqlMapClientDaoSupport{
     public List makeMemberInfo(List userList) {
         return getSqlMapClientTemplate().queryForList("member.makeMemberInfo",userList);
     }
+
+    public void insertRole(Integer memberId) {
+        getSqlMapClientTemplate().insert("member.insertRole", memberId);
+    }
 }

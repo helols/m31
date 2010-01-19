@@ -265,7 +265,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	userConfig: null,
     init: function() {
         console.log("init");
-        m31.util.requiredJS("pirobox");
+//        m31.util.requiredJS("pirobox");
     },
     createCallback: function(win){
     	console.log("createCallback");

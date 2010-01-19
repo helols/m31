@@ -33,6 +33,7 @@
     <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/DataView-more.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/piroBox.1_2.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js"/>"></script>
