@@ -157,9 +157,9 @@ div#springtwitter-friends-dataview { width:363px; }
 div#springtwitter-mentions-dataview { width:363px; }
 div#springtwitter-direcmessage-dataview { width:363px; }
 div.springtwitter-tweet div.springtwitter-contents-thumb { float:left; margin-right:10px; }
-div.springtwitter-tweet div.springtwitter-btn span.springtwitter-reply,
-div.springtwitter-tweet div.springtwitter-btn span.springtwitter-retweet,
-div.springtwitter-tweet div.springtwitter-btn span.springtwitter-message { cursor:pointer; }
+div.springtwitter-tweet div.springtwitter-btn img.springtwitter-reply,
+div.springtwitter-tweet div.springtwitter-btn img.springtwitter-retweet,
+div.springtwitter-tweet div.springtwitter-btn img.springtwitter-message { cursor:pointer; }
 
 div.springtwitter-tweet { padding-bottom:10px;}
 div.springtwitter-tweet div.springtwitter-contents { margin-right:10px; }
@@ -172,4 +172,7 @@ div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-bo
 div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-bottom div.springtwitter-btn img { margin-left:10px; }
 div.twitter-morebtn { height:40px; text-align:center; font-size:1.9em; font-weight:bolder; background-color:#ffffdf; color:#246faf; cursor:pointer; padding-top:7px; }
 
-
+div#springtwitter-authGuide { background: url(../../images/apps/springtwitter/auth-need-title.gif) top left no-repeat; padding:74px 0 0 0;}
+div#springtwitter-authGuide div { text-align:center;}
+div#springtwitter-authGuide div span { display:block; margin-top:7px; }
+div#springtwitter-authGuide img { margin-top: 10px; }

@@ -6,9 +6,11 @@
     <% request.setAttribute("cacheTime", System.currentTimeMillis());%>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Springsprout WEB DESKTOP</title>
+    <style type="text/css">
+        body {text-align:center;}
+        img { cursor:pointer; margin-top:20px; }
+    </style>
 
-
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/outsider.css"/>"/>
     <!-- LIBS -->
     <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
     <!-- ENDLIBS -->
@@ -26,11 +28,10 @@
 <body>
 <c:choose>
     <c:when test="${success}">
-        <div>인증완료 페이지 입니다. 3초후 자동으로 닫힙니다.</div>
-        <input type="button" onclick="self.close();" value="Close" />
+        <img src="/images/apps/springtwitter/auth-complete.gif" alt="인증완료" onclick="self.close();"/>
     </c:when>
     <c:when test="${success}">
-        <div>인증 실패</div>
+        <img src="/images/apps/springtwitter/auth-fail.gif" alt="인증실패" onclick="self.close();"/>
     </c:when>
 </c:choose>
 </body>

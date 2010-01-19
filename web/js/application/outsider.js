@@ -1108,7 +1108,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         var authGuide = new Ext.Panel({
             id: 'springtwitter-authGuide',
             layout:'fit',
-            html: '봄트위터를 사용하려면 트위터에서 인증이 필요합니다. 인증을 받으시려면 아래의 버튼을 클릭하세요.<a href="" id="springtwitter-authguideurl" target="_blank">인증하기</a>',
+            html: '<div><span>봄트위터를 사용하려면 트위터에서 인증이 필요합니다.</span><span>게스트계정일 경우에는 인증토큰을 저장하지 않습니다.</span><a href="" id="springtwitter-authguideurl" target="_blank"><img src="/images/apps/springtwitter/auth-btn.gif" alt="인증받기"/></a></div>',
             hideBorders: true
         });
         return authGuide;
@@ -1126,13 +1126,13 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
 	            		'<tpl if="this.isNotMine(screenName)">',
 		                	'<tpl if="!this.isDerectMessage(category)">',
 		                		'<div class="springtwitter-btn">',
-			                		'<img src="/images/apps/springtwitter/reply.png" alt="Reply" class="springtwitter-reply" />',
-			                		'<img src="/images/apps/springtwitter/retweet.png" alt="Retweet" class="springtwitter-retweet" />',
-			                		'<img src="/images/apps/springtwitter/diretmessage.png" alt="Direct Message" class="springtwitter-message" />',
+			                		'<img src="/images/apps/springtwitter/reply.png" alt="Reply" class="springtwitter-reply" ext:qwidth="60" ext:qtip="Reply" />',
+			                		'<img src="/images/apps/springtwitter/retweet.png" alt="Retweet" class="springtwitter-retweet" ext:qwidth="60" ext:qtip="Retweet" />',
+			                		'<img src="/images/apps/springtwitter/diretmessage.png" alt="Direct Message" class="springtwitter-message" ext:qwidth="60" ext:qtip="Message" />',
 		                		'</div>',
 		                	'</tpl>',
 		                	'<tpl if="this.isDerectMessage(category)">',
-		                		'<div class="springtwitter-btn"><img src="/images/apps/springtwitter/diretmessage.png" alt="Direct Message" class="springtwitter-message"/></div>',
+		                		'<div class="springtwitter-btn"><img src="/images/apps/springtwitter/diretmessage.png" alt="Direct Message" class="springtwitter-message" ext:qwidth="60" ext:qtip="Message" /></div>',
 		                	'</tpl>',
 		                '</tpl>',
             		'</div>',
