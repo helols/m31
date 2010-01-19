@@ -21,6 +21,7 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
 import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
@@ -351,19 +352,21 @@ public class SpringMe2DayApiService {
 				for(Element tagEl : iconEls){
 					PostIcon icon = (PostIcon) convertElementToBean(tagEl.getChildren(), PostIcon.class);
 					if(icon != null){
-						switch (icon.getIconIndex()) {
-						case 1:
-							icon.setDescription("생각");
-							break;
-						case 2:
-							icon.setDescription("느낌");
-							break;
-						case 3:
-							icon.setDescription("알림");
-							break;
-						default:
-							icon.setDescription("Empty");
-							break;
+						if(!StringUtils.hasText(icon.getDescription())){
+							switch (icon.getIconIndex()) {
+							case 1:
+								icon.setDescription("생각");
+								break;
+							case 2:
+								icon.setDescription("느낌");
+								break;
+							case 3:
+								icon.setDescription("알림");
+								break;
+							default:
+								icon.setDescription("Empty");
+								break;
+							}	
 						}
 						icons.add(icon);
 					}
@@ -603,6 +606,7 @@ public class SpringMe2DayApiService {
 			
 			BeanWrapper beanWrapper = new BeanWrapperImpl(beanClass);
 			beanWrapper.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss"), false));
+			beanWrapper.registerCustomEditor(int.class, new IntegerEditor());
 			beanWrapper.registerCustomEditor(List.class, new ListEditor());
 			beanWrapper.setPropertyValues(propertyValues, true);
 
@@ -621,5 +625,21 @@ public class SpringMe2DayApiService {
 	        return ObjectUtils.toString(getValue());
 	    }
 	}
+	
+	private class IntegerEditor extends PropertyEditorSupport {
+	    @Override
+	    public void setAsText(String text) throws IllegalArgumentException {
+	    	if(StringUtils.hasText(text)){
+	    		setValue(NumberUtils.parseNumber(text, Integer.class).intValue());
+	    	}
+	    	else{
+	    		setValue(0);
+	    	}
+	    }		
+	    @Override
+	    public String getAsText() {
+	        return ObjectUtils.toString(getValue());
+	    }
+	}	
 
 }

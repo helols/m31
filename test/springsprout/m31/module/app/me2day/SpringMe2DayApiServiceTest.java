@@ -42,7 +42,6 @@ public class SpringMe2DayApiServiceTest {
 		System.out.println(service.getAuthenticationInfo(me2DayDTO));
 	}
 	
-	@Test
 	public void 사용자인증테스트() throws Me2DayApiRequestException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		Me2DayUserInfo info = new Me2DayUserInfo();
 		info.setUser_id("arawn");
@@ -102,8 +101,9 @@ public class SpringMe2DayApiServiceTest {
 		}
 	}
 
+	@Test
 	public void 사용자정보얻어오기() throws Me2DayApiRequestException{
-		System.out.println(service.getPerson("arawn"));
+		System.out.println(service.getPerson("miracle0k"));
 	}	
 	
 	public void 오류정보확인() throws Me2DayApiRequestException{
