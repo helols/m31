@@ -58,6 +58,7 @@
     <script type="text/javascript" src="<c:url value="/js/application/helols.js"/>"></script>
     <!-- arawn -->
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/springguide.js"/>"></script>
 </head>
 <body id="body" scroll="no">
 <div id="loading-mask"></div>

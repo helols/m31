@@ -9,7 +9,8 @@ M31.ApplicationRegistry = function() {
         signout :{app : 'new M31Desktop.Signout()'},
         springfinder :{app : 'new M31Desktop.Springfinder()'},
         springbook :{app : 'new M31Desktop.SpringBook()'},
-        springtimelog:{app : 'new M31Desktop.SpringTimeLog()'}
+        springtimelog:{app : 'new M31Desktop.SpringTimeLog()'},
+        springguide:{app : 'new M31Desktop.SpringGuide()'}
     };
     var loaded = false;
     var appOrderSort = function(a,b){
