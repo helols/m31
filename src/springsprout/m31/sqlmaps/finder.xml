@@ -17,6 +17,8 @@
         <result property="iconCls" column="ICONCLS"/>
         <result property="linkAppId" column="LINK_APP_ID"/>
         <result property="fileAddition" column="FILE_ADDITION_INFO"/>
+        <result property="fileType" column="FILE_TYPE"/>
+        <result property="imgName" column="IMGNAME"/>
     </resultMap>
 
     <select id="getTree" resultMap="tree" parameterClass="hashMap">
@@ -35,13 +37,15 @@
     <select id="getFiles" resultMap="file" parameterClass="hashMap">
         <isNotEqual property="parentId" compareValue="1">
         SELECT
-            #parentId# as ID,
+            (select parent_id from spring_finder where id = #parentId#) as ID,
             '..' as FILE_NAME,
-            (select parent_id from spring_finder where id = #parentId#) as PARENT_ID,
+            #parentId# as PARENT_ID,
             'Y' as DEFAULT_YN,
-            'up-folder' as ICONCLS,
+            'folder'  as ICONCLS ,
+            'up-folder' as IMGNAME,
             'springfinder' as LINK_APP_ID,
-            '' as FILE_ADDITION_INFO
+            '' as FILE_ADDITION_INFO ,
+            'F' as FILE_TYPE
         FROM dual
         union all
         </isNotEqual>
@@ -50,12 +54,15 @@
             FILE_NAME,
             PARENT_ID,
             DEFAULT_YN,
-            ICONCLS||'-'||LINK_APP_ID as ICONCLS,
+            ICONCLS,
+            ICONCLS||'-'||LINK_APP_ID as IMGNAME,
             LINK_APP_ID,
-            FILE_ADDITION_INFO
+            FILE_ADDITION_INFO ,
+            FILE_TYPE
         FROM SPRING_FINDER
         WHERE MEMBER_ID = #memberId#
-        AND PARENT_ID = #parentId#
+            AND PARENT_ID = #parentId#
+        ORDER BY PARENT_ID, FILE_TYPE ,ID
     </select>
 
     <select id="getParentNodeId" resultClass="int" parameterClass="hashMap">

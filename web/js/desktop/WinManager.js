@@ -34,8 +34,11 @@ M31.WindowsManager = function() {
     };
 
     function removeWin(win) {
+        console.log(win.id)
         M31.ApplicationRegistry.getInstance().getApp(win.id.replace("-win","")).removeWin();
         win.destroy();
+        windows.unregister(win);
+        console.log('remove... win' );
     };
 
     function maxWin(win){
@@ -52,7 +55,8 @@ M31.WindowsManager = function() {
                                 Ext.applyIf(config || {}, {
                                     manager: windows,
                                     minimizable: true,
-                                    maximizable: true
+                                    maximizable: true,
+                                    constrain:true
                                 }));
                         win.render(desktopEl);
 //                        win.cmenu = new Ext.menu.Menu({

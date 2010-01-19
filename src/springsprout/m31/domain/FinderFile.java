@@ -17,6 +17,7 @@ public class FinderFile {
     private String fileAddition;
     private Integer memberId;
     private String fileType;
+    private String imgName;
 
     public String getFileAddition() {
         return fileAddition;
@@ -88,5 +89,13 @@ public class FinderFile {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 }
