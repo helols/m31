@@ -182,6 +182,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 								searchType:Ext.getCmp('springbook-api-provider').getValue(),
 								query:Ext.getCmp('springbook-search-text').getValue()}});
 						}.createDelegate(this)
+				},{
+					xtype: 'button',
+					text: '추가',
+					handler: function(sender, event){ this.gateway(''); }.createDelegate(this)
 				}
 			],
 			listeners: {
@@ -251,11 +255,13 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	// 윈도우에 패널을 추가하고 창을 다시 그린다.
     	this.win.add(this.bookPanel);
     	this.win.doLayout();
-    	
-    	this.bookStore.load();
     },
     gateway: function(bookInfoString){
-    	console.log(bookInfoString);
+    	var data = {
+    		"springBookDTO":
+    			{"books":[Ext.decode(bookInfoString)]}
+    	};
+    	this.bookStore.loadData(data, true);
     }    
 });
 
