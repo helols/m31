@@ -250,7 +250,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     height: 110,
                     items: new M31.app.SpringFinderPanel({
                         height : 110,
-                        region:'center',
                         border : false,
                         rootNodeName: 'springsee'
                     })
@@ -421,9 +420,6 @@ ImageDragZone = function(view, config) {
     ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
 Ext.extend(ImageDragZone, Ext.dd.DragZone, {
-    // We don't want to register our image elements, so let's 
-    // override the default registry lookup to fetch the image 
-    // from the event instead
     onBeforeDrag : function(data, e) {
         var nodeData = this.viewClone.getRecords(data.nodes);
         var items = new Array();
@@ -474,35 +470,12 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
         }
         return false;
     },
-
-    // this method is called by the TreeDropZone after a node drop
-    // to get the new tree node (there are also other way, but this is easiest)
-    getTreeNode : function() {
-        var treeNodes = [];
-        var nodeData = this.viewClone.getRecords(this.dragData.nodes);
-        for (var i = 0, len = nodeData.length; i < len; i++) {
-            var data = nodeData[i].data;
-            treeNodes.push(new Ext.tree.TreeNode({
-                text: data.name,
-                icon: '../view/' + data.url,
-                data: data,
-                leaf:true,
-                cls: 'image-node'
-            }));
-        }
-        return treeNodes;
-    },
-
-    // the default action is to "highlight" after a bad drop
-    // but since an image can't be highlighted, let's frame it 
     afterRepair:function() {
         for (var i = 0, len = this.dragData.nodes.length; i < len; i++) {
             Ext.fly(this.dragData.nodes[i]).frame('#8db2e3', 1);
         }
         this.dragging = false;
     },
-
-    // override the default repairXY with one offset for the margins and padding
     getRepairXY : function(e) {
         if (!this.dragData.multi) {
             var xy = Ext.Element.fly(this.dragData.ddel).getXY();
