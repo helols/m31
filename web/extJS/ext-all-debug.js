@@ -24397,6 +24397,7 @@ Ext.MessageBox = function(){
                     plain:true,
                     footer:true,
                     closable:true,
+                    manager : M31.WindowsManager.getInstance().getManager(), /*add Miracle*/
                     close : function(){
                         if(opt && opt.buttons && opt.buttons.no && !opt.buttons.cancel){
                             handleButton("no");
