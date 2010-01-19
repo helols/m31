@@ -6,7 +6,7 @@
  * background:#3d71b8 url(../../images/desktop/wallpapers/desktop.jpg) no-repeat left top;
  */
 html, body {
-    background: #000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center;
+    /*background: #000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center;*/
 }
 
 #m31-desktop {
@@ -122,4 +122,50 @@ html, body {
 
 .ext-el-mask{
     background-color:#444 !important;
+}
+
+#booting-view img.logo{
+    margin-bottom: 40px;
+    width:400px;
+    height :110px;
+}
+
+
+#booting-messge {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 30%;
+}
+/**/
+#booting-view {
+    /*background: #000;*/
+    position: absolute;
+    z-index: 20001;
+    height: 100%;
+    width: 100%;
+    display:block;
+}
+
+#booting-mask {
+    background: black;
+    position: absolute;
+    z-index: 20000;
+    height: 100%;
+    width: 100%;
+    display:block;
+}
+
+#booting-view .booting-messge {
+    /*background: black;*/
+    color: #fff;
+    font: bold 13px tahoma, arial, helvetica;
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 30%;
 }

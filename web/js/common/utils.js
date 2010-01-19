@@ -91,12 +91,12 @@ m31.util = {
      * ex ) m31.util.loading(true);
      * @param anime  default : false
      */
-    loading : function(anime){
+    loading : function(anime,msg){        
         var anime = anime || false;
         var loadingHtml = [   '     <div id="loading"> '
                             , '         <div class="loading-messge"> '
                             , '             <img class="loading-img" src="../../../images/loading-logo.png"/><br/>'
-                            , '            Loading...<br/>'
+                            , '            '+msg+'<br/>'
                             , '             <img class="loader-img" src="../../../images/ajax-loader.gif" align="absmiddle"/>'
                             , '         </div>'
                             , '</div>' ].join('');

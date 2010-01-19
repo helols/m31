@@ -414,7 +414,7 @@ movingbox = function() {
         }
         var isCookie = actItem.id === CHANGE ? isEmailSave : false;
 
-        m31.util.loading(true);
+        m31.util.loading(true, 'signin... plz wait..');
         Ext.Ajax.request({
             method:'POST',
             url: '/j_spring_security_check',
@@ -447,7 +447,7 @@ movingbox = function() {
         lastEmailAddress = 'not';
         var email = jQuery('#j_username').val();
         m31.util.notificationRemove(notiUniqeId);
-        m31.util.loading(true);
+        m31.util.loading(true, 'signup... plz wait..');
         Ext.Ajax.request({
             method:'POST',
             url: '/main/signup',

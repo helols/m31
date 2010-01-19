@@ -39,6 +39,7 @@ SpringDock = function() {
                         return _instance;
                     },
                     initDockButton : function(appInfos) {
+                        $("#processbar").progressBar(70);
                         for (var x in appInfos) {
                             if (appInfos[x].appInstallYn === "Y") {
                                 springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
@@ -48,11 +49,15 @@ SpringDock = function() {
                         springdockcontainer.positionContainer(0);
                         springdockcontainer.el.addClass('container');
                         springdockcontainer.positionItems();
+                        $("#processbar").progressBar(80);
+                        setTimeout(function(){
+                            $("#processbar").progressBar(100);
+                        }, 150);
+                        setTimeout(function(){
+                                Ext.get('booting-view').remove();
+                                Ext.get('booting-mask').fadeOut({remove:true});
+                            }, 700);
 
-                        //        setTimeout(function(){
-                        //                Ext.get('loading').remove();
-                        //                Ext.get('loading-mask').fadeOut({remove:true});
-                        //            }, 250);
                     },
                     add : function(appInfo) {
                         springdockcontainer.dockbtns.push(addDockBtn(appInfo));

@@ -7,12 +7,6 @@
  */
 package springsprout.m31.module.main;
 
-import static springsprout.m31.common.M31System.JSON_VIEW;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +18,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.main.support.SignupValidator;
 import springsprout.m31.module.member.MemberService;
 import springsprout.m31.service.security.SecurityService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import static springsprout.m31.common.M31System.JSON_VIEW;
 
 @Controller
 public class MainController {
@@ -42,14 +41,19 @@ public class MainController {
     SignupValidator signupValidator;
 
     @RequestMapping("/main/index")
-    public String index(){
+    public String index() {
         return "/index";
     }
 
     @RequestMapping("/main/loginSuccessProcess")
-    public ModelAndView loginSuccessProcess(HttpServletRequest req, HttpServletResponse res) {
+    public ModelAndView loginSuccessProcess(HttpServletRequest req, HttpServletResponse res, HttpSession session) {
         clearAJAXHeader(res);
-        return new ModelAndView(JSON_VIEW).addObject("loginResult", "success").addObject("isGuest", securityService.isGuest());
+        Boolean isSignup = false;
+        if (session.getAttribute("isSignup") != null) {
+            isSignup = true;
+            session.removeAttribute("isSignup");
+        }
+        return new ModelAndView(JSON_VIEW).addObject("loginResult", "success").addObject("isGuest", securityService.isGuest()).addObject("isSignup", isSignup);
     }
 
     @RequestMapping("/main/loginFailProcess")
@@ -59,34 +63,35 @@ public class MainController {
         return new ModelAndView(JSON_VIEW).addObject("loginResult", "fail");
     }
 
-    @RequestMapping(value="/main/signup",method= RequestMethod.POST)
-    public ModelAndView signup(SignupDTO signupDTO, BindingResult result){
+    @RequestMapping(value = "/main/signup", method = RequestMethod.POST)
+    public ModelAndView signup(SignupDTO signupDTO, BindingResult result, HttpSession session) {
         signupValidator.validate(signupDTO, result);
         if (result.hasErrors()) {
-			return new ModelAndView(JSON_VIEW).addObject("signstat","validate")
-                    .addObject("errInfo",result.getFieldErrors());
-		}
-        Boolean signupStat =  memberService.signup(signupDTO);
-        return new ModelAndView(JSON_VIEW).addObject("signstat", signupStat?"success":"fail");
-    }
-
-    @RequestMapping(value="/main/emailconfirm")
-    public ModelAndView emailconfirm(String email){
-        return new ModelAndView(JSON_VIEW).addObject("emailconfirm",memberService.isDuplicated(email));    
-    }
-
-    @RequestMapping(value="/main/makememberinfo")
-    public ModelAndView makememberinfo(String users){
-        if(users == null || !StringUtils.hasText(users)){
-            return new ModelAndView(JSON_VIEW).addObject("status","fail");
+            return new ModelAndView(JSON_VIEW).addObject("signstat", "validate")
+                    .addObject("errInfo", result.getFieldErrors());
         }
-        return new ModelAndView(JSON_VIEW).addObject("status","success").addObject("userInfo",memberService.makeMemberInfo(users));
+        Boolean signupStat = memberService.signup(signupDTO);
+        session.setAttribute("isSignup", true);
+        return new ModelAndView(JSON_VIEW).addObject("signstat", signupStat ? "success" : "fail");
     }
-    
+
+    @RequestMapping(value = "/main/emailconfirm")
+    public ModelAndView emailconfirm(String email) {
+        return new ModelAndView(JSON_VIEW).addObject("emailconfirm", memberService.isDuplicated(email));
+    }
+
+    @RequestMapping(value = "/main/makememberinfo")
+    public ModelAndView makememberinfo(String users) {
+        if (users == null || !StringUtils.hasText(users)) {
+            return new ModelAndView(JSON_VIEW).addObject("status", "fail");
+        }
+        return new ModelAndView(JSON_VIEW).addObject("status", "success").addObject("userInfo", memberService.makeMemberInfo(users));
+    }
+
     @RequestMapping("/app/springguide")
-    public String springguide(){
+    public String springguide() {
         return "/springguide/contents";
-    }    
+    }
 
     private boolean isAjaxLogin(HttpServletRequest req) {
         return (req.getHeader("AJAX") != null && req.getHeader("AJAX").equals("true"));

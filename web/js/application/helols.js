@@ -95,8 +95,9 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
         return opt;
     },
     yesClick : function(){
-        m31.util.loading();
-        setTimeout('window.location.href="/j_spring_security_logout"', 500);
+//        m31.util.loading(false,'signout... plz wait...');
+        window.location.href="/j_spring_security_logout";
+//        setTimeout('window.location.href="/j_spring_security_logout"', 500);
     },
     noClick : function(){
          getApp('signout').win.close();

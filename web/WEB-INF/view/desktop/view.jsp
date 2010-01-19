@@ -34,6 +34,7 @@
 
     <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/piroBox.1_2.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/progressbar.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/common/utils.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js"/>"></script>
@@ -43,15 +44,33 @@
     <script type="text/javascript" src="<c:url value="/js/desktop/WinManager.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/Module.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/desktop/Desktop.js"/>"></script>
-
-    <script type="text/javascript">
-        M31Desktop = new M31.Desktop({minHeight : 300,minWidth : 1000});
+</head>
+<body id="body" scroll="no">
+<div id="booting-mask"></div>
+<div id="booting-view">
+    <div class="booting-messge">
+        <img class="logo" src="<c:url value="/images/desktop/booting.png"/>"><br/>
+        <span class="progressBar" id="processbar"></span>
+        <script type="text/javascript">
+            $("#processbar").progressBar(10,{ barImage: '/images/desktop/progressbg_blue.png', showText: false , boxImage:Ext.BLANK_IMAGE_URL, width:420,height:10});
+        </script>
+    </div>
+</div>
+<div id="loading-mask"></div>
+<div id="m31-desktop">
+    <div id="m31-springdock">
+        <div id="m31-springdock-container"></div>
+    </div>
+</div>
+<script type="text/javascript">
+        M31Desktop = new M31.Desktop({minHeight : 600,minWidth : 1000});
         ZeroClipboard.setMoviePath( '/js/plugin/ZeroClipboard.swf' );
     </script>
     <!-- Miracle -->
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
        // Load the Visualization API and the piechart package.
+        $("#processbar").progressBar(20);
         google.load('visualization', '1', {'packages':['piechart']});
     </script>
     <script type="text/javascript" src="<c:url value="/js/application/miracle.js"/>"></script>
@@ -65,31 +84,22 @@
     <!-- arawn -->
     <script type="text/javascript" src="<c:url value="/js/application/arawn.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/application/springguide.js"/>"></script>
-</head>
-<body id="body" scroll="no">
-<div id="loading-mask"></div>
-<script type="text/javascript">
+    <script type="text/javascript">
     Ext.onReady(function() {
-
-//        M31.ApplicationRegistry.getInstance().loadApplicationStore();
-        Ext.Ajax.request({
-            method:'POST',
-            url: '/j_spring_security_check',
-            params: {
-                j_username: 'springsprout@springsprout.org',
-                j_password: 'springsprout'
-            },
-            success: function(response, opts) {
-                M31.ApplicationRegistry.getInstance().loadApplicationStore();
-            }
-        });
+        Ext.get(document.body).setStyle('background','#000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center');
+        M31.ApplicationRegistry.getInstance().loadApplicationStore();
+//        Ext.Ajax.request({
+//            method:'POST',
+//            url: '/j_spring_security_check',
+//            params: {
+//                j_username: 'springsprout@springsprout.org',
+//                j_password: 'springsprout'
+//            },
+//            success: function(response, opts) {
+//                M31.ApplicationRegistry.getInstance().loadApplicationStore();
+//            }
+//        });
     });
 </script>
-<div id="m31-desktop">
-    <div id="m31-springdock">
-        <div id="m31-springdock-container"></div>
-    </div>
-</div>
-
 </body>
 </html>

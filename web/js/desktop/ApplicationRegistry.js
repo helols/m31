@@ -28,9 +28,10 @@ M31.ApplicationRegistry = function() {
         idProperty: 'appId',
         fields: [ 'id','appName','appId','appDesc','appInstallYn','appOrder'],
         listeners: {
-            beforeload:{fn:function(){loaded = true;}},
+            beforeload:{fn:function(){loaded = true; $("#processbar").progressBar(50);}},
             load: {
                 fn: function(store, records, options) {
+                    $("#processbar").progressBar(60);
                     store.each(function(item) {
                         Ext.apply(appInfos[item.data.appId], {
                             appId : item.data.appId,
