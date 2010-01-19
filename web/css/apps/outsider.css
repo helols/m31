@@ -153,7 +153,23 @@ a:hover.stop{background:url(../../images/apps/springsee/pirobox/pause_h.png) no-
 }
 
 /* Twitter Text */
-div.springtwitter-tweet div.springtwitter-contents>a>img { float:left; margin-right:10px; }
+div#springtwitter-friends-dataview { width:363px; }
+div#springtwitter-mentions-dataview { width:363px; }
+div#springtwitter-direcmessage-dataview { width:363px; }
+div.springtwitter-tweet div.springtwitter-contents-thumb { float:left; margin-right:10px; }
 div.springtwitter-tweet div.springtwitter-btn span.springtwitter-reply,
 div.springtwitter-tweet div.springtwitter-btn span.springtwitter-retweet,
 div.springtwitter-tweet div.springtwitter-btn span.springtwitter-message { cursor:pointer; }
+
+div.springtwitter-tweet { padding-bottom:10px;}
+div.springtwitter-tweet div.springtwitter-contents { margin-right:10px; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-top { background: url(../../images/apps/springtwitter/message-top.png) top right no-repeat; height:25px; padding: 0 0 0 85px; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-top h4 { padding-top:5px; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-middle { background: url(../../images/apps/springtwitter/message-middle.png) top right repeat-y; padding: 0 7px 0 73px; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-middle div.springtwitter-info { padding:10px 0 5px 0; text-align:right; font-size:0.8em; color:#606060; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-middle div.springtwitter-btn { padding-bottom:3px;}
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-bottom { background: url(../../images/apps/springtwitter/message-bottom.png) bottom right no-repeat; height:21px; text-align:right; padding-right:20px; }
+div.springtwitter-tweet div.springtwitter-contents div.springtwitter-contents-bottom div.springtwitter-btn img { margin-left:10px; }
+div.twitter-morebtn { height:40px; text-align:center; font-size:1.9em; font-weight:bolder; background-color:#ffffdf; color:#246faf; cursor:pointer; padding-top:7px; }
+
+
