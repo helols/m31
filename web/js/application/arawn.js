@@ -4,7 +4,6 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	state: null,
     init: function() {
 	    console.log("init");
-	  //필요한 JS
     },
     createCallback: function(win){
     	console.log("createCallback");
@@ -15,9 +14,8 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	this.loadMask = new Ext.LoadMask(this.win.body, {msg:"봄북을 초기화 중 입니다."});
     	this.loadMask.show();
     	
-    	this.runner = new Ext.util.TaskRunner();
-        console.log(this);
-    	var redyTask = {
+    	if(!this.runner) this.runner = new Ext.util.TaskRunner();
+        this.redyTask = {
     	    run: function(app){
 	    		if(app.state != null) return;
 	        	console.log('state : ' + app.state);
@@ -26,14 +24,13 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	        	if(app.win == null) return;
 	        	if(!app.win.isVisible()) return;
 	        	
-	        	app.state = 'ready';
-	        	console.log('state : ' + app.state);
+	        	app.runner.stop(app.redyTask);
 	        	
 	        	app.createBookView();
 	        	
 	        	app.loadMask.hide();
 	        	
-	        	app.runner.stopAll();
+	        	app.state = 'ready';
 	        	
 	        	// 검색필드에 포커스
 	        	Ext.getCmp('springbook-search-text').focus();
@@ -41,7 +38,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	    interval: 1000,
     	    args: [this]
     	};
-    	this.runner.start(redyTask);
+    	this.runner.start(this.redyTask);
     },
     beforeCreate: function(){
     	console.log("beforeCreate");
@@ -257,11 +254,23 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	this.win.doLayout();
     },
     gateway: function(bookInfoString){
-    	var data = {
-    		"springBookDTO":
-    			{"books":[Ext.decode(bookInfoString)]}
+    	if(!this.runner) this.runner = new Ext.util.TaskRunner();
+        this.gatewayTask = {
+    	    run: function(app, bookInfoString){
+	    		if(app.state != 'ready') return;
+	        	
+	        	app.runner.stop(app.gatewayTask);
+	        	
+	        	var data = {
+            		"springBookDTO":
+            			{"books":[Ext.decode(bookInfoString)]}
+            	};
+	        	app.bookStore.loadData(data, true);
+    		},
+    	    interval: 1000,
+    	    args: [this, bookInfoString]
     	};
-    	this.bookStore.loadData(data, true);
+    	this.runner.start(this.gatewayTask);
     }    
 });
 
