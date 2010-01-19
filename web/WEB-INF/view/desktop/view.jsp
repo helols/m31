@@ -63,7 +63,7 @@
 <div id="loading-mask"></div>
 <script type="text/javascript">
     Ext.onReady(function(){
-       // M31.ApplicationRegistry.getInstance().loadApplicationStore();
+//        M31.ApplicationRegistry.getInstance().loadApplicationStore();
         Ext.Ajax.request({
             method:'POST',
             url: '/j_spring_security_check',

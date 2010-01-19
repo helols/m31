@@ -175,8 +175,22 @@ getApp = function(appName){
     return M31.ApplicationRegistry.getInstance().getApp(appName);
 };
 
-reqexception = function(){
-    m31.util.notification({title:'죄송합니다..',text:'Ajax 요청중 에러가 발생했습니다..',remove:true});
+reqexception = function(conn, response, options){
+
+    if(response.status == 401 || response.status == 403) {
+        Ext.MessageBox.show({
+            title : "Error",
+            msg : 'Logged out. Please login again....',
+            buttons : Ext.MessageBox.OK,
+            fn : function(){
+                m31.util.loading();
+                setTimeout('window.location.href="/j_spring_security_logout"', 500);
+            },
+            icon : Ext.MessageBox.ERROR
+        });
+    }else{
+        m31.util.notification({title:'죄송합니다..',text:'Ajax 요청중 에러가 발생했습니다..',remove:true});
+    }
 };
 
 Ext.Ajax.on('requestexception',reqexception,this);

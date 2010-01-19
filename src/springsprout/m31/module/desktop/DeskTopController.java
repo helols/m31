@@ -29,4 +29,9 @@ public class DeskTopController {
     public String view(){
         return "/desktop/view";
     }
+
+    @RequestMapping(method= RequestMethod.GET)
+    public ModelAndView checkSignin(){
+        return new ModelAndView(JSON_VIEW).addObject("success",true);
+    }
 }

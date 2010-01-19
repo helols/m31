@@ -7,9 +7,13 @@
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
     <http>
-
-		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<form-login login-page="/app/main/index"
+        <intercept-url pattern="/main/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/app/**" access="ROLE_GUEST,ROLE_MEMBER" />
+        <intercept-url pattern="/application/**" access="ROLE_GUEST,ROLE_MEMBER" />
+        <intercept-url pattern="/gateway/**" access="ROLE_GUEST,ROLE_MEMBER" />
+        <intercept-url pattern="/desktop/**" access="ROLE_GUEST,ROLE_MEMBER" />
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<form-login login-page="/main/index"
 			authentication-success-handler-ref="authenticationSuccessSuppotAJAXHandler"
 			authentication-failure-handler-ref="simpleUrlAuthenticationFailureHandler"/>
 		<logout logout-success-url="/main/index" />

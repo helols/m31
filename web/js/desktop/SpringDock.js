@@ -169,7 +169,7 @@ M31.dt.DockButton = function(appInfo, el) {
         buttonSelector : 'img',
         handler : function(t, e) {
             var win = M31.WindowsManager.getInstance().getWindow(appInfo.appId);
-            if (!win) {
+            if (appInfo.appId === 'signout') {
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
                 app.beforeCreate();
                 win = M31.WindowsManager.getInstance().createWindow(this,
@@ -180,6 +180,28 @@ M31.dt.DockButton = function(appInfo, el) {
                         }));
                 app.createCallback(win);
                 win.show();
+            }
+            else if (!win) {
+                var options = {
+                    url : '/desktop/checkSignin'
+                    ,method: 'GET'
+                    ,scope:this
+                    ,success:function() {
+                        var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
+                        app.beforeCreate();
+                        win = M31.WindowsManager.getInstance().createWindow(this,
+                                Ext.apply(app.createWindow(), {
+                                    id:appInfo.appId + '-win',
+                                    title:appInfo.appName,
+                                    iconCls:appInfo.appId + '-win-icon'
+                                }));
+                        app.createCallback(win);
+                        win.show();
+                    }
+                };
+                Ext.Ajax.request(options);
+
+
             }
             else if (win.minimized || win.hidden) {
                 win.show();
