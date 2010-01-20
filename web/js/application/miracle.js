@@ -209,12 +209,13 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
             minWidth: 640,
             minHeight: 480,
             constrain : true,
-            hideMode : 'offsets',
-
+            hideMode : 'display',
+            
             layout : 'card',
             activeItem : 0,
 
-            items : [ this.serchePanel,
+            items : [
+                this.serchePanel,
                 {
                     xtype : 'panel',
                     plugins: new Ext.ux.FlashPlugin(),
@@ -235,9 +236,14 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
                             }
                         }
-
                     ]
-                }]            
+            }],
+
+            listeners: {
+                beforeshow : function(cmp) {
+                    cmp.setAnimateTarget(null);
+                }
+            }
         };
         return config;
     },

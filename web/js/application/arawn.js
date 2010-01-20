@@ -729,7 +729,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		beforeaction: function(form, action){ 
 //	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
-	        			var currentValueLength = form.findField('springme2day-form-body').getValue().length;
+	        			var currentValueLength = form.findField('springme2day-form-body').getValue().replace(/"(.*?)":http:\/\/(.*?) /g, "$1").length;
+                        
 	        			if(currentValueLength <= 0){
 	        				m31.util.notification({title:'봄미투데이',text:'본문이 비어있습니다.'});
 	        				return false;
