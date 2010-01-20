@@ -713,7 +713,7 @@ movingbox = function() {
             });
         }, 300);
         if(document.referrer){
-            if(document.referrer.indexOf('desktop/view') === -1){
+            if(document.referrer.indexOf('m31.springsprout.org') === -1){
                 m31.util.notification({title:'봄 웹데스트탑 안내',text:'안녕하세요.. 봄 WebDeskTop입니다. 구경은 Demo User로~ 자신만의 WebDeskTop을 이용하시려면 가입 하신 후 사용하세요', remove:true,time:6000});
             }
         }else{
