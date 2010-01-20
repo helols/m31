@@ -84,18 +84,14 @@
 					map['#' + opt.target +' a.'+it.attr('class')]=0;
 				}
 			var gall_settings = new Array();
-				for (var key in map) {
-					gall_settings.push(key);
-//					if($(key).length === 1){//check on set of images
-//					alert('For single image is recommended to use class pirobox');
-//					$(key).css('border','2px dotted red');
-//					}
-				}
-				for (var i=0; i<gall_settings.length; i++) {
-					$(gall_settings[i]).each(function(rel){this.rel = rel+1 + "&nbsp;of&nbsp;" + $(gall_settings[i]).length;});
-					var add_first = $(gall_settings[i]+':first').addClass('first');
-					var add_last = $(gall_settings[i]+':last').addClass('last');
-				}
+            for (var key in map) {
+                gall_settings.push(key);
+            }
+            for (var i=0; i<gall_settings.length; i++) {
+                $(gall_settings[i]).each(function(rel){this.rel = rel+1 + "&nbsp;of&nbsp;" + $(gall_settings[i]).length;});
+                var add_first = $(gall_settings[i]+':first').addClass('first');
+                var add_last = $(gall_settings[i]+':last').addClass('last');
+            }
 			$(my_gall_classes).each(function(rev){this.rev = rev+0});
 			var piro_gallery = $(my_gall_classes);
 			var piro_single = $('#' + opt.target + ' a.pirobox');

@@ -20,16 +20,16 @@ M31.WindowsManager = function() {
         if (activeWindow && activeWindow != win) {
             markInactive(activeWindow);
         }
-        //        springbar.setActiveButton(win.barButton);
+        Ext.fly('btn-'+win.id.replace("-win","")).select('.m31-springdock-item-img').setOpacity(1);
         activeWindow = win;
-        //        Ext.fly(win.barButton.el).addClass('active-win');
         win.minimized = false;
     };
 
     function markInactive(win) {
         if (win == activeWindow) {
             activeWindow = null;
-            //            Ext.fly(win.barButton.el).removeClass('active-win');
+            Ext.fly('btn-'+win.id.replace("-win","")).select('.m31-springdock-item-img').setOpacity(.7);
+            //Ext.fly(win.barButton.el).removeClass('active-win');
         }
     };
 
@@ -92,6 +92,9 @@ M31.WindowsManager = function() {
                     },
                     getWindow : function(id) {
                         return windows.get(id+"-win");
+                    },
+                    getActWindow : function(){
+                        return activeWindow;
                     }
                 }
             }

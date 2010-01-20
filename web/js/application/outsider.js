@@ -252,7 +252,12 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         height : 110,
                         border : false,
                         rootNodeName: 'springsee'
-                    })
+                    }),
+                    listeners: {
+                        'afterlayout': { fn:function() {
+                            Ext.getCmp('springsee-explorer-panel').items.items[0].onResizez(Ext.fly('springsee-explorer-panel').getSize().height);
+                        }, scope:this, single:false}
+                   }
                 }
             ]
         };

@@ -1,6 +1,8 @@
 package springsprout.m31.module.app.twitter.support;
 
-public class TwitterAuthorizationDTO {
+import java.io.Serializable;
+
+public class TwitterAuthorizationDTO implements Serializable{
 	private int member_id;
 	private String token;
 	private String secret_token;

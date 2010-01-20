@@ -249,12 +249,22 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     		title: '책 보관소',
             height : 110,
             collapsible: true,
+            id : 'springbook-explorer-panel',
             split: true,
             border: false,
             layout:'fit',
             items:[new M31.app.SpringFinderPanel({
-        		rootNodeName: 'springbook'
-        	})]
+                  height : 110,
+                  autoScroll : false,
+                  border : false,
+        		  rootNodeName: 'springbook'
+        	})
+            ],
+            listeners: {
+                'afterlayout': { fn:function() {
+                   Ext.getCmp('springbook-explorer-panel').items.items[0].onResizez(Ext.fly('springbook-explorer-panel').getSize().height);
+                }, scope:this, single:false}
+           }
     	});
     	
     	// 봄북 패널

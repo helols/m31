@@ -133,8 +133,7 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             border: false,
             layout:'fit',
             items:[springfinderDataPanel],
-            tools:[
-                {
+            tools:[{
                     id:'refresh',
                     qtip: '새로고침',
                     // hidden:true,
@@ -147,7 +146,6 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
 
         var springfinderTree = new M31.app.SpringFinderTree({finderpanel:springfinderDataPanel});
         springfinderDataPanel.springfinderTree = springfinderTree;
-
 
         var opt = {
             layout: 'border',

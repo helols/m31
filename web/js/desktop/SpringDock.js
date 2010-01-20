@@ -57,7 +57,6 @@ SpringDock = function() {
                                 Ext.get('booting-view').remove();
                                 Ext.get('booting-mask').fadeOut({remove:true});
                                 var userInfo = M31.ApplicationRegistry.getInstance().initData();
-                                console.dir(userInfo);
                                 if(userInfo[0] === true){
                                     m31.util.notification({title:'환영인사!',text:'Demo User입니다.. 봄가이드를 보시고 즐기세요~~',remove:true});
                                 }else{
@@ -254,10 +253,15 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
 
     toggleBtn : function(cmp_id, type) {
         Ext.fly(cmp_id).select('.m31-springdock-item-text').setStyle('display', type === 'E' ? 'block' : 'none');
-        Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);
-
+        var win = M31.WindowsManager.getInstance().getActWindow();
+        if(win){
+             if(win.id.replace('-win','') !== cmp_id.replace('btn-','')){
+                Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);         
+             }
+         }else{
+            Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);
+        }
     }
-
 });
 
 /**

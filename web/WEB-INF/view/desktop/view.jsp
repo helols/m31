@@ -63,7 +63,7 @@
     </div>
 </div>
 <script type="text/javascript">
-        M31Desktop = new M31.Desktop({minHeight : 600,minWidth : 1000});
+        M31Desktop = new M31.Desktop({minHeight : 500,minWidth : 1000});
         ZeroClipboard.setMoviePath( '/js/plugin/ZeroClipboard.swf' );
     </script>
     <!-- Miracle -->

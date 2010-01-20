@@ -180,15 +180,22 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     collapsedTitle : 'FLASH SHAP',
                     region : 'south',
                     height : 110,
+                    layout : 'fit',
+                    id : 'springplayer-explorer-panel',
                     autoScroll : true,
                     items : new M31.app.SpringFinderPanel({
-                        height : 85,
+                        height : 110,
                         autoScroll : false,
                         border : false,
                         rootNodeName: 'springplayer'
                     }),
                     collapsible: true,
-                    split: true
+                    split: true,
+                    listeners: {
+                        'afterlayout': { fn:function() {
+                           Ext.getCmp('springplayer-explorer-panel').items.items[0].onResizez(Ext.fly('springplayer-explorer-panel').getSize().height);
+                        }, scope:this, single:false}
+                   }
                 }
             ]
         });
