@@ -27,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import springsprout.m31.domain.Book;
 import springsprout.m31.dto.SpringBookDTO;
 import springsprout.m31.dto.SpringseeDTO;
+import springsprout.m31.utils.DefaultIntegerEditor;
 import springsprout.m31.utils.OpenApiRequestHelper;
 
 public class NaverAPIHelper {
@@ -123,6 +124,8 @@ public class NaverAPIHelper {
 		List<Element> elements = source.getChildren();
 		if(!CollectionUtils.isEmpty(elements)){
 			BeanWrapper beanWrapper = new BeanWrapperImpl(beanClass);
+			beanWrapper.registerCustomEditor(int.class, new DefaultIntegerEditor());
+			
 			MutablePropertyValues propertyValues = new MutablePropertyValues();
 			for(Element element : elements){
 				propertyValues.add(element.getName(), element.getValue());
@@ -132,4 +135,5 @@ public class NaverAPIHelper {
 		}
 		return null;
 	}    
+	
 }

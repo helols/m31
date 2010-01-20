@@ -85,7 +85,24 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                 }},
                 'isbn',
                 'description'
-            ]
+            ],
+            listeners: {
+        		load: {fn:function(){
+        			// 미투 보내기 앵커에 이벤트 걸어주기
+	        		var els = this.bookListPanel.getEl().select('a[class=book-me2day]', true);
+	        		Ext.each(els.elements, function(el){
+	        			el.addListener('click', function(event, sender){
+	        				event.preventDefault();
+	        				if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
+                                m31.util.notification({title:'봄북',text:'봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.'});
+                            } else {
+                            	M31.ApplicationRegistry.getInstance().getApp('springme2day')
+                            		.me2DayModule.gateway(Ext.decode(this.id));
+                            }
+	        			}, el);
+	        		}, this);
+        		}, scope:this}
+        	}
         });	
         
     	this.bookListPanel = new Ext.grid.GridPanel({
@@ -99,9 +116,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                 },
                 columns: [
                     {header: '책 정보 조회 결과입니다.', dataIndex: 'title', align:'center', renderer: function(value, p, record){
+                    	var bookData = "{'appId':'springbook','name':'" + record.data.title + "','url':'" + record.data.link + "'}";
                     	var body = '<table width="100%" cellspacing="1" cellpadding="0" border="0">';
                     	body += '<tr>';
-                    	body += '<td width="64" rowspan="2"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
+                    	body += '<td width="64" rowspan="3"><img src="' + record.data.image + '" alt="' + record.data.title + '" width="60" height="80" /></td>';
                     	body += '<td align="left">';
                     	body += '<a href="' + record.data.link + '" target="blank"><b>' + record.data.title + '</b></a><br />';
                     	body += record.data.author + ' 저 | ' + record.data.publisher + ' | ' + record.data.pubdate;
@@ -110,6 +128,11 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     	body += '<tr>';
                     	body += '<td align="left" style="padding: 2 2 2 10;">';
                     	body += record.data.description;
+                    	body += '</td>';
+                    	body += '</tr>';
+                    	body += '<tr>';
+                    	body += '<td align="left" valign="middle" style="padding: 0 0 0 10;">';
+                    	body += '<a id="' + bookData + '" href="about:blank" class="book-me2day"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a>';
                     	body += '</td>';
                     	body += '</tr>';
                     	body += '</table>';
@@ -179,10 +202,6 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 								searchType:Ext.getCmp('springbook-api-provider').getValue(),
 								query:Ext.getCmp('springbook-search-text').getValue()}});
 						}.createDelegate(this)
-				},{
-					xtype: 'button',
-					text: '추가',
-					handler: function(sender, event){ this.gateway(''); }.createDelegate(this)
 				}
 			],
 			listeners: {
@@ -730,7 +749,6 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 //	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
 	        			var currentValueLength = form.findField('springme2day-form-body').getValue().replace(/"(.*?)":http:\/\/(.*?) /g, "$1").length;
-                        
 	        			if(currentValueLength <= 0){
 	        				m31.util.notification({title:'봄미투데이',text:'본문이 비어있습니다.'});
 	        				return false;
@@ -1277,6 +1295,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         		} else if((data.appId === 'springplayer' && data.url.trim())) {
         			var value = Ext.getCmp('springme2day-form-body').getValue();
         			Ext.getCmp('springme2day-form-body').setValue(value + ' "":' + data.url.trim() + ' ');
+                } else if((data.appId === 'springbook' && data.url.trim())) {
+                	var value = Ext.getCmp('springme2day-form-body').getValue();
+        			Ext.getCmp('springme2day-form-body').setValue(value + ' "' + data.name + '":' + data.url.trim() + ' ');
                 }
         	}
         }

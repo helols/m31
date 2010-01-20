@@ -21,7 +21,6 @@ import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
 import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
@@ -40,6 +39,7 @@ import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
 import springsprout.m31.module.app.me2day.support.PostDTO;
 import springsprout.m31.module.app.me2day.support.PostSearchParam;
 import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
+import springsprout.m31.utils.DefaultIntegerEditor;
 import springsprout.m31.utils.OpenApiRequestHelper;
 
 @Service
@@ -408,7 +408,7 @@ public class SpringMe2DayApiService {
 		if(!StringUtils.hasText(postDto.getBody())){
 			throw new Me2DayApiRequestException(-1, "springme2day_postsend_body_blank");
 		}
-		else if(postDto.getBody().length() > 150){
+		else if(postDto.getBodyLength() > 150){
 			throw new Me2DayApiRequestException(-1, "springme2day_postsend_body_maxlength_over");
 		}
 		
@@ -416,8 +416,12 @@ public class SpringMe2DayApiService {
 			String requestUrl = createMe2DayRequestUrl(String.format(me2dayapi_create_post, info.getUser_id()), info);	
 			
 			requestUrl += "&post[body]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
-			if(StringUtils.hasText(postDto.getTags()) && !"태그를 입력하세요 (공백으로 구분합니다.)".equals(postDto.getTags())){
-				requestUrl += "&post[tags]=" + URLEncoder.encode(postDto.getTags(), "utf-8");
+			if("태그를 입력하세요 (공백으로 구분합니다.)".equals(postDto.getTags())){
+				requestUrl += "&post[tags]=" + URLEncoder.encode("봄미투", "utf-8");
+			}
+			else if(StringUtils.hasText(postDto.getTags())){
+				String tempTags = StringUtils.trimWhitespace(postDto.getTags()) + " 봄미투";
+				requestUrl += "&post[tags]=" + URLEncoder.encode(tempTags, "utf-8");
 			}
 			if(postDto.getIcon() > 0){
 				requestUrl += "&post[icon]=" + postDto.getIcon();
@@ -607,7 +611,7 @@ public class SpringMe2DayApiService {
 			
 			BeanWrapper beanWrapper = new BeanWrapperImpl(beanClass);
 			beanWrapper.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss"), false));
-			beanWrapper.registerCustomEditor(int.class, new IntegerEditor());
+			beanWrapper.registerCustomEditor(int.class, new DefaultIntegerEditor());
 			beanWrapper.registerCustomEditor(List.class, new ListEditor());
 			beanWrapper.setPropertyValues(propertyValues, true);
 
@@ -627,20 +631,4 @@ public class SpringMe2DayApiService {
 	    }
 	}
 	
-	private class IntegerEditor extends PropertyEditorSupport {
-	    @Override
-	    public void setAsText(String text) throws IllegalArgumentException {
-	    	if(StringUtils.hasText(text)){
-	    		setValue(NumberUtils.parseNumber(text, Integer.class).intValue());
-	    	}
-	    	else{
-	    		setValue(0);
-	    	}
-	    }		
-	    @Override
-	    public String getAsText() {
-	        return ObjectUtils.toString(getValue());
-	    }
-	}	
-
 }

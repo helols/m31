@@ -6,14 +6,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
-import springsprout.m31.module.app.me2day.entity.Comment;
 import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
 import springsprout.m31.module.app.me2day.entity.Metoo;
 import springsprout.m31.module.app.me2day.entity.Person;
@@ -81,14 +79,31 @@ public class SpringMe2DayApiServiceTest {
 
 	@Test
 	public void 댓글얻어오기() throws Me2DayApiRequestException {
-		FastDateFormat dateFormat = FastDateFormat.getInstance("HH", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
+		/*FastDateFormat dateFormat = FastDateFormat.getInstance("HH", TimeZone.getTimeZone("GMT+09:00"), Locale.ENGLISH);
 		
 		List<Comment> comments = service.getRequestComments("http://me2day.net/api/get_comments.xml?akey=eb4d74485df2773948ccd8eefdd53ef3&post_id=p5fzj3", false);
 		if(!CollectionUtils.isEmpty(comments)){
 			for(Comment comment : comments){
 				System.out.println(dateFormat.format(comment.getPubDate()));
 			}
-		}
+		}*/
+		String temp = "영화 브레이드하트 ";
+		
+		temp = "\"연아사진\":http://www.naver.com/spring/tt.jpg 완전이뻐요... 최고에요!!! \"연아사진\":http://www.naver.com/spring/tt.jpg 후후~ 이건 테스트일뿐!!";
+		
+		Pattern pattern = Pattern.compile("\"([^\"]*)\":(http?://[^\\s]*)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(temp);
+
+        StringBuffer message = new StringBuffer();
+
+        while(matcher.find()) {
+	        String toReplace = matcher.group(1).replace("$", "\\$");
+	        matcher.appendReplacement(message, toReplace);
+        }
+
+        matcher.appendTail(message);
+        
+        System.out.println(message.toString());
 	}	
 	
 	public void 친구목록얻어오기() throws Me2DayApiRequestException{
@@ -161,6 +176,24 @@ public class SpringMe2DayApiServiceTest {
 		commentDTO.setBody("봄미투데에서 덧글 쓰기 테스트를 합니다.");
 		
 		System.out.println(service.createComment(commentDTO, info));
+	}
+	
+	public void 정규식으로링크제거하기() {
+		String temp = "\"연아사진\":http://www.naver.com/spring/tt.jpg 완전이뻐요... 최고에요!!! \"연아사진\":http://www.naver.com/spring/tt.jpg 후후~ 이건 테스트일뿐!!";
+		
+		Pattern pattern = Pattern.compile("\"([^\"]*)\":(http?://[^\\s]*)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(temp);
+
+        StringBuffer message = new StringBuffer();
+
+        while(matcher.find()) {
+	        String toReplace = matcher.group(1).replace("$", "\\$");
+	        matcher.appendReplacement(message, toReplace);
+        }
+
+        matcher.appendTail(message);
+        
+        System.out.println(message.toString());	
 	}
 	
 }

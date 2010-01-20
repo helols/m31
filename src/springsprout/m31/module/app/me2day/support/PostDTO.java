@@ -1,5 +1,10 @@
 package springsprout.m31.module.app.me2day.support;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.springframework.util.StringUtils;
+
 import springsprout.m31.module.app.me2day.entity.Location;
 
 
@@ -37,6 +42,24 @@ public class PostDTO {
 	}
 	public void setBody(String body) {
 		this.body = body;
+	}
+	public int getBodyLength(){
+		if(StringUtils.hasText(body)){
+			Pattern pattern = Pattern.compile("\"([^\"]*)\":(http?://[^\\s]*) ", Pattern.CASE_INSENSITIVE);
+	        Matcher matcher = pattern.matcher(body);
+
+	        StringBuffer message = new StringBuffer();
+
+	        while(matcher.find()) {
+		        String toReplace = matcher.group(1).replace("$", "\\$");
+		        matcher.appendReplacement(message, toReplace);
+	        }
+
+	        matcher.appendTail(message);
+	        
+	        return message.toString().length();
+		}
+		return 0;	
 	}
 	
 	public String getTags() {
