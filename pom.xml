@@ -476,12 +476,12 @@
         <repository>
             <id>opensprout nexus</id>
             <name>OpenSprout Nexus public</name>
-            <url>http://dev.springsprout.org:8001/nexus/content/groups/public</url>
+            <url>http://dev.springsprout.org/nexus/content/groups/public</url>
         </repository>
         <repository>
             <id>opensprout snapshots</id>
             <name>OpenSprout Nexus public snapshots</name>
-            <url>http://dev.springsprout.org:8001/nexus/content/groups/public-snapshots/</url>
+            <url>http://dev.springsprout.org/nexus/content/groups/public-snapshots/</url>
         </repository>
         <repository>
             <id>mesir-repo</id>
