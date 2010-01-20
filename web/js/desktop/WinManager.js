@@ -62,8 +62,10 @@ M31.WindowsManager = function() {
 //
 //                            ]
 //                        });
+                        if(targetId !== 'springplayer'){
+                            win.animateTarget = Ext.getCmp('btn-'+targetId);
+                        }
 
-                        win.animateTarget = Ext.getCmp('btn-'+targetId);
 
                         win.on({
                             'activate': {
