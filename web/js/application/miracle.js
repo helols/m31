@@ -316,8 +316,7 @@ Ext.ux.FlashPlugin = function() {
                 '<param name="swliveconnect" value="true" />',
                 '<param name="scale" value="showall" />',
                 '<embed name="flash-{id}" src="{swf}" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="{computedflashvars}" type="application/x-shockwave-flash" width="{swfWidth}" height="{swfHeight}" wmode="transparent" allowScriptAccess="always" swliveconnect="true" align="t" salign="TL" scale="showall"></embed>',
-                '</object>'
-                );
+                '</object>');        
         ct.flashTemplate.compile();
         ct.renderFlash = function() {
             //console.log("render Flash");
@@ -328,18 +327,18 @@ Ext.ux.FlashPlugin = function() {
                         tempflashvars[key] = tempflashvars[key].call(this, true);
                     }
                 }
-                ;
                 this.computedflashvars = Ext.urlEncode(tempflashvars);
             }
             //this.swfHeight = this.body.getSize().height -2;
             //this.swfWidth = this.body.getSize().width -2;
             this.swfHeight = "100%";
             this.swfWidth = "100%";
-            if (this.body.first()) {
-                this.flashTemplate.overwrite(this.body.first(), this);
-            } else {
-                this.flashTemplate.insertFirst(this.body, this);
-            }
+//            if (this.body.first()) {
+//                this.flashTemplate.overwrite(this.body.first(), this);
+//            } else {
+//                this.flashTemplate.insertFirst(this.body, this);
+//            }
+            this.flashTemplate.overwrite(this.body, this);
         };
         ct.loadFlash = function(config) {
             Ext.apply(this, config);
@@ -596,7 +595,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
                    // Instantiate and draw our chart, passing in some options.
                    var chart = new google.visualization.PieChart(cmp.body.dom);
-                   chart.draw(data, {width: 282, height: 311, is3D: true, legend : 'bottom', pieJoinAngle  : 10});
+                   chart.draw(data, {width: 282, height: 311, is3D: true, legend : 'bottom', pieJoinAngle  : 5});
                }
            }
 
@@ -647,9 +646,9 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 editable: false,
                 format: 'Y-m-d',
                 value: new Date(),
-                width: 85
-            }, {
-                text : '불러오기',
+                width: 100
+            }, '-', {
+                text : '통계 보기',
                 handler : function() {
                     var player = this;
                     var date = Ext.getCmp('timelog-datefild').getValue();
@@ -680,11 +679,11 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                         layout : 'fit',
                         items : this.log
                     },
-                    {
-                        title : 'history',
-                        layout : 'fit',
-                        html : 'History'
-                    },
+//                    {
+//                        title : 'history',
+//                        layout : 'fit',
+//                        html : 'History'
+//                    },
                     this.statistics
                 ]
             }),
