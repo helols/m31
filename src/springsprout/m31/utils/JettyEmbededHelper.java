@@ -13,12 +13,11 @@ import org.eclipse.jetty.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import javax.annotation.PostConstruct;
 
-@Component
+//@Component
 public class JettyEmbededHelper {
 
     @Autowired
