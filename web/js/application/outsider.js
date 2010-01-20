@@ -369,7 +369,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         text:'배경화면 지정하기',
                         scope:this,
                         handler: function() {
-                            //                        console.log("배경화면 지정하기.");
+                            m31.util.notification({title:'봄씨',text:'준비중입니다...',remove:true});
                         }
                     }
                 ]
