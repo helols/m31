@@ -20,7 +20,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '<tpl if="linkAppId === \'springsee\' && fileType === \'N\'">',
                 '<a hidefocus="on" href="{fileAddition}" class="pirobox_gall" title="{fileName}">',
             '</tpl>',
-            '<img class="file" src="../../images/apps/springfinder/{imgName}.png">',
+            '<img style="{imgStyle}" src="../../images/apps/springfinder/{imgName}.png">',
             '<tpl if="linkAppId !== \'springbook\'">',
                 '<tpl if="linkAppId !== \'springsee\' && fileType !== \'N\'">',
                     '</a>',
@@ -61,6 +61,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     prepareData: function(data) {
         data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel' ? 8 : 5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
+        data.imgStyle = this.id === 'springfinder-panel'? 'width:80px;height:80px;' : 'width:40px;height:40px;';
         return data;
     },
 
@@ -143,7 +144,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 autoSave : false
             });
         }
-        this.lastChangeNodeId = this.rootNodeId || 0;
+        this.lastChangeNodeId = this.rootNodeId || 1;
         this.store.load({params:{parentNode: this.rootNodeId || 1 , parentNodeName:this.rootNodeName || null}});
         M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
         this.on({

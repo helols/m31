@@ -314,7 +314,7 @@
 						c.preventDefault();
 						piro_close.add(bg_overlay).add(main_cont).add(caption).add(piro_next).add(piro_prev).fadeOut(opt.close_speed);
 						main_cont.removeClass('loading');
-//						$(piro_gallery).children().removeAttr('class');
+						$(piro_gallery).children().removeAttr('class');
 						piro_next.add(piro_prev).css('width',my_nav_w+'px').hide();
 						$(tagId + '.stop').remove();
 						$(tagId + '.c_c').append(piro_play);
