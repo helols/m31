@@ -581,6 +581,9 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                load : function(store, records, options) {
                    var cmp = Ext.getCmp("timelog-statistics");
 
+                   //body 초기화. (구글 차트가 계속 append 됨.)
+                   Ext.DomHelper.overwrite(cmp.body, "<span></span>");
+
                    var data = new google.visualization.DataTable();
                    data.addColumn('string', 'Task');
                    data.addColumn('number', 'Second per Day');
@@ -592,7 +595,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                    }
 
                    // Instantiate and draw our chart, passing in some options.
-                   var chart = new google.visualization.PieChart(cmp.body);
+                   var chart = new google.visualization.PieChart(cmp.body.dom);
                    chart.draw(data, {width: 282, height: 311, is3D: true, legend : 'bottom', pieJoinAngle  : 10});
                }
            }
