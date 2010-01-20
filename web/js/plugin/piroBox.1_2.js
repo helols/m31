@@ -81,7 +81,7 @@
 			var map = new Object();
 				for (var i=0; i<my_gall_classes.length; i++) {
 					var it=$(my_gall_classes[i])
-					map['a.'+it.attr('class')]=0;
+					map['#' + opt.target +' a.'+it.attr('class')]=0;
 				}
 			var gall_settings = new Array();
 				for (var key in map) {
@@ -95,7 +95,7 @@
 					$(gall_settings[i]).each(function(rel){this.rel = rel+1 + "&nbsp;of&nbsp;" + $(gall_settings[i]).length;});
 					var add_first = $(gall_settings[i]+':first').addClass('first');
 					var add_last = $(gall_settings[i]+':last').addClass('last');
-				}						
+				}
 			$(my_gall_classes).each(function(rev){this.rev = rev+0});
 			var piro_gallery = $(my_gall_classes);
 			var piro_single = $('#' + opt.target + ' a.pirobox');
