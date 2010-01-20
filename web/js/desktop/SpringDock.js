@@ -56,8 +56,17 @@ SpringDock = function() {
                         setTimeout(function(){
                                 Ext.get('booting-view').remove();
                                 Ext.get('booting-mask').fadeOut({remove:true});
+                                var userInfo = M31.ApplicationRegistry.getInstance().initData();
+                                console.dir(userInfo);
+                                if(userInfo[0] === true){
+                                    m31.util.notification({title:'환영인사!',text:'Demo User입니다.. 봄가이드를 보시고 즐기세요~~',remove:true});
+                                }else{
+                                    m31.util.notification({title:'환영인사!',text:userInfo[1]+'님이 접속하셨네요~',remove:true});
+                                    if(userInfo[2]){
+                                        m31.util.openWindow('springguide');
+                                    }
+                                }
                             }, 700);
-
                     },
                     add : function(appInfo) {
                         springdockcontainer.dockbtns.push(addDockBtn(appInfo));
@@ -177,7 +186,7 @@ M31.dt.DockButton = function(appInfo, el) {
             if (appInfo.appId === 'signout') {
                 var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
                 app.beforeCreate();
-                win = M31.WindowsManager.getInstance().createWindow(this,
+                win = M31.WindowsManager.getInstance().createWindow(appInfo.appId,
                         Ext.apply(app.createWindow(), {
                             id:appInfo.appId + '-win',
                             title:appInfo.appName,
@@ -194,7 +203,7 @@ M31.dt.DockButton = function(appInfo, el) {
                     ,success:function() {
                         var app = M31.ApplicationRegistry.getInstance().getApp(appInfo.appId);
                         app.beforeCreate();
-                        win = M31.WindowsManager.getInstance().createWindow(this,
+                        win = M31.WindowsManager.getInstance().createWindow(appInfo.appId,
                                 Ext.apply(app.createWindow(), {
                                     id:appInfo.appId + '-win',
                                     title:appInfo.appName,

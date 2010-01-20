@@ -88,17 +88,6 @@
     Ext.onReady(function() {
         Ext.get(document.body).setStyle('background','#000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center');
         M31.ApplicationRegistry.getInstance().loadApplicationStore();
-//        Ext.Ajax.request({
-//            method:'POST',
-//            url: '/j_spring_security_check',
-//            params: {
-//                j_username: 'springsprout@springsprout.org',
-//                j_password: 'springsprout'
-//            },
-//            success: function(response, opts) {
-//                M31.ApplicationRegistry.getInstance().loadApplicationStore();
-//            }
-//        });
     });
 </script>
 </body>

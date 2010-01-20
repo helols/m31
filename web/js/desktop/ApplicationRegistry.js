@@ -1,5 +1,8 @@
 M31.ApplicationRegistry = function() {
     var _instance = null;
+    var guest = null;
+    var nickName = null;
+    var first = null;
     var appInfos = {
         setting : {app : 'new M31Desktop.Setting()'},
         springsee :{app : 'new M31Desktop.SpringSee()'},
@@ -31,6 +34,9 @@ M31.ApplicationRegistry = function() {
             beforeload:{fn:function(){loaded = true; $("#processbar").progressBar(50);}},
             load: {
                 fn: function(store, records, options) {
+                    nickName = store.reader.jsonData.nickName;
+                    guest  = store.reader.jsonData.isGuest;
+                    first  = store.reader.jsonData.isFirst;
                     $("#processbar").progressBar(60);
                     store.each(function(item) {
                         Ext.apply(appInfos[item.data.appId], {
@@ -74,6 +80,9 @@ M31.ApplicationRegistry = function() {
                         if(!loaded){
                             applicationStore.load();
                         }
+                    },
+                    initData : function(){
+                        return [guest,nickName,first];
                     }
                 };
             }

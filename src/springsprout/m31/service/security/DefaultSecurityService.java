@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import springsprout.m31.domain.Member;
 import springsprout.m31.domain.Role;
 import springsprout.m31.module.app.me2day.SpringMe2DayRepository;
@@ -45,7 +44,15 @@ public class DefaultSecurityService implements SecurityService {
 		return -1;
 	}
 
-	public boolean isAdmin() {
+    @Override
+    public String getCurrentMemberName() {
+        if(getCurrentMember() != null || !isGuest()){
+            return getCurrentMember().getName();
+        }
+		return "Demo User";
+    }
+
+    public boolean isAdmin() {
         if (hasRole("ADMIN")) return true;
 		return false;
 	}
@@ -54,6 +61,21 @@ public class DefaultSecurityService implements SecurityService {
         if (hasRole("GUEST")) return true;
         return false;
     }
+
+    @Override
+    public boolean isFirst() {
+        if(getCurrentMember() != null || !isGuest()){
+            return getCurrentMember().getLocation() == null;
+        }
+		return false;
+    }
+
+    @Override
+    public void setFirst(String location) {
+         if(getCurrentMember() != null)
+             getCurrentMember().setLocation(location);
+    }
+
     /**
      * role을 가지고 있는지... 확인한다.
      * @param roleName

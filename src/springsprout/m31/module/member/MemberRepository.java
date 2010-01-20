@@ -16,6 +16,7 @@ import springsprout.m31.domain.Member;
 import springsprout.m31.dto.SignupDTO;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -94,5 +95,9 @@ public class MemberRepository extends SqlMapClientDaoSupport{
 
     public void insertRole(Integer memberId) {
         getSqlMapClientTemplate().insert("member.insertRole", memberId);
+    }
+
+    public void setLocation(HashMap<String, Object> conditionMap) {
+        getSqlMapClientTemplate().update("member.setLocation", conditionMap);
     }
 }

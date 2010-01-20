@@ -17,6 +17,7 @@ import springsprout.m31.domain.ThingVO;
 import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.app.finder.FinderRepository;
 import springsprout.m31.module.app.timelog.TimeLogRepository;
+import springsprout.m31.service.security.SecurityService;
 import springsprout.m31.utils.MD5Util;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class MemberService {
 
     @Autowired
     TimeLogRepository timeLogRepository;
+
+    @Autowired
+    SecurityService securityService;
 
     /**
      * 가입 프로세스.
@@ -80,6 +84,18 @@ public class MemberService {
             userInfo.put("IMGSRC", AVATAR_URL + MD5Util.md5Hex(userInfo.get("EMAIL")) + "?r=x&s=256");
         }
         return userList;
+    }
+
+    public void setLocation(String location) {
+        HashMap<String,Object> conditionMap = new HashMap<String,Object>();
+        conditionMap.put("location",location);
+        conditionMap.put("memberId",securityService.getCurrentMemberId());
+        memberRepository.setLocation(conditionMap);
+    }
+
+    public Boolean isFirstMember(){
+        
+        return true;
     }
 
     private void makeDefaultFolder(Integer memberId) {
@@ -215,4 +231,6 @@ public class MemberService {
 
 
     }
+
+
 }

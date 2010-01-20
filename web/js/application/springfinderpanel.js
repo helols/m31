@@ -13,21 +13,21 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             '<tpl for=".">',
             '<div class="file-wrap {fileType}" id="{fileId}">',
             '<tpl if="linkAppId !== \'springbook\'">',
-                '<tpl if="linkAppId !== \'springsee\' && fileType !== \'N\'">',
-                    '<a hidefocus="on" href="{fileAddition}">',
-                '</tpl>',
+            '<tpl if="linkAppId !== \'springsee\' && fileType !== \'N\'">',
+            '<a hidefocus="on" href="{fileAddition}">',
+            '</tpl>',
             '</tpl>',
             '<tpl if="linkAppId === \'springsee\' && fileType === \'N\'">',
-                '<a hidefocus="on" href="{fileAddition}" class="pirobox_gall" title="{fileName}">',
+            '<a hidefocus="on" href="{fileAddition}" class="pirobox_gall" title="{fileName}">',
             '</tpl>',
             '<img style="{imgStyle}" src="../../images/apps/springfinder/{imgName}.png">',
             '<tpl if="linkAppId !== \'springbook\'">',
-                '<tpl if="linkAppId !== \'springsee\' && fileType !== \'N\'">',
-                    '</a>',
-                '</tpl>',
+            '<tpl if="linkAppId !== \'springsee\' && fileType !== \'N\'">',
+            '</a>',
+            '</tpl>',
             '</tpl>',
             '<tpl if="linkAppId === \'springsee\' && fileType === \'N\'">',
-                '</a>',
+            '</a>',
             '</tpl>',
             '<div class="x-editable-wrap">',
             '<tpl if="defaultYn === \'Y\'">',
@@ -61,7 +61,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     prepareData: function(data) {
         data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel' ? 8 : 5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
-        data.imgStyle = this.id === 'springfinder-panel'? 'width:80px;height:80px;' : 'width:40px;height:40px;';
+        data.imgStyle = this.id === 'springfinder-panel' ? 'width:80px;height:80px;' : 'width:40px;height:40px;';
         return data;
     },
 
@@ -224,27 +224,25 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             } else {
                 this.onDirChange(fileId);
             }
-        }else if(data.linkAppId === 'springplayer' || data.linkAppId === 'springbook'){
-            var win = M31.WindowsManager.getInstance().getWindow(data.linkAppId);
+        } else if (data.linkAppId === 'springplayer' || data.linkAppId === 'springbook') {
             var app = M31.ApplicationRegistry.getInstance().getApp(data.linkAppId);
-            if(!win){
-                app.beforeCreate();
-                win = M31.WindowsManager.getInstance().createWindow(this,
-                        Ext.apply(app.createWindow(), {
-                            id:     app.id+ '-win',
-                            title:  app.id==='springplayer'?'봄플레이어' :'봄북',
-                            iconCls:app.id+'-win-icon'
-                        }));
-                app.createCallback(win);
-                win.show();
-             }
-            if(data.linkAppId === 'springplayer'){
-                if(Ext.getCmp("springfinder-panel-springplayer")){
+            var win = M31.WindowsManager.getInstance().getWindow(data.linkAppId);
+            if (!win) {
+                m31.util.openWindow(data.linkAppId);
+            } else {
+                if (win.minimized || win.hidden) {
+                    win.show();
+                } else if (win !== win.manager.getActive()) {
+                    win.toFront();
+                } 
+            }
+            if (data.linkAppId === 'springplayer') {
+                if (Ext.getCmp("springfinder-panel-springplayer")) {
                     app.play(data.fileName, data.fileAddition);
-                }else{
-                    app.play.defer(1000,app,[data.fileName,data.fileAddition]);
+                } else {
+                    app.play.defer(1000, app, [data.fileName,data.fileAddition]);
                 }
-            }else{
+            } else {
                 app.gateway(data.fileAddition);
             }
         }
@@ -284,8 +282,10 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                 if (node) {
                     node.reload();
                 }
-            } else {
-
+            }
+        } else {
+            if (this.id === 'springfinder-panel-springsee') {
+                //                this.onDataViewRender();
             }
         }
         store.commitChanges();
@@ -402,7 +402,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         e.stopEvent();
         this.contextMenu.showAt(e.getXY());
     },
-    reload : function(){
+    reload : function() {
         this.store.reload();
     }
 });
@@ -541,7 +541,7 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
         var isDropble = this.isContainerDropble(data);
         if (isDropble) {
             var store = this.view.store;
-            var parentId = this.view.lastChangeNodeId;
+            var parentId = this.view.store.getAt(0).data.parentId || this.view.lastChangeNodeId;
             var actType = 'fileCreate';
             if (data.isApp) {
                 Ext.each(data.items, function(item) {

@@ -57,7 +57,7 @@
 			
 			$('#' + opt.target + "_bg_overlay").remove();
 		    $('#' + opt.target + "_main_cont").remove();
-			
+
 			$('body').append(bg_overlay).append(main_cont);
 			main_cont.append(corners);
 			

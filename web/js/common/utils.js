@@ -15,7 +15,7 @@ if (Ext.isIE) {
         }}
     }();
 }
-    
+
 // namespace
 var m31 = {};
 var noti_unique_id = null;
@@ -91,7 +91,7 @@ m31.util = {
      * ex ) m31.util.loading(true);
      * @param anime  default : false
      */
-    loading : function(anime,msg){        
+    loading : function(anime,msg){
         var anime = anime || false;
         var loadingHtml = [   '     <div id="loading"> '
                             , '         <div class="loading-messge"> '
@@ -111,7 +111,7 @@ m31.util = {
 
     /**
      * 로딩이미지 제거 ..
-     * @param anime_time 삭제 시간 제어. 기본 250 ms  
+     * @param anime_time 삭제 시간 제어. 기본 250 ms
      */
     loading_remove: function(anime_time){
         setTimeout(function(){
@@ -140,7 +140,7 @@ m31.util = {
         return noti_unique_id;
     },
     notificationRemove : function( uniqueArray){
-        if(Ext.isArray(uniqueArray)){
+        if(Ext.isArray(uniqueArray||'')){
             Ext.each(uniqueArray, function(uniqueId){
                 $.gritter.remove(uniqueId, {
         	        fade: false,
@@ -163,10 +163,13 @@ m31.util = {
     setUserCokie : function(user){
         Ext.util.Cookies.set("springsprout", user, new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30)), "/");
     },
-    
+
     replaceURLtoLink: function(str) {
     	var regExp = /(https?:\/\/)([\da-z\.-]+\.)([a-z\.]{2,6})([\/\w\.\?\&=-]*)\/?/g;
     	return str.replace(regExp, '<a href="$1$2$3$4">$1$2$3$4</a>');
+    },
+    openWindow : function(appId){
+        Ext.getCmp('btn-'+appId).handler.defer(100,this);    
     }
 };
 
@@ -182,8 +185,9 @@ reqexception = function(conn, response, options){
             msg : 'Logged out. Please login again....',
             buttons : Ext.MessageBox.OK,
             fn : function(){
-                m31.util.loading();
-                setTimeout('window.location.href="/j_spring_security_logout"', 500);
+//                m31.util.loading(true,'s');
+                window.location.href="/j_spring_security_logout";
+//                setTimeout('window.location.href="/j_spring_security_logout"', 500);
             },
             icon : Ext.MessageBox.ERROR
         });

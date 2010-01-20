@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import springsprout.m31.module.member.MemberService;
 import springsprout.m31.service.security.SecurityService;
 
 import static springsprout.m31.common.M31System.JSON_VIEW;
@@ -29,12 +30,25 @@ public class ApplicationController {
     @Autowired
     SecurityService securityService;
 
+    @Autowired
+    MemberService memberService;
+
     /**
      * application list를 리턴한다...
+     *
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView list(){
-        return new ModelAndView(JSON_VIEW).addObject("appList",deskTopService.getAppList(securityService.getCurrentMemberId()));
+    public ModelAndView list() {
+        Boolean first = false;
+        if (securityService.isFirst()) {
+            memberService.setLocation("seoul");
+            securityService.setFirst("seoul");
+            first = true;
+        }
+        return new ModelAndView(JSON_VIEW).addObject("appList", deskTopService.getAppList(securityService.getCurrentMemberId()))
+                .addObject("nickName", securityService.getCurrentMemberName())
+                .addObject("isGuest", securityService.isGuest())
+                .addObject("isFirst", first);
     }
 }

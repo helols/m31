@@ -12,10 +12,16 @@ public interface SecurityService {
 	public Member getPersistentMember();
 
 	public int getCurrentMemberId();
-	
+
+    public String getCurrentMemberName();
+
 	public boolean isAdmin();
 
     public boolean isGuest();
+
+    public boolean isFirst();
+
+    public void setFirst(String location);
 
 	public boolean isCurrentUserOrAdmin(int id);
 	

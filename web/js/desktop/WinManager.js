@@ -48,7 +48,7 @@ M31.WindowsManager = function() {
             if (_instance === null) {
                 desktopEl = args;
                 _instance = {
-                    createWindow : function(barButton,config, cls) {
+                    createWindow : function(targetId,config, cls) {
                         var win = new (cls || Ext.Window)(
                                 Ext.applyIf(config || {}, {
                                     manager: windows,
@@ -63,7 +63,7 @@ M31.WindowsManager = function() {
 //                            ]
 //                        });
 
-                        win.animateTarget = barButton;
+                        win.animateTarget = Ext.getCmp('btn-'+targetId);
 
                         win.on({
                             'activate': {
