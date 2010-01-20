@@ -2,7 +2,9 @@
 .springme2day-win-icon{
     background-image: url(../../images/apps/win-icon/springme2day_win_icon.png) !important;
 }
-
+.springbook-win-icon{
+    background-image: url(../../images/apps/win-icon/springbook-win-icon.png) !important;
+}
 .x-panel-collapsed-title-text {
 	color:#ffffff;
 	font-family:tahoma,arial,verdana,sans-serif;
