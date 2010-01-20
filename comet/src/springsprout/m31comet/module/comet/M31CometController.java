@@ -41,13 +41,11 @@ public class M31CometController {
             log.debug("init date>> " + new Date().toString());
             store.put(sessionId, continuation);
             continuation.suspend();
-            System.out.println("dddd");
 //            return new ModelAndView(DUMMY_VIEW);
         }else{
             log.debug("espire date>> " + new Date().toString());
             return new ModelAndView(JSON_VIEW).addObject("request","expire");
         }
-        System.out.println("rrr");
         return new ModelAndView(JSON_VIEW).addObject("init",a);
 
     }

@@ -1,6 +1,5 @@
 package springsprout.m31.module.app.timelog;
 
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +134,6 @@ public class TimeLogService {
         map.put("일감", 3);
         map.put("등록", 4);
 
-        System.out.println(JSONObject.fromObject(map).toString());
+//        System.out.println(JSONObject.fromObject(map).toString());
     }
 }
