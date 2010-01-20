@@ -220,9 +220,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         {
                             text : "Close",
                             handler : function() {
-                                Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
-                                Ext.getCmp("springplayer-player").loadFlash({swf : ''});
                                 Ext.getCmp("springplayer-win").doLayout();
+                                Ext.getCmp("springplayer-player").loadFlash({swf : ''});
+                                Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
                             }
                         }
 
@@ -581,21 +581,18 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                load : function(store, records, options) {
                    var cmp = Ext.getCmp("timelog-statistics");
 
-                   //body 초기화. (구글 차트가 계속 append 됨.)
-                   Ext.DomHelper.overwrite(cmp.body, "<span></span>");
-                   
                    var data = new google.visualization.DataTable();
                    data.addColumn('string', 'Task');
                    data.addColumn('number', 'Second per Day');
-                                                                                
-                   for(var i=0; i<records.length; i++) {                       
+
+                   for(var i=0; i<records.length; i++) {
                        data.addRow([
                         records[i].get('thing'), records[i].get('time')
                        ])
                    }
 
                    // Instantiate and draw our chart, passing in some options.
-                   var chart = new google.visualization.PieChart(cmp.body.dom);
+                   var chart = new google.visualization.PieChart(cmp.body);
                    chart.draw(data, {width: 282, height: 311, is3D: true, legend : 'bottom', pieJoinAngle  : 10});
                }
            }
