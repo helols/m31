@@ -16,6 +16,7 @@ import springsprout.m31.domain.FinderFile;
 import springsprout.m31.domain.ThingVO;
 import springsprout.m31.dto.SignupDTO;
 import springsprout.m31.module.app.finder.FinderRepository;
+import springsprout.m31.module.app.timelog.TimeLogRepository;
 import springsprout.m31.utils.MD5Util;
 
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public class MemberService {
 
     @Autowired
     FinderRepository finderRepository;
+
+    @Autowired
+    TimeLogRepository timeLogRepository;
 
     /**
      * 가입 프로세스.
@@ -182,25 +186,33 @@ public class MemberService {
         study.setMemberID(memberId);
         study.setThing("공부");
         study.setViewOrder(0);
+        timeLogRepository.addThing(study);
 
         work.setMemberID(memberId);
         work.setThing("회사일");
         work.setViewOrder(0);
+        timeLogRepository.addThing(work);
 
         goToilet.setMemberID(memberId);
         goToilet.setThing("화장실");
         goToilet.setViewOrder(0);
+        timeLogRepository.addThing(goToilet);
 
         coding.setMemberID(memberId);
         coding.setThing("코딩");
         coding.setViewOrder(0);
+        timeLogRepository.addThing(coding);
 
         eat.setMemberID(memberId);
         eat.setThing("식사");
         eat.setViewOrder(0);
+        timeLogRepository.addThing(eat);
 
         end.setMemberID(memberId);
         end.setThing("연아짱");
         end.setViewOrder(-2);
+        timeLogRepository.addThing(end);
+
+
     }
 }
