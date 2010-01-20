@@ -88,7 +88,7 @@
             (#fileId#,	#memberId#, #fileName#, #parentId#, #fileType# ,#defaultYn# , #iconCls#, #linkAppId#, #fileAddition#)
     </insert>
 
-    <delete id="deleteFile" parameterClass="int">
-        delete from spring_finder where id = #fileId#
+    <delete id="deleteFile" parameterClass="hashMap">
+        delete from spring_finder where id = #fileId# and member_id = #memberId#
     </delete>
 </sqlMap>

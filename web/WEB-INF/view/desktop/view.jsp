@@ -23,9 +23,9 @@
     <![endif]-->
     <!-- GC -->
     <!-- LIBS -->
-    <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter-debug.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/ext-all-debug.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/ext-all.js"/>"></script>
     <!-- ENDLIBS -->
 
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>

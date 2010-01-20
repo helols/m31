@@ -59,7 +59,9 @@ public class FinderService {
     }
 
     public void updateFile(List<FinderFile> finderFileList) {
+        Integer memberId = securityService.getCurrentMemberId();
         for(FinderFile finderFile : finderFileList){
+            finderFile.setMemberId(memberId);
             finderRepository.updateFile(finderFile);
         }
     }
@@ -74,9 +76,11 @@ public class FinderService {
     }
 
     public void deleteFile(Object[] fileIds) {
-        Integer memberId = securityService.getCurrentMemberId();
+        HashMap<String,Object> conditionMap = new HashMap<String,Object>();
+        conditionMap.put("memberId",securityService.getCurrentMemberId());
         for(Object fileId : fileIds){
-            finderRepository.deleteFile(Integer.parseInt(fileId.toString()));
+            conditionMap.put("fileId",Integer.parseInt(fileId.toString()));
+            finderRepository.deleteFile(conditionMap);
         }
     }
 }

@@ -50,7 +50,7 @@ public class FinderRepository  extends SqlMapClientDaoSupport {
         return (Integer)getSqlMapClientTemplate().insert("finder.insertFile",finderFile);
     }
 
-    public void deleteFile(Integer finderFile) {
+    public void deleteFile(HashMap<String, Object> finderFile) {
         getSqlMapClientTemplate().update("finder.deleteFile",finderFile);
     }
 }
