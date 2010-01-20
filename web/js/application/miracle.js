@@ -80,8 +80,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                 '<tpl if="playerURL !== null"><a href="{playerURL}" class="player-play" title="{title}"><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span></a></tpl>',
                 '<tpl if="playerURL === null"><span><img class="player-icon" src="../../images/apps/springplayer/play-disable.png"/>Play</span></tpl>',
                 '<a href="{htmlLink}" class="player-link"><span><img class="player-icon" style="padding-right:2px;" src="../../images/apps/springplayer/link.png"/>{source}</span></a>',
-                '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a>',
-                '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springtwitter_win_icon.png"/><span>Twitter</span></a></td></tr>',
+                '<a href="{playerURL}" class="player-me2day"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a>',
+//                '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springtwitter_win_icon.png"/><span>Twitter</span></a></td></tr>',
                 '</table></div></tpl>'
                 );
 
@@ -117,6 +117,16 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                     // 새창에 소스 홈페이지 오픈.
                                 } else if ((target = e.getTarget("a .player-link")) !== null) {
                                     window.open(target.href);
+                                } else if((target = e.getTarget("a .player-me2day")) !== null) {
+                                    if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
+                                        Ext.Msg.alert('봄 플레이어', '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.');
+                                    } else {
+                                        M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
+                                            appId: 'springplayer',
+                                            url: target.href
+                                        });
+                                    }
+
                                 }
                             }.createDelegate(this)
                         },
@@ -218,10 +228,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                             text : 'title'
                         }, '->',
                         {
-                            text : "Close",
+                            text : "돌아가기",
                             handler : function() {
-                                Ext.getCmp("springplayer-win").doLayout();
-                                Ext.getCmp("springplayer-player").loadFlash({swf : ''});
+                                //Ext.getCmp("springplayer-win").doLayout();
+                                $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
                             }
                         }

@@ -1273,7 +1273,10 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
             	if(data.appId === 'springsee' && data.url.trim()){
         			var value = Ext.getCmp('springme2day-form-body').getValue();
         			Ext.getCmp('springme2day-form-body').setValue(value + ' "":' + data.url.trim() + ' ');
-        		}
+        		} else if((data.appId === 'springplayer' && data.url.trim())) {
+        			var value = Ext.getCmp('springme2day-form-body').getValue();
+        			Ext.getCmp('springme2day-form-body').setValue(value + ' "":' + data.url.trim() + ' ');
+                }
         	}
         }
     }
