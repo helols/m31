@@ -37,7 +37,7 @@
       <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>
       <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
         <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>현재 구식 브라우저를 사용중입니다.</div>
-        <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>이 웹 사이트 IE6 버전은 지원하지 않습니다.</div>
+        <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>이 웹 사이트 IE6 버전은 지원하지 않습니다. 다른 브라우저를 사용해주세요.</div>
       </div>
       <div style='width: 75px; float: left;'><a href='http://www.firefox.com' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
       <div style='width: 75px; float: left;'><a href='http://www.browserforthebetter.com/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>
