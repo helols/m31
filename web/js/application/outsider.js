@@ -599,7 +599,8 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
         
         this.startForm.getForm().submit({
             url:'/app/twitter/requestAuthorization',
-            waitMsg:'Loading...'
+            waitMsg:'Loading...',
+            timeout: 15
         });
     },
 
@@ -958,11 +959,6 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                     html: '<img src="/images/apps/springsee/loading.gif" />'
                 },
                 {
-                    id:'springtwitter-postStatus',
-                    xtype: 'displayfield',
-                    value: ''
-                },
-                {
                     id: 'springtwitter-postSend',
                     text: 'Update',
                     handler: function() {
@@ -1039,20 +1035,11 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                         self.reloadStatus = 2;
                         self.loadTimeline.reload();
                         Ext.getCmp("springtwitter-postLoading").hide();
-                        Ext.getCmp("springtwitter-postStatus").show();
-                        Ext.getCmp("springtwitter-postStatus").setValue("전송되었습니다.");
-                        setTimeout(function() {
-                            Ext.getCmp("springtwitter-postStatus").hide();
-                        }, 10000);
-
+                        m31.util.notification({title:'봄트위터',text:'전송되었습니다.',remove:true});
                     }
                 },
                 actionfailed: function(form, action) {
-                    Ext.getCmp("springtwitter-postStatus").show();
-                    Ext.getCmp("springtwitter-postStatus").setValue("전송에 실패했습니다.");
-                    setTimeout(function() {
-                        Ext.getCmp("springtwitter-postStatus").hide();
-                    }, 10000);
+                	m31.util.notification({title:'봄트위터',text:'전송에 실패했습니다.',remove:true});
                 },
                 beforeaction: function(form, action) {
                     if (!form.isValid()) {
@@ -1098,6 +1085,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                     }
                 }.createDelegate(this),
                 actionfailed: function(form, action) {
+                	m31.util.notification({title:'봄트위터',text:'Twitter가 응답하지 않습니다. <br/>잠시 후 다시 실행해 주세요.',remove:true});
                 }
             }
         });
