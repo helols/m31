@@ -551,7 +551,7 @@ movingbox = function() {
                     }
                 },
                 failure: function(respones,opts){
-                    console.log(respones);
+//                    console.log(respones);
                 }
             });
         }

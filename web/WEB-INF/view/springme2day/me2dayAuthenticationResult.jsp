@@ -8,7 +8,7 @@
 <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.js"/>"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		console.log('springme2day-me2day-authentication-result');
+//		console.log('springme2day-me2day-authentication-result');
 		try{
 			var auth = {
 				'result': ${userInfo.result},
@@ -20,7 +20,9 @@
 			}
 			parent.getApp('springme2day').loginModule.me2DayAuthenticationComplete(auth);
 		}
-		catch(e){console.log(e);}
+		catch(e){
+//            console.log(e);
+        }
 	});
 </script>
 <title>∫ΩπÃ≈ıµ•¿Ã</title>

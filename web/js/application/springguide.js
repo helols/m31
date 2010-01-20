@@ -27,14 +27,14 @@ M31Desktop.SpringGuide = Ext.extend(M31.app.Module, {
     	var redyTask = {
     	    run: function(app){
 	    		if(app.state == null) return;
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	// 봄가이드가 준비가 되었는가?
 	        	if(app.win == null) return;
 	        	if(!app.win.isVisible()) return;
 	        	
 	        	app.state = 'ready';
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	app.win.update(app.contents);
 	        	

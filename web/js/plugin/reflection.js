@@ -45,7 +45,7 @@ var Reflection = {
         var src = Ext.fly(image).getStyle('background-image').match(/^url\(?(.*)\)/)[1].replace(/"/g,"");
         var image = document.createElement('img');
         image.src = src;
-        console.log(image);
+//        console.log(image);
         try {
 			var d = document.createElement('div');
 			var p = image;

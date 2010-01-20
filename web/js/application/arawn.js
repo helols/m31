@@ -3,10 +3,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 	loadMask : null, 
 	state: null,
     init: function() {
-	    console.log("init");
+//	    console.log("init");
     },
     createCallback: function(win){
-    	console.log("createCallback");
+//    	console.log("createCallback");
 
     	if(!this.win){ this.win = win; }
     	this.win.app = this;
@@ -18,7 +18,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
         this.redyTask = {
     	    run: function(app){
 	    		if(app.state != null) return;
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	// 봄북이 준비가 되었는가?
 	        	if(app.win == null) return;
@@ -41,13 +41,13 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
     	this.runner.start(this.redyTask);
     },
     beforeCreate: function(){
-    	console.log("beforeCreate");
+//    	console.log("beforeCreate");
     },
     removeWin: function(){
-    	console.log("removeWin");
+//    	console.log("removeWin");
     	this.state = null;
     	this.loadMask = null;
-    	
+
     	this.win.app = null;
     	this.win = null;
         this.runner.stopAll();
@@ -282,11 +282,11 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	userInfo: null,
 	userConfig: null,
     init: function() {
-        console.log("init");
+//        console.log("init");
 //        m31.util.requiredJS("pirobox");
     },
     createCallback: function(win){
-    	console.log("createCallback");
+//    	console.log("createCallback");
 
     	if(!this.win){ this.win = win; }
     	this.win.app = this;
@@ -298,14 +298,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	var redyTask = {
     	    run: function(app){
 	    		if(app.state != null) return;
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	// 봄미투데이가 준비가 되었는가?
 	        	if(app.win == null || app.loginModule.loginState == null) return;
 	        	if(!app.win.isVisible()) return;
 	        	
 	        	app.state = 'ready';
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	app.loadMask.hide();
 	        	
@@ -314,7 +314,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        		app.loginModule.createLoginPanel(app);
 	        		Ext.getCmp('springme2day-login-iframepanel').setSrc(app.loginModule.authUrl);
 	        		
-	        		console.log('미투데이 인증 페이지로 이동합니다. (' + app.loginModule.authUrl + ')');
+//	        		console.log('미투데이 인증 페이지로 이동합니다. (' + app.loginModule.authUrl + ')');
 	        	}
 	        	else{
 	        		// 미투데이 패널을 생성합니다.
@@ -329,12 +329,12 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	this.runner.start(redyTask);
     },
     beforeCreate: function(){
-    	console.log("beforeCreate");
+//    	console.log("beforeCreate");
     	
     	this.loginModule.initializing(this);
     },
     removeWin: function(){
-    	console.log("removeWin");
+//    	console.log("removeWin");
     	
     	this.me2DayModule.destroy();
     	this.loginModule.destroy();
@@ -372,7 +372,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 				url: '/app/me2day/initializing',
 				success: function(response, opts){
 			    	try { 
-			    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
+//			    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
 			    		
 			    		var result = Ext.decode(response.responseText);
 			    		if(result.state){
@@ -380,14 +380,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 			    			this.userInfo = {
 			    				id: result.userInfo.user_id
 			    			};
-			    			console.log(result.userInfo);
+//			    			console.log(result.userInfo);
 			    			// 사용자 환경설정
 			    			this.userConfig = {
 			    				myPostView: result.userInfo.myPostView,
 			    				friendPostView: result.userInfo.friendPostView,
 			    				commentView: result.userInfo.commentView
 			    			};
-			    			console.log(this.userConfig);
+//			    			console.log(this.userConfig);
 			    			
 			    	        this.me2DayModule.createIconStore().loadData(result.person.postIcons, false);
 			    		}
@@ -401,19 +401,19 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 			    		this.loginModule.loginState = result.state;
 			    	}
 					catch(e){
-						console.log('초기화 중 오류가 발생했습니다. (' + e + ')');
+//						console.log('초기화 중 오류가 발생했습니다. (' + e + ')');
 						
 						this.loadMask.hide();
 						this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
 				    	this.loadMask.show();
 					}
 					
-					console.log('loginModule.loginState : ' + this.loginModule.loginState);
-		    		console.log('loginModule.authUrl : ' + this.loginModule.authUrl);
-		    		console.log('loginModule.authToken : ' + this.loginModule.authToken);
+//					console.log('loginModule.loginState : ' + this.loginModule.loginState);
+//		    		console.log('loginModule.authUrl : ' + this.loginModule.authUrl);
+//		    		console.log('loginModule.authToken : ' + this.loginModule.authToken);
 		    	}.createDelegate(app),
 				failure: function(response, opts){
-		    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
+//		    		console.log('loginCheckAjaxSuccess : ' + response.responseText);
 		    		this.loginModule.loginState = false;
 		    		this.loadMask.hide();
 					this.loadMask = new Ext.LoadMask(this.win.body, {msg:"초기화 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
@@ -473,7 +473,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    				friendPostView: auth.friendPostView,
 	    				commentView: auth.commentView
 	    			};
-	    			console.log(app.userConfig);
+//	    			console.log(app.userConfig);
 	    			
 	    			try{
 	    				app.me2DayModule.createIconStore().loadData(Ext.decode(auth.postIcons), false);
@@ -497,7 +497,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
         		}
 	    	}
 			catch(e){
-				console.log('미투데이 인증결과를 반영하는 중 오류가 발생했습니다. {' + e + '}');
+//				console.log('미투데이 인증결과를 반영하는 중 오류가 발생했습니다. {' + e + '}');
 				
 				app.loadMask.hide();
 				app.loadMask = new Ext.LoadMask(this.win.body, {msg:"로그인 중 오류가 발생했습니다. 봄미투데이를 다시 시작해주세요."});
@@ -530,7 +530,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     			if(config.to){ url += '&to=' + config.to; }
     		}
     		
-    		console.log('me2DayModule.get_posts() : ' + url);
+//    		console.log('me2DayModule.get_posts() : ' + url);
     		
     		return url;
     	},
@@ -550,7 +550,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
     	},    	
     	/** 미투데이 패널 생성 : 글쓰기 and 글목록 */
     	createView: function(app){
-    		console.log('me2DayModule.createView()');
+//    		console.log('me2DayModule.createView()');
     		
             var intervalID = null;
             var tcnt = 10000; //무한 이벤트 방지용.  300 * (10000/300) 초 정도.. 대기 해줌.
@@ -703,7 +703,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            })],
 	            listeners: {
 	        		actioncomplete: function(form, action){
-	        			console.log('actioncomplete');
+//	        			console.log('actioncomplete');
 	        			var result = Ext.decode(action.response.responseText);
 	        			var msg = '전송 중 네트워크 장애가 발생했습니다.';
 	        			if(result.msg == 'springme2day_not_login'){
@@ -725,9 +725,9 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	        			}
 	        			m31.util.notification({title:'봄미투데이',text:msg});
 	        		}.createDelegate(this),
-	        		actionfailed: function(form, action){ console.log('actionfailed'); },
+//	        		actionfailed: function(form, action){ console.log('actionfailed'); },
 	        		beforeaction: function(form, action){ 
-	        			console.log('beforeaction');
+//	        			console.log('beforeaction');
 	        			if(!form.isValid()) return false;
 	        			var currentValueLength = form.findField('springme2day-form-body').getValue().length;
 	        			if(currentValueLength <= 0){
@@ -824,8 +824,8 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		        					url: '/app/me2day/commentDelete',
 		        					params: {commentId:sender.id},
 		        					success: function(response, opts){
-		        						console.log('commentDeleteSuccess : ' + response.responseText);
-		        						console.log(this);
+//		        						console.log('commentDeleteSuccess : ' + response.responseText);
+//		        						console.log(this);
 		        			    		try{
 		        			    			var result = Ext.decode(response.responseText);
 		        			    			if(result.msg == 'springme2day_commentdelete_success'){
@@ -837,7 +837,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		        			    		catch(e){}
 		        					}.createDelegate(this),
 		        					failure: function(response, opts){
-		        						console.log('commentDeleteFailure: ' + response.responseText);
+//		        						console.log('commentDeleteFailure: ' + response.responseText);
 		        					}.createDelegate(this)
 		        				});
 		        			}, this);
@@ -1134,7 +1134,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	    				m31.util.notification({title:'봄미투데이',text:msg});
 					}
 					
-					console.log(result.userInfo);
+//					console.log(result.userInfo);
 				
 					this.userConfig.myPostView = result.userInfo.myPostView;
 	        		this.userConfig.friendPostView = result.userInfo.friendPostView;
@@ -1405,8 +1405,8 @@ Ext.override(Ext.layout.BorderLayout, {
 					var collapsedEl = configs[idx].collapsedEl;
 					var titleId = collapsedEl.id+'-title';
 					if(!Ext.get(titleId)){
-						console.log(configs[idx].collapsedTitle);
-						console.log(collapsedEl);
+//						console.log(configs[idx].collapsedTitle);
+//						console.log(collapsedEl);
 						
 						var insertedHtml = this.collapsedTitleTpl.insertFirst(collapsedEl,{ id : titleId, title : configs[idx].collapsedTitle });
 						if(configs[idx].collapsedTitleCls) {

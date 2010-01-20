@@ -1183,7 +1183,7 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
     },
     
     initTimelineView: function(screenName) {
-    	console.log(screenName);
+//    	console.log(screenName);
     	var self = M31.ApplicationRegistry.getInstance().getApp('springtwitter');
     	self.win.setSize(400, 500);
 		self.myScreenName = screenName;

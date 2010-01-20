@@ -20,7 +20,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
     },
     beforeCreate : function() {
-        console.log("spring player beforeCreate");
+//        console.log("spring player beforeCreate");
 
         // 스토어
         this.ds = new Ext.data.JsonStore({
@@ -220,9 +220,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         {
                             text : "Close",
                             handler : function() {
-                                Ext.getCmp("springplayer-win").doLayout();
-                                Ext.getCmp("springplayer-player").loadFlash({swf : ''});
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
+                                Ext.getCmp("springplayer-player").loadFlash({swf : ''});
+                                Ext.getCmp("springplayer-win").doLayout();
                             }
                         }
 
