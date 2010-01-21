@@ -2,24 +2,23 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
     /*
      * Desktop에서 필요한 경우 호출하는 콜백 함수 정의 부.
      */
-    init : function() {
+    init : function () {
         //console.log("Init Call.....");
     },
-    createCallback : function(win) {
+    createCallback : function (win) {
         //console.log("Create Call Back.....");
         if (undefined !== win) {
             this.win = win;
         }
 
         // Load Mask
-        this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg:"Loading Video..."});
+        this.ds.loadMask = new Ext.app.CustomLoadMask(Ext.getCmp('springplayer-dataview').getEl(), {store: this.ds, msg: "Loading Video..."});
         // 검색창에 포커스 줌.. (바로 주면 포커스 못 받는 경우가 있어서 500ms후에 focus주도록 함.
-        window.setTimeout(function() {
+        window.setTimeout(function () {
             Ext.getCmp('springplayer-serach-textfield').focus();
         }, 500);
-
     },
-    beforeCreate : function() {
+    beforeCreate : function () {
 //        console.log("spring player beforeCreate");
 
         // 스토어
@@ -33,31 +32,31 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
             fields : ['source', 'duration', 'author', 'title', 'thumbnailURL', 'playerURL', 'htmlLink'],
 
             listeners : {
-                beforeload : function(store, options) {
+                beforeload : function (store, options) {
                     store.loadMask.show();
                     var textfield = Ext.getCmp('springplayer-serach-textfield');
                     var combo = Ext.getCmp('springplayer-serach-combo');
 
                     // 페이징시 검색어가 안 넘어가서 추가.
-                    if (options.params['q'] != '') {
+                    if (options.params.q !== '') {
                         var q = textfield.getRawValue();
-                        options.params['q'] = (q === null) ? '' : q;
+                        options.params.q = (q === null) ? '' : q;
                     }
 
-                    // 보이는건 Youtube지만 실제 전송되는 값은 google이여야 함.
-                    var comboValue = combo.getValue();
-                    if (comboValue === 'Youtube')
-                        comboValue = 'google';
-                    options.params['type'] = comboValue;
+                    options.params.type = combo.getValue();
+                    options.params.limit = 10;
 
-                    options.params['limit'] = 10;
+                    // 보이는건 Youtube지만 실제 전송되는 값은 google이여야 함.
+                    if (options.params.type === 'Youtube') {
+                        options.params.type = 'google';
+                    }
 
                     // 텍스트 필드나 콤보박스의 값이 바뀌면 새로 검색.
                     if (textfield.isDirty() || combo.isDirty()) {
-                        options.params['start'] = 0;
+                        options.params.start = 0;
                     }
                 },
-                load : function(store) {
+                load : function (store) {
                     var view = Ext.getCmp("springplayer-dataview-view");
                     Ext.getCmp("springplayer-dataview").body.scrollTo('top', 0);
                     // Dirty 채크를 위해서 검색어 저장.
@@ -66,7 +65,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     textfield.originalValue = textfield.getValue();
                     combo.originalValue = combo.getValue();
                     if (!view.dragZone) {
-                        view.dragZone = new MovieDragZone(view, {containerScroll:false, ddGroup: 'springfinderpenelDD'});
+                        view.dragZone = new MovieDragZone(view, {containerScroll: false, ddGroup: 'springfinderpenelDD'});
                     }
                 }
             }
@@ -101,14 +100,14 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         id : 'springplayer-dataview-view',
                         store: this.ds,
                         tpl: this.thumbnailtpl,
-                        overClass:'x-view-over',
+                        overClass: 'x-view-over',
                         itemSelector: 'div.thumb-wrap',
-                        singleSelect : true,
-                        plugins: new Ext.DataView.DragSelector({dragSafe:true}),
+                        singleSelect: true,
+                        plugins: new Ext.DataView.DragSelector({dragSafe: true}),
                         emptyText: 'No Video to display',
 
                         listeners : {
-                            click : function(dataview, index, node, e) {
+                            click : function (dataview, index, node, e) {
                                 var springPlayer = this;
                                 var target = null;
                                 // Player로 전환.
@@ -117,7 +116,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                     // 새창에 소스 홈페이지 오픈.
                                 } else if ((target = e.getTarget("a .player-link")) !== null) {
                                     window.open(target.href);
-                                } else if((target = e.getTarget("a .player-me2day")) !== null) {
+                                } else if ((target = e.getTarget("a .player-me2day")) !== null) {
                                     if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
                                         Ext.Msg.alert('봄 플레이어', '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.');
                                     } else {
@@ -131,7 +130,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                             }.createDelegate(this)
                         },
 
-                        prepareData : function(data) {
+                        prepareData : function (data) {
                             data.thumbWrap = Ext.id();
                             return data;
                         }
@@ -163,10 +162,10 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         '-',
                         // 검색 필드
                         new Ext.app.SearchField({
-                            id : 'springplayer-serach-textfield',
-                            width:200,
-                            store : this.ds,
-                            paramName : 'q'
+                            id: 'springplayer-serach-textfield',
+                            width: 200,
+                            store: this.ds,
+                            paramName: 'q'
                         })
                     ],
                     // 페이징 툴바
@@ -192,19 +191,19 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     collapsible: true,
                     split: true,
                     listeners: {
-                        'afterlayout': { fn:function() {
-                           Ext.getCmp('springplayer-explorer-panel').items.items[0].onResizez(Ext.fly('springplayer-explorer-panel').getSize().height);
-                        }, scope:this, single:false}
-                   }
+                        'afterlayout': { fn: function () {
+                            Ext.getCmp('springplayer-explorer-panel').items.items[0].onResizez(Ext.fly('springplayer-explorer-panel').getSize().height);
+                        }, scope: this, single: false}
+                    }
                 }
             ]
         });
     },
-    removeWin: function() {
+    removeWin: function () {
         //console.log("removeWin");
         // this.win = undefined;
     },
-    createWindow : function() {
+    createWindow : function () {
         //console.log("CreateWindow");
 
         var config;
@@ -237,20 +236,20 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         }, '->',
                         {
                             text : "돌아가기",
-                            handler : function() {
+                            handler : function () {
                                 //Ext.getCmp("springplayer-win").doLayout();
                                 $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
                                 Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
                             }
                         }
                     ]
-            }],
+                }],
 
-            listeners: {
-                beforeshow : function(cmp) {
-                    cmp.setAnimateTarget(null);
+                listeners: {
+                    beforeshow : function (cmp) {
+                        cmp.setAnimateTarget(null);
+                    }
                 }
-            }
         };
         return config;
     },
@@ -260,7 +259,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param title
      * @param url
      */
-    play : function(title, url) {
+    play : function (title, url) {
         Ext.getCmp("springplayer-win").getLayout().setActiveItem(1);
         Ext.getCmp("springplayer-player").loadFlash({swf : url});
         Ext.getCmp("springplayer-player-title").setText(title);
@@ -271,37 +270,37 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
  * The custom search field
  */
 Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
-    initComponent : function() {
+    initComponent : function () {
         Ext.app.SearchField.superclass.initComponent.call(this);
-        this.on('specialkey', function(f, e) {
-            if (e.getKey() == e.ENTER) {
+        this.on('specialkey', function (f, e) {
+            if (e.getKey() === e.ENTER) {
                 this.onTrigger2Click();
             }
         }, this);
     },
 
-    validationEvent:false,
-    validateOnBlur:false,
-    trigger1Class:'x-form-clear-trigger',
-    trigger2Class:'x-form-search-trigger',
-    hideTrigger1:true,
-    width:180,
+    validationEvent: false,
+    validateOnBlur: false,
+    trigger1Class: 'x-form-clear-trigger',
+    trigger2Class: 'x-form-search-trigger',
+    hideTrigger1: true,
+    width: 180,
     hasSearch : false,
     paramName : 'query',
 
     // X버튼 클릭시
-    onTrigger1Click : function() {
+    onTrigger1Click : function () {
         if (this.hasSearch) {
             var o = {start: 0};
             o[this.paramName] = '';
-            this.store.reload({params:o});
+            this.store.reload({params: o});
             this.el.dom.value = '';
             this.triggers[0].hide();
             this.hasSearch = false;
         }
     },
     // 검색(돋보기) 클릭시
-    onTrigger2Click : function() {
+    onTrigger2Click : function () {
         var v = this.getRawValue();
         if (v.length < 1) {
             this.onTrigger1Click();
@@ -309,7 +308,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         }
         var o = {start: 0};
         o[this.paramName] = v;
-        this.store.reload({params:o});
+        this.store.reload({params: o});
         this.hasSearch = true;
         this.triggers[0].show();
     }
@@ -317,16 +316,16 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
 Ext.app.CustomLoadMask = Ext.extend(Ext.LoadMask, {
     /* Override */
-    onLoad : function() {
+    onLoad : function () {
         var self = this;
-        window.setTimeout(function() {
+        window.setTimeout(function () {
             self.el.unmask(self.removeMask);
         }, 500);
     }
 });
 
-Ext.ux.FlashPlugin = function() {
-    this.init = function(ct) {
+Ext.ux.FlashPlugin = function () {
+    this.init = function (ct) {
         ct.flashTemplate = new Ext.XTemplate(
                 '<object id="flash-{id}" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="{swfWidth}" height="{swfHeight}">',
                 '<param name="movie" value="{swf}" />',
@@ -341,12 +340,12 @@ Ext.ux.FlashPlugin = function() {
                 '<embed name="flash-{id}" src="{swf}" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="{computedflashvars}" type="application/x-shockwave-flash" width="{swfWidth}" height="{swfHeight}" wmode="transparent" allowScriptAccess="always" swliveconnect="true" align="t" salign="TL" scale="showall"></embed>',
                 '</object>');        
         ct.flashTemplate.compile();
-        ct.renderFlash = function() {
+        ct.renderFlash = function () {
             //console.log("render Flash");
-            if (this.flashvars && (typeof this.flashvars == 'object')) {
+            if (this.flashvars && (typeof this.flashvars === 'object')) {
                 var tempflashvars = Ext.apply({}, this.flashvars);
                 for (var key in tempflashvars) {
-                    if (typeof tempflashvars[key] == 'function') {
+                    if (typeof tempflashvars[key] === 'function') {
                         tempflashvars[key] = tempflashvars[key].call(this, true);
                     }
                 }
@@ -363,7 +362,7 @@ Ext.ux.FlashPlugin = function() {
 //            }
             this.flashTemplate.overwrite(this.body, this);
         };
-        ct.loadFlash = function(config) {
+        ct.loadFlash = function (config) {
             Ext.apply(this, config);
             this.renderFlash();
         };
@@ -374,7 +373,7 @@ Ext.ux.FlashPlugin = function() {
 /**
  * Create a DragZone instance for our JsonView
  */
-MovieDragZone = function(view, config) {
+MovieDragZone = function (view, config) {
     this.view = view;
     MovieDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
@@ -382,10 +381,10 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
     // We don't want to register our image elements, so let's
     // override the default registry lookup to fetch the image
     // from the event instead
-    onBeforeDrag : function(data, e) {
+    onBeforeDrag : function (data, e) {
         var nodeData = this.view.getRecords(data.nodes);
-        var items = new Array();
-        Ext.each(nodeData, function(item) {
+        var items = [];
+        Ext.each(nodeData, function (item) {
             items.push({
                 'fileName': item.data.title,
                 'fileAddition': item.data.playerURL
@@ -396,7 +395,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
         data.linkAppId = 'springplayer';
         data.items = items;
     },
-    getDragData : function(e) {
+    getDragData : function (e) {
         var target = e.getTarget('.thumb-wrap');
 
         if (target) {
@@ -409,7 +408,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
                 nodes: selNodes
             };
 
-            if (selNodes.length == 1) {
+            if (selNodes.length === 1) {
                 dragData.ddel = Ext.fly(target.id).child('img.thumb-img').dom;
                 dragData.single = true;
             }
@@ -420,7 +419,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
     },
     // the default action is to "highlight" after a bad drop
     // but since an image can't be highlighted, let's frame it
-    afterRepair:function() {
+    afterRepair: function () {
         for (var i = 0, len = this.dragData.nodes.length; i < len; i++) {
             Ext.fly(this.dragData.nodes[i]).frame('#8db2e3', 1);
         }
@@ -428,7 +427,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
     },
 
     // override the default repairXY with one offset for the margins and padding
-    getRepairXY : function(e) {
+    getRepairXY : function (e) {
         if (!this.dragData.multi) {
             var xy = Ext.Element.fly(this.dragData.ddel).getXY();
             xy[0] += 3;
@@ -442,10 +441,10 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
  * 타임 로그
  ***********************************************************************************************************************/
 M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
-    init : function() {
+    init : function () {
     },
 
-    beforeCreate : function() {
+    beforeCreate : function () {
         // 타임로그 스토어
         this.store = new Ext.data.JsonStore({
             //url : "app/timelog/list",
@@ -523,11 +522,11 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
 
             listeners : {
                 write : function (store, action, result, res, rs) {
-                    if(action === 'create') {
+                    if (action === 'create') {
                         store.load();
                     }
                 },
-                load : function(store, records, options) {
+                load : function (store, records, options) {
                     var tbar = Ext.getCmp("timelog-LogGrid").getTopToolbar();
                     if (tbar !== null) {
                         //툴바 초기화.
@@ -537,8 +536,8 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                         tbar.add({
                             text : '추가',
                             xtype : 'button',
-                            handler : function(b, e) {
-                                Ext.MessageBox.prompt('Thing', '새로운 할일:', function(btn, text) {
+                            handler : function (b, e) {
+                                Ext.MessageBox.prompt('Thing', '새로운 할일:', function (btn, text) {
                                     if (btn === 'ok') {
                                         if (text !== '') {
                                             var record = new store.recordType({
@@ -554,12 +553,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                             }}, '-');
 
                         // Thing 버튼 생성
-                        var i;
-                        for (i = 0; i < records.length; i++) {
-                            tbar.add({
-                                text : records[i].get('thing'),
-                                xtype : 'button',
-                                handler : function(b, e, thingID) {
+                        var buutonHandler =  function (b, e, thingID) {
 //                                    console.log("Thing 클릭.. : " + thingID);
 //                                    console.log(b.getText());
                                     var store = Ext.getCmp("timelog-LogGrid").getStore();
@@ -577,10 +571,16 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                                     Ext.getCmp("timelog-LogGrid").doLayout();
                                     //store.commitChanges()
                                     //store.save();
-                                }.createDelegate(tbar, records[i].get('id'), true)
+                        };
+
+                        var i;
+                        for (i = 0; i < records.length; i++) {
+                            tbar.add({
+                                text : records[i].get('thing'),
+                                xtype : 'button',
+                                handler : buutonHandler.createDelegate(tbar, records[i].get('id'), true)
                             });
                         }
-
                         tbar.doLayout();
                     } else {
                         //console.log("[WRAN] Toptoolbar is not exist.")
@@ -600,7 +600,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
            }],
 
            listeners : {
-               load : function(store, records, options) {
+               load : function (store, records, options) {
                    var cmp = Ext.getCmp("timelog-statistics");
 
                    //body 초기화. (구글 차트가 계속 append 됨.)
@@ -613,7 +613,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                    for(var i=0; i<records.length; i++) {
                        data.addRow([
                         records[i].get('thing'), records[i].get('time')
-                       ])
+                       ]);
                    }
 
                    // Instantiate and draw our chart, passing in some options.
@@ -672,18 +672,18 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                 width: 100
             }, '-', {
                 text : '통계 보기',
-                handler : function() {
+                handler : function () {
                     var player = this;
                     var date = Ext.getCmp('timelog-datefild').getValue();
                     var dateStr = date.format('Y-m-d');
                     player.statisticsStore.load({params: {regDate : dateStr}});
                 }.createDelegate(this)
             }]
-        })
+        });
 
     },
 
-    createWindow : function() {
+    createWindow : function () {
         var opt = {
             id : 'timelog',
             layout:'fit',
@@ -712,7 +712,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             }),
 
             listeners : {
-                render : function(win) {
+                render : function (win) {
                     // Time Log Load
                     this.store.load({
                         params : {
@@ -723,7 +723,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
                     this.thingStore.load();
                 }.createDelegate(this),
 
-                close : function(win) {
+                close : function (win) {
                     Ext.Ajax.request({
                         url : '/app/timelog/end'
                     });
@@ -734,7 +734,7 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
         return opt;
     },
 
-    createCallback : function(win) {
+    createCallback : function (win) {
         //console.log("CreateCallback");
     }
 });
