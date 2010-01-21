@@ -113,6 +113,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
                         listeners : {
                             click : function (dataview, index, node, e) {
+                                e.preventDefault();
                                 var springPlayer = this;
                                 var target = null;
                                 // Player로 전환.
@@ -123,14 +124,17 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                     window.open(target.href);
                                 } else if ((target = e.getTarget("a .player-me2day")) !== null) {
                                     if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
-                                        Ext.Msg.alert('봄 플레이어', '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.');
+//                                         Ext.Msg.alert('봄 플레이어', '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.');
+                                         m31.util.notification({
+                                             title: '봄 플레이어',
+                                             text: '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.'
+                                        });
                                     } else {
                                         M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
                                             appId: 'springplayer',
                                             url: target.href
                                         });
                                     }
-
                                 }
                             }.createDelegate(this)
                         },
@@ -306,7 +310,7 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     },
     // 검색(돋보기) 클릭시
     onTrigger2Click : function () {
-        var v = this.getRawValue();
+        var v = this.getRawValue().trim();
         if (v.length < 1) {
             this.onTrigger1Click();
             return;
@@ -391,8 +395,9 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
         var items = [];
         var sw = false;
         Ext.each(nodeData, function (item) {
-            if(item.data.playerURL.length === 0)
+            if(item.data.playerURL.length === 0){
                 sw = true;
+            }
             items.push({
                 'fileName': item.data.title,
                 'fileAddition': item.data.playerURL
@@ -400,10 +405,10 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
         });
 
         // 드래그 앤 드롭 안되게 함.
-        if(sw === true) {
-            return false;
-        }
-
+//        if(sw === true) {
+//            return false;
+//        }
+        data.isDragble = sw;
         data.isApp = true;
         data.linkAppId = 'springplayer';
         data.items = items;
@@ -414,7 +419,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
         if (target) {
             var view = this.view;
             if (!view.isSelected(target)) {
-                view.onClick(e);
+                view.select(target);
             }
             var selNodes = view.getSelectedNodes();
             var dragData = {
