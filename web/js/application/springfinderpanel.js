@@ -304,7 +304,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             }
         } else {
             if (this.id === 'springfinder-panel-springsee') {
-                store.reload();
+                store.load({params:{parentNode:this.lastChangeNodeId}});
             }
         }
         store.commitChanges();
@@ -422,7 +422,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.contextMenu.showAt(e.getXY());
     },
     reload : function() {
-        this.store.reload();
+        this.store.load({params:{parentNode:this.lastChangeNodeId}});
     }
 });
 
