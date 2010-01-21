@@ -98,11 +98,11 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'defaultYn','fileType','imgName'
                 ],
                 listeners: {
-                    'beforeload' : {fn:function(store) {
-                        if (store.loadMask) {                      
-                            store.loadMask.msg = 'Loading panel...';
-                        }
-                    }, scope:this},
+//                    'beforeload' : {fn:function(store) {
+//                        if (store.loadMask) {                      
+//                            store.loadMask.msg = 'Loading panel...';
+//                        }
+//                    }, scope:this},
                     'load': {fn:function(store) {
                         if (store.getCount() > 0) {
                             this.select(0);
@@ -180,8 +180,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     },
     onRender:function() {
         M31.app.SpringFinderPanel.superclass.onRender.apply(this, arguments);
-        this.store.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.store, msg:"Loading panel..."});
-        this.tmpstore.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.tmpstore, msg:"Save data..."});
+//        this.store.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.store, msg:"Loading panel..."});
+//        this.tmpstore.loadMask = new Ext.app.CustomLoadMask(this.getEl(), {store: this.tmpstore, msg:"Save data..."});
         this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:false,
             ddGroup: 'springfinderpenelDD',id : this.id + '-dragzone'});
         this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD',id: this.id + '-dropzone'});
@@ -271,8 +271,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.ownerCt.setTitle(this.springfinderTree.getPath(node));
     },
     onBeforesave : function(store, data) {
-        store.loadMask.msg = 'process data...';
-        store.loadMask.show();
+//        store.loadMask.msg = 'process data...';
+//        store.loadMask.show();
     },
     onWrite :function(store, action, result, res, rec) {
         var noticationmsg = '';
@@ -308,7 +308,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             }
         }
         store.commitChanges();
-        store.loadMask.hide();
+//        store.loadMask.hide();
     },
     onContainerContextClick : function (view, e) {
         if (!this.containerContextMenu) { // create context menu on first right click
