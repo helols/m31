@@ -8,6 +8,8 @@
 package springsprout.m31.module.app.finder;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -21,7 +23,8 @@ import java.util.List;
 @Repository
 public class FinderRepository  extends SqlMapClientDaoSupport {
 
-	@Autowired
+	Logger log = LoggerFactory.getLogger(getClass());
+    @Autowired
     SqlMapClient sqlMapClient;
 
 	@PostConstruct
@@ -35,6 +38,7 @@ public class FinderRepository  extends SqlMapClientDaoSupport {
     }
 
     public List<FinderFile> getFiles(HashMap<String, Integer> conditionMap) {
+        log.info("getFiles >> "+conditionMap);
         return getSqlMapClientTemplate().queryForList("finder.getFiles",conditionMap);
     }
 

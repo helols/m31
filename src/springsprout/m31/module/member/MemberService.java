@@ -138,7 +138,7 @@ public class MemberService {
         bookFolder.setFileType("F");
         bookFolder.setFileAddition("");
         bookFolder.setDefaultYn("Y");
-        bookFolder.setLinkAppId("springdoc");
+        bookFolder.setLinkAppId("springbook");
         bookFolder.setIconCls("folder");
 
         defaultFolderList.add(docFolder);
