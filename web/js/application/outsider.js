@@ -346,7 +346,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
                                 m31.util.notification({
                                     title: '봄씨',
-                                    text: '봄미투데이를 실행해 주세요.'
+                                    text: '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.'
                                 });
                             } else {
                                 M31.ApplicationRegistry.getInstance().getApp('springme2day').me2DayModule.gateway({
@@ -363,7 +363,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             if (!M31.WindowsManager.getInstance().getWindow("springtwitter")) {
                                 m31.util.notification({
                                     title: '봄씨',
-                                    text: '봄트위터를 실행해 주세요.'
+                                    text: '봄트위터가 실행된 상태에서만 보낼 수 있습니다.'
                                 });
                             } else {
                                 M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
