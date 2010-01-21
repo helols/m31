@@ -72,17 +72,22 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         });
 
         this.thumbnailtpl = new Ext.XTemplate(
-                '<tpl for="."><div class="thumb-wrap" id={thumbWrap}><table>',
-                '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><span><img class="player-icon" src="../../images/apps/springplayer/title.png"/>{title}</span></td></tr>',
-                '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/author.png"/>{author}</span></td></tr>',
-                '<tr><td>',
-                '<tpl if="playerURL !== null"><a href="{playerURL}" class="player-play" title="{title}"><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span></a></tpl>',
-                '<tpl if="playerURL === null"><span><img class="player-icon" src="../../images/apps/springplayer/play-disable.png"/>Play</span></tpl>',
-                '<a href="{htmlLink}" class="player-link"><span><img class="player-icon" style="padding-right:2px;" src="../../images/apps/springplayer/link.png"/>{source}</span></a>',
-                '<a href="{playerURL}" class="player-me2day"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a>',
-//                '<a href="#"><img class="player-icon" src="../../images/apps/win-icon/springtwitter_win_icon.png"/><span>Twitter</span></a></td></tr>',
-                '</table></div></tpl>'
-                );
+            '<tpl for="."><div class="thumb-wrap" id={thumbWrap}><table>',
+            '<tr><td class="thumb" rowspan="3"><img class="thumb-img" src="{thumbnailURL}" alt="{title}"/></td><td><span><img class="player-icon" src="../../images/apps/springplayer/title.png"/>{title}</span></td></tr>',
+            '<tr><td><span><img class="player-icon" src="../../images/apps/springplayer/author.png"/>{author}</span></td></tr>',
+            '<tr><td>',
+            '<tpl if="this.isPlayerURL(playerURL)"><a href="{playerURL}" class="player-play" title="{title}"><span><img class="player-icon" src="../../images/apps/springplayer/play.png"/>Play</span></a></tpl>',
+            '<tpl if="!this.isPlayerURL(playerURL)"><span><img class="player-icon" src="../../images/apps/springplayer/play-disable.png"/>Play</span></tpl>',
+            '<a href="{htmlLink}" class="player-link"><span><img class="player-icon" style="padding-right:2px;" src="../../images/apps/springplayer/link.png"/>{source}</span></a>',
+            '<tpl if="this.isPlayerURL(playerURL)"><a href="{playerURL}" class="player-me2day"><img class="player-icon" src="../../images/apps/win-icon/springme2day_win_icon.png"/><span>Me2Day</span></a></tpl>',
+            '<tpl if="!this.isPlayerURL(playerURL)"><img class="player-icon" src="../../images/apps/springplayer/springme2day-disable.png"/><span>Me2Day</span></tpl>',
+            '</table></div></tpl>',
+            {
+                isPlayerURL : function(playerURL) {
+                    return playerURL !== null && playerURL.length !== 0;
+                }
+            }
+        );
 
         // 동영상 검색 부분
         this.serchePanel = new Ext.Panel({
@@ -208,7 +213,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
         var config;
         config = {
-            //id : 'springplayer',
             title : 'Spring Player',
             width: 640,
             height: 480,
@@ -384,12 +388,20 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
     onBeforeDrag : function (data, e) {
         var nodeData = this.view.getRecords(data.nodes);
         var items = [];
+        var sw = false;
         Ext.each(nodeData, function (item) {
+            if(item.data.playerURL.length === 0)
+                sw = true;
             items.push({
                 'fileName': item.data.title,
                 'fileAddition': item.data.playerURL
             });
         });
+
+        // 드래그 앤 드롭 안되게 함.
+        if(sw === true) {
+            return false;
+        }
 
         data.isApp = true;
         data.linkAppId = 'springplayer';

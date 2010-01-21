@@ -99,9 +99,7 @@ public class GoogleAPIHelper {
 
             List<MovieVO> list = new ArrayList<MovieVO>();
             log.debug("videoFeed Size : {}",videoFeed.getEntries().size());
-            if(videoFeed.getNextLink() != null) {
-                log.debug("{}",videoFeed.getNextLink().getHref());
-            }
+
             for (VideoEntry ve : videoFeed.getEntries()) {
                 MovieVO vo = new MovieVO();
                 vo.setSource("YouTube");
@@ -112,6 +110,7 @@ public class GoogleAPIHelper {
                 vo.setAuthor(mediaGroup.getUploader());
                 
                 for(YouTubeMediaContent mediaContent : mediaGroup.getYouTubeContents()) {
+                    vo.setPlayerURL("");
                    if("application/x-shockwave-flash".equals(mediaContent.getType())) {                       
                         vo.setPlayerURL(mediaContent.getUrl());
                         vo.setDuration(mediaContent.getDuration());
