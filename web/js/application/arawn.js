@@ -671,7 +671,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		height: 20,
 	            		items:[{
 	            			region: 'center',
-		            		xtype: 'textarea',
+		            		xtype: 'textfield',
 		            		id: 'springme2day-form-tags',
 		            		name: 'tags',
 		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)'
@@ -955,14 +955,14 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 				tbar: [{
 						xtype: 'tbtext',
 						text: '',
-						width: 5
+						width: 10
 					},{
 						xtype: 'datefield',
 						id: 'springme2day-postlist-form-to',
 						editable: false,
 						format: 'Y-m-d',
 						value: new Date(),
-						width: 85,
+						width: 90,
 						listeners: {
 							select: function(sender, date){
 								this.userConfig.form = date.format('Y-m-d');
@@ -975,7 +975,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 						}
 					},{
 						xtype: 'tbtext',
-						text: '로 부터 이전 7일간의 글을 봅니다.'
+						text: ' 로 부터 이전 7일간의 글을 봅니다.'
 					},'->',{
 						xtype: 'button',
 						text: '새로고침',
