@@ -118,7 +118,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                 // Player로 전환.
                                 if ((target = e.getTarget("a .player-play")) !== null) {
                                     springPlayer.play(target.title, target.href);
-                                    // 새창에 소스 홈페이지 오픈.
+                                // 새창에 소스 홈페이지 오픈.
                                 } else if ((target = e.getTarget("a .player-link")) !== null) {
                                     window.open(target.href);
                                 } else if ((target = e.getTarget("a .player-me2day")) !== null) {
@@ -137,6 +137,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
                         prepareData : function (data) {
                             data.thumbWrap = Ext.id();
+                            console.log(data.title);
                             return data;
                         }
                     },

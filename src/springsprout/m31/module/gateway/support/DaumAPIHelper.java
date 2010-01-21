@@ -15,6 +15,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springsprout.m31.common.StringUtil;
 import springsprout.m31.domain.MovieVO;
 import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
@@ -90,7 +91,7 @@ public class DaumAPIHelper {
             JSONObject j = (JSONObject) iter.next();
             MovieVO vo = new MovieVO();
             vo.setSource("daum");
-            vo.setTitle(j.getString("title"));
+            vo.setTitle((StringUtil.doubleQuotationEscape(j.getString("title"))));
             vo.setAuthor(j.getString("author"));
             vo.setDuration(Integer.parseInt(j.getString("playtime")));
             vo.setPlayerURL(j.getString("player_url"));

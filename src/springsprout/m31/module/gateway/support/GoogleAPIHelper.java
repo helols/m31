@@ -14,7 +14,9 @@ import com.google.gdata.data.youtube.VideoFeed;
 import com.google.gdata.data.youtube.YouTubeMediaContent;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.util.ServiceException;
+
 import springsprout.m31.common.OpenApiReadException;
+import springsprout.m31.common.StringUtil;
 import springsprout.m31.domain.MovieVO;
 import springsprout.m31.module.gateway.support.SpringPlayerCri;
 import springsprout.m31.dto.SpringPlayerDTO;
@@ -117,9 +119,12 @@ public class GoogleAPIHelper {
                         break;
                     }
                 }
+
+                vo.setTitle(StringUtil.doubleQuotationEscape(vo.getTitle()));
+                
                 list.add(vo);
             }
-            
+
             dto.setList(list);
 
             return dto;    
@@ -130,5 +135,11 @@ public class GoogleAPIHelper {
         } catch (IOException e) {
             throw new OpenApiReadException("YouTube Data 가져오기 실패.",e);
         }
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(org.springframework.util.StringUtils.replace("\"Chocolate Rain\" Original Song by Tay Zonday", "\"", "\\\""));
+
     }
 }
