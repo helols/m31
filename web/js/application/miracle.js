@@ -667,7 +667,12 @@ M31Desktop.SpringTimeLog = Ext.extend(M31.app.Module, {
             }),
 
             viewConfig : {
-                forceFit:true
+                forceFit:true,
+                listeners : {
+                    rowsinserted : function(view, firstRow,lastRow ) {
+                        view.focusRow(lastRow);
+                    }
+                }
             },
 
             // TopToolbar는 동적으로 생성.
