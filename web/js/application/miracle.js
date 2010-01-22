@@ -394,7 +394,7 @@ Ext.extend(MovieDragZone, Ext.dd.DragZone, {
         var items = [];
         var sw = false;
         Ext.each(nodeData, function (item) {
-            if(item.data.playerURL.length === 0){
+            if(!(item.data.playerURL)){
                 sw = true;
             }
             items.push({
