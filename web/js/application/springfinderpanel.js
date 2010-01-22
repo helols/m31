@@ -374,7 +374,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                                     this.ownerCt.ownerCt.close();
                                 },
                                 msg : sCnt + '개의 파일을 삭제 하시겠습니까?'
-                            }
+                            };
                             new Ext.Window(
                                     Ext.apply(
                                             new M31Desktop.Signout().createWindow(options), {

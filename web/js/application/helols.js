@@ -25,7 +25,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
         }
     },
     createWindow : function(options) {
-        options = options||{};
+        options = options || {};
         this.win = undefined;
         var opt = {
             width:280,
@@ -47,7 +47,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                     border:false,
                     cls:'signout-fit',
                     padding: '10px 5px 5px 5px',
-                    html: options.msg||'봄 Web DeskTop을 종료 하시겠습니까?'
+                    html: options.msg || '봄 Web DeskTop을 종료 하시겠습니까?'
                 },
                 {
                     height: 20,
@@ -66,7 +66,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                             xtype: 'button',
                             text: '예',
                             columnWidth:.22,
-                            handler: options.yesClick||this.yesClick
+                            handler: options.yesClick || this.yesClick
                         },
                         {
                             xtype: 'spacer'
@@ -79,7 +79,7 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
                             xtype: 'button',
                             text: '아니오',
                             columnWidth:.22,
-                            handler: options.noClick||this.noClick
+                            handler: options.noClick || this.noClick
                         },
                         {
                             xtype: 'spacer'
@@ -94,13 +94,13 @@ M31Desktop.Signout = Ext.extend(M31.app.Module, {
         };
         return opt;
     },
-    yesClick : function(){
-//        m31.util.loading(false,'signout... plz wait...');
-        window.location.href="/j_spring_security_logout";
-//        setTimeout('window.location.href="/j_spring_security_logout"', 500);
+    yesClick : function() {
+        //        m31.util.loading(false,'signout... plz wait...');
+        window.location.href = "/j_spring_security_logout";
+        //        setTimeout('window.location.href="/j_spring_security_logout"', 500);
     },
-    noClick : function(){
-         getApp('signout').win.close();
+    noClick : function() {
+        getApp('signout').win.close();
     }
 });
 
@@ -133,7 +133,8 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             border: false,
             layout:'fit',
             items:[springfinderDataPanel],
-            tools:[{
+            tools:[
+                {
                     id:'refresh',
                     qtip: '새로고침',
                     // hidden:true,

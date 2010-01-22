@@ -80,7 +80,6 @@ M31.app.SpringFinderTree = Ext.extend(Ext.tree.TreePanel, {
     ,url:'/app/springfinder/getTree'
     ,animate:false
     ,expandable:false
-    ,containerScroll: false
 //    ,ddGroup: 'springfinderpenelDD'
     ,rootVisible:true
     ,region:'west'
