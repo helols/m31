@@ -141,7 +141,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
                         prepareData : function (data) {
                             data.thumbWrap = Ext.id();
-                            console.log(data.title);
                             return data;
                         }
                     },
