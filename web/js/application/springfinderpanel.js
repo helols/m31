@@ -625,7 +625,7 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
     isContainerDropble : function(data) {
         if (data.isTree) {
             return false;
-        } else if (data.isApp) {
+        } else if (data.isApp  && !(data.isDragble)) {
             return true;
         } else if (data.isPanel) {
             var stat = false;
