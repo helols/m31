@@ -972,6 +972,14 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                     id: 'springtwitter-postSend',
                     text: 'Update',
                     handler: function() {
+	                	if (Ext.fly('springtwitter-tweetPost').getValue().trim().length == 0) {
+	                		m31.util.notification({title:'봄트위터',text:'내용을 입력하세요.',remove:true});
+	                		return false;
+	                	}
+                		if (Ext.fly('springtwitter-tweetPost').getValue().length > 140) {
+                			m31.util.notification({title:'봄트위터',text:'140자 이상은 작성할 수 없습니다.',remove:true});
+                			return false;
+                		}
                         M31.ApplicationRegistry.getInstance().getApp('springtwitter').writeForm.getForm().submit({
                             url: '/app/twitter/update'
                         });
