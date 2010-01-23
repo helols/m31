@@ -694,7 +694,6 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
                 v_store.commitChanges();
                 v_store.removed = [];
                 actType = 'panel-fileCreate';
-                console.dir(view)
             }
             view.onFileCreate(actType);
         }
