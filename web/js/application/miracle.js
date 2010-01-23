@@ -245,9 +245,16 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         {
                             text : "돌아가기",
                             handler : function () {
-                                //Ext.getCmp("springplayer-win").doLayout();
+                                var springPlayerWin = Ext.getCmp("springplayer-win");
+
                                 $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
-                                Ext.getCmp("springplayer-win").getLayout().setActiveItem(0);
+                                
+                                if(springPlayerWin.resizer.enabled === false) {
+                                    springPlayerWin.tools.maximize.show();
+                                    springPlayerWin.resizer.enabled = true;
+                                }
+                                
+                                springPlayerWin.getLayout().setActiveItem(0);
                             }
                         }
                     ]
@@ -268,9 +275,16 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      * @param url
      */
     play : function (title, url) {
+        var springPlayer = this;
+        console.log(this);
+        if(url.match(/^http:\/\/flvs.daum.net\/flvPlayer.swf/)) {
+            springPlayer.win.tools.maximize.hide();
+            springPlayer.win.resizer.enabled = false;
+        }
+
+        Ext.getCmp("springplayer-player-title").setText(title);
         Ext.getCmp("springplayer-win").getLayout().setActiveItem(1);
         Ext.getCmp("springplayer-player").loadFlash({swf : url});
-        Ext.getCmp("springplayer-player-title").setText(title);
     }
 });
 
