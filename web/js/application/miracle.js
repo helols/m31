@@ -283,7 +283,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
 
                 toggleMaximize : function() {
                     if(Ext.getCmp("springplayer-win").resizer.enabled === true) {
-                    return this[this.maximized ? 'restore' : 'maximize']();
+                        return this[this.maximized ? 'restore' : 'maximize']();
                     }
                 }
         };
