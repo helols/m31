@@ -255,11 +255,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         id :'springfinder-panel-springsee'
 
                     }),
-                    listeners: {
-                        'afterlayout': { fn:function() {
-                            Ext.getCmp('springsee-explorer-panel').items.items[0].onResizez(Ext.fly('springsee-explorer-panel').getSize().height);
-                        }, scope:this, single:false}
-                   }
+                   listeners: {
+                    'afterlayout': { fn:function(sfp, sfpl) {
+                        sfp.items.items[0].onResizez(sfp.getHeight());
+                    }, scope:this, single:false}
+                    }
                 }
             ]
         };

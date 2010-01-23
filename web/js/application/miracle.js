@@ -200,9 +200,9 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     collapsible: true,
                     split: true,
                     listeners: {
-                        'afterlayout': { fn: function () {
-                            Ext.getCmp('springplayer-explorer-panel').items.items[0].onResizez(Ext.fly('springplayer-explorer-panel').getSize().height);
-                        }, scope: this, single: false}
+                        'afterlayout': { fn:function(sfp, sfpl) {
+                            sfp.items.items[0].onResizez(sfp.getHeight());
+                        }, scope:this, single:false}
                     }
                 }
             ]

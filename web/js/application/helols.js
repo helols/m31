@@ -133,7 +133,13 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             split: true,
             autoScroll : true,
             border: false,
+            id : 'springfinder-main-panel',
             layout:'fit',
+            listeners: {
+                        'afterlayout': { fn:function(sfp, sfpl) {
+                            sfp.items.items[0].onResizez(sfp.getHeight());
+                        }, scope:this, single:false}
+            },
             items:[springfinderDataPanel],
             tools:[
                 {

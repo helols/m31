@@ -264,10 +264,10 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
         	})
             ],
             listeners: {
-                'afterlayout': { fn:function() {
-                   Ext.getCmp('springbook-explorer-panel').items.items[0].onResizez(Ext.fly('springbook-explorer-panel').getSize().height);
-                }, scope:this, single:false}
-           }
+                        'afterlayout': { fn:function(sfp, sfpl) {
+                            sfp.items.items[0].onResizez(sfp.getHeight());
+                        }, scope:this, single:false}
+            }
     	});
     	
     	// 봄북 패널
