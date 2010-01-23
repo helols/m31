@@ -124,7 +124,6 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                     window.open(target.href);
                                 } else if ((target = e.getTarget("a .player-me2day")) !== null) {
                                     if (!M31.WindowsManager.getInstance().getWindow("springme2day")) {
-//                                         Ext.Msg.alert('봄 플레이어', '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.');
                                          m31.util.notification({
                                              title: '봄 플레이어',
                                              text: '봄 미투데이가 실행된 상태에서만 보낼 수 있습니다.'
@@ -257,7 +256,11 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                                         $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
 
                                         if(springPlayerWin.resizer.enabled === false) {
-                                            springPlayerWin.tools.maximize.show();
+                                            if(springPlayerWin.maximized === false) {
+                                                springPlayerWin.tools.maximize.show();
+                                            } else {
+                                                springPlayerWin.tools.restore.show();
+                                            }
                                             springPlayerWin.resizer.enabled = true;
                                         }
 
@@ -276,6 +279,12 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     beforeshow : function (cmp) {
                         cmp.setAnimateTarget(null);
                     }
+                },
+
+                toggleMaximize : function() {
+                    if(Ext.getCmp("springplayer-win").resizer.enabled === true) {
+                    return this[this.maximized ? 'restore' : 'maximize']();
+                    }
                 }
         };
         return config;
@@ -292,6 +301,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
         //다음 동영상일때는 창크기 고정 시킴.
         if(url.match(/^http:\/\/flvs.daum.net\/flvPlayer.swf/)) {
             springPlayer.win.tools.maximize.hide();
+            springPlayer.win.tools.restore.hide();
             springPlayer.win.resizer.enabled = false;
         }
 
