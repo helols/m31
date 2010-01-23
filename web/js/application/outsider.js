@@ -221,7 +221,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         {
                             id: 'springsee-prev-btn',
                             xtype: 'button',
-                            text: 'Prev',
+                            icon: '/images/apps/springsee/previous.png',
+                            tooltip: 'Prev',
                             disabled: true,
                             handler: this.getImages.createDelegate(this, [-1], true),
                             scope: this
@@ -229,7 +230,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         {
                             id: 'springsee-Next-btn',
                             xtype: 'button',
-                            text: 'Next',
+                            icon: '/images/apps/springsee/next.png',
+                            tooltip: 'Next',
                             disabled: true,
                             handler: this.getImages.createDelegate(this, [1], true),
                             scope: this
@@ -914,7 +916,8 @@ M31Desktop.SpringTwitter = Ext.extend(M31.app.Module, {
                 items: [
                     {
                         xtype: 'button',
-                        html: '<img src="/images/apps/springtwitter/reload.png" alt="새로고침"/>',
+                        icon: '/images/apps/springtwitter/reload.png',
+                        tooltip: 'Refresh',
                         handler : this.reloadAll,
                         scope: this
                     },
