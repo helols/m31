@@ -52,11 +52,6 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     storeAction : 'get',
     newFolderNames : ['whiteship', 'nije', 'miracle', 'sonegy', 'srue', 'antatirs', 'mercujjang',  'anarcher','gyumee',  'princekey',  'outsider', 'is윤군','arawn'],
 
-    plugins: [
-        new Ext.DataView.DragSelector({dragSafe:true}),
-        new Ext.DataView.LabelEditor({dataIndex: 'fileName'})
-    ],
-
     prepareData: function(data) {
         data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel' ? 8 : 5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
@@ -92,11 +87,6 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'defaultYn','fileType','imgName','filePath'
                 ],
                 listeners: {
-                    'beforeload' : {fn:function(store) {
-                        if (store.loadMask) {
-                            store.loadMask.msg = 'Loading panel...';
-                        }
-                    }, scope:this},
                     'load': {fn:function(store) {
                         if (store.getCount() > 0) {
                             this.select(0);
@@ -149,6 +139,8 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             ,contextmenu : {fn:this.onContextClick,scope:this}
             ,containercontextmenu : {fn:this.onContainerContextClick,scope:this}
         });
+        this.plugins = [ new Ext.DataView.DragSelector({dragSafe:true,id:this.id+'-selector'}),
+                          new Ext.DataView.LabelEditor({dataIndex: 'fileName'})];
     },
     onResizez : function(rawHeight) {
         if (Ext.fly(this.id)) {
@@ -219,8 +211,11 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         }
     },
     onDblClick : function(node, scope, e) {
-        var selNode = this.getSelectedNodes()[0];
-        if(!this.getRecord(selNode)){
+        var selNode = undefined;
+        if(this.getSelectedNodes()){
+            selNode = this.getSelectedNodes()[0];
+        }
+        if(!selNode|| !this.getRecord(selNode)){
             return false;
         }
         var data = this.getRecord(selNode).data;
@@ -290,13 +285,11 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     node.reload();
                 }
             }
-        } else {
-            if (this.id === 'springfinder-panel-springsee' && this.storeAction !== 'createFolder') {
-                store.load({params:{parentNode:this.lastChangeNodeId}});
-            }
+        }
+        if (store.find('linkAppId','springsee') !== -1 && this.storeAction !== 'createFolder') {
+            store.load({params:{parentNode:this.lastChangeNodeId}});
         }
         store.commitChanges();
-        //        store.loadMask.hide();
     },
     onContainerContextClick : function (view, e) {
         if (!this.containerContextMenu) { // create context menu on first right click
