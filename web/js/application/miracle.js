@@ -235,29 +235,41 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     plugins: new Ext.ux.FlashPlugin(),
                     id : 'springplayer-player',
                     header: false,
-                    tbar : [
-                        "Title", ' ',
-                        {
-                            id : 'springplayer-player-title',
-                            xtype : 'tbtext',
-                            text : 'title'
-                        }, '->',
-                        {
-                            text : "돌아가기",
-                            handler : function () {
-                                var springPlayerWin = Ext.getCmp("springplayer-win");
+                    tbar : [],
 
-                                $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
-                                
-                                if(springPlayerWin.resizer.enabled === false) {
-                                    springPlayerWin.tools.maximize.show();
-                                    springPlayerWin.resizer.enabled = true;
+                    listeners : {
+                        resize : function(win) {this.titleResize();}.createDelegate(this),
+                        render : function(cmp) {
+                            //console.log("re");
+                            var tbar = cmp.getTopToolbar();
+                            tbar.add("Title", '-',
+                                {
+                                    id : 'springplayer-player-title',
+                                    xtype : 'tbtext',
+                                    text : 'title',
+                                    cls : 'overflowhide'
+
+                                }, '->', {
+                                    text : "돌아가기",
+                                    handler : function () {
+                                        var springPlayerWin = Ext.getCmp("springplayer-win");
+
+                                        $(Ext.getCmp("springplayer-player").body.dom).html('<span></span>'); //급해서 제이쿼리로 땜빵..
+
+                                        if(springPlayerWin.resizer.enabled === false) {
+                                            springPlayerWin.tools.maximize.show();
+                                            springPlayerWin.resizer.enabled = true;
+                                        }
+
+                                        springPlayerWin.getLayout().setActiveItem(0);
                                 }
-                                
-                                springPlayerWin.getLayout().setActiveItem(0);
-                            }
+                            });
+                            
+                            tbar.enableOverflow = false;
+
+                            tbar.doLayout();
                         }
-                    ]
+                    }
                 }],
 
                 listeners: {
@@ -276,15 +288,25 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
      */
     play : function (title, url) {
         var springPlayer = this;
-        console.log(this);
+
+        //다음 동영상일때는 창크기 고정 시킴.
         if(url.match(/^http:\/\/flvs.daum.net\/flvPlayer.swf/)) {
             springPlayer.win.tools.maximize.hide();
             springPlayer.win.resizer.enabled = false;
         }
 
-        Ext.getCmp("springplayer-player-title").setText(title);
         Ext.getCmp("springplayer-win").getLayout().setActiveItem(1);
+        Ext.getCmp("springplayer-player-title").setText(title);
+        springPlayer.titleResize();
         Ext.getCmp("springplayer-player").loadFlash({swf : url});
+    },
+    /**
+     * 동영상 타이틀을 Window 크기에 따라서 리사이즈.
+     */
+    titleResize : function() {
+        var title_size = Ext.getCmp("springplayer-player").getTopToolbar().getWidth() - 100;
+        //console.log(title_size);
+        Ext.getCmp("springplayer-player-title").setSize(title_size);
     }
 });
 
