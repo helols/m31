@@ -108,7 +108,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         overClass: 'x-view-over',
                         itemSelector: 'div.thumb-wrap',
                         singleSelect: true,
-                        plugins: new Ext.DataView.DragSelector({dragSafe: true}),
+//                        plugins: new Ext.DataView.DragSelector({dragSafe: true}),
                         emptyText: 'No Video to display',
 
                         listeners : {
