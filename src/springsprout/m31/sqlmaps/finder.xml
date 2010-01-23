@@ -19,6 +19,7 @@
         <result property="fileAddition" column="FILE_ADDITION_INFO"/>
         <result property="fileType" column="FILE_TYPE"/>
         <result property="imgName" column="IMGNAME"/>
+        <result property="filePath" column="FILE_PATH"/>
     </resultMap>
 
     <select id="getTree" resultMap="tree" parameterClass="hashMap">
@@ -45,8 +46,15 @@
             'up-folder' as IMGNAME,
             'springfinder' as LINK_APP_ID,
             '' as FILE_ADDITION_INFO ,
-            'F' as FILE_TYPE
-        FROM dual
+            'F' as FILE_TYPE,
+            (SELECT 'root'||REPLACE(FILE_PATH,'^','/') FROM (
+                SELECT  ID
+                    ,SYS_CONNECT_BY_PATH(FILE_NAME, '^') AS file_path
+                    FROM SPRING_FINDER WHERE member_id =#memberId# AND iconcls = 'folder'
+                    START WITH parent_id=1
+   			        CONNECT BY PRIOR id=parent_id ) a
+                    WHERE a.ID =  #parentId#) as FILE_PATH
+          FROM dual
         union all
         </isNotEqual>
         SELECT
@@ -58,7 +66,8 @@
             ICONCLS||'-'||LINK_APP_ID as IMGNAME,
             LINK_APP_ID,
             FILE_ADDITION_INFO ,
-            FILE_TYPE
+            FILE_TYPE,
+            'root' as FILE_PATH
         FROM SPRING_FINDER
         WHERE MEMBER_ID = #memberId#
             AND PARENT_ID = #parentId#

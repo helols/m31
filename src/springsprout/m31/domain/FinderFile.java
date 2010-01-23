@@ -18,6 +18,15 @@ public class FinderFile {
     private Integer memberId;
     private String fileType;
     private String imgName;
+    private String filePath;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
     public String getFileAddition() {
         return fileAddition;
