@@ -287,7 +287,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
             }
         }
         if (store.find('linkAppId','springsee') !== -1 && this.storeAction !== 'createFolder') {
-            store.load({params:{parentNode:this.lastChangeNodeId}});
+            store.load({params:{parentNode:store.getAt(0).data.parentId}});
         }
         store.commitChanges();
     },
