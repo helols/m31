@@ -210,6 +210,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             		// 드래그시 보내줄 데이터 생성 처리
             		grid.getView().dragZone = new Ext.grid.GridDragZone(this, {
             			ddGroup: 'springfinderpenelDD',
+                        scroll:false,
             			onBeforeDrag: function(data, e) {
             				var items = new Array();
             				Ext.each(data.selections, function(item){
@@ -251,13 +252,15 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
             collapsible: true,
             id : 'springbook-explorer-panel',
             split: true,
+            autoScroll : true,
             border: false,
             layout:'fit',
             items:[new M31.app.SpringFinderPanel({
                   height : 110,
                   autoScroll : false,
                   border : false,
-        		  rootNodeName: 'springbook'
+        		  rootNodeName: 'springbook',
+                  id :'springfinder-panel-springbook'
         	})
             ],
             listeners: {

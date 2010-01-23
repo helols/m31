@@ -94,7 +94,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     m31.showImage();
                     $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
                     if (!this.dragZone) {
-                        this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD'});
+                        this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD',scroll:false});
                     }
                 }, scope:this, single:false
                 }
@@ -251,7 +251,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     items: new M31.app.SpringFinderPanel({
                         height : 110,
                         border : false,
-                        rootNodeName: 'springsee'
+                        rootNodeName: 'springsee',
+                        id :'springfinder-panel-springsee'
+
                     }),
                     listeners: {
                         'afterlayout': { fn:function() {

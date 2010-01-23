@@ -65,7 +65,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     textfield.originalValue = textfield.getValue();
                     combo.originalValue = combo.getValue();
                     if (!view.dragZone) {
-                        view.dragZone = new MovieDragZone(view, {containerScroll: false, ddGroup: 'springfinderpenelDD'});
+                        view.dragZone = new MovieDragZone(view, {containerScroll: false, ddGroup: 'springfinderpenelDD',scroll:false});
                     }
                 }
             }
@@ -194,7 +194,8 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         height : 110,
                         autoScroll : false,
                         border : false,
-                        rootNodeName: 'springplayer'
+                        rootNodeName: 'springplayer',
+                        id :'springfinder-panel-springplayer'
                     }),
                     collapsible: true,
                     split: true,
