@@ -65,12 +65,10 @@ SpringDock = function() {
                                         m31.util.openWindow('springguide');
                                     }
                                 }
-
                                 var cp = new Ext.state.CookieProvider();
                                 if(window.console && window.console.firebug && !cp.get('hideFBWarning')) {
-                                     Ext.MessageBox.alert("경고", "Firebug는 봄 WebDeskTop의 성능을 저하시킬 수 있습니다.", function(){cp.set('hideFBWarning', true);});                                    
+                                     Ext.MessageBox.alert("경고", "Firebug는 봄 WebDeskTop의 성능을 저하시킬 수 있습니다.", function(){cp.set('hideFBWarning', true);});
                                 }
-
                             }, 700);
                     },
                     add : function(appInfo) {
@@ -234,7 +232,6 @@ M31.dt.DockButton = function(appInfo, el) {
         template : new Ext.Template(
                 '<span id="{0}" class="m31-springdock-item">',
                 '<img class="{3}" src="{1}" alt="{2}"/>',
-                //'<img class="act_point"src="/images/desktop/springdock/active_point.png"/>',
                 '<span class="m31-springdock-item-text">{2}</span>',
                 '</span>')
     });
@@ -266,7 +263,7 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
                 Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .6);
              }
          }else{
-            Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : 6);
+            Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .6);
         }
     }
 });
