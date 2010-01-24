@@ -67,6 +67,10 @@ public class NaverAPIHelper {
 	public static SpringBookDTO book(SpringBookSearchParam param) {
     	SpringBookDTO library = null;
     	String requestUrl = param.getApiUrl() + param.getQuery();
+    	requestUrl += "&display=" + param.getLimit();
+    	if(param.getStart() > 0){
+    		requestUrl += "&start=" + (param.getStart() + 1);	
+    	}
 
     	log.debug("Naver book api : " + requestUrl);
         

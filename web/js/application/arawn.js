@@ -18,7 +18,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
         this.redyTask = {
     	    run: function(app){
 	    		if(app.state != null) return;
-//	        	console.log('state : ' + app.state);
+	        	console.log('state : ' + app.state);
 	        	
 	        	// 봄북이 준비가 되었는가?
 	        	if(app.win == null) return;
@@ -71,6 +71,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
         	baseParams: {searchType:'naver',query:''},
         	autoLoad: false,
         	autoDestroy: true,
+        	totalProperty: 'springBookDTO.total',
             root: 'springBookDTO.books',
             fields: [
                 'title',
@@ -191,7 +192,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     id : 'springbook-search-text',
                     width: 200,
                     store: this.bookStore,
-                    paramName : 'query'
+                    baseParam : 'query'
                 })
 //                {
 //					xtype: 'textfield',
@@ -218,6 +219,13 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 //						}.createDelegate(this)
 //				}
 			],
+	        bbar: new Ext.PagingToolbar({
+	            pageSize: 20,
+	            store: this.bookStore,
+	            displayInfo: true,
+	            displayMsg: '총 검색된 책 {0} - {1} of {2}',
+	            emptyMsg: "검색된 책이 없습니다."
+	        }),
 			listeners: {
             	render: function(grid){
             		grid.getGridEl().child('div[class=x-grid3-header]').setStyle('display', 'none');
