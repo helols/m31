@@ -52,6 +52,7 @@ public class FinderController {
             return new ModelAndView(JSON_VIEW).addObject("fileList", emptyList);
         } else if (parentNodeName != null && StringUtils.hasText(parentNodeName)) {
             parentNode = finderService.getParentNodeId(parentNodeName);
+            parentNode = parentNode == null ? 1 : parentNode;
         }
 
         return new ModelAndView(JSON_VIEW).addObject("fileList", finderService.getFiles(parentNode));
@@ -78,7 +79,7 @@ public class FinderController {
     public ModelAndView deleteFile(String fileList) {
         JSONArray jsonArray = JSONArray.fromObject(fileList);
         finderService.deleteFile(jsonArray.toArray());
-        return new ModelAndView(JSON_VIEW).addObject("fileList", fileList).addObject("success", true);
+        return new ModelAndView(JSON_VIEW).addObject("fileList", jsonArray).addObject("success", true);
     }
 
     @RequestMapping(value = "/app/springfinder/renameFile", method = RequestMethod.POST)
