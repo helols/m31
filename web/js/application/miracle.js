@@ -109,7 +109,7 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                         itemSelector: 'div.thumb-wrap',
                         singleSelect: true,
 //                        plugins: new Ext.DataView.DragSelector({dragSafe: true}),
-                        emptyText: 'No Video to display',
+                        emptyText: '<div style="padding:10px;">검색된 동영상이 없습니다.</div>',
 
                         listeners : {
                             click : function (dataview, index, node, e) {

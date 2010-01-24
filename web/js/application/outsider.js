@@ -38,7 +38,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             singleSelect: true,
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
-            emptyText : '<div style="padding:10px;">No images match the specified search</div>',
+            emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
             plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
@@ -332,19 +332,11 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     onLoadException : function(v, o) {
         this.view.getEl().update('<div style="padding:10px;">Error loading images.</div>');
     },
-    alertCB : function(){
-        jQuery('springsee-search').focus();
-    },
     //이미지 검색하기
     getImages : function(button, event, cmd) {
         var combo = Ext.getCmp('springsee-api-provider');
         var search = Ext.getCmp('springsee-search');
 
-        if (Ext.isEmpty(Ext.getCmp('springsee-search').getValue())) {
-//            alert("검색어를 입력하세요.");
-            Ext.Msg.alert('봄씨', '검색어를 입력하세요.',this.alertCB);
-            return;
-        }
         if (cmd) {
             this.currentPage += parseInt(cmd);
         } else {

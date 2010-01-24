@@ -151,7 +151,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                 autoFill:false, 
 				forceFit:true,
 				deferEmptyText:'', 
-				emptyText: '검색된 책이 없습니다.'
+				emptyText: '<div style="padding:10px;">검색된 책이 없습니다.</div>'
             },
             header: false,
             enableColumnResize: false,
