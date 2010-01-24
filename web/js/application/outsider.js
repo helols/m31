@@ -142,7 +142,19 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             id : 'springsee-search',
                             width : 200,
                             searchHandler : this.getImages.createDelegate(this),
-                            clearHandler : function(){this.store.removeAll();}.createDelegate(this)
+                            clearHandler : function() {
+                                var o = {};
+
+                                o.search_type = 'NONE';
+                                o.query = '';
+
+                                this.store.reload({params:o});
+
+                                this.el.dom.value = '';
+                                this.triggers[0].hide();
+                                this.focus();
+                                this.hasSearch = false;
+                            }.createDelegate(this)
                         }),
                         {
                             xtype: 'tbfill'
@@ -275,9 +287,16 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             this.currentPage = 1;
             return;
         }
-        //검색조건이 변경되었으면, 다시 검색함.
-        if (combo.isDirty() || search.isDirty()) {
-            this.currentPage = 1;
+
+        // 텍스트 필드나 콤보박스의 값이 바뀐후 페이징시..                  
+        if(cmd) {
+            if (search.isDirty()) {
+                search.setValue(search.originalValue);
+            }
+
+            if (combo.isDirty()) {
+                combo.setValue(combo.originalValue);
+            }
         }
 
         this.store.reload({

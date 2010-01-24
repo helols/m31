@@ -8,5 +8,5 @@
 package springsprout.m31.domain.enums;
 
 public enum OpenApi {
-    DAUM, NAVER, GOOGLE, FLICKR, ALL
+    DAUM, NAVER, GOOGLE, FLICKR, ALL, NONE
 }

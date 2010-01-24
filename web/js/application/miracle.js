@@ -46,14 +46,22 @@ M31Desktop.SpringPlayer = Ext.extend(M31.app.Module, {
                     options.params.type = combo.getValue();
                     options.params.limit = 10;
 
+                    // 텍스트 필드나 콤보박스의 값이 바뀐후 페이징시..                  
+                    if(!options.start) {
+                        if (textfield.isDirty()) {
+                            textfield.setValue(textfield.originalValue);
+                            options.params.q = textfield.getRawValue();
+                        }
+
+                        if (combo.isDirty()) {
+                            combo.setValue(combo.originalValue);
+                            options.params.type = combo.getValue();
+                        }
+                    }
+
                     // 보이는건 Youtube지만 실제 전송되는 값은 google이여야 함.
                     if (options.params.type === 'Youtube') {
                         options.params.type = 'google';
-                    }
-
-                    // 텍스트 필드나 콤보박스의 값이 바뀌면 새로 검색.
-                    if (textfield.isDirty() || combo.isDirty()) {
-                        options.params.start = 0;
                     }
                 },
                 load : function (store) {
