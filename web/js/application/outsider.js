@@ -143,17 +143,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             width : 200,
                             searchHandler : this.getImages.createDelegate(this),
                             clearHandler : function() {
-                                var o = {};
-
-                                o.search_type = 'NONE';
-                                o.query = '';
-
-                                this.store.reload({params:o});
-
-                                this.el.dom.value = '';
-                                this.triggers[0].hide();
-                                this.focus();
-                                this.hasSearch = false;
+//                                var o = {};
+//
+//                                o.search_type = 'NONE';
+//                                o.query = '';
+//
+//                                this.store.reload({params:o});
+                                this.store.removeAll();
+                                Ext.getCmp("springsee-Next-btn").disable();
+                                Ext.getCmp("springsee-prev-btn").disable();
                             }.createDelegate(this)
                         }),
                         {
