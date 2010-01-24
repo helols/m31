@@ -61,7 +61,7 @@
         , APP.APP_DEFULT_ORDER
         FROM MEMBER MEMBER,
         APPLICATION_INFO APP
-        WHERE MEMBER.ID = #id#
+        WHERE MEMBER.ID = #id#        
         ORDER BY APP.APP_DEFULT_ORDER
     </insert>
 

@@ -22,5 +22,7 @@
             APPLICATION_INFO AI
             INNER JOIN MEMBER_APPS MA ON AI.ID = MA.APP_ID
                                         AND MA.MEMBER_ID = #id#
+                                        AND MA.INSTALL_YN = 'Y'
+
 	</select>
 </sqlMap>
