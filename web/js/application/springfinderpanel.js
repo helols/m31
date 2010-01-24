@@ -87,10 +87,16 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     'defaultYn','fileType','imgName','filePath'
                 ],
                 listeners: {
+                    'beforeload' :{fn:function(store){
+                        this.autoHeight = true;
+                      }
+                     ,scope:this},
                     'load': {fn:function(store) {
+                        this.syncSize();
                         if (store.getCount() > 0) {
                             this.select(0);
                             this.ownerCt.setTitle((this.ownerCtTitle) +store.getAt(0).data.filePath+' ]');
+                            this.onResizez(this.ownerCt.getHeight());
                         }
                         this.onDataViewRender(); }, scope:this}
                     ,'write':{fn:this.onWrite,scope:this}
@@ -150,6 +156,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                     Ext.fly(this.id).setHeight(rawHeight - 30);
                 } else {
                     this.autoHeight = true;
+                    this.syncSize();
                 }
             } else {
                 this.autoHeight = true;
@@ -457,9 +464,14 @@ Ext.extend(SpringfinderPanelDragZone, Ext.dd.DragZone, {
                 var div = document.createElement('div'); // create the multi element drag "ghost"
                 div.className = 'multi-proxy';
                 for (var i = 0, len = selNodes.length; i < len; i++) {
-                    div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
-                    if ((i + 1) % 3 == 0) {
-                        div.appendChild(document.createElement('br'));
+                    var seleNode = Ext.fly(selNodes[i].id).child('img').dom;
+                    if(seleNode){
+                        var t_node = seleNode.cloneNode(false);
+                        t_node.className = 'dragthum';
+                        div.appendChild(t_node); // image nodes only
+                        if ((i + 1) % 3 == 0) {
+                            div.appendChild(document.createElement('br'));
+                        }
                     }
                 }
                 var count = document.createElement('div'); // selected image count

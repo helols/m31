@@ -43,7 +43,8 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
             m31.util.notification({
                 title: 'System',
-                text: '검색어를 입력해주세요.'
+                text: '검색어를 입력해주세요.',
+                remove:true
             });
 
             this.onTrigger1Click();

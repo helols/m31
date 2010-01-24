@@ -70,6 +70,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             itemSelector: 'div.thumb-wrap',
             emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
             store: this.store,
+            multiSelect : true,
+            plugins : [new Ext.DataView.DragSelector({dragSafe:true})],
             listeners: {
                 'loadexception'  : {fn:this.onLoadException, scope:this},
                 'beforeselect'   : {fn:function(view) {
@@ -78,6 +80,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             },
             prepareData: function(data) {
                 M31.ApplicationRegistry.getInstance().getApp('springsee').lookup[data.title] = data;
+                data.thumbWrap = Ext.id();
                 return data;
             }
         });
@@ -143,12 +146,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             width : 200,
                             searchHandler : this.getImages.createDelegate(this),
                             clearHandler : function() {
-//                                var o = {};
-//
-//                                o.search_type = 'NONE';
-//                                o.query = '';
-//
-//                                this.store.reload({params:o});
                                 this.store.removeAll();
                                 Ext.getCmp("springsee-Next-btn").disable();
                                 Ext.getCmp("springsee-prev-btn").disable();
@@ -260,7 +257,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     initTemplates : function() {
         this.thumbTemplate = new Ext.XTemplate(
                 '<tpl for=".">',
-                '<div class="thumb-wrap" id="{name}">',
+                '<div class="thumb-wrap" id="{thumbWrap}">',
                 '<div class="thumb"><a href="{image}" class="pirobox_gall" title="{title}"><img src="{thumbnail}" title="{title}"></a></div>',
                 '</div></tpl>',
                 '<div class="x-clear"/>'
@@ -452,9 +449,14 @@ Ext.extend(ImageDragZone, Ext.dd.DragZone, {
                 var div = document.createElement('div'); // create the multi element drag "ghost"
                 div.className = 'multi-proxy';
                 for (var i = 0, len = selNodes.length; i < len; i++) {
-                    div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
-                    if ((i + 1) % 3 == 0) {
-                        div.appendChild(document.createElement('br'));
+                    var seleNode = Ext.fly(selNodes[i].id).child('img').dom;
+                    if(seleNode){
+                        var t_node = seleNode.cloneNode(false);
+                        t_node.className = 'dragthum';
+                        div.appendChild(t_node); // image nodes only
+                        if ((i + 1) % 3 == 0) {
+                            div.appendChild(document.createElement('br'));
+                        }
                     }
                 }
                 var count = document.createElement('div'); // selected image count

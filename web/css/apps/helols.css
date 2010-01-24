@@ -19,7 +19,23 @@
 .x-tree-node-leaf .x-tree-node-icon {
     background: transparent url(../../extJS/resources/images/default/tree/folder.gif) !important;
 }
-
+/*setting*/
+#setting-dataview{
+    width:455px !important;
+    margin:0 auto;
+    cursor:pointer;
+}
+#setting-dataview .x-view-selected{
+    background: #DFEDFF;
+}
+#setting-dataview .menu-wrap  {
+    width: 76px;
+    height: 76px;
+    padding:2px;
+    float: left;
+    margin: 5px;
+    text-align:center;
+}
 /* springfinderpanel*/
 
 #springfinder-panel{
@@ -152,4 +168,9 @@
     background: transparent url(../../images/apps/springfinder/rename-file-menu-icon.png);
     padding-left:1px !important;
 }
-    
+
+.dragthum  {
+    width: 40px !important;
+    height: 40px !important;
+    margin:5px !important;
+}
