@@ -1,15 +1,5 @@
 package springsprout.m31.module.app.me2day;
 
-import java.beans.PropertyEditorSupport;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -22,25 +12,16 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import springsprout.m31.module.app.me2day.entity.AuthenticationUrl;
-import springsprout.m31.module.app.me2day.entity.Author;
-import springsprout.m31.module.app.me2day.entity.Comment;
-import springsprout.m31.module.app.me2day.entity.Flickr;
-import springsprout.m31.module.app.me2day.entity.Location;
-import springsprout.m31.module.app.me2day.entity.Me2DayUserInfo;
-import springsprout.m31.module.app.me2day.entity.Metoo;
-import springsprout.m31.module.app.me2day.entity.Person;
-import springsprout.m31.module.app.me2day.entity.Post;
-import springsprout.m31.module.app.me2day.entity.PostIcon;
-import springsprout.m31.module.app.me2day.entity.Tag;
-import springsprout.m31.module.app.me2day.support.CommentDTO;
-import springsprout.m31.module.app.me2day.support.Me2DayApiRequestException;
-import springsprout.m31.module.app.me2day.support.PostDTO;
-import springsprout.m31.module.app.me2day.support.PostSearchParam;
-import springsprout.m31.module.app.me2day.support.SpringMe2DayDTO;
+import springsprout.m31.module.app.me2day.entity.*;
+import springsprout.m31.module.app.me2day.support.*;
 import springsprout.m31.utils.DefaultIntegerEditor;
 import springsprout.m31.utils.OpenApiRequestHelper;
+
+import java.beans.PropertyEditorSupport;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class SpringMe2DayApiService {
@@ -417,10 +398,10 @@ public class SpringMe2DayApiService {
 			
 			requestUrl += "&post[body]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
 			if("태그를 입력하세요 (공백으로 구분합니다.)".equals(postDto.getTags())){
-				requestUrl += "&post[tags]=" + URLEncoder.encode("봄미투", "utf-8");
+				requestUrl += "&post[tags]=" + URLEncoder.encode("me2spring", "utf-8");
 			}
 			else if(StringUtils.hasText(postDto.getTags())){
-				String tempTags = StringUtils.trimWhitespace(postDto.getTags()) + " 봄미투";
+				String tempTags = StringUtils.trimWhitespace(postDto.getTags()) + " me2spring";
 				requestUrl += "&post[tags]=" + URLEncoder.encode(tempTags, "utf-8");
 			}
 			if(postDto.getIcon() > 0){

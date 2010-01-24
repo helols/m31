@@ -313,7 +313,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                             var record = new store.recordType({
                                 fileName : this.newFolderNames[Math.floor(Math.random() * 12) + 1],
                                 linkAppId : linkAppId,
-                                parentId : this.lastChangeNodeId,
+                                parentId : store.getAt(0).data.parentId || this.view.lastChangeNodeId,
                                 iconCls : 'folder' ,
                                 fileAddition : '' ,
                                 defaultYn : 'N',
