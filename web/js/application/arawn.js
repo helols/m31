@@ -92,6 +92,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     fn: function(store, options) {
                         var params = options.params;
                         params.searchType = Ext.getCmp('springbook-api-provider').getValue();
+                        Ext.getCmp('springbook-search-text').setValue(this.bookStore.baseParams.query);
                     },
                     scope: this
                 },
@@ -654,7 +655,7 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 	            		xtype: 'textarea',
 	            		id: 'springme2day-form-body',
 	            		name: 'body',
-	            		emptyText: '현재 기분을 150자로 내로 남겨주세요!',
+	            		emptyText: '현재 기분을 150자로 내로 남겨주세요! 엔터시 글이 전송됩니다.',
 	            		allowBlank: false,
 	            		blankText: '최소 한자 이상의 글을 남기셔야합니다.',
 	            		enableKeyEvents: true,
@@ -699,7 +700,18 @@ M31Desktop.SpringMe2Day = Ext.extend(M31.app.Module, {
 		            		xtype: 'textfield',
 		            		id: 'springme2day-form-tags',
 		            		name: 'tags',
-		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다.)'
+		            		emptyText: '태그를 입력하세요 (공백으로 구분합니다. 엔터시 글이 전송됩니다.)',
+		            		enableKeyEvents: true,
+		            		listeners: {
+	                            keypress: function(sender,event){
+	                            	if(event.keyCode == Ext.EventObject.ENTER){
+	                            		this.postFormPanel.getForm().submit({
+	        	                			url:'/app/me2day/postSend', 
+	        	                			waitMsg:'미투데이에 글을 전송 중 입니다.'
+	        	                		});	
+	                            	}
+	                            }.createDelegate(this)
+		                    }
 		            	},{
 	            			region: 'east',
 		            		xtype: 'box',
