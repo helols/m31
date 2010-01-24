@@ -38,12 +38,12 @@
 }
 /* springfinderpanel*/
 
-#springfinder-panel{
+#springfinder-panel-finder{
     background: #FFF;
     padding: 5px;
 }
 
-#springfinder-panel .file-wrap  {
+#springfinder-panel-finder .file-wrap  {
     width: 90px;
     height: 100px;
     float: left;
@@ -52,46 +52,46 @@
     padding: 5px;
     text-align:center;
 }
-#springfinder-panel .x-editable-wrap{
+#springfinder-panel-finder .x-editable-wrap{
     margin-top:5px;
     text-align:center;
 }
 
-#springfinder-panel .file  {
+#springfinder-panel-finder .file  {
     width: 80px;
     height: 80px;
 }
 
-#springfinder-panel .folder-springdoc{
+#springfinder-panel-finder .folder-springdoc{
     background: url('../../images/apps/springfinder/folder-springdoc.png') no-repeat;
 }
 
-#springfinder-panel .folder-springsee{
+#springfinder-panel-finder .folder-springsee{
     background: url('../../images/apps/springfinder/folder-springsee.png') no-repeat;
 }
 
-#springfinder-panel .folder-springplayer{
+#springfinder-panel-finder .folder-springplayer{
     background: url('../../images/apps/springfinder/folder-springplayer.png') no-repeat;
 }
 
-#springfinder-panel .folder-springbook{
+#springfinder-panel-finder .folder-springbook{
     background: url('../../images/apps/springfinder/folder-springbook.png') no-repeat;
 }
 
-#springfinder-panel .file-wrap span{
+#springfinder-panel-finder .file-wrap span{
     overflow: hidden;
     vertical-align: middle;
 }
-#springfinder-panel .x-view-over{
+#springfinder-panel-finder .x-view-over{
     background: #efefef url(../../images/apps/springsee/row-over.gif) repeat-x left top;
 }
-#springfinder-panel .x-view-selected{
+#springfinder-panel-finder .x-view-selected{
     background: #DFEDFF;
 }
-#springfinder-panel .x-view-selected .file-wrap{
+#springfinder-panel-finder .x-view-selected .file-wrap{
     background:transparent;
 }
-#springfinder-panel .x-view-selected span{
+#springfinder-panel-finder .x-view-selected span{
     color:#1A4D8F;
 }
 

@@ -203,7 +203,7 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
             height : 500,
             border : false,
             rootNodeId : 1,
-            id : 'springfinder-panel'
+            id : 'springfinder-panel-finder'
         });
 
         var springfinderPanel = new Ext.Panel({
@@ -250,111 +250,111 @@ M31Desktop.Springfinder = Ext.extend(M31.app.Module, {
         return opt;
     }
 });
-
-M31.app.Grid = Ext.extend(Ext.grid.GridPanel, {
-      mode : null // wallpapers or themes
-    , ownerModule : null
-
-    , constructor : function(config){
-        // constructor pre-processing
-        config = config || {};
-
-        this.ownerModule = config.ownerModule;
-        this.mode = config.mode;
-
-        var reader = new Ext.data.JsonReader({
-            fields: ['group', 'id', 'name', 'pathtothumbnail', 'pathtofile']
-            , id: 'id'
-            , root: this.mode //'wallpapers'
-        });
-
-        var largeIcons = new Ext.Template(
-            '<div class="x-grid3-row ux-explorerview-item ux-explorerview-large-item" unselectable="on">'+
-            '<table class="ux-explorerview-icon" cellpadding="0" cellspacing="0">'+
-            '<tr><td align="center"><img src="{pathtothumbnail}"></td></tr></table>'+
-            '<div class="ux-explorerview-text"><div class="x-grid3-cell x-grid3-td-name" unselectable="on">{name}</div></div></div>'
-        );
-
-        // this config
-        Ext.applyIf(config, {
-            columns: [
-                {header: 'Group', width: 40, sortable: true, dataIndex: 'group'}
-                , {header: 'Name', sortable: true, dataIndex: 'name'}
-            ]
-            , enableDragDrop: false
-            , hideHeaders: true
-            , sm: new Ext.grid.RowSelectionModel({
-                listeners: {
-                    'rowselect': { fn: this.onRowSelect, scope: this }
-                }
-                , singleSelect: true
-            })
-            , store: new Ext.data.GroupingStore({
-                baseParams: {
-                    action: (this.mode === 'themes' ? 'viewThemes' : 'viewWallpapers')
-                    , moduleId: this.ownerModule.moduleId
-                }
-                , groupField: 'group'
-                , listeners: {
-                    'load': { fn: this.selectRecord, scope: this }
-                }
-                , reader: reader
-                , sortInfo: {field: 'name', direction: 'ASC'}
-                , url: config.ownerModule.app.connection
-
-            })
-            , view: new Ext.ux.grid.GroupingExplorerView({
-                rowTemplate: largeIcons
-                , forceFit: true
-                , groupTextTpl: '{text} ({[values.rs.length]})'
-                , showGroupName: false
-            })
-        });
-
-        M31.app.Grid.superclass.constructor.apply(this, [config]);
-
-        this.desktop = this.ownerModule.app.getDesktop();
-    }
-
-    // added methods
-
-    , onRowSelect : function(sm, index, record){
-        var r = record;
-        var d = r.data;
-        var id;
-
-        if(this.mode === 'themes'){
-            id = this.ownerModule.app.styles.theme.id;
-        }else{
-            id = this.ownerModule.app.styles.wallpaper.id;
-        }
-
-        if(parseInt(id) !== parseInt(r.id)){
-            if(r && r.id && d.name && d.pathtofile){
-                config = {
-                    id: r.id
-                    , name: d.name
-                    , pathtofile: d.pathtofile
-                };
-
-                if(this.mode === 'themes'){
-                    this.desktop.setTheme(config);
-                }else{
-                    this.desktop.setWallpaper(config);
-                }
-            }
-        }
-    }
-
-    , selectRecord : function(){
-        var id;
-
-        if(this.mode === 'themes'){
-            id = this.ownerModule.app.styles.theme.id;
-        }else{
-            id = this.ownerModule.app.styles.wallpaper.id;
-        }
-
-        this.selModel.selectRecords([this.store.getById(id)]);
-    }
-});
+//
+//M31.app.Grid = Ext.extend(Ext.grid.GridPanel, {
+//      mode : null // wallpapers or themes
+//    , ownerModule : null
+//
+//    , constructor : function(config){
+//        // constructor pre-processing
+//        config = config || {};
+//
+//        this.ownerModule = config.ownerModule;
+//        this.mode = config.mode;
+//
+//        var reader = new Ext.data.JsonReader({
+//            fields: ['group', 'id', 'name', 'pathtothumbnail', 'pathtofile']
+//            , id: 'id'
+//            , root: this.mode //'wallpapers'
+//        });
+//
+//        var largeIcons = new Ext.Template(
+//            '<div class="x-grid3-row ux-explorerview-item ux-explorerview-large-item" unselectable="on">'+
+//            '<table class="ux-explorerview-icon" cellpadding="0" cellspacing="0">'+
+//            '<tr><td align="center"><img src="{pathtothumbnail}"></td></tr></table>'+
+//            '<div class="ux-explorerview-text"><div class="x-grid3-cell x-grid3-td-name" unselectable="on">{name}</div></div></div>'
+//        );
+//
+//        // this config
+//        Ext.applyIf(config, {
+//            columns: [
+//                {header: 'Group', width: 40, sortable: true, dataIndex: 'group'}
+//                , {header: 'Name', sortable: true, dataIndex: 'name'}
+//            ]
+//            , enableDragDrop: false
+//            , hideHeaders: true
+//            , sm: new Ext.grid.RowSelectionModel({
+//                listeners: {
+//                    'rowselect': { fn: this.onRowSelect, scope: this }
+//                }
+//                , singleSelect: true
+//            })
+//            , store: new Ext.data.GroupingStore({
+//                baseParams: {
+//                    action: (this.mode === 'themes' ? 'viewThemes' : 'viewWallpapers')
+//                    , moduleId: this.ownerModule.moduleId
+//                }
+//                , groupField: 'group'
+//                , listeners: {
+//                    'load': { fn: this.selectRecord, scope: this }
+//                }
+//                , reader: reader
+//                , sortInfo: {field: 'name', direction: 'ASC'}
+//                , url: config.ownerModule.app.connection
+//
+//            })
+//            , view: new Ext.ux.grid.GroupingExplorerView({
+//                rowTemplate: largeIcons
+//                , forceFit: true
+//                , groupTextTpl: '{text} ({[values.rs.length]})'
+//                , showGroupName: false
+//            })
+//        });
+//
+//        M31.app.Grid.superclass.constructor.apply(this, [config]);
+//
+//        this.desktop = this.ownerModule.app.getDesktop();
+//    }
+//
+//    // added methods
+//
+//    , onRowSelect : function(sm, index, record){
+//        var r = record;
+//        var d = r.data;
+//        var id;
+//
+//        if(this.mode === 'themes'){
+//            id = this.ownerModule.app.styles.theme.id;
+//        }else{
+//            id = this.ownerModule.app.styles.wallpaper.id;
+//        }
+//
+//        if(parseInt(id) !== parseInt(r.id)){
+//            if(r && r.id && d.name && d.pathtofile){
+//                config = {
+//                    id: r.id
+//                    , name: d.name
+//                    , pathtofile: d.pathtofile
+//                };
+//
+//                if(this.mode === 'themes'){
+//                    this.desktop.setTheme(config);
+//                }else{
+//                    this.desktop.setWallpaper(config);
+//                }
+//            }
+//        }
+//    }
+//
+//    , selectRecord : function(){
+//        var id;
+//
+//        if(this.mode === 'themes'){
+//            id = this.ownerModule.app.styles.theme.id;
+//        }else{
+//            id = this.ownerModule.app.styles.wallpaper.id;
+//        }
+//
+//        this.selModel.selectRecords([this.store.getById(id)]);
+//    }
+//});
