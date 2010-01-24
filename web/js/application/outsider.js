@@ -360,14 +360,14 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                                 M31.ApplicationRegistry.getInstance().getApp('springtwitter').receiveURL(this.linkUrl);
                             }
                         }
-                    },
-                    {
-                        text:'배경화면 지정하기',
-                        scope:this,
-                        handler: function() {
-                            m31.util.notification({title:'봄씨',text:'준비중입니다...',remove:true});
-                        }
-                    }
+                    }//,
+//                    {
+//                        text:'배경화면 지정하기',
+//                        scope:this,
+//                        handler: function() {
+//                            m31.util.notification({title:'봄씨',text:'준비중입니다...',remove:true});
+//                        }
+//                    }
                 ]
             });
             this.menu.on('hide', function() {
