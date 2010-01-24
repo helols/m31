@@ -79,23 +79,36 @@ div#springme2day-form-body-length.body-length{
 }
 
 .springguide-contents{
-	width: 80%;
-	padding: 5 5 5 5;
+	width: 100%;
+	padding: 5px 5px 5px 5px;
+    border-collapse: collapse;    
 }
 
-.springguide-contents tr{
-	height: 100;
+/*.springguide-contents tr{*/
+	/*height: 100px;*/
+/*}*/
+
+.springguide-contents tr {
+    vertical-align:middle;
 }
 
-.springguide-contents tr td b{
+.springguide-contents td {
+    border-bottom: 1px solid darkgray;
+}
+
+.springguide-contents img {
+    padding-top: 10px;
+}
+.springguide-contents b {
 	color:#888888;
 	text-decoration:none;
-	font-size:9; !important;
-	font-style: inherit oblique !important;	
+	font-size:1.2em; !important;
+    display:block;
+    padding-bottom:2px;
 }
 
-.springguide-contents tr td p{
-	color:#888888;
+.springguide-contents p {
+	color: #ffffff;
 	text-decoration:none;
-	font-size:7; !important;	
+	font-size:1.2em !important;	
 }
