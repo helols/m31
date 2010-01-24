@@ -178,3 +178,7 @@ div#springtwitter-authGuide div span { display:block; margin-top:7px; }
 div#springtwitter-authGuide img { margin-top: 10px; }
 
 div#springtwitter-view-friends>div>div.x-panel-body { overflow-x:hidden !important;  }
+
+.springsee-dataview-ie7{
+    margin-top:-86px !important;
+}

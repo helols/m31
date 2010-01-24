@@ -14,7 +14,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     currentPage:1,
     lookup : {},
     init : function() {},
-    
+
     /**
      *  해당 app의 window가 제거 될때 호출되는 콜백.
      */
@@ -43,17 +43,12 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             listeners: {
                 beforeload : function(store, options) {
                     store.loadMask.show();
-//                    this.view.autoHeigth = true;
                 }.createDelegate(this),
                 load: { fn:function() {
-//                  this.view.syncSize();
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
                     Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
                     Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
-                    //this.view.select(0);
                     m31.showImage();
-                    //$("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
-                    //Ext.fly("springsee-dataview").setHeight('100%');
                     if (!this.dragZone) {
                         this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD',scroll:false});
                     }
@@ -65,7 +60,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         this.view = new Ext.DataView({
             tpl: this.thumbTemplate,
             id: 'springsee-dataview',
-            singleSelect: true,
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
             emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
@@ -76,13 +70,14 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 'loadexception'  : {fn:this.onLoadException, scope:this},
                 'beforeselect'   : {fn:function(view) {
                     return view.store.getRange().length > 0;
-                }}
+                },scope:this}
             },
             prepareData: function(data) {
                 M31.ApplicationRegistry.getInstance().getApp('springsee').lookup[data.title] = data;
                 data.thumbWrap = Ext.id();
                 return data;
             }
+           
         });
         this.view.on("contextmenu", this.onContextClick, this);
         this.view.on("containercontextmenu", this.onContainerContextClick, this);
@@ -97,6 +92,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         }
 
         this.store.loadMask = new Ext.LoadMask(Ext.getCmp('springsee-view').getEl(), {store: this.store, msg:"Loading Images..."});
+        if(Ext.isIE7){
+            $('#springsee-dataview').addClass('springsee-dataview-ie7').addClass('springsee-dataview-ie7-2');
+        }
         setTimeout(function() {
             $("#springsee-search").focus();
         }, 800);
@@ -118,7 +116,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     id: 'springsee-view',
                     autoScroll: true,
                     items: this.view,
-                    
+
                     tbar:[
                         {
                             id: 'springsee-api-provider',
@@ -236,7 +234,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
         // 검색(돋보기) 클릭시
         onTrigger2Click : function () {
             var v = this.getRawValue().trim();
-            
+
             if (v.length < 1) {
                 m31.util.notification({
                     title: 'System',
@@ -246,7 +244,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 this.onTrigger1Click();
                 return;
             }
-            
+
             this.searchHandler();
 
             this.hasSearch = true;
@@ -283,7 +281,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             return;
         }
 
-        // 텍스트 필드나 콤보박스의 값이 바뀐후 페이징시..                  
+        // 텍스트 필드나 콤보박스의 값이 바뀐후 페이징시..
         if(cmd) {
             if (search.isDirty()) {
                 search.setValue(search.originalValue);
