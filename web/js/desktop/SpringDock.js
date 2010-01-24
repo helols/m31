@@ -45,7 +45,7 @@ SpringDock = function() {
                                 springdockcontainer.dockbtns.push(addDockBtn(appInfos[x]));
                             }
                         }
-                        Ext.select('.m31-springdock-item-img').setOpacity(.7);
+                        Ext.select('.m31-springdock-item-img').setOpacity(.6);
                         springdockcontainer.positionContainer(0);
                         springdockcontainer.el.addClass('container');
                         springdockcontainer.positionItems();
@@ -67,9 +67,8 @@ SpringDock = function() {
                                 }
 
                                 var cp = new Ext.state.CookieProvider();
-
                                 if(window.console && window.console.firebug && !cp.get('hideFBWarning')) {
-                                     Ext.MessageBox.alert("경고", "Firebug는 봄 데스탑의 성능을 저하시킬 수 있습니다.", function(){cp.set('hideFBWarning', true);});                                    
+                                     Ext.MessageBox.alert("경고", "Firebug는 봄 WebDeskTop의 성능을 저하시킬 수 있습니다.", function(){cp.set('hideFBWarning', true);});                                    
                                 }
 
                             }, 700);
@@ -235,6 +234,7 @@ M31.dt.DockButton = function(appInfo, el) {
         template : new Ext.Template(
                 '<span id="{0}" class="m31-springdock-item">',
                 '<img class="{3}" src="{1}" alt="{2}"/>',
+                //'<img class="act_point"src="/images/desktop/springdock/active_point.png"/>',
                 '<span class="m31-springdock-item-text">{2}</span>',
                 '</span>')
     });
@@ -263,10 +263,10 @@ Ext.extend(M31.dt.DockButton, Ext.Button, {
         var win = M31.WindowsManager.getInstance().getActWindow();
         if(win){
              if(win.id.replace('-win','') !== cmp_id.replace('btn-','')){
-                Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);         
+                Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .6);
              }
          }else{
-            Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : .7);
+            Ext.fly(cmp_id).select('.m31-springdock-item-img').setOpacity(type === 'E' ? 1 : 6);
         }
     }
 });

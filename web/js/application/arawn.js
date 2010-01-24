@@ -18,7 +18,7 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
         this.redyTask = {
     	    run: function(app){
 	    		if(app.state != null) return;
-	        	console.log('state : ' + app.state);
+//	        	console.log('state : ' + app.state);
 	        	
 	        	// 봄북이 준비가 되었는가?
 	        	if(app.win == null) return;
@@ -195,30 +195,6 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                     store: this.bookStore,
                     baseParam : 'query'
                 })
-//                {
-//					xtype: 'textfield',
-//                    id: 'springbook-search-text',
-//                    selectOnFocus: true,
-//                    width: 100,
-//                    enableKeyEvents: true,
-//                    listeners: {
-//                		'keypress'  : {fn:function(cmp, evt){
-//                        	if (evt.keyCode == Ext.EventObject.ENTER) {
-//                        		this.bookStore.load({params:{
-//    								searchType:Ext.getCmp('springbook-api-provider').getValue(),
-//    								query:Ext.getCmp('springbook-search-text').getValue()}});
-//				    		}
-//    				    }, scope:this}
-//                	}
-//				},{
-//					xtype: 'button',
-//					text: '검색',
-//					handler: function(sender, event){
-//							this.bookStore.load({params:{
-//								searchType:Ext.getCmp('springbook-api-provider').getValue(),
-//								query:Ext.getCmp('springbook-search-text').getValue()}});
-//						}.createDelegate(this)
-//				}
 			],
 	        bbar: new Ext.PagingToolbar({
 	            pageSize: 20,

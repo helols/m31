@@ -60,6 +60,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     },
 
     initComponent:function() {
+        M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
         this.growSize = this.id === 'springfinder-panel' ? 90 : 55;
         var proxy = new Ext.data.HttpProxy({
             api: {
@@ -134,16 +135,15 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         }
         this.lastChangeNodeId = this.rootNodeId || 1;
         this.store.load({params:{parentNode: this.rootNodeId || 1 , parentNodeName:this.rootNodeName || null}});
-        M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
         this.on({
             filemove:{scope:this, fn:this.onFileMove}
             ,filerename:{scope:this, fn:this.onFileRename}
             ,filedelete:{scope:this, fn:this.onFileDelete}
             ,filecreate:{scope:this, fn:this.onFileCreate}
             ,dirchange:{scope:this, fn:this.onDirChange}
-            ,dblclick : {fn:this.onDblclick, scope:this}
-            ,contextmenu : {fn:this.onContextClick,scope:this}
-            ,containercontextmenu : {fn:this.onContainerContextClick,scope:this}
+            ,dblclick : {fn:this.onDblclick}
+            ,contextmenu : {fn:this.onContextClick}
+            ,containercontextmenu : {fn:this.onContainerContextClick}
         });
         this.plugins = [ new Ext.DataView.DragSelector({dragSafe:true,id:this.id+'-selector'}),
                           new Ext.DataView.LabelEditor({dataIndex: 'fileName'})];
@@ -171,7 +171,6 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         this.dragZone = new SpringfinderPanelDragZone(this, {containerScroll:false,
             ddGroup: 'springfinderpenelDD',id : this.id + '-dragzone',scroll:false});
         this.dropZone = new SpringfinderPanelDropZone(this, {ddGroup: 'springfinderpenelDD',id: this.id + '-dropzone',scroll:false});
-
         this.ownerCtTitle = this.springfinderTree ? '[ ':this.ownerCt.title+' [ ';
     },
     onDataViewRender : function() {
@@ -301,7 +300,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     onContainerContextClick : function (view, e) {
         if (!this.containerContextMenu) { // create context menu on first right click
             this.containerContextMenu = new Ext.menu.Menu({
-                id:'springfinderpanel-containercontext-menu',
+                id:this.id+'-containercontext-menu',
                 items: [
                     {
                         iconCls: 'new-folder',
@@ -344,7 +343,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         var selectCnt = this.getSelectionCount();
         if (!this.contextMenu) { // create context menu on first right click
             this.contextMenu = new Ext.menu.Menu({
-                id:'springfinderpanel-context-menu',
+                id:this.id+'-context-menu',
                 items: [
                     {
                         itemId : 'delete-file',
