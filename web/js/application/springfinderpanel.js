@@ -53,15 +53,15 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
     newFolderNames : ['whiteship', 'nije', 'miracle', 'sonegy', 'srue', 'antatirs', 'mercujjang',  'anarcher','gyumee',  'princekey',  'outsider', 'is윤군','arawn'],
 
     prepareData: function(data) {
-        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel' ? 8 : 5);
+        data.shortFileName = Ext.util.Format.ellipsis(data.fileName, this.id === 'springfinder-panel-finder' ? 8 : 5);
         data.fileAddition = data.fileAddition === null ? '#' : data.fileAddition;
-        data.imgStyle = this.id === 'springfinder-panel' ? 'width:80px;height:80px;' : 'width:40px;height:40px;';
+        data.imgStyle = this.id === 'springfinder-panel-finder' ? 'width:80px;height:80px;' : 'width:40px;height:40px;';
         return data;
     },
 
     initComponent:function() {
         M31.app.SpringFinderPanel.superclass.initComponent.apply(this, arguments);
-        this.growSize = this.id === 'springfinder-panel' ? 90 : 55;
+        this.growSize = this.id === 'springfinder-panel-finder' ? 90 : 55;
         var proxy = new Ext.data.HttpProxy({
             api: {
                 read : '/app/springfinder/getFiles',
@@ -308,7 +308,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
                         scope:this,
                         handler: function() {
                             var store = this.getStore();
-                            var linkAppId = this.id === 'springfinder-panel'?'springfinder':this.rootNodeName;
+                            var linkAppId = this.id === 'springfinder-panel-finder'?'springfinder':this.rootNodeName;
                             var record = new store.recordType({
                                 fileName : this.newFolderNames[Math.floor(Math.random() * 12) + 1],
                                 linkAppId : linkAppId,
@@ -555,7 +555,7 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
     //      드랍이 가능한지 체크를 해서 true 와 false를 리던해줌.
     onContainerDrop : function(dd, e, data) {
         var isDropble = this.isContainerDropble(dd, e, data);
-        if (isDropble) {
+        if (isDropble  &&e.target.id === this.id) {
             var store = this.view.store;
             var parentId = this.view.store.getAt(0).data.parentId || this.view.lastChangeNodeId;
             var actType = 'fileCreate';
@@ -598,9 +598,9 @@ Ext.extend(SpringfinderPanelDropZone, Ext.dd.DropZone, {
     },
     //data.isDragble ||
     isContainerDropble : function(dd, e, data) {
-        if(e.getTarget('#'+dd.id) !== null || e.getTarget('#'+(dd.grid || dd).id) !== null){
-            return false;
-        }
+//        if(e.getTarget('#'+dd.id) !== null || e.getTarget('#'+(dd.grid || dd).id) !== null){
+//            return false;
+//        }
         if (data.isTree) {
             return false;
         } else if (data.isApp  && !(data.isDragble)) {
