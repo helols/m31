@@ -24,9 +24,14 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     // X버튼 클릭시
     onTrigger1Click : function () {
         if (this.hasSearch) {
+        	
             var o = {start: 0};
-            
-            o[this.paramName] = '';
+            if(this.baseParam){
+            	this.store.setBaseParam(this.baseParam, '');
+            }
+            else{
+            	o[this.paramName] = '';
+            }
             this.store.reload({params:o});
 
             this.el.dom.value = '';

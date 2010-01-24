@@ -7,10 +7,12 @@
  */
 package springsprout.m31.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.util.CollectionUtils;
 
 import springsprout.m31.domain.Book;
 
@@ -57,7 +59,7 @@ public class SpringBookDTO {
 	}
 	
 	public List<Book> getBooks() {
-		return books;
+		return CollectionUtils.isEmpty(books) ? new ArrayList<Book>() : books;
 	}
 	public void setBooks(List<Book> books) {
 		this.books = books;
