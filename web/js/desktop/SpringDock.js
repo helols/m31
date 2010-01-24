@@ -65,6 +65,13 @@ SpringDock = function() {
                                         m31.util.openWindow('springguide');
                                     }
                                 }
+
+                                var cp = new Ext.state.CookieProvider();
+
+                                if(window.console && window.console.firebug && !cp.get('hideFBWarning')) {
+                                     Ext.MessageBox.alert("경고", "Firebug는 봄 데스탑의 성능을 저하시킬 수 있습니다.", function(){cp.set('hideFBWarning', true);});                                    
+                                }
+
                             }, 700);
                     },
                     add : function(appInfo) {
