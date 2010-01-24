@@ -4,7 +4,7 @@
 <head>
 </head>
 <body>
-<table width="100%" height="100%" border="0" background="/images/desktop/wallpapers/springsprout-light.png">
+<table width="100%" height="100%" border="0" background="/images/apps/SpringGuide.png">
 <tr>
 	<td align="center" valign="middle">
 		<table class="springguide-contents">

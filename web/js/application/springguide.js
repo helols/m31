@@ -58,11 +58,11 @@ M31Desktop.SpringGuide = Ext.extend(M31.app.Module, {
         return {
         	width:480,
 	        height:500,
-	        minWidth: 480,
-            minHeight: 500,
 	        layout:'fit',
 	        autoScroll: true,
 	        constrainHeader: true,
+            maximizable : false,
+            resizable : false,
 	        closeAction: 'close',
 	        border: false
         };
