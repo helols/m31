@@ -36,6 +36,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             tpl: this.thumbTemplate,
             id: 'springsee-dataview',
             singleSelect: true,
+            autoHeight : true,
+            layout:'fit',
             overClass:'x-view-over',
             itemSelector: 'div.thumb-wrap',
             emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
@@ -68,9 +70,9 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
      *  윈도우를 생성하기 직전에 호출되는 펑션.
      */
     beforeCreate : function() {
-        if (!this.view) {
-            this.view = this.createView();
-        }
+//        if (!this.view) {
+//            this.view = this.createView();
+//        }
 
         this.initTemplates();
 
@@ -85,14 +87,16 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             listeners: {
                 beforeload : function(store, options) {
                     store.loadMask.show();
-                },
+//                    this.view.autoHeigth = true;
+                }.createDelegate(this),
                 'load': { fn:function() {
+//                    this.view.syncSize();
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
                     Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
                     Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
                     this.view.select(0);
                     m31.showImage();
-                    $("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+                    //$("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
                     if (!this.dragZone) {
                         this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD',scroll:false});
                     }
@@ -106,8 +110,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             id: 'springsee-dataview',
             singleSelect: true,
             overClass:'x-view-over',
+            autoHeight : true,
+            layout:'fit',
             itemSelector: 'div.thumb-wrap',
-            emptyText : '<div style="padding:10px;">No images match the specified search</div>',
+            emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
             plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
@@ -149,18 +155,18 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             closeAction: 'close',
             constrainHeader:true,
             border: false,
-            listeners: {
-                'resize'  : {fn:function(win, width, height) {
-                    $("#springsee-view-body div.x-panel-body div:first").height(0);
-                }, scope:this},
-                'afterlayout'  : {fn:function(win, width, height) {
-                    var toHeight = $("#springsee-view").height();
-                    if ($("#springsee-view-body").height() < toHeight) {
-                        toHeight -= 32;
-                    }
-                    $("#springsee-view-body div.x-panel-body div:first").height(toHeight);
-                }, scope:this, single:false}
-            },
+//            listeners: {
+//                'resize'  : {fn:function(win, width, height) {
+//                    //$("#springsee-view-body div.x-panel-body div:first").height(0);
+//                }, scope:this},
+//                'afterlayout'  : {fn:function(win, width, height) {
+//                    var toHeight = $("#springsee-view").height();
+//                    if ($("#springsee-view-body").height() < toHeight) {
+//                        toHeight -= 32;
+//                    }
+//                    $("#springsee-view-body div.x-panel-body div:first").height(toHeight);
+//                }, scope:this, single:false}
+//            },
             items:[
                 {
                     id: 'springsee-view',
@@ -199,28 +205,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                             searchHandler : this.getImages.createDelegate(this),
                             clearHandler : function(){this.store.removeAll();}.createDelegate(this)
                         }),
-//                        'Search:',
-//                        {
-//                            xtype: 'textfield',
-//                            id: 'springsee-search',
-//                            selectOnFocus: true,
-//                            width: 100,
-//                            enableKeyEvents: true,
-//                            listeners: {
-//                                'keypress'  : {fn:function(cmp, evt) {
-//                                    if (evt.keyCode == Ext.EventObject.ENTER) {
-//                                        this.getImages();
-//                                    }
-//                                }, scope:this}
-//                            }
-//                        },
-//                        {
-//                            id: 'springsee-send-btn',
-//                            xtype: 'button',
-//                            text: 'Send',
-//                            handler: this.getImages,
-//                            scope: this
-//                        },
                         {
                             xtype: 'tbfill'
                         },
@@ -310,7 +294,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             if (v.length < 1) {
                 m31.util.notification({
                     title: 'System',
-                    text: '검색어를 입력해주세요.'
+                    text: '검색어를 입력해주세요.',
+                    remove:true
                 });
                 this.onTrigger1Click();
                 return;
