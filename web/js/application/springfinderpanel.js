@@ -211,7 +211,7 @@ M31.app.SpringFinderPanel = Ext.extend(Ext.DataView, {
         }
     },
     onDirChange : function(nodeId) {
-        if (this.lastChangeNodeId !== nodeId) {
+        if (nodeId === 1 || this.lastChangeNodeId !== nodeId) {
             this.lastChangeNodeId = nodeId;
             this.store.load({params:{parentNode:nodeId}});
         }
