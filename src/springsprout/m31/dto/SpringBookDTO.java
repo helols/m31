@@ -35,7 +35,8 @@ public class SpringBookDTO {
 	}
 
 	public int getTotal() {
-		return total;
+		// 네이버 OpenApi 제한에 검색 갯수가 1000 으로 한계지어있다. 1000 이후의 갯수는 무용지물...-_-!
+		return total > 1000 ? 1000 : total;
 	}
 	public void setTotal(int total) {
 		this.total = total;
