@@ -87,6 +87,13 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
                 'description'
             ],
             listeners: {
+                beforeload : {
+                    fn: function(store, options) {
+                        var params = options.params;
+                        params.searchType = Ext.getCmp('springbook-api-provider').getValue();
+                    },
+                    scope: this
+                },
         		load: {fn:function(){
         			// 미투 보내기 앵커에 이벤트 걸어주기
 	        		var els = this.bookListPanel.getEl().select('a[class=book-me2day]', true);
@@ -179,30 +186,37 @@ M31Desktop.SpringBook = Ext.extend(M31.app.Module, {
 				},'-',{
 					xtype: 'tbtext',
 					text: '책 제목 : '
-				},{
-					xtype: 'textfield',
-                    id: 'springbook-search-text',
-                    selectOnFocus: true,
-                    width: 100,
-                    enableKeyEvents: true,
-                    listeners: {
-                		'keypress'  : {fn:function(cmp, evt){
-                        	if (evt.keyCode == Ext.EventObject.ENTER) {
-                        		this.bookStore.load({params:{
-    								searchType:Ext.getCmp('springbook-api-provider').getValue(),
-    								query:Ext.getCmp('springbook-search-text').getValue()}});
-				    		}
-    				    }, scope:this}
-                	}
-				},{
-					xtype: 'button',
-					text: '검색',
-					handler: function(sender, event){
-							this.bookStore.load({params:{
-								searchType:Ext.getCmp('springbook-api-provider').getValue(),
-								query:Ext.getCmp('springbook-search-text').getValue()}});
-						}.createDelegate(this)
-				}
+				},
+                new Ext.app.SearchField({
+                    id : 'springbook-search-text',
+                    width: 200,
+                    store: this.bookStore,
+                    paramName : 'query'
+                })
+//                {
+//					xtype: 'textfield',
+//                    id: 'springbook-search-text',
+//                    selectOnFocus: true,
+//                    width: 100,
+//                    enableKeyEvents: true,
+//                    listeners: {
+//                		'keypress'  : {fn:function(cmp, evt){
+//                        	if (evt.keyCode == Ext.EventObject.ENTER) {
+//                        		this.bookStore.load({params:{
+//    								searchType:Ext.getCmp('springbook-api-provider').getValue(),
+//    								query:Ext.getCmp('springbook-search-text').getValue()}});
+//				    		}
+//    				    }, scope:this}
+//                	}
+//				},{
+//					xtype: 'button',
+//					text: '검색',
+//					handler: function(sender, event){
+//							this.bookStore.load({params:{
+//								searchType:Ext.getCmp('springbook-api-provider').getValue(),
+//								query:Ext.getCmp('springbook-search-text').getValue()}});
+//						}.createDelegate(this)
+//				}
 			],
 			listeners: {
             	render: function(grid){

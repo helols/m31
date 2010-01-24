@@ -25,7 +25,8 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         if (this.hasSearch) {
             var o = {start: 0};
             o[this.paramName] = '';
-            this.store.reload({params: o});
+            //this.store.reload({params: o});
+            this.store.removeAll();
             this.el.dom.value = '';
             this.triggers[0].hide();
             this.hasSearch = false;
