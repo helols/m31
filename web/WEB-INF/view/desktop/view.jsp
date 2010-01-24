@@ -31,7 +31,7 @@
     <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/DataView-more.js"/>"></script>
-
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/SearchField.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/piroBox.1_2.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/plugin/progressbar.min.js"/>"></script>

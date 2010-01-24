@@ -193,28 +193,34 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                         },
                         ' ',
                         '-',
-                        'Search:',
-                        {
-                            xtype: 'textfield',
-                            id: 'springsee-search',
-                            selectOnFocus: true,
-                            width: 100,
-                            enableKeyEvents: true,
-                            listeners: {
-                                'keypress'  : {fn:function(cmp, evt) {
-                                    if (evt.keyCode == Ext.EventObject.ENTER) {
-                                        this.getImages();
-                                    }
-                                }, scope:this}
-                            }
-                        },
-                        {
-                            id: 'springsee-send-btn',
-                            xtype: 'button',
-                            text: 'Send',
-                            handler: this.getImages,
-                            scope: this
-                        },
+                        new this.searchFild({
+                            id : 'springsee-search',
+                            width : 200,
+                            searchHandler : this.getImages.createDelegate(this),
+                            clearHandler : function(){this.store.removeAll();}.createDelegate(this)
+                        }),
+//                        'Search:',
+//                        {
+//                            xtype: 'textfield',
+//                            id: 'springsee-search',
+//                            selectOnFocus: true,
+//                            width: 100,
+//                            enableKeyEvents: true,
+//                            listeners: {
+//                                'keypress'  : {fn:function(cmp, evt) {
+//                                    if (evt.keyCode == Ext.EventObject.ENTER) {
+//                                        this.getImages();
+//                                    }
+//                                }, scope:this}
+//                            }
+//                        },
+//                        {
+//                            id: 'springsee-send-btn',
+//                            xtype: 'button',
+//                            text: 'Send',
+//                            handler: this.getImages,
+//                            scope: this
+//                        },
                         {
                             xtype: 'tbfill'
                         },
@@ -268,6 +274,49 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
 
         return otp;
     },
+    /*검색 필드*/
+    searchFild : Ext.extend(Ext.form.TwinTriggerField, {
+        initComponent : function () {
+            Ext.app.SearchField.superclass.initComponent.call(this);
+            this.on('specialkey', function (f, e) {
+                if (e.getKey() === e.ENTER) {
+                    this.onTrigger2Click();
+                }
+            }, this);
+        },
+
+        validationEvent: false,
+        validateOnBlur: false,
+        trigger1Class: 'x-form-clear-trigger',
+        trigger2Class: 'x-form-search-trigger',
+        hideTrigger1: true,
+        width: 180,
+        hasSearch : false,
+
+        // X버튼 클릭시
+        onTrigger1Click : function () {
+            if (this.hasSearch) {
+                this.el.dom.value = '';
+                this.triggers[0].hide();
+                this.clearHandler();
+                this.hasSearch = false;
+            }
+        },
+        // 검색(돋보기) 클릭시
+        onTrigger2Click : function () {
+            var v = this.getRawValue().trim();
+            
+            if (v.length < 1) {
+                this.onTrigger1Click();
+                return;
+            }
+            
+            this.searchHandler();
+
+            this.hasSearch = true;
+            this.triggers[0].show();
+        }
+    }),
 
     initTemplates : function() {
         this.thumbTemplate = new Ext.XTemplate(

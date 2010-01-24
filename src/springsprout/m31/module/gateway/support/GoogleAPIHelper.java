@@ -138,8 +138,6 @@ public class GoogleAPIHelper {
     }
 
     public static void main(String[] args) {
-
         System.out.println(org.springframework.util.StringUtils.replace("\"Chocolate Rain\" Original Song by Tay Zonday", "\"", "\\\""));
-
     }
 }
