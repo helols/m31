@@ -13,49 +13,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
     ],
     currentPage:1,
     lookup : {},
-    init : function() {
-        //필요한 JS
-//        m31.util.requiredJS("pirobox");
-    },
-
-    createView : function() {
-        var formatSize = function(data) {
-            if (data.size < 1024) {
-                return data.size + " bytes";
-            } else {
-                return (Math.round(((data.size * 10) / 1024)) / 10) + " KB";
-            }
-        };
-
-        var formatData = function(data) {
-            this.lookup[data.title] = data;
-            return data;
-        };
-
-        return new Ext.DataView({
-            tpl: this.thumbTemplate,
-            id: 'springsee-dataview',
-            singleSelect: true,
-            autoHeight : true,
-            layout:'fit',
-            overClass:'x-view-over',
-            itemSelector: 'div.thumb-wrap',
-            emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
-            plugins: new Ext.DataView.DragSelector({dragSafe:true}),
-            store: this.store,
-            listeners: {
-                'loadexception'  : {fn:this.onLoadException, scope:this},
-                'beforeselect'   : {fn:function(view) {
-                    return view.store.getRange().length > 0;
-                }}
-            },
-            prepareData: function(data) {
-                this.lookup[data.title] = data;
-                return data;
-            }.createDelegate(this)
-        });
-    },
-
+    init : function() {},
+    
     /**
      *  해당 app의 window가 제거 될때 호출되는 콜백.
      */
@@ -70,9 +29,6 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
      *  윈도우를 생성하기 직전에 호출되는 펑션.
      */
     beforeCreate : function() {
-//        if (!this.view) {
-//            this.view = this.createView();
-//        }
 
         this.initTemplates();
 
@@ -89,14 +45,15 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                     store.loadMask.show();
 //                    this.view.autoHeigth = true;
                 }.createDelegate(this),
-                'load': { fn:function() {
-//                    this.view.syncSize();
+                load: { fn:function() {
+//                  this.view.syncSize();
                     Ext.getCmp("springsee-view").body.scrollTo('top', 0);
                     Ext.getCmp("springsee-api-provider").originalValue = Ext.getCmp("springsee-api-provider").getValue();
                     Ext.getCmp("springsee-search").originalValue = Ext.getCmp("springsee-search").getValue();
-                    this.view.select(0);
+                    //this.view.select(0);
                     m31.showImage();
                     //$("#springsee-view-body div.x-panel-body div:first").height($("#springsee-view-body").height());
+                    //Ext.fly("springsee-dataview").setHeight('100%');
                     if (!this.dragZone) {
                         this.dragZone = new ImageDragZone(this.view, {containerScroll:false, ddGroup: 'springfinderpenelDD',scroll:false});
                     }
@@ -110,11 +67,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             id: 'springsee-dataview',
             singleSelect: true,
             overClass:'x-view-over',
-            autoHeight : true,
-            layout:'fit',
             itemSelector: 'div.thumb-wrap',
             emptyText: '<div style="padding:10px;">검색된 이미지가 없습니다.</div>',
-            plugins: new Ext.DataView.DragSelector({dragSafe:true}),
             store: this.store,
             listeners: {
                 'loadexception'  : {fn:this.onLoadException, scope:this},
@@ -155,28 +109,13 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             closeAction: 'close',
             constrainHeader:true,
             border: false,
-//            listeners: {
-//                'resize'  : {fn:function(win, width, height) {
-//                    //$("#springsee-view-body div.x-panel-body div:first").height(0);
-//                }, scope:this},
-//                'afterlayout'  : {fn:function(win, width, height) {
-//                    var toHeight = $("#springsee-view").height();
-//                    if ($("#springsee-view-body").height() < toHeight) {
-//                        toHeight -= 32;
-//                    }
-//                    $("#springsee-view-body div.x-panel-body div:first").height(toHeight);
-//                }, scope:this, single:false}
-//            },
             items:[
                 {
-                    id: 'springsee-view',
                     region: 'center',
+                    id: 'springsee-view',
                     autoScroll: true,
-                    items: {
-                        xtype: 'panel',
-                        id: 'springsee-view-body',
-                        items:this.view
-                    },
+                    items: this.view,
+                    
                     tbar:[
                         {
                             id: 'springsee-api-provider',
@@ -313,8 +252,8 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 '<tpl for=".">',
                 '<div class="thumb-wrap" id="{name}">',
                 '<div class="thumb"><a href="{image}" class="pirobox_gall" title="{title}"><img src="{thumbnail}" title="{title}"></a></div>',
-                '</div>',
-                '</tpl>'
+                '</div></tpl>',
+                '<div class="x-clear"/>'
                 );
         this.thumbTemplate.compile();
     },
