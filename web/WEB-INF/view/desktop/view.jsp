@@ -8,42 +8,43 @@
     <title>Springsprout WEB DESKTOP</title>
 
 
-    <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/common.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/framework/plugin/gritter.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/springdock.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/miracle.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/outsider.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/helols.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/arawn.css?update=2010124"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/xtheme-vistablack/css/xtheme-vistablack.css?update=2010124"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/extJS/resources/css/ext-all.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/common.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/framework/plugin/gritter.css"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/desktop.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/desktop/springdock.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/miracle.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/outsider.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/helols.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/apps/arawn.css"><c:param value="${cacheTime}" name="_c"/></c:url>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/xtheme-vistablack/css/xtheme-vistablack.css"/>"/>
     <!--[if lt IE 7]>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css?update=2010124"/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/css/iehack.css"/>"/>
     <![endif]-->
     <!-- GC -->
     <!-- LIBS -->
-    <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.min.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/ext-all.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/framework/jQuery/jquery-1.3.2.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/adapter/jquery/ext-jquery-adapter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/ext-all.js"/>"></script>
     <!-- ENDLIBS -->
 
-    <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/DataView-more.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/SearchField.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/plugin/piroBox.1_2.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/plugin/progressbar.min.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/common/utils.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/miframe/miframe-debug.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/grid/RowExpander.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/DataView-more.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/gritter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/progressbar.min.js"/>"></script>
 
-    <script type="text/javascript" src="<c:url value="/js/plugin/ZeroClipboard.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/desktop/SpringDock.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/common/utils.js?update=2010124"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/plugin/piroBox.1_2.js?update=2010124"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/extJS/plugin/ux/SearchField.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/SpringDock.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+
     <script type="text/javascript"
-    src="<c:url value="/js/desktop/ApplicationRegistry.js?update=2010124"> <c:param value="${cacheTime}" name="_c"/></c:url>"></script>
-    <script type="text/javascript" src="<c:url value="/js/desktop/WinManager.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/desktop/Module.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/desktop/Desktop.js?update=2010124"/>"></script>
+    src="<c:url value="/js/desktop/ApplicationRegistry.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/WinManager.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/Module.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/desktop/Desktop.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
 </head>
 <body id="body" scroll="no">
 <div id="booting-mask"></div>
@@ -73,17 +74,17 @@
         $("#processbar").progressBar(20);
         google.load('visualization', '1', {'packages':['piechart']});
     </script>
-    <script type="text/javascript" src="<c:url value="/js/application/miracle.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/miracle.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
     <!-- Outsider -->
-    <script type="text/javascript" src="<c:url value="/js/application/outsider.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/outsider.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
     <!-- helols -->
 
-    <script type="text/javascript" src="<c:url value="/js/application/springfindertree.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/application/springfinderpanel.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/application/helols.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/springfindertree.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/springfinderpanel.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/helols.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
     <!-- arawn -->
-    <script type="text/javascript" src="<c:url value="/js/application/arawn.js?update=2010124"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/application/springguide.js?update=2010124"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/arawn.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
+    <script type="text/javascript" src="<c:url value="/js/application/springguide.js"><c:param value="${cacheTime}" name="_c"/></c:url>"></script>
     <script type="text/javascript">
     Ext.onReady(function() {
         Ext.get(document.body).setStyle('background','#000 url(../../images/desktop/wallpapers/springsprout-disit.jpg) no-repeat top center');
