@@ -299,6 +299,7 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
                 this.el.dom.value = '';
                 this.triggers[0].hide();
                 this.clearHandler();
+                this.focus();
                 this.hasSearch = false;
             }
         },
@@ -307,6 +308,10 @@ M31Desktop.SpringSee = Ext.extend(M31.app.Module, {
             var v = this.getRawValue().trim();
             
             if (v.length < 1) {
+                m31.util.notification({
+                    title: 'System',
+                    text: '검색어를 입력해주세요.'
+                });
                 this.onTrigger1Click();
                 return;
             }

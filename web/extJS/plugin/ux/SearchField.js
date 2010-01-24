@@ -23,22 +23,28 @@ Ext.app.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     // X버튼 클릭시
     onTrigger1Click : function () {
         if (this.hasSearch) {
-            var o = {start: 0};
-            o[this.paramName] = '';
-            //this.store.reload({params: o});
             this.store.removeAll();
             this.el.dom.value = '';
             this.triggers[0].hide();
+            this.focus();
             this.hasSearch = false;
         }
     },
     // 검색(돋보기) 클릭시
     onTrigger2Click : function () {
         var v = this.getRawValue().trim();
+
         if (v.length < 1) {
+
+            m31.util.notification({
+                title: 'System',
+                text: '검색어를 입력해주세요.'
+            });
+
             this.onTrigger1Click();
             return;
         }
+
         var o = {start: 0};
         o[this.paramName] = v;
         this.store.reload({params: o});
