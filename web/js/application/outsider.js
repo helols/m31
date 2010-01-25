@@ -395,7 +395,7 @@ m31.showImage = function() {
     $().piroBox({
     	target: 'springsee-dataview',
         eventName:'dblclick',
-        my_speed: 600, //animation speed
+        my_speed: 300, //animation speed
         bg_alpha: 0.5, //background opacity
         radius: 4, //caption rounded corner
         scrollImage : false, // true == image follows the page, false == image remains in the same open position
