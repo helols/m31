@@ -398,10 +398,10 @@ public class SpringMe2DayApiService {
 			
 			requestUrl += "&post[body]=" + URLEncoder.encode(postDto.getBody(), "utf-8");
 			if("태그를 입력하세요 (공백으로 구분합니다.)".equals(postDto.getTags())){
-				requestUrl += "&post[tags]=" + URLEncoder.encode("me2spring", "utf-8");
+				requestUrl += "&post[tags]=" + URLEncoder.encode("봄미투", "utf-8");
 			}
 			else if(StringUtils.hasText(postDto.getTags())){
-				String tempTags = StringUtils.trimWhitespace(postDto.getTags()) + " me2spring";
+				String tempTags = "봄미투 "+StringUtils.trimWhitespace(postDto.getTags());
 				requestUrl += "&post[tags]=" + URLEncoder.encode(tempTags, "utf-8");
 			}
 			if(postDto.getIcon() > 0){
