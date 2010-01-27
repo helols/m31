@@ -403,6 +403,11 @@
             <artifactId>jetty-util</artifactId>
             <version>7.0.1.v20091125</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-ajp</artifactId>
+            <version>7.0.1.v20091125</version>
+        </dependency>
         <!-- jetty end-->
     </dependencies>
 

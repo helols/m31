@@ -21,6 +21,9 @@
 	                <property name="lowResourcesConnections" value="20000"/>
 	                <property name="lowResourcesMaxIdleTime" value="5000"/>
                 </bean>
+                <bean class="org.eclipse.jetty.ajp.Ajp13SocketConnector">
+                    <property name="port" value="8010"/>
+                </bean>
             </list>
         </property>
         <property name="handler">

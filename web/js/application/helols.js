@@ -11,7 +11,7 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
         if (!this.win) {
             this.win = win;
         }
-        this.menuView.select(0);
+//        this.menuView.select(0);
     },
     beforeCreate : function() {
         var menuData = [
@@ -32,25 +32,8 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
             ]
         });
         store.loadData(menuData);
-        this.menuView = new Ext.DataView({
-            tpl : new Ext.XTemplate(
-                    '<tpl for=".">',
-                    '<div class="menu-wrap">',
-                    '<img src="{imgsrc}"/>',
-                    '<br/><span>{menuname}</span>',
-                    '</div>',
-                    '</tpl>',
-                    '<div class="x-clear"></div>'
-                    ),
-            height : 80,
-            id : 'setting-dataview' ,
-            store :store,
-            overClass:'x-view-over',
-            itemSelector:'div.menu-wrap',
-            emptyText: '',
-            singleSelect: true,
-            layout:'fit'
-        });
+//        Ext.store.data
+
         this.northMenu = new Ext.Panel({
             region : 'north',
             height : 90,
@@ -59,8 +42,7 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
             autoScroll : false,
             border: false,
             id : 'menu-panel',
-            layout:'fit',
-            items:[this.menuView]
+            layout:'fit'
         });
         this.cardPanel = new Ext.Panel({
             title: '프로그램관리',
@@ -74,6 +56,7 @@ M31Desktop.Setting = Ext.extend(M31.app.Module, {
             region:'center',
             html:'프로그램관리'
         });
+        console.log(this.northMenu.el);
     },
     createWindow : function() {
         var northMenu = this.northMenu;
